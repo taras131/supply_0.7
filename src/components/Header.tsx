@@ -1,9 +1,11 @@
 import {FC} from 'react';
-import {IconButton, Toolbar, Typography} from "@mui/material";
+import {IconButton, Stack, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {styled} from '@mui/material/styles';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import {drawerWidth} from "./App";
+import {useLocation} from "react-router-dom";
+import InvoicesInfo from "./InvoicesInfo";
 
 
 interface IProps {
@@ -33,6 +35,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Header: FC<IProps> = ({open, handleDrawerOpen}) => {
+    const path = useLocation().pathname
     return (
         <AppBar position="fixed" open={open} sx={{backgroundColor: "white"}}>
             <Toolbar>
@@ -45,9 +48,9 @@ const Header: FC<IProps> = ({open, handleDrawerOpen}) => {
                 >
                     <MenuIcon sx={{color: "black"}}/>
                 </IconButton>
-                <Typography variant="h6" noWrap component="div">
-                    Persistent drawer
-                </Typography>
+                <Stack sx={{width: "100%" , ml: -5}}  alignItems={"center"} justifyContent={"center"}>
+                    {path === "/invoices" && (<InvoicesInfo/>)}
+                </Stack>
             </Toolbar>
         </AppBar>
     );

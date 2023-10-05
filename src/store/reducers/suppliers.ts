@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ISuppliers} from "../../models/iSuppliers";
+import {ISupplier} from "../../models/iSuppliers";
 
 interface ISuppliersState {
     list: ISupplier []

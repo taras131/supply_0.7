@@ -1,7 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {IInvoice} from "../../models/iInvoices";
 
 interface ICommentsState {
-    list: any
+    list: IInvoice []
     isLoading: boolean
     errorMessage: string
 }
@@ -16,6 +17,9 @@ export const InvoicesSlice = createSlice({
     name: 'invoices',
     initialState,
     reducers: {
+        setInvoices: (state, action: PayloadAction<IInvoice []>) => {
+            state.list = action.payload
+        },
         setComments: (state, action: PayloadAction<any>) => {
             state.list = action.payload
         },
@@ -27,7 +31,7 @@ export const InvoicesSlice = createSlice({
 })
 
 export const {
-    setComments, setCommentsLoading
+    setInvoices, setComments, setCommentsLoading
 } = InvoicesSlice.actions
 
 export default InvoicesSlice.reducer

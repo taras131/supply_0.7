@@ -1,9 +1,9 @@
 import React from 'react';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {getIsShowMessage, getMessage} from "../services/selectors/messageSelectors";
+import {getIsShowMessage, getMessage} from "../store/selectors/message";
 import Snackbar from '@mui/material/Snackbar';
 import {Alert} from "@mui/material";
-import {resetMessage} from "../services/reducers/message";
+import {resetMessage} from "../store/reducers/message";
 
 
 const Message = () => {
@@ -15,9 +15,9 @@ const Message = () => {
     }
     return (
         <Snackbar open={isShowMessage}
-                  autoHideDuration={6000}
+                  autoHideDuration={1000}
                   onClose={handleClose}
-                  anchorOrigin={{vertical: 'top', horizontal: 'left'}}>
+                  anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
             <Alert onClose={handleClose} severity={message.severity} sx={{width: '100%'}}>
                 {message.text}
             </Alert>

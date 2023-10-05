@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Modal} from "@mui/material";
+import {Modal, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
@@ -7,6 +7,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 interface IProps {
     isOpenModal: boolean
+    title: string
     handleToggleOpen: () => void
     children: React.ReactNode
 }
@@ -23,7 +24,7 @@ const modalStyle = {
     p: 2,
 };
 
-const ModalWindow: FC<IProps> = ({isOpenModal, handleToggleOpen, children}) => {
+const ModalWindow: FC<IProps> = ({isOpenModal, title, handleToggleOpen, children}) => {
     return (
         <Modal
             open={isOpenModal}
@@ -32,7 +33,10 @@ const ModalWindow: FC<IProps> = ({isOpenModal, handleToggleOpen, children}) => {
             aria-describedby="modal-modal-description"
         >
             <Box sx={modalStyle}>
-                <Grid container justifyContent="end">
+                <Grid container justifyContent="space-between" alignItems={"center"}>
+                    <Typography fontSize={"16px"} fontWeight={600}>
+                        {title}
+                    </Typography>
                     <IconButton aria-label="close" onClick={handleToggleOpen}>
                         <CloseIcon/>
                     </IconButton>

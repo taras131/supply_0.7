@@ -4,17 +4,11 @@ import {Drawer, Stack, styled, Typography, useTheme} from "@mui/material";
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import SideBarMenuItem from "./SideBarMenuItem";
 import {routes} from "../utils/routes";
 import MenuIcon from '@mui/icons-material/Menu';
+import {useAppSelector} from "../hooks/redux";
+import {getCountUnpaidInvoices} from "../store/selectors/invoices";
 
 
 interface IProps {
@@ -31,6 +25,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 
 const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
+    const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state))
     return (
         <Drawer
             sx={{
@@ -61,7 +56,7 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
             <Divider color={"#404854"}/>
             <List disablePadding>
                 <SideBarMenuItem title={"Главная"} route={routes.main}/>
-                <SideBarMenuItem title={"Счета"} route={routes.invoices}/>
+                <SideBarMenuItem title={"Счета"} route={routes.invoices} count={countUnpaidInvoices}/>
                 <SideBarMenuItem title={"Поставщики"} route={routes.suppliers}/>
                 <SideBarMenuItem title={"Вход"} route={routes.login}/>
                 <SideBarMenuItem title={"Регистрация"} route={routes.register}/>

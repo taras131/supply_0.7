@@ -10,6 +10,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Suppliers from "../pages/Suppliers";
+import {useAppDispatch} from "../hooks/redux";
+import {useEffect, useState} from "react";
+import {collection, onSnapshot, query} from "firebase/firestore";
+import {db} from "../firebase";
+import {ISupplier} from "../models/iSuppliers";
+import {setSuppliers} from "../store/reducers/suppliers";
+import {Typography} from "@mui/material";
+import {IInvoice} from "../models/iInvoices";
+import {setInvoices} from "../store/reducers/invoices";
+import Message from "./Message";
 
 
 export const drawerWidth = 240;
@@ -46,6 +56,42 @@ const DrawerHeader = styled('div')(({theme}) => ({
 function App() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [isLoading, setIsLoading] = useState(true)
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        const q = query(collection(db, "invoices"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                let invoicesArr: IInvoice [] = []
+                querySnapshot.forEach((doc: any) => {
+                    invoicesArr.push({...doc.data(), id: doc.id});
+                });
+                console.log(invoicesArr)
+                dispatch(setInvoices(invoicesArr))
+            } catch (e) {
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, [])
+
+    useEffect(() => {
+        const q = query(collection(db, "suppliers"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                let suppliesArr: ISupplier [] = []
+                querySnapshot.forEach((doc: any) => {
+                    suppliesArr.push({...doc.data(), id: doc.id});
+                });
+                console.log(suppliesArr)
+                dispatch(setSuppliers(suppliesArr))
+                setIsLoading(false)
+            } catch (e) {
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, [])
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -54,7 +100,9 @@ function App() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
+    if (isLoading) {
+        return (<Typography>...Загрузка...</Typography>)
+    }
     return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
@@ -70,6 +118,7 @@ function App() {
                     <Route path={routes.register} element={<Auth/>}/>
                 </Routes>
             </Main>
+            <Message/>
         </Box>
     )
 }

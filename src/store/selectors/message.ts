@@ -1,5 +1,5 @@
-import {RootState} from "../store";
 import {IMessage} from "../../models/IMessage";
+import {RootState} from "../index";
 
 export const getMessage = (state: RootState): IMessage => {
     return state.message.message
