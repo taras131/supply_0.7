@@ -10,13 +10,12 @@ import {
     TableRow, Typography,
 } from "@mui/material";
 import InvoicesHeader from "../components/InvoicesHeader";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
+import {useAppSelector} from "../hooks/redux";
 import {getInvoices} from "../store/selectors/invoices";
 import Invoice from "../components/Invoice";
 import InvoicesHelper from "../components/InvoicesHelper";
 
 const Invoices = () => {
-    const dispatch = useAppDispatch()
     const invoices = useAppSelector(state => getInvoices(state))
     const invoicesList = invoices.map(invoice => (<Invoice key={invoice.author.date} {...invoice}/>))
     return (
