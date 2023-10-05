@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
     Paper,
     Stack,
@@ -11,10 +11,6 @@ import {
 } from "@mui/material";
 import InvoicesHeader from "../components/InvoicesHeader";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {collection, onSnapshot, query} from "firebase/firestore";
-import {db} from "../firebase";
-import {setInvoices} from "../store/reducers/invoices";
-import {IInvoice} from "../models/iInvoices";
 import {getInvoices} from "../store/selectors/invoices";
 import Invoice from "../components/Invoice";
 import InvoicesHelper from "../components/InvoicesHelper";

@@ -1,11 +1,8 @@
 import React, {FC, useEffect, useId, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {fetchAddSupplier} from "../store/actionsCreators/suppliers";
 import ModalWindow from "./ModalWindow";
 import Typography from "@mui/material/Typography";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import MergeTypeIcon from '@mui/icons-material/MergeType';
-import RedoIcon from '@mui/icons-material/Redo';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import LoadingButton from "@mui/lab/LoadingButton";
 import {

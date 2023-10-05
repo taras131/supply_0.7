@@ -1,9 +1,7 @@
 import React from 'react';
 import {Button, Stack, Typography} from "@mui/material";
-import InvoicesAddNew from "./InvoicesAddNew";
 import {useAppSelector} from "../hooks/redux";
 import {getAmountUnpaidInvoices, getCountUnpaidInvoices} from "../store/selectors/invoices";
-import Grid from "@mui/material/Unstable_Grid2";
 
 const InvoicesInfo = () => {
     const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state))

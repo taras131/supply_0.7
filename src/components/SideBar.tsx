@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {drawerWidth} from "./App";
-import {Drawer, Stack, styled, Typography, useTheme} from "@mui/material";
+import {Drawer, Stack, styled, Typography} from "@mui/material";
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';

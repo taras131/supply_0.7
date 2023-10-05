@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
-import {ISuppliers} from "../models/iSuppliers";
+import {ISupplier} from "../models/iSuppliers";
 import {TableCell, TableRow} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 import {getAmountBySupplierId} from "../store/selectors/invoices";
 
-const Supplier: FC<ISuppliers> = ({id, name, INN}) => {
+const Supplier: FC<ISupplier> = ({id, name, INN}) => {
     const amountPaidInvoice = useAppSelector(state => getAmountBySupplierId(state, id))
     return (
         <TableRow

@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import api from "../../api";
 import {handlerError} from "./handleError";
-import {IApproved, IInvoice, INewInvoice, IPaid} from "../../models/iInvoices";
+import {IApproved, INewInvoice, IPaid} from "../../models/iInvoices";
 
 export const fetchAddInvoice = createAsyncThunk(
     'fetch_add_invoice',
