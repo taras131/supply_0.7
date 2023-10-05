@@ -37,18 +37,18 @@ const InvoicesHelper = () => {
                     <ContentCopyIcon color="action"/>
                     <Typography>- клик по данным с эти значком копирует их.</Typography>
                 </Stack>
-                <Stack direction={"row"} spacing={1} alignItems={"center"} mt={1}>
+                <Stack direction={"row"} spacing={1} alignItems={"center"} mt={2}>
                     <DownloadIcon/>
                     <Typography>- можно скачать файл счёта или платёжного поручения.</Typography>
                 </Stack>
-                <Stack direction={"row"} spacing={1} alignItems={"center"} mt={1}>
+                <Stack direction={"row"} spacing={1} alignItems={"center"} mt={2}>
                     <AttachFileIcon/>
                     <Typography>
                         - позволяет прикрепить файл платёжного поручения к неоплаченному счёту.
-                        После чего счёт получет статус "оплачен"
+                        После чего счёт получит статус "оплачен"
                     </Typography>
                 </Stack>
-                <Stack direction={"row"} spacing={1} alignItems={"center"} mt={1}>
+                <Stack direction={"row"} spacing={1} alignItems={"center"} mt={2}>
                     <MoreVertIcon color="action"/>
                     <Typography>
                         - в будующем позволит копировать номер счёта, отменить счёт, просмотреть тайминг счёта,
