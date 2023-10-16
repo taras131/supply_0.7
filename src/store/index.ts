@@ -3,12 +3,14 @@ import {configureStore} from '@reduxjs/toolkit';
 import InvoicesReducer from "./reducers/invoices";
 import SuppliersReducer from "./reducers/suppliers"
 import MessageReducer from "./reducers/message"
+import authReducer from "./reducers/auth"
 
 
 const rootReducer = combineReducers({
     invoices: InvoicesReducer,
     suppliers: SuppliersReducer,
-    message: MessageReducer
+    message: MessageReducer,
+    auth: authReducer,
 });
 export const setupStore = () => {
     return configureStore({

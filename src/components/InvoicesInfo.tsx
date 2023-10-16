@@ -7,7 +7,7 @@ const InvoicesInfo = () => {
     const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state))
     const amountUnpaidInvoices = useAppSelector(state => getAmountUnpaidInvoices(state))
     return (
-        <Stack sx={{maxWidth: 1350, width: "100%"}} direction="row" alignItems="center"
+        <Stack sx={{maxWidth: 1350, width: "100%", marginTop: "12px"}} direction="row" alignItems="center"
                justifyContent="space-between">
             <Stack direction="row" spacing={1}>
                 <Typography color={"gray"}>Всего неоплаченных счетов:</Typography>

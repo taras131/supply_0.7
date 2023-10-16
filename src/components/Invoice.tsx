@@ -22,10 +22,13 @@ import {fetchUpdateInvoice, fetchUpdateInvoiceApproved, fetchUploadFile} from ".
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {setMessage} from "../store/reducers/message";
 import {MESSAGE_SEVERITY} from "../utils/const";
+import {routes} from "../utils/routes";
+import {useNavigate} from "react-router-dom";
 
 const Invoice: FC<IInvoice> = (invoice) => {
     const dispatch = useAppDispatch()
     const checkboxId = useId()
+    const navigate = useNavigate()
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId))
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId))
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false)
@@ -75,6 +78,9 @@ const Invoice: FC<IInvoice> = (invoice) => {
     const handleAmountClick = () => {
         navigator.clipboard.writeText(invoice.amount)
         dispatch(setMessage({text: "Сумма скопирована", severity: MESSAGE_SEVERITY.success}))
+    }
+    const handleMoreClick = () => {
+        navigate(`${routes.invoices}/${invoice.id}`)
     }
     return (
         <TableRow
@@ -166,7 +172,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                     )}
             </TableCell>
             <TableCell>
-                <IconButton aria-label="add to shopping cart">
+                <IconButton aria-label="add to shopping cart" onClick={handleMoreClick}>
                     <MoreVertIcon color="action"/>
                 </IconButton>
             </TableCell>

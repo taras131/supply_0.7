@@ -20,6 +20,11 @@ import {Typography} from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {setInvoices} from "../store/reducers/invoices";
 import Message from "./Message";
+import Users from "../pages/Users";
+import {IUser} from "../models/iAuth";
+import {setAllUsers} from "../store/reducers/auth";
+import Profile from "../pages/Profile";
+import InvoiceDetails from "../pages/InvoiceDetails";
 
 
 export const drawerWidth = 240;
@@ -93,6 +98,23 @@ function App() {
         });
     }, [])
 
+    useEffect(() => {
+        const q = query(collection(db, "users"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                let usersArr: IUser [] = []
+                querySnapshot.forEach((doc: any) => {
+                    usersArr.push({...doc.data(), id: doc.id});
+                });
+                dispatch(setAllUsers(usersArr))
+                setIsLoading(false)
+            } catch (e) {
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, [])
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -113,9 +135,12 @@ function App() {
                 <Routes>
                     <Route path={routes.main} element={<MainPage/>}/>
                     <Route path={routes.invoices} element={<Invoices/>}/>
+                    <Route path={routes.invoices + "/:invoiceId/"} element={<InvoiceDetails/>}/>
                     <Route path={routes.suppliers} element={<Suppliers/>}/>
+                    <Route path={routes.users} element={<Users/>}/>
                     <Route path={routes.login} element={<Auth/>}/>
                     <Route path={routes.register} element={<Auth/>}/>
+                    <Route path={routes.profile} element={<Profile/>}/>
                 </Routes>
             </Main>
             <Message/>

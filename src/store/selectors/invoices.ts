@@ -24,3 +24,6 @@ export const getAmountBySupplierId = (state: RootState, supplierId: string): num
     })
     return amount
 }
+export const getInvoiceById = (state: RootState, invoiceId: string) => {
+    return state.invoices.list.filter(invoice => invoice.id === invoiceId)[0]
+}

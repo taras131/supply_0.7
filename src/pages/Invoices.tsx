@@ -14,6 +14,7 @@ import {useAppSelector} from "../hooks/redux";
 import {getInvoices} from "../store/selectors/invoices";
 import Invoice from "../components/Invoice";
 import InvoicesHelper from "../components/InvoicesHelper";
+import InvoicesInfo from "../components/InvoicesInfo";
 
 const Invoices = () => {
     const invoices = useAppSelector(state => getInvoices(state))
@@ -21,6 +22,7 @@ const Invoices = () => {
     return (
         <Stack style={{minHeight: "calc(100vh - 100px"}} alignItems="center">
             <InvoicesHeader/>
+            <InvoicesInfo/>
             <TableContainer component={Paper} sx={{maxWidth: 1350, mt: 3}}>
                 <Table aria-label="simple table">
                     <TableHead>

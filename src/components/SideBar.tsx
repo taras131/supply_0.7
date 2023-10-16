@@ -9,6 +9,7 @@ import {routes} from "../utils/routes";
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppSelector} from "../hooks/redux";
 import {getCountUnpaidInvoices} from "../store/selectors/invoices";
+import {getIsAuth} from "../store/selectors/auth";
 
 
 interface IProps {
@@ -26,6 +27,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 
 const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
     const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state))
+    const isAuth = useAppSelector(state => getIsAuth(state))
     return (
         <Drawer
             sx={{
@@ -58,8 +60,14 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
                 <SideBarMenuItem title={"Главная"} route={routes.main}/>
                 <SideBarMenuItem title={"Счета"} route={routes.invoices} count={countUnpaidInvoices}/>
                 <SideBarMenuItem title={"Поставщики"} route={routes.suppliers}/>
-                <SideBarMenuItem title={"Вход"} route={routes.login}/>
-                <SideBarMenuItem title={"Регистрация"} route={routes.register}/>
+                <SideBarMenuItem title={"Сотрудники"} route={routes.users}/>
+
+                {isAuth
+                    ? (<SideBarMenuItem title={"Профиль"} route={routes.profile}/>)
+                    : (<>
+                        <SideBarMenuItem title={"Вход"} route={routes.login}/>
+                        <SideBarMenuItem title={"Регистрация"} route={routes.register}/>
+                    </>)}
             </List>
         </Drawer>
     );

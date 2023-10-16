@@ -4,8 +4,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {styled} from '@mui/material/styles';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import {drawerWidth} from "./App";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import InvoicesInfo from "./InvoicesInfo";
+import {useAppSelector} from "../hooks/redux";
+import {getIsAuth, getUser} from "../store/selectors/auth";
+import {routes} from "../utils/routes";
 
 
 interface IProps {
@@ -36,6 +39,8 @@ const AppBar = styled(MuiAppBar, {
 
 const Header: FC<IProps> = ({open, handleDrawerOpen}) => {
     const path = useLocation().pathname
+    const isAuth = useAppSelector(state => getIsAuth(state))
+    const user = useAppSelector(state => getUser(state))
     return (
         <AppBar position="fixed" open={open} sx={{backgroundColor: "white"}}>
             <Toolbar>
@@ -48,8 +53,14 @@ const Header: FC<IProps> = ({open, handleDrawerOpen}) => {
                 >
                     <MenuIcon sx={{color: "black"}}/>
                 </IconButton>
-                <Stack sx={{width: "100%" , ml: -5}}  alignItems={"center"} justifyContent={"center"}>
-                    {path === "/invoices" && (<InvoicesInfo/>)}
+                <Stack sx={{width: "100%"}} alignItems={"center"} justifyContent={"end"} direction="row">
+                    {isAuth
+                        ? (<Link to={routes.profile}>
+                            <Typography color="black">{user.firstName} {user.middleName}</Typography>
+                        </Link>)
+                        : (<Link to={routes.login}>
+                            <Typography color="black">Войти</Typography>
+                        </Link>)}
                 </Stack>
             </Toolbar>
         </AppBar>

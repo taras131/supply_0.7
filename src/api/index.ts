@@ -8,15 +8,16 @@ import {
 } from "firebase/firestore";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
-import {INewSupplier, ISuppliers} from "../models/iSuppliers";
+import {INewSupplier, ISupplier} from "../models/iSuppliers";
 import {IInvoice, INewInvoice} from "../models/iInvoices";
 import {IFileData, IUpdateApprovedData, IUpdatePaidData} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds} from "../utils/services";
+import {IAuthData, IRegisterData} from "../models/iAuth";
 
 
 class Api {
     auth = getAuth();
-    getSuppliers = async (dispatchSetSuppliers: (suppliesArr: ISuppliers[]) => void) => {
+    getSuppliers = async (dispatchSetSuppliers: (suppliesArr: ISupplier[]) => void) => {
 
 
     }
@@ -97,6 +98,26 @@ class Api {
             alert(e);
         });
     };
+    login = async (authData: IAuthData) => {
+        const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password)
+        return res.user.uid
+    }
+    register = async (registerData: IRegisterData) => {
+        const res = await createUserWithEmailAndPassword(this.auth, registerData.email, registerData.password)
+        const user = await addDoc(collection(db, "users"), {
+                uid: res.user.uid,
+                email: res.user.email,
+                role: registerData.role,
+                firstName: registerData.firstName,
+                middleName: registerData.middleName
+            }
+        );
+        return user
+    }
+    out = async () => {
+        const res = await signOut(this.auth)
+        return res
+    }
 }
 
 const api = new Api();

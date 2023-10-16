@@ -3,5 +3,7 @@ export const routes = {
     login: "/login",
     register: "/register",
     invoices: "/invoices",
-    suppliers: "/suppliers"
+    suppliers: "/suppliers",
+    users: "/users",
+    profile: "/profile"
 }
