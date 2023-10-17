@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import api from "../../api";
 import {handlerError} from "./handleError";
-import {IApproved, INewInvoice, IPaid} from "../../models/iInvoices";
+import {IApproved, ICancel, INewInvoice, IPaid} from "../../models/iInvoices";
 
 export const fetchAddInvoice = createAsyncThunk(
     'fetch_add_invoice',
@@ -18,6 +18,7 @@ export interface IUpdatePaidData {
     invoiceId: string
     newPaid: IPaid
 }
+
 export const fetchUpdateInvoice = createAsyncThunk(
     'update_invoice',
     async (updatePaidData: IUpdatePaidData, ThunkAPI) => {
@@ -44,6 +45,23 @@ export const fetchUpdateInvoiceApproved = createAsyncThunk(
         }
     }
 )
+export interface IUpdateCancelData {
+    invoiceId: string
+    newCancel: ICancel
+}
+
+export const fetchUpdateInvoiceCancel = createAsyncThunk(
+    'update_invoice_cancel',
+    async (updateCancelData: IUpdateCancelData, ThunkAPI) => {
+        try {
+            const res = await api.updateCancelInvoice(updateCancelData)
+            return res
+        } catch (e) {
+            return ThunkAPI.rejectWithValue(handlerError(e))
+        }
+    }
+)
+
 export interface IFileData {
     file: File
     updateFile: (name: string, filePatch: string) => void

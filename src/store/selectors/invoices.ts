@@ -8,12 +8,17 @@ export const getInvoices = (state: RootState): IInvoice[] => {
     })
 }
 export const getCountUnpaidInvoices = (state: RootState): number => {
-    return state.invoices.list.filter(invoice => !invoice.paid.isPaid).length
+    let unPaidInvoices = [...state.invoices.list.filter(invoice => !invoice.paid.isPaid)]
+    return unPaidInvoices.filter(invoice => !invoice.cancel || !invoice.cancel.isCancel).length
 }
 export const getAmountUnpaidInvoices = (state: RootState): number => {
     let amount = 0
     state.invoices.list.forEach(invoice => {
-        if (!invoice.paid.isPaid) amount += invoice.amount
+        if (!invoice.paid.isPaid) {
+            if (!invoice.cancel || !invoice.cancel.isCancel) {
+                amount += invoice.amount
+            }
+        }
     })
     return amount
 }

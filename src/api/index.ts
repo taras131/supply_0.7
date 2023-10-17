@@ -10,8 +10,8 @@ import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sig
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {INewSupplier, ISupplier} from "../models/iSuppliers";
 import {IInvoice, INewInvoice} from "../models/iInvoices";
-import {IFileData, IUpdateApprovedData, IUpdatePaidData} from "../store/actionsCreators/invoices";
-import {getDateInMilliseconds} from "../utils/services";
+import {IFileData, IUpdateApprovedData, IUpdateCancelData, IUpdatePaidData} from "../store/actionsCreators/invoices";
+import {getDateInMilliseconds, transliterate} from "../utils/services";
 import {IAuthData, IRegisterData} from "../models/iAuth";
 
 
@@ -44,6 +44,16 @@ class Api {
         });
         return res
     }
+    updateCancelInvoice = async (updateCancelData: IUpdateCancelData) => {
+        let res = await updateDoc(doc(db, "invoices", updateCancelData.invoiceId), {
+            cancel: {
+                isCancel: updateCancelData.newCancel.isCancel,
+                date: updateCancelData.newCancel.date,
+                userId: updateCancelData.newCancel.userId
+            }
+        });
+        return res
+    }
     updateInvoiceApproved = async (updateApprovedData: IUpdateApprovedData) => {
         let res = await updateDoc(doc(db, "invoices", updateApprovedData.invoiceId), {
             approved: {
@@ -55,7 +65,7 @@ class Api {
         return res
     }
     uploadFile = async (fileData: IFileData) => {
-        const name = `${getDateInMilliseconds()}-${fileData.file.name}`;
+        const name = `${getDateInMilliseconds()}-${transliterate(fileData.file.name.replace(" ", "_"))}`;
         const storageRef = ref(storage, name);
         const uploadTask = uploadBytesResumable(storageRef, fileData.file);
         uploadTask.on("state_changed",

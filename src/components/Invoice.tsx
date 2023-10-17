@@ -24,11 +24,13 @@ import {setMessage} from "../store/reducers/message";
 import {MESSAGE_SEVERITY} from "../utils/const";
 import {routes} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
+import {getUser} from "../store/selectors/auth";
 
 const Invoice: FC<IInvoice> = (invoice) => {
     const dispatch = useAppDispatch()
     const checkboxId = useId()
     const navigate = useNavigate()
+    const user = useAppSelector(state => getUser(state))
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId))
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId))
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false)
@@ -38,13 +40,17 @@ const Invoice: FC<IInvoice> = (invoice) => {
         setBackgroundColor("white")
         setTextColor("black")
         if (invoice.paid.isPaid) {
-            setBackgroundColor("green")
+            setBackgroundColor("#00CC66")
             setTextColor("white")
         } else {
             if (invoice.approved.isApproved) {
-                setBackgroundColor("#a0d2eb")
+                setBackgroundColor("#00CCFF")
                 setTextColor("white")
             }
+        }
+        if (invoice.cancel && invoice.cancel.isCancel) {
+            setBackgroundColor("#FF66CC")
+            setTextColor("black")
         }
     }, [invoice])
     const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
@@ -65,7 +71,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
         dispatch(fetchUpdateInvoiceApproved({
             invoiceId: invoice.id,
             newApproved: {
-                userId: "",
+                userId: user.uid,
                 date: getDateInMilliseconds(),
                 isApproved: !invoice.approved.isApproved
             }
@@ -94,7 +100,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                     control={<Checkbox checked={invoice.approved.isApproved}
                                        onChange={handleApprovedChange}
                                        id={checkboxId}
-                                       disabled={invoice.paid.isPaid}
+                                       disabled={invoice.paid.isPaid || invoice.cancel && invoice.cancel.isCancel}
                                        sx={{'& .MuiSvgIcon-root': {fontSize: 38}}}/>}/>
             </TableCell>
             <TableCell sx={{color: textColor}}>{convertMillisecondsToDate(invoice.author.date)}</TableCell>
@@ -110,15 +116,19 @@ const Invoice: FC<IInvoice> = (invoice) => {
                 </Tooltip>
             </TableCell>
             <TableCell sx={{cursor: "pointer"}} align={"right"} onClick={handleAmountClick}>
-                <Tooltip title="скопировать">
-                    <Stack sx={{width: "100%"}} direction={"row"} alignItems={"center"} justifyContent={"end"}
-                           spacing={1}>
-                        <Typography sx={{color: textColor}}>
-                            {new Intl.NumberFormat('ru-RU').format(invoice.amount)} руб.
-                        </Typography>
-                        <ContentCopyIcon color="action"/>
-                    </Stack>
-                </Tooltip>
+                {invoice.cancel && invoice.cancel.isCancel
+                    ? (<Typography color={"#FF0033"} fontWeight={600}>
+                       - - - - - - - - -   руб.
+                    </Typography>)
+                    : (<Tooltip title="скопировать">
+                        <Stack sx={{width: "100%"}} direction={"row"} alignItems={"center"} justifyContent={"end"}
+                               spacing={1}>
+                            <Typography sx={{color: textColor}}>
+                                {new Intl.NumberFormat('ru-RU').format(invoice.amount)} руб.
+                            </Typography>
+                            <ContentCopyIcon color="action"/>
+                        </Stack>
+                    </Tooltip>)}
             </TableCell>
             <TableCell sx={{color: textColor}} align={"center"}>
                 {invoice.isWithVAT
@@ -132,7 +142,16 @@ const Invoice: FC<IInvoice> = (invoice) => {
             <TableCell
                 sx={{color: textColor}}
                 align={"center"}>
-                {invoice.paid.isPaid ? convertMillisecondsToDate(invoice.paid.date) : "Нет"}
+                {invoice.paid.isPaid
+                    ? convertMillisecondsToDate(invoice.paid.date)
+                    : (
+                        <Typography color={invoice.cancel && invoice.cancel.isCancel ? "#FF0033" : "black"}
+                                    fontWeight={invoice.cancel && invoice.cancel.isCancel ? 600 : 400}>
+                            {invoice.cancel && invoice.cancel.isCancel
+                                ? "ОТМЕНЁН"
+                                : "Нет"}
+                        </Typography>
+                    )}
             </TableCell>
             <TableCell sx={{color: textColor}} align="center">
                 <Chip
@@ -159,13 +178,15 @@ const Invoice: FC<IInvoice> = (invoice) => {
                             component="label"
                             loading={isUploadFileLoading}
                             fullWidth
+                            disabled={invoice.cancel && invoice.cancel.isCancel}
                             size="small"
                             startIcon={(<AttachFileIcon/>)}
                         >
-                            {"Загрузить"}
+                            Загрузить
                             <input
                                 type="file"
                                 hidden
+                                accept="image/*, application/pdf"
                                 onChange={handleChangeInputFile}
                             />
                         </LoadingButton>

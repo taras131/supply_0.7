@@ -20,6 +20,7 @@ import {getSuppliers} from "../store/selectors/suppliers";
 import {emptyInvoice} from "../models/iInvoices";
 import {getDateInMilliseconds} from "../utils/services";
 import {fetchAddInvoice, fetchRemoveFile, fetchUploadFile} from "../store/actionsCreators/invoices";
+import {getUser} from "../store/selectors/auth";
 
 interface IProps {
     isOpenModal: boolean
@@ -33,6 +34,7 @@ const InvoicesAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
         number: ""
     })
     const [isWithVAT, setIsWithVAT] = useState(true)
+    const user = useAppSelector(state => getUser(state))
     const [selectedSupplierId, setSelectedSupplierId] = useState("")
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false)
     const [fileName, setFileName] = useState("")
@@ -69,7 +71,7 @@ const InvoicesAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
     const handleAddClick = async () => {
         dispatch(fetchAddInvoice({
             ...emptyInvoice,
-            author: {...emptyInvoice.author, date: getDateInMilliseconds()},
+            author: {...emptyInvoice.author, date: getDateInMilliseconds(), userId: user.uid},
             isWithVAT: isWithVAT,
             supplierId: selectedSupplierId,
             number: inputValue.number,

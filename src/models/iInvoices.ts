@@ -10,6 +10,12 @@ export interface IApproved {
     date: number
 }
 
+export interface ICancel {
+    isCancel: boolean
+    date: number
+    userId: string
+}
+
 export interface INewInvoice {
     author: {
         userId: string,
@@ -24,6 +30,7 @@ export interface INewInvoice {
     shipmentId: string
     supplierId: string
     invoiceFileLink: string
+    cancel: ICancel
 }
 
 export interface IInvoice extends INewInvoice {
