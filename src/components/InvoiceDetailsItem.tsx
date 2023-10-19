@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import {Typography} from "@mui/material";
-import Divider from '@mui/material/Divider';
+import Divider from "@mui/material/Divider";
 
 interface IProps {
     title: string

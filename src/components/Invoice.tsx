@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useId, useState} from 'react';
+import React, {FC, useEffect, useId, useState} from "react";
 import {
     Checkbox,
     Chip,
@@ -8,18 +8,18 @@ import {
     TableCell,
     TableRow,
     Tooltip,
-    Typography
+    Typography,
 } from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {convertMillisecondsToDate, getDateInMilliseconds} from "../utils/services";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getSupplierINNById, getSupplierNameById} from "../store/selectors/suppliers";
-import DownloadIcon from '@mui/icons-material/Download';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DownloadIcon from "@mui/icons-material/Download";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {fetchUpdateInvoice, fetchUpdateInvoiceApproved, fetchUploadFile} from "../store/actionsCreators/invoices";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {setMessage} from "../store/reducers/message";
 import {MESSAGE_SEVERITY} from "../utils/const";
 import {routes} from "../utils/routes";
@@ -27,72 +27,72 @@ import {useNavigate} from "react-router-dom";
 import {getUser} from "../store/selectors/auth";
 
 const Invoice: FC<IInvoice> = (invoice) => {
-    const dispatch = useAppDispatch()
-    const checkboxId = useId()
-    const navigate = useNavigate()
-    const user = useAppSelector(state => getUser(state))
-    const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId))
-    const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId))
-    const [isUploadFileLoading, setIsUploadFileLoading] = useState(false)
-    const [backgroundColor, setBackgroundColor] = useState("white")
-    const [textColor, setTextColor] = useState("black")
+    const dispatch = useAppDispatch();
+    const checkboxId = useId();
+    const navigate = useNavigate();
+    const user = useAppSelector(state => getUser(state));
+    const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
+    const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
+    const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
+    const [backgroundColor, setBackgroundColor] = useState("white");
+    const [textColor, setTextColor] = useState("black");
     useEffect(() => {
-        setBackgroundColor("white")
-        setTextColor("black")
+        setBackgroundColor("white");
+        setTextColor("black");
         if (invoice.paid.isPaid) {
-            setBackgroundColor("#00CC66")
-            setTextColor("white")
+            setBackgroundColor("#00CC66");
+            setTextColor("white");
         } else {
             if (invoice.approved.isApproved) {
-                setBackgroundColor("#00CCFF")
-                setTextColor("white")
+                setBackgroundColor("#00CCFF");
+                setTextColor("white");
             }
         }
         if (invoice.cancel && invoice.cancel.isCancel) {
-            setBackgroundColor("#FF66CC")
-            setTextColor("black")
+            setBackgroundColor("#FF66CC");
+            setTextColor("black");
         }
-    }, [invoice])
+    }, [invoice]);
     const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
         const newPaid = {
-            isPaid: true, userId: "", date: getDateInMilliseconds(), paymentOrderFileLink: filePatch
-        }
-        dispatch(fetchUpdateInvoice({invoiceId: invoice.id, newPaid: newPaid}))
-    }
+            isPaid: true, userId: "", date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
+        };
+        dispatch(fetchUpdateInvoice({invoiceId: invoice.id, newPaid: newPaid}));
+    };
     const handleChangeInputFile = (e: any) => {
-        setIsUploadFileLoading(true)
+        setIsUploadFileLoading(true);
         dispatch(fetchUploadFile({
             file: e.target.files[0],
             updateFile: onLoadingPaymentOrderFile,
-            setIsUpdateFileLoading: setIsUploadFileLoading
-        }))
-    }
+            setIsUpdateFileLoading: setIsUploadFileLoading,
+        }));
+    };
     const handleApprovedChange = () => {
         dispatch(fetchUpdateInvoiceApproved({
             invoiceId: invoice.id,
             newApproved: {
                 userId: user.uid,
                 date: getDateInMilliseconds(),
-                isApproved: !invoice.approved.isApproved
-            }
-        }))
-    }
+                isApproved: !invoice.approved.isApproved,
+            },
+        }));
+    };
     const handleINNClick = () => {
-        navigator.clipboard.writeText(supplierINN)
-        dispatch(setMessage({text: "ИНН скопирован", severity: MESSAGE_SEVERITY.success}))
-    }
+        navigator.clipboard.writeText(supplierINN);
+        dispatch(setMessage({text: "ИНН скопирован", severity: MESSAGE_SEVERITY.success}));
+    };
     const handleAmountClick = () => {
-        navigator.clipboard.writeText(invoice.amount)
-        dispatch(setMessage({text: "Сумма скопирована", severity: MESSAGE_SEVERITY.success}))
-    }
+        navigator.clipboard.writeText(invoice.amount);
+        dispatch(setMessage({text: "Сумма скопирована", severity: MESSAGE_SEVERITY.success}));
+    };
     const handleMoreClick = () => {
-        navigate(`${routes.invoices}/${invoice.id}`)
-    }
+        navigate(`${routes.invoices}/${invoice.id}`);
+    };
     return (
         <TableRow
             sx={{
-                '&:last-child td, &:last-child th': {border: 0},
-                backgroundColor: backgroundColor
+                "&:last-child td, &:last-child th": {border: 0},
+                backgroundColor: backgroundColor,
             }}
         >
             <TableCell align={"center"}>
@@ -101,7 +101,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                                        onChange={handleApprovedChange}
                                        id={checkboxId}
                                        disabled={invoice.paid.isPaid || invoice.cancel && invoice.cancel.isCancel}
-                                       sx={{'& .MuiSvgIcon-root': {fontSize: 38}}}/>}/>
+                                       sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
             </TableCell>
             <TableCell sx={{color: textColor}}>{convertMillisecondsToDate(invoice.author.date)}</TableCell>
             <TableCell sx={{color: textColor}}>{supplierName}</TableCell>
@@ -124,7 +124,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                         <Stack sx={{width: "100%"}} direction={"row"} alignItems={"center"} justifyContent={"end"}
                                spacing={1}>
                             <Typography sx={{color: textColor}}>
-                                {new Intl.NumberFormat('ru-RU').format(invoice.amount)} руб.
+                                {new Intl.NumberFormat("ru-RU").format(invoice.amount)} руб.
                             </Typography>
                             <ContentCopyIcon color="action"/>
                         </Stack>

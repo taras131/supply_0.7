@@ -4,11 +4,11 @@ import {ISupplier} from "../../models/iSuppliers";
 
 
 export const getSuppliers = (state: RootState): ISupplier [] => {
-    return state.suppliers.list
-}
+    return state.suppliers.list;
+};
 export const getSupplierNameById = (state: RootState, supplierId: string) => {
-    return state.suppliers.list.filter(supplier => supplier.id === supplierId)[0].name
-}
+    return state.suppliers.list.filter(supplier => supplier.id === supplierId)[0].name;
+};
 export const getSupplierINNById = (state: RootState, supplierId: string) => {
-    return state.suppliers.list.filter(supplier => supplier.id === supplierId)[0].INN
-}
+    return state.suppliers.list.filter(supplier => supplier.id === supplierId)[0].INN;
+};

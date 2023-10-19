@@ -1,15 +1,13 @@
-import {FC} from 'react';
+import {FC} from "react";
 import {IconButton, Stack, Toolbar, Typography} from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-import {styled} from '@mui/material/styles';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
-import {drawerWidth} from "./App";
-import {Link, useLocation} from "react-router-dom";
-import InvoicesInfo from "./InvoicesInfo";
+import MenuIcon from "@mui/icons-material/Menu";
+import {styled} from "@mui/material/styles";
+import MuiAppBar, {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar";
+import {Link} from "react-router-dom";
 import {useAppSelector} from "../hooks/redux";
 import {getIsAuth, getUser} from "../store/selectors/auth";
 import {routes} from "../utils/routes";
-
+import {drawerWidth} from "../utils/const";
 
 interface IProps {
     open: boolean
@@ -21,16 +19,16 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({theme, open}) => ({
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
     ...(open && {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: `${drawerWidth}px`,
-        transition: theme.transitions.create(['margin', 'width'], {
+        transition: theme.transitions.create(["margin", "width"], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
@@ -38,9 +36,8 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Header: FC<IProps> = ({open, handleDrawerOpen}) => {
-    const path = useLocation().pathname
-    const isAuth = useAppSelector(state => getIsAuth(state))
-    const user = useAppSelector(state => getUser(state))
+    const isAuth = useAppSelector(state => getIsAuth(state));
+    const user = useAppSelector(state => getUser(state));
     return (
         <AppBar position="fixed" open={open} sx={{backgroundColor: "white"}}>
             <Toolbar>
@@ -49,7 +46,7 @@ const Header: FC<IProps> = ({open, handleDrawerOpen}) => {
                     aria-label="open drawer"
                     onClick={handleDrawerOpen}
                     edge="start"
-                    sx={{mr: 2, ...(open && {display: 'none'})}}
+                    sx={{mr: 2, ...(open && {display: "none"})}}
                 >
                     <MenuIcon sx={{color: "black"}}/>
                 </IconButton>

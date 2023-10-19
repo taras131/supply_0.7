@@ -11,31 +11,31 @@ const initialState: IMessageState = {
     isShow: false,
     message: {
         severity: MESSAGE_SEVERITY.success,
-        text: ""
-    }
-}
+        text: "",
+    },
+};
 
 export const MessageSlice = createSlice({
-    name: 'message',
+    name: "message",
     initialState,
     reducers: {
         setMessage: (state, action: PayloadAction<IMessage>) => {
-            state.message = action.payload
-            state.isShow = true
+            state.message = action.payload;
+            state.isShow = true;
         },
         resetMessage: (state) => {
-            state.isShow = false
+            state.isShow = false;
             state.message = {
                 severity: MESSAGE_SEVERITY.success,
-                text: ""
-            }
-        }
+                text: "",
+            };
+        },
     },
-    extraReducers: {}
-})
+    extraReducers: {},
+});
 
 export const {
-    setMessage, resetMessage
-} = MessageSlice.actions
+    setMessage, resetMessage,
+} = MessageSlice.actions;
 
-export default MessageSlice.reducer
+export default MessageSlice.reducer;

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import ModalWindow from "./ModalWindow";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -12,11 +12,11 @@ interface IMessageWindowProps {
 
 const MessageWindow: FC<IMessageWindowProps> = ({
                                                     isOpenModal, message,
-                                                    handleToggleOpen
+                                                    handleToggleOpen,
                                                 }) => {
     const handleOkClick = () => {
-        handleToggleOpen()
-    }
+        handleToggleOpen();
+    };
     return (
         <ModalWindow handleToggleOpen={handleToggleOpen} isOpenModal={isOpenModal}>
             <Stack>

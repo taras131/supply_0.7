@@ -1,15 +1,13 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import LoadingButton from '@mui/lab/LoadingButton';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import LoadingButton from "@mui/lab/LoadingButton";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 import {useEffect, useId, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
@@ -24,77 +22,77 @@ import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui
 
 
 const Auth = () => {
-    const location: any = useLocation()
-    const dispatch = useAppDispatch()
-    const navigate = useNavigate()
-    const isAuth = useAppSelector(state => getIsAuth(state))
-    const isLoading = useAppSelector(state => getIsAuthLoading(state))
-    const selectLabelId = useId()
-    const selectId = useId()
-    const selectUserRoleId = useId()
-    const errorMessage = useAppSelector(state => getAuthErrorMessage(state))
+    const location: any = useLocation();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const isAuth = useAppSelector(state => getIsAuth(state));
+    const isLoading = useAppSelector(state => getIsAuthLoading(state));
+    const selectLabelId = useId();
+    const selectId = useId();
+    const selectUserRoleId = useId();
+    const errorMessage = useAppSelector(state => getAuthErrorMessage(state));
     const [inputValues, setInputValues] = useState({
         email: "",
         password: "",
         firstName: "",
-        middleName: ""
-    })
+        middleName: "",
+    });
     const [validationErrors, setValidationErrors] = useState({
         email: "",
         password: "",
         firstName: "",
-        middleName: ""
-    })
+        middleName: "",
+    });
     const [textErrors, setTextErrors] = useState({
         email: "",
         password: "",
         firstName: "",
-        middleName: ""
-    })
-    const [selectedUserRole, setSelectedUserRole] = useState("")
+        middleName: "",
+    });
+    const [selectedUserRole, setSelectedUserRole] = useState("");
     const handleUserRoleChange = (e: SelectChangeEvent) => {
-        setSelectedUserRole(e.target.value as string)
-    }
-    const {pathname} = useLocation()
-    const isRegister = pathname === routes.register
-    const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false)
+        setSelectedUserRole(e.target.value as string);
+    };
+    const {pathname} = useLocation();
+    const isRegister = pathname === routes.register;
+    const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
     const toggleIsOpenErrorMessageWindow = () => {
-        setIsOpenErrorMessageWindow(prev => !prev)
-    }
+        setIsOpenErrorMessageWindow(prev => !prev);
+    };
     useEffect(() => {
         if (errorMessage) {
-            setIsOpenErrorMessageWindow(true)
+            setIsOpenErrorMessageWindow(true);
         }
-    }, [errorMessage])
+    }, [errorMessage]);
     useEffect(() => {
         if (isAuth) {
             if (location.state && location.state.from) {
-                navigate(location.state.from)
+                navigate(location.state.from);
             } else {
-                navigate(routes.profile)
+                navigate(routes.profile);
             }
             dispatch(setMessage({
                 severity: MESSAGE_SEVERITY.success,
-                text: "Вы успешно вошли в систему."
-            }))
+                text: "Вы успешно вошли в систему.",
+            }));
         }
-    }, [isAuth])
+    }, [isAuth]);
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === "email") {
-            setValidationErrors({...validationErrors, email: ""})
+            setValidationErrors({...validationErrors, email: ""});
             setTextErrors({...textErrors, email: ""});
             if (!validateEmail(e.target.value)) {
-                setValidationErrors({...validationErrors, email: "Введён не email"})
+                setValidationErrors({...validationErrors, email: "Введён не email"});
             }
         } else {
-            setValidationErrors({...validationErrors, password: ""})
+            setValidationErrors({...validationErrors, password: ""});
             setTextErrors({...textErrors, password: ""});
             if (e.target.value.length < 6) {
-                setValidationErrors({...validationErrors, password: "Пароль должен быть не менее 6 символов"})
+                setValidationErrors({...validationErrors, password: "Пароль должен быть не менее 6 символов"});
             }
         }
-        setInputValues({...inputValues, [e.target.name]: e.target.value})
-    }
+        setInputValues({...inputValues, [e.target.name]: e.target.value});
+    };
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (isRegister) {
@@ -103,10 +101,10 @@ const Auth = () => {
                 middleName: inputValues.middleName,
                 password: inputValues.password,
                 email: inputValues.email,
-                role: selectedUserRole
-            }))
+                role: selectedUserRole,
+            }));
         } else {
-            dispatch(fetchLogin(inputValues))
+            dispatch(fetchLogin(inputValues));
         }
     };
     useEffect(() => {
@@ -120,19 +118,19 @@ const Auth = () => {
         }, 1300);
 
         return () => clearTimeout(validationTimeout);
-    }, [validationErrors.email, validationErrors.password, inputValues.email, inputValues.password])
+    }, [validationErrors.email, validationErrors.password, inputValues.email, inputValues.password]);
     return (
         <Container component="div" maxWidth="xs">
             <CssBaseline/>
             <Box
                 sx={{
                     marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                 }}
             >
-                <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">

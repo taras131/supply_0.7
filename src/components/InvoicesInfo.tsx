@@ -1,11 +1,11 @@
-import React from 'react';
-import {Button, Stack, Typography} from "@mui/material";
+import React from "react";
+import {Stack, Typography} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 import {getAmountUnpaidInvoices, getCountUnpaidInvoices} from "../store/selectors/invoices";
 
 const InvoicesInfo = () => {
-    const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state))
-    const amountUnpaidInvoices = useAppSelector(state => getAmountUnpaidInvoices(state))
+    const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state));
+    const amountUnpaidInvoices = useAppSelector(state => getAmountUnpaidInvoices(state));
     return (
         <Stack sx={{maxWidth: 1350, width: "100%", marginTop: "12px"}} direction="row" alignItems="center"
                justifyContent="space-between">
@@ -16,7 +16,7 @@ const InvoicesInfo = () => {
             <Stack direction="row" spacing={1}>
                 <Typography color={"gray"}>На сумму:</Typography>
                 <Typography color={"darkblue"} fontSize="16px" fontWeight={600}>
-                    {new Intl.NumberFormat('ru-RU').format(amountUnpaidInvoices)} руб.
+                    {new Intl.NumberFormat("ru-RU").format(amountUnpaidInvoices)} руб.
                 </Typography>
             </Stack>
         </Stack>

@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
 import {Button, Stack, Typography} from "@mui/material";
 import SuppliersAddNew from "./SuppliersAddNew";
 
 const SuppliersHeader = () => {
-    const [isOpenAddNewModal, setIsOpenAddNewModal] = useState(false)
+    const [isOpenAddNewModal, setIsOpenAddNewModal] = useState(false);
     const toggleIsOpenAddNewModal = () => {
-        setIsOpenAddNewModal(prev => !prev)
-    }
+        setIsOpenAddNewModal(prev => !prev);
+    };
     return (
         <Stack sx={{maxWidth: 850, width: "100%", padding: "20px 0"}} direction="row" alignItems="center"
                justifyContent="space-between">

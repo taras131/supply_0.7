@@ -1,59 +1,53 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState} from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import {Button, ButtonGroup, Stack, Typography} from "@mui/material";
+import {Button, Stack, Typography} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import {IInvoice} from "../models/iInvoices";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import {getDateInMilliseconds} from "../utils/services";
 import {
     fetchRemoveFile,
     fetchUpdateInvoice,
-    fetchUpdateInvoiceFileLink,
-    fetchUploadFile
+    fetchUploadFile,
 } from "../store/actionsCreators/invoices";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getUser} from "../store/selectors/auth";
 
 
 const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid}) => {
-    const user = useAppSelector(state => getUser(state))
-    const dispatch = useAppDispatch()
-    const [isLoading, setIsLoading] = useState(false)
-    let paymentOrderFileName = ""
+    const user = useAppSelector(state => getUser(state));
+    const dispatch = useAppDispatch();
+    const [isLoading, setIsLoading] = useState(false);
+    let paymentOrderFileName = "";
     if (paid.paymentOrderFileLink) {
-        paymentOrderFileName = paid.paymentOrderFileLink.split("/")[7].split("?")[0]
+        paymentOrderFileName = paid.paymentOrderFileLink.split("/")[7].split("?")[0];
     }
-    let invoiceFileName = invoiceFileLink.split("/")[7].split("?")[0]
-    console.log(invoiceFileName)
-    console.log(paymentOrderFileName)
-    const handleChangeInvoiceFile = () => {
-
-    }
+    const invoiceFileName = invoiceFileLink.split("/")[7].split("?")[0];
     const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
         const newPaid = {
-            isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch
-        }
-        dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}))
-    }
+            isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
+        };
+        dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}));
+    };
     const handleRemovePaymentOrderFile = () => {
-        dispatch(fetchRemoveFile(paymentOrderFileName))
-        const newPaid = {isPaid: false, userId: "", date: 0, paymentOrderFileLink: ""}
-        dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}))
-    }
+        dispatch(fetchRemoveFile(paymentOrderFileName));
+        const newPaid = {isPaid: false, userId: "", date: 0, paymentOrderFileLink: ""};
+        dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}));
+    };
     const handleChangePaymentOrderFile = (e: any) => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (paymentOrderFileName) {
-            handleRemovePaymentOrderFile()
+            handleRemovePaymentOrderFile();
         }
         dispatch(fetchUploadFile({
             file: e.target.files[0],
             updateFile: onLoadingPaymentOrderFile,
-            setIsUpdateFileLoading: setIsLoading
-        }))
-    }
+            setIsUpdateFileLoading: setIsLoading,
+        }));
+    };
 
     return (
         <Grid container sx={{width: "100%", height: "100px"}} alignItems="start" spacing={2}>

@@ -1,43 +1,42 @@
-import {FC} from 'react';
-import {drawerWidth} from "./App";
+import {FC} from "react";
 import {Drawer, Stack, styled, Typography} from "@mui/material";
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
 import SideBarMenuItem from "./SideBarMenuItem";
 import {routes} from "../utils/routes";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 import {useAppSelector} from "../hooks/redux";
 import {getCountUnpaidInvoices} from "../store/selectors/invoices";
 import {getIsAuth} from "../store/selectors/auth";
-
+import {drawerWidth} from "../utils/const";
 
 interface IProps {
     open: boolean
     handleDrawerClose: () => void
 }
 
-const DrawerHeader = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'center',
+const DrawerHeader = styled("div")(({theme}) => ({
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
 }));
 
 const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
-    const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state))
-    const isAuth = useAppSelector(state => getIsAuth(state))
+    const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state));
+    const isAuth = useAppSelector(state => getIsAuth(state));
     return (
         <Drawer
             sx={{
                 width: drawerWidth,
                 flexShrink: 0,
-                '& .MuiDrawer-paper': {
+                "& .MuiDrawer-paper": {
                     width: drawerWidth,
-                    boxSizing: 'border-box',
+                    boxSizing: "border-box",
                     backgroundColor: "#272e3d",
-                    color: "white"
+                    color: "white",
                 },
             }}
             variant="persistent"

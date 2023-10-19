@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {useAppSelector} from "../hooks/redux";
 import {
     Paper,
@@ -9,14 +9,14 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Typography
+    Typography,
 } from "@mui/material";
 import {getAllUsers} from "../store/selectors/auth";
 import User from "../components/User";
 
 const Users = () => {
-    const allUsers = useAppSelector(state => getAllUsers(state))
-    const allUsersList = allUsers.map(user => (<User key={user.id} {...user}/>))
+    const allUsers = useAppSelector(state => getAllUsers(state));
+    const allUsersList = allUsers.map(user => (<User key={user.id} {...user}/>));
     return (
         <Stack style={{minHeight: "calc(100vh - 60px"}} alignItems="center">
             <TableContainer component={Paper} sx={{maxWidth: 850}}>
@@ -50,7 +50,7 @@ const Users = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Stack>)
+        </Stack>);
 };
 
 export default Users;

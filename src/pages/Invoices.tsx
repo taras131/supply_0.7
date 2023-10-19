@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
     Paper,
     Stack,
@@ -17,8 +17,8 @@ import InvoicesHelper from "../components/InvoicesHelper";
 import InvoicesInfo from "../components/InvoicesInfo";
 
 const Invoices = () => {
-    const invoices = useAppSelector(state => getInvoices(state))
-    const invoicesList = invoices.map(invoice => (<Invoice key={invoice.author.date} {...invoice}/>))
+    const invoices = useAppSelector(state => getInvoices(state));
+    const invoicesList = invoices.map(invoice => (<Invoice key={invoice.author.date} {...invoice}/>));
     return (
         <Stack style={{minHeight: "calc(100vh - 100px"}} alignItems="center">
             <InvoicesHeader/>

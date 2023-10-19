@@ -41,18 +41,18 @@ export interface IInvoice extends INewInvoice {
 export const emptyInvoice: INewInvoice = {
     author: {
         userId: "",
-        date: 0
+        date: 0,
     },
     approved: {
         isApproved: false,
         userId: "",
-        date: 0
+        date: 0,
     },
     paid: {
         isPaid: false,
         userId: "",
         date: 0,
-        paymentOrderFileLink: ""
+        paymentOrderFileLink: "",
     },
     number: "",
     amount: 0,
@@ -60,5 +60,5 @@ export const emptyInvoice: INewInvoice = {
     requestId: "",
     shipmentId: "",
     supplierId: "",
-    invoiceFileLink: ""
-}
+    invoiceFileLink: "",
+};

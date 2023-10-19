@@ -1,20 +1,19 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import Box from "@mui/material/Box";
 import {Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
 import {convertMillisecondsToDate} from "../utils/services";
 import {IInvoice} from "../models/iInvoices";
 
 const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) => {
-    let activeStep = 0
+    let activeStep = 0;
     if (approved.isApproved) {
-        activeStep = 1
+        activeStep = 1;
     }
     if (paid.isPaid) {
-        activeStep = 2
+        activeStep = 2;
     }
-    console.log(cancel)
     return (
-        <Box sx={{maxWidth: "1200px", width: '100%', paddingTop: "60px"}}>
+        <Box sx={{maxWidth: "1200px", width: "100%", paddingTop: "60px"}}>
             <Stepper activeStep={activeStep} alternativeLabel>
                 <Step key={1}>
                     <StepLabel>

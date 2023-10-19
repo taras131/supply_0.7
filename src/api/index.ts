@@ -2,14 +2,13 @@ import {db, storage} from "../firebase";
 import {
     addDoc,
     collection,
-    deleteDoc,
     updateDoc,
     doc,
 } from "firebase/firestore";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
-import {INewSupplier, ISupplier} from "../models/iSuppliers";
-import {IInvoice, INewInvoice} from "../models/iInvoices";
+import {INewSupplier} from "../models/iSuppliers";
+import {INewInvoice} from "../models/iInvoices";
 import {IFileData, IUpdateApprovedData, IUpdateCancelData, IUpdatePaidData} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds, transliterate} from "../utils/services";
 import {IAuthData, IRegisterData} from "../models/iAuth";
@@ -17,53 +16,49 @@ import {IAuthData, IRegisterData} from "../models/iAuth";
 
 class Api {
     auth = getAuth();
-    getSuppliers = async (dispatchSetSuppliers: (suppliesArr: ISupplier[]) => void) => {
-
-
-    }
     addSupplier = async (supplier: INewSupplier) => {
-        let res = await addDoc(collection(db, "suppliers"),
+        const res = await addDoc(collection(db, "suppliers"),
             supplier
         );
-        return res
-    }
+        return res;
+    };
     addInvoice = async (invoice: INewInvoice) => {
-        let res = await addDoc(collection(db, "invoices"),
+        const res = await addDoc(collection(db, "invoices"),
             invoice
         );
-        return res
-    }
+        return res;
+    };
     updateInvoice = async (updatePaidData: IUpdatePaidData) => {
-        let res = await updateDoc(doc(db, "invoices", updatePaidData.invoiceId), {
+        const res = await updateDoc(doc(db, "invoices", updatePaidData.invoiceId), {
             paid: {
                 isPaid: updatePaidData.newPaid.isPaid,
                 userId: updatePaidData.newPaid.userId,
                 date: updatePaidData.newPaid.date,
-                paymentOrderFileLink: updatePaidData.newPaid.paymentOrderFileLink
-            }
+                paymentOrderFileLink: updatePaidData.newPaid.paymentOrderFileLink,
+            },
         });
-        return res
-    }
+        return res;
+    };
     updateCancelInvoice = async (updateCancelData: IUpdateCancelData) => {
-        let res = await updateDoc(doc(db, "invoices", updateCancelData.invoiceId), {
+        const res = await updateDoc(doc(db, "invoices", updateCancelData.invoiceId), {
             cancel: {
                 isCancel: updateCancelData.newCancel.isCancel,
                 date: updateCancelData.newCancel.date,
-                userId: updateCancelData.newCancel.userId
-            }
+                userId: updateCancelData.newCancel.userId,
+            },
         });
-        return res
-    }
+        return res;
+    };
     updateInvoiceApproved = async (updateApprovedData: IUpdateApprovedData) => {
-        let res = await updateDoc(doc(db, "invoices", updateApprovedData.invoiceId), {
+        const res = await updateDoc(doc(db, "invoices", updateApprovedData.invoiceId), {
             approved: {
                 isApproved: updateApprovedData.newApproved.isApproved,
                 userId: updateApprovedData.newApproved.userId,
                 date: updateApprovedData.newApproved.date,
-            }
+            },
         });
-        return res
-    }
+        return res;
+    };
     uploadFile = async (fileData: IFileData) => {
         const name = `${getDateInMilliseconds()}-${transliterate(fileData.file.name.replace(" ", "_"))}`;
         const storageRef = ref(storage, name);
@@ -94,8 +89,8 @@ class Api {
             },
             async () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    fileData.updateFile(name, downloadURL)
-                    fileData.setIsUpdateFileLoading(false)
+                    fileData.updateFile(name, downloadURL);
+                    fileData.setIsUpdateFileLoading(false);
                 });
             }
         );
@@ -109,25 +104,25 @@ class Api {
         });
     };
     login = async (authData: IAuthData) => {
-        const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password)
-        return res.user.uid
-    }
+        const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password);
+        return res.user.uid;
+    };
     register = async (registerData: IRegisterData) => {
-        const res = await createUserWithEmailAndPassword(this.auth, registerData.email, registerData.password)
+        const res = await createUserWithEmailAndPassword(this.auth, registerData.email, registerData.password);
         const user = await addDoc(collection(db, "users"), {
                 uid: res.user.uid,
                 email: res.user.email,
                 role: registerData.role,
                 firstName: registerData.firstName,
-                middleName: registerData.middleName
+                middleName: registerData.middleName,
             }
         );
-        return user
-    }
+        return user;
+    };
     out = async () => {
-        const res = await signOut(this.auth)
-        return res
-    }
+        const res = await signOut(this.auth);
+        return res;
+    };
 }
 
 const api = new Api();

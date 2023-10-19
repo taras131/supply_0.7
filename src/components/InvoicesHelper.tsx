@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 import {Stack, Typography} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Grid from "@mui/material/Unstable_Grid2";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
@@ -15,7 +15,7 @@ const InvoicesHelper = () => {
                         height: "35px",
                         width: "35px",
                         backgroundColor: "white",
-                        border: "1px solid black"
+                        border: "1px solid black",
                     }}></div>
                     <Typography>- новые счета</Typography>
                 </Stack>

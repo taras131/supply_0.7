@@ -10,28 +10,28 @@ interface ICommentsState {
 const initialState: ICommentsState = {
     list: [],
     isLoading: false,
-    errorMessage: ""
-}
+    errorMessage: "",
+};
 
 export const InvoicesSlice = createSlice({
-    name: 'invoices',
+    name: "invoices",
     initialState,
     reducers: {
         setInvoices: (state, action: PayloadAction<IInvoice []>) => {
-            state.list = action.payload
+            state.list = action.payload;
         },
         setComments: (state, action: PayloadAction<any>) => {
-            state.list = action.payload
+            state.list = action.payload;
         },
         setCommentsLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload
-        }
+            state.isLoading = action.payload;
+        },
     },
-    extraReducers: {}
-})
+    extraReducers: {},
+});
 
 export const {
-    setInvoices, setComments, setCommentsLoading
-} = InvoicesSlice.actions
+    setInvoices, setComments, setCommentsLoading,
+} = InvoicesSlice.actions;
 
-export default InvoicesSlice.reducer
+export default InvoicesSlice.reducer;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {useAppSelector} from "../hooks/redux";
 import {
     Paper,
@@ -9,15 +9,15 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Typography
+    Typography,
 } from "@mui/material";
 import {getSuppliers} from "../store/selectors/suppliers";
 import Supplier from "../components/Supplier";
 import SuppliersHeader from "../components/SuppliersHeader";
 
 const Suppliers = () => {
-    const suppliers = useAppSelector(state => getSuppliers(state))
-    const suppliersList = suppliers.map(supplier => (<Supplier key={supplier.id} {...supplier}/>))
+    const suppliers = useAppSelector(state => getSuppliers(state));
+    const suppliersList = suppliers.map(supplier => (<Supplier key={supplier.id} {...supplier}/>));
     return (
         <Stack style={{minHeight: "calc(100vh - 60px"}} alignItems="center">
             <SuppliersHeader/>

@@ -1,31 +1,31 @@
-import React, {useEffect} from 'react';
+import React, {useEffect} from "react";
 import Preloader from "../components/Preloader";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getIsAuth, getIsAuthLoading, getUser} from "../store/selectors/auth";
-import {deepPurple} from '@mui/material/colors';
+import {deepPurple} from "@mui/material/colors";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
+import Stack from "@mui/material/Stack";
+import Avatar from "@mui/material/Avatar";
 import {fetchOut} from "../store/actionsCreators/auth";
-import {Grid, Box, Container} from "@mui/material";
-import CssBaseline from '@mui/material/CssBaseline';
+import {Grid, Container} from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const Profile = () => {
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch()
-    const user = useAppSelector(state => getUser(state))
-    const isAuth = useAppSelector(state => getIsAuth(state))
-    const isAuthLoading = useAppSelector(state => getIsAuthLoading(state))
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(state => getUser(state));
+    const isAuth = useAppSelector(state => getIsAuth(state));
+    const isAuthLoading = useAppSelector(state => getIsAuthLoading(state));
     useEffect(() => {
-        if (!isAuth) navigate(routes.login)
-    }, [isAuth])
+        if (!isAuth) navigate(routes.login);
+    }, [isAuth]);
     const handleOutClick = () => {
-        dispatch(fetchOut())
-    }
-    if (isAuthLoading) return (<Preloader/>)
+        dispatch(fetchOut());
+    };
+    if (isAuthLoading) return (<Preloader/>);
     return (
         <Container component="div" maxWidth="xs" style={{marginTop: "150px"}}>
             <CssBaseline/>

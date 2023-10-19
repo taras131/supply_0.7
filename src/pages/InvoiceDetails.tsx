@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 import {Link, useParams} from "react-router-dom";
 import {
     Button, Paper,
     Stack,
-    Typography
+    Typography,
 } from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 import {getInvoiceById} from "../store/selectors/invoices";
 import {getSupplierINNById, getSupplierNameById} from "../store/selectors/suppliers";
 import {routes} from "../utils/routes";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import InvoiceDetailsStepper from "../components/InvoiceDetailsStepper";
 import InvoiceDetailsItem from "../components/InvoiceDetailsItem";
 import InvoiceDetailsActions from "../components/InvoiceDetailsActions";
@@ -17,9 +17,9 @@ import InvoiceDetailsCancel from "../components/InvoiceDetailsCancel";
 
 const InvoiceDetails = () => {
     const invoiceId = useParams().invoiceId || "0";
-    const invoice = useAppSelector(state => getInvoiceById(state, invoiceId))
-    const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId))
-    const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId))
+    const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
+    const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
+    const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
 
     return (
         <Stack alignItems="center">

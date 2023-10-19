@@ -5,5 +5,5 @@ export const routes = {
     invoices: "/invoices",
     suppliers: "/suppliers",
     users: "/users",
-    profile: "/profile"
-}
+    profile: "/profile",
+};

@@ -1,9 +1,9 @@
-import React, {FC, useEffect, useId, useState} from 'react';
+import React, {FC, useEffect, useId, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import ModalWindow from "./ModalWindow";
 import Typography from "@mui/material/Typography";
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
     Button,
@@ -14,7 +14,7 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
-    Checkbox, FormControlLabel
+    Checkbox, FormControlLabel,
 } from "@mui/material";
 import {getSuppliers} from "../store/selectors/suppliers";
 import {emptyInvoice} from "../models/iInvoices";
@@ -28,46 +28,46 @@ interface IProps {
 }
 
 const InvoicesAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
     const [inputValue, setInputValue] = useState({
         amount: 0,
-        number: ""
-    })
-    const [isWithVAT, setIsWithVAT] = useState(true)
-    const user = useAppSelector(state => getUser(state))
-    const [selectedSupplierId, setSelectedSupplierId] = useState("")
-    const [isUploadFileLoading, setIsUploadFileLoading] = useState(false)
-    const [fileName, setFileName] = useState("")
-    const [filePatch, setFilePatch] = useState("")
-    const [disabled, setDisabled] = useState(true)
-    const selectLabelId = useId()
-    const selectId = useId()
-    const selectSupplier = useId()
-    const checkboxId = useId()
-    const suppliers = useAppSelector(state => getSuppliers(state))
+        number: "",
+    });
+    const [isWithVAT, setIsWithVAT] = useState(true);
+    const user = useAppSelector(state => getUser(state));
+    const [selectedSupplierId, setSelectedSupplierId] = useState("");
+    const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
+    const [fileName, setFileName] = useState("");
+    const [filePatch, setFilePatch] = useState("");
+    const [disabled, setDisabled] = useState(true);
+    const selectLabelId = useId();
+    const selectId = useId();
+    const selectSupplier = useId();
+    const checkboxId = useId();
+    const suppliers = useAppSelector(state => getSuppliers(state));
     useEffect(() => {
         if (selectedSupplierId && filePatch && inputValue.amount && inputValue.number) {
-            setDisabled(false)
+            setDisabled(false);
         } else {
-            setDisabled(true)
+            setDisabled(true);
         }
-    }, [selectedSupplierId, filePatch, inputValue.amount, inputValue.number])
+    }, [selectedSupplierId, filePatch, inputValue.amount, inputValue.number]);
     const updateFile = (name: string, filePatch: string) => {
-        setFileName(name)
-        setFilePatch(filePatch)
-    }
-    let suppliersList = suppliers.map(supplier => (
+        setFileName(name);
+        setFilePatch(filePatch);
+    };
+    const suppliersList = suppliers.map(supplier => (
         <MenuItem key={`${supplier.id}_${supplier.name}`}
-                  value={supplier.id}>{`${supplier.name} - ${supplier.INN}`}</MenuItem>))
+                  value={supplier.id}>{`${supplier.name} - ${supplier.INN}`}</MenuItem>));
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue({...inputValue, [e.target.name]: e.target.value})
-    }
+        setInputValue({...inputValue, [e.target.name]: e.target.value});
+    };
     const handleSupplierChange = (e: SelectChangeEvent) => {
-        setSelectedSupplierId(e.target.value as string)
-    }
+        setSelectedSupplierId(e.target.value as string);
+    };
     const handleIsWithVATSelected = () => {
-        setIsWithVAT(prev => !prev)
-    }
+        setIsWithVAT(prev => !prev);
+    };
     const handleAddClick = async () => {
         dispatch(fetchAddInvoice({
             ...emptyInvoice,
@@ -76,32 +76,32 @@ const InvoicesAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
             supplierId: selectedSupplierId,
             number: inputValue.number,
             amount: +inputValue.amount,
-            invoiceFileLink: filePatch
-        }))
+            invoiceFileLink: filePatch,
+        }));
         setInputValue({
             amount: 0,
-            number: ""
-        })
-        setIsWithVAT(true)
-        setFileName("")
-        setFilePatch("")
-        setDisabled(true)
-        setSelectedSupplierId("")
-        handleToggleOpen()
-    }
+            number: "",
+        });
+        setIsWithVAT(true);
+        setFileName("");
+        setFilePatch("");
+        setDisabled(true);
+        setSelectedSupplierId("");
+        handleToggleOpen();
+    };
     const handleChangeInputFile = (e: any) => {
-        setIsUploadFileLoading(true)
+        setIsUploadFileLoading(true);
         if (filePatch) {
-            dispatch(fetchRemoveFile(fileName))
+            dispatch(fetchRemoveFile(fileName));
         }
         dispatch(fetchUploadFile({
             file: e.target.files[0],
             updateFile: updateFile,
-            setIsUpdateFileLoading: setIsUploadFileLoading
-        }))
-        setFileName(e.target.files[0].name)
+            setIsUpdateFileLoading: setIsUploadFileLoading,
+        }));
+        setFileName(e.target.files[0].name);
 
-    }
+    };
     return (
         <ModalWindow isOpenModal={isOpenModal} handleToggleOpen={handleToggleOpen} title={"Новый счёт"}>
             <Stack spacing={4} mt={4} mb={2}>
@@ -133,7 +133,7 @@ const InvoicesAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
                     control={<Checkbox checked={isWithVAT}
                                        onChange={handleIsWithVATSelected}
                                        id={checkboxId}
-                                       sx={{'& .MuiSvgIcon-root': {fontSize: 38}}}/>}
+                                       sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}
                     label="C НДС"/>
                 {fileName && (
                     <Typography>Файл: {fileName.split("-")[1]}</Typography>

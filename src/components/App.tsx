@@ -3,10 +3,10 @@ import Invoices from "../pages/Invoices";
 import Auth from "../pages/Auth";
 import {routes} from "../utils/routes";
 import {Routes, Route} from "react-router-dom";
-import * as React from 'react';
-import {styled, useTheme} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
+import * as React from "react";
+import {styled} from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Suppliers from "../pages/Suppliers";
@@ -25,22 +25,20 @@ import {IUser} from "../models/iAuth";
 import {setAllUsers} from "../store/reducers/auth";
 import Profile from "../pages/Profile";
 import InvoiceDetails from "../pages/InvoiceDetails";
+import {drawerWidth} from "../utils/const";
 
-
-export const drawerWidth = 240;
-
-const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
+const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
 }>(({theme, open}) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: `-${drawerWidth}px`,
     ...(open && {
-        transition: theme.transitions.create('margin', {
+        transition: theme.transitions.create("margin", {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
@@ -49,71 +47,68 @@ const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
 }));
 
 
-const DrawerHeader = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'center',
+const DrawerHeader = styled("div")(({theme}) => ({
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
 }));
 
 
 function App() {
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [isLoading, setIsLoading] = useState(true)
-    const dispatch = useAppDispatch()
+    const [isLoading, setIsLoading] = useState(true);
+    const dispatch = useAppDispatch();
     useEffect(() => {
         const q = query(collection(db, "invoices"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             try {
-                let invoicesArr: IInvoice [] = []
+                const invoicesArr: IInvoice [] = [];
                 querySnapshot.forEach((doc: any) => {
                     invoicesArr.push({...doc.data(), id: doc.id});
                 });
-                console.log(invoicesArr)
-                dispatch(setInvoices(invoicesArr))
+                dispatch(setInvoices(invoicesArr));
             } catch (e) {
                 alert(e);
             }
             return () => unsubscribe();
         });
-    }, [])
+    }, []);
 
     useEffect(() => {
         const q = query(collection(db, "suppliers"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             try {
-                let suppliesArr: ISupplier [] = []
+                const suppliesArr: ISupplier [] = [];
                 querySnapshot.forEach((doc: any) => {
                     suppliesArr.push({...doc.data(), id: doc.id});
                 });
-                console.log(suppliesArr)
-                dispatch(setSuppliers(suppliesArr))
-                setIsLoading(false)
+                dispatch(setSuppliers(suppliesArr));
+                setIsLoading(false);
             } catch (e) {
                 alert(e);
             }
             return () => unsubscribe();
         });
-    }, [])
+    }, []);
 
     useEffect(() => {
         const q = query(collection(db, "users"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             try {
-                let usersArr: IUser [] = []
+                const usersArr: IUser [] = [];
                 querySnapshot.forEach((doc: any) => {
                     usersArr.push({...doc.data(), id: doc.id});
                 });
-                dispatch(setAllUsers(usersArr))
-                setIsLoading(false)
+                dispatch(setAllUsers(usersArr));
+                setIsLoading(false);
             } catch (e) {
                 alert(e);
             }
             return () => unsubscribe();
         });
-    }, [])
+    }, []);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -123,10 +118,10 @@ function App() {
         setOpen(false);
     };
     if (isLoading) {
-        return (<Typography>...Загрузка...</Typography>)
+        return (<Typography>...Загрузка...</Typography>);
     }
     return (
-        <Box sx={{display: 'flex'}}>
+        <Box sx={{display: "flex"}}>
             <CssBaseline/>
             <Header open={open} handleDrawerOpen={handleDrawerOpen}/>
             <SideBar open={open} handleDrawerClose={handleDrawerClose}/>
@@ -145,7 +140,7 @@ function App() {
             </Main>
             <Message/>
         </Box>
-    )
+    );
 }
 
-export default App
+export default App;

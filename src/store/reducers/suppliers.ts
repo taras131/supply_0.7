@@ -10,25 +10,25 @@ interface ISuppliersState {
 const initialState: ISuppliersState = {
     list: [],
     isLoading: false,
-    errorMessage: ""
-}
+    errorMessage: "",
+};
 
 export const SuppliersSlice = createSlice({
-    name: 'suppliers',
+    name: "suppliers",
     initialState,
     reducers: {
         setSuppliers: (state, action: PayloadAction<ISupplier []>) => {
-            state.list = action.payload
+            state.list = action.payload;
         },
         setSuppliersLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload
-        }
+            state.isLoading = action.payload;
+        },
     },
-    extraReducers: {}
-})
+    extraReducers: {},
+});
 
 export const {
-    setSuppliers, setSuppliersLoading
-} = SuppliersSlice.actions
+    setSuppliers, setSuppliersLoading,
+} = SuppliersSlice.actions;
 
-export default SuppliersSlice.reducer
+export default SuppliersSlice.reducer;
