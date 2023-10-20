@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Paper,
     Stack,
@@ -17,23 +17,34 @@ import InvoicesHelper from "../components/InvoicesHelper";
 import InvoicesInfo from "../components/InvoicesInfo";
 
 const Invoices = () => {
-    const invoices = useAppSelector(state => getInvoices(state));
+    const [isShowCanceledInvoice, setIsShowCanceledInvoice] = useState(false);
+    const [isShowPaidInvoice, setIsShowPaidInvoice] = useState(true);
+    const invoices = useAppSelector(state => getInvoices(state, isShowCanceledInvoice, isShowPaidInvoice));
+    const handleCanceledInvoiceChange = () => {
+        setIsShowCanceledInvoice(prev => !prev);
+    };
+    const handlePaidInvoiceChange = () => {
+        setIsShowPaidInvoice(prev => !prev);
+    };
     const invoicesList = invoices.map(invoice => (<Invoice key={invoice.author.date} {...invoice}/>));
     return (
         <Stack style={{minHeight: "calc(100vh - 100px"}} alignItems="center">
-            <InvoicesHeader/>
+            <InvoicesHeader isShowCanceledInvoice={isShowCanceledInvoice}
+                            isShowPaidInvoice={isShowPaidInvoice}
+                            handleCanceledInvoiceChange={handleCanceledInvoiceChange}
+                            handlePaidInvoiceChange={handlePaidInvoiceChange}/>
             <InvoicesInfo/>
             <TableContainer component={Paper} sx={{maxWidth: 1350, mt: 3}}>
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Одобрен
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Дата
                                 </Typography>
                             </TableCell>
@@ -42,12 +53,12 @@ const Invoices = () => {
                                     Поставщик
                                 </Typography></TableCell>
                             <TableCell align={"center"}>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     ИНН
                                 </Typography>
                             </TableCell>
                             <TableCell align={"center"}>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Сумма
                                 </Typography>
                             </TableCell>
@@ -57,12 +68,12 @@ const Invoices = () => {
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Оплачен
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Счёт
                                 </Typography>
                             </TableCell>
@@ -72,7 +83,12 @@ const Invoices = () => {
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
+                                    Ком
+                                </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Ещё
                                 </Typography>
                             </TableCell>

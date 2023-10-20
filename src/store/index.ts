@@ -4,13 +4,14 @@ import InvoicesReducer from "./reducers/invoices";
 import SuppliersReducer from "./reducers/suppliers";
 import MessageReducer from "./reducers/message";
 import authReducer from "./reducers/auth";
-
+import commentsReducer from "./reducers/coments";
 
 const rootReducer = combineReducers({
     invoices: InvoicesReducer,
     suppliers: SuppliersReducer,
     message: MessageReducer,
     auth: authReducer,
+    comments: commentsReducer,
 });
 export const setupStore = () => {
     return configureStore({

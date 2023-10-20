@@ -1,4 +1,4 @@
-import {IMessage} from "../../models/IMessage";
+import {IMessage} from "../../models/iMessage";
 import {RootState} from "../index";
 
 export const getMessage = (state: RootState): IMessage => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {
     Button, Paper,
@@ -14,15 +14,19 @@ import InvoiceDetailsStepper from "../components/InvoiceDetailsStepper";
 import InvoiceDetailsItem from "../components/InvoiceDetailsItem";
 import InvoiceDetailsActions from "../components/InvoiceDetailsActions";
 import InvoiceDetailsCancel from "../components/InvoiceDetailsCancel";
+import InvoiceDetailsComments from "../components/InvoiceDetailsComments";
 
 const InvoiceDetails = () => {
     const invoiceId = useParams().invoiceId || "0";
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
-
+    const [expanded, setExpanded] = useState<string | false>("panel2");
+    const handleExpandedChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+        setExpanded(isExpanded ? panel : false);
+    };
     return (
-        <Stack alignItems="center">
+        <Stack alignItems="center" spacing={2}>
             <Paper sx={{maxWidth: "1000px", width: "100%", backgroundColor: "white", padding: "20px"}}>
                 <Stack spacing={5} alignItems="center">
                     <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}
@@ -49,6 +53,9 @@ const InvoiceDetails = () => {
                     </Stack>
                 </Stack>
             </Paper>
+            <InvoiceDetailsComments expanded={expanded}
+                                    handleExpandedChange={handleExpandedChange}
+                                    invoiceId={invoiceId}/>
         </Stack>
     );
 };

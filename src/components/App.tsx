@@ -26,6 +26,8 @@ import {setAllUsers} from "../store/reducers/auth";
 import Profile from "../pages/Profile";
 import InvoiceDetails from "../pages/InvoiceDetails";
 import {drawerWidth} from "../utils/const";
+import {setComments, setCommentsLoading} from "../store/reducers/coments";
+import {IComment} from "../models/iComents";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -104,6 +106,25 @@ function App() {
                 dispatch(setAllUsers(usersArr));
                 setIsLoading(false);
             } catch (e) {
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, []);
+
+    useEffect(() => {
+        const q = query(collection(db, "comments"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                dispatch(setCommentsLoading(true));
+                const commentsArr: IComment [] = [];
+                querySnapshot.forEach((doc: any) => {
+                    commentsArr.push({...doc.data(), id: doc.id});
+                });
+                dispatch(setComments(commentsArr));
+                dispatch(setCommentsLoading(false));
+            } catch (e) {
+                dispatch(setCommentsLoading(false));
                 alert(e);
             }
             return () => unsubscribe();

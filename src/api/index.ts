@@ -12,6 +12,7 @@ import {INewInvoice} from "../models/iInvoices";
 import {IFileData, IUpdateApprovedData, IUpdateCancelData, IUpdatePaidData} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds, transliterate} from "../utils/services";
 import {IAuthData, IRegisterData} from "../models/iAuth";
+import {INewComment} from "../models/iComents";
 
 
 class Api {
@@ -19,6 +20,12 @@ class Api {
     addSupplier = async (supplier: INewSupplier) => {
         const res = await addDoc(collection(db, "suppliers"),
             supplier
+        );
+        return res;
+    };
+    addComment = async (comment: INewComment) => {
+        const res = await addDoc(collection(db, "comments"),
+            comment
         );
         return res;
     };
@@ -123,6 +130,7 @@ class Api {
         const res = await signOut(this.auth);
         return res;
     };
+
 }
 
 const api = new Api();

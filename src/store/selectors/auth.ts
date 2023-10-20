@@ -16,3 +16,6 @@ export const getAuthErrorMessage = (state: RootState): string => {
 export const getAllUsers = (state: RootState): IUser [] => {
     return state.auth.allUsers;
 };
+export const getAllUserById = (state: RootState, userId: string): IUser => {
+    return state.auth.allUsers.filter(user => user.id === userId)[0];
+};

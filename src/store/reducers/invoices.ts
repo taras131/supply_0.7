@@ -20,18 +20,13 @@ export const InvoicesSlice = createSlice({
         setInvoices: (state, action: PayloadAction<IInvoice []>) => {
             state.list = action.payload;
         },
-        setComments: (state, action: PayloadAction<any>) => {
-            state.list = action.payload;
-        },
-        setCommentsLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
+
     },
     extraReducers: {},
 });
 
 export const {
-    setInvoices, setComments, setCommentsLoading,
+    setInvoices,
 } = InvoicesSlice.actions;
 
 export default InvoicesSlice.reducer;

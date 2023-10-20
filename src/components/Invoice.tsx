@@ -25,12 +25,16 @@ import {MESSAGE_SEVERITY} from "../utils/const";
 import {routes} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {getUser} from "../store/selectors/auth";
+import {getCommentsByInvoiceId} from "../store/selectors/coments";
+import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
+import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 
 const Invoice: FC<IInvoice> = (invoice) => {
     const dispatch = useAppDispatch();
     const checkboxId = useId();
     const navigate = useNavigate();
     const user = useAppSelector(state => getUser(state));
+    const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
@@ -99,6 +103,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                 <FormControlLabel
                     control={<Checkbox checked={invoice.approved.isApproved}
                                        onChange={handleApprovedChange}
+                                       color={"success"}
                                        id={checkboxId}
                                        disabled={invoice.paid.isPaid || invoice.cancel && invoice.cancel.isCancel}
                                        sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
@@ -111,24 +116,20 @@ const Invoice: FC<IInvoice> = (invoice) => {
                         <Typography sx={{color: textColor}}>
                             {supplierINN}
                         </Typography>
-                        <ContentCopyIcon color="action"/>
+                        <ContentCopyIcon color="success"/>
                     </Stack>
                 </Tooltip>
             </TableCell>
             <TableCell sx={{cursor: "pointer"}} align={"right"} onClick={handleAmountClick}>
-                {invoice.cancel && invoice.cancel.isCancel
-                    ? (<Typography color={"#FF0033"} fontWeight={600}>
-                       - - - - - - - - -   руб.
-                    </Typography>)
-                    : (<Tooltip title="скопировать">
-                        <Stack sx={{width: "100%"}} direction={"row"} alignItems={"center"} justifyContent={"end"}
-                               spacing={1}>
-                            <Typography sx={{color: textColor}}>
-                                {new Intl.NumberFormat("ru-RU").format(invoice.amount)} руб.
-                            </Typography>
-                            <ContentCopyIcon color="action"/>
-                        </Stack>
-                    </Tooltip>)}
+                <Tooltip title="скопировать">
+                    <Stack sx={{width: "100%"}} direction={"row"} alignItems={"center"} justifyContent={"end"}
+                           spacing={1}>
+                        <Typography sx={{color: textColor}}>
+                            {new Intl.NumberFormat("ru-RU").format(invoice.amount)} руб.
+                        </Typography>
+                        <ContentCopyIcon color="success"/>
+                    </Stack>
+                </Tooltip>
             </TableCell>
             <TableCell sx={{color: textColor}} align={"center"}>
                 {invoice.isWithVAT
@@ -148,7 +149,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                         <Typography color={invoice.cancel && invoice.cancel.isCancel ? "#FF0033" : "black"}
                                     fontWeight={invoice.cancel && invoice.cancel.isCancel ? 600 : 400}>
                             {invoice.cancel && invoice.cancel.isCancel
-                                ? "ОТМЕНЁН"
+                                ? "Отменён"
                                 : "Нет"}
                         </Typography>
                     )}
@@ -159,30 +160,37 @@ const Invoice: FC<IInvoice> = (invoice) => {
                     component="a"
                     href={invoice.invoiceFileLink}
                     icon={<DownloadIcon/>}
-                    color={invoice.paid.isPaid ? "success" : "primary"}
+                    color={"success"}
                     clickable
                 />
             </TableCell>
             <TableCell sx={{color: textColor}} align="center">
                 {invoice.paid.isPaid
                     ? (<Chip
+                        sx={{width: "100%"}}
                         label={"Скачать"}
                         component="a"
                         href={invoice.paid.paymentOrderFileLink}
                         icon={<DownloadIcon/>}
-                        color={invoice.paid.isPaid ? "success" : "primary"}
+                        color={"success"}
                         clickable
                     />)
                     : (
                         <LoadingButton
+                            variant={"contained"}
+                            sx={{borderRadius: "25px", textTransform: "none"}}
                             component="label"
                             loading={isUploadFileLoading}
                             fullWidth
                             disabled={invoice.cancel && invoice.cancel.isCancel}
                             size="small"
-                            startIcon={(<AttachFileIcon/>)}
+                            startIcon={(invoice.cancel && invoice.cancel.isCancel
+                                ? (<DoDisturbAltIcon/>)
+                                : (<AttachFileIcon/>))}
                         >
-                            Загрузить
+                            {invoice.cancel && invoice.cancel.isCancel
+                                ? "Отменён"
+                                : "Загрузить"}
                             <input
                                 type="file"
                                 hidden
@@ -193,8 +201,15 @@ const Invoice: FC<IInvoice> = (invoice) => {
                     )}
             </TableCell>
             <TableCell>
+                <IconButton aria-label="add to shopping cart" onClick={handleMoreClick} color={"success"}>
+                    {comments.length
+                        ? (<MarkUnreadChatAltIcon/>)
+                        : ("")}
+                </IconButton>
+            </TableCell>
+            <TableCell>
                 <IconButton aria-label="add to shopping cart" onClick={handleMoreClick}>
-                    <MoreVertIcon color="action"/>
+                    <MoreVertIcon color="success"/>
                 </IconButton>
             </TableCell>
         </TableRow>

@@ -15,9 +15,10 @@ import {
 } from "../store/actionsCreators/invoices";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getUser} from "../store/selectors/auth";
+import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 
 
-const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid}) => {
+const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}) => {
     const user = useAppSelector(state => getUser(state));
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState(false);
@@ -107,11 +108,16 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid}) => {
                             </>)
                             : (<LoadingButton
                                 component="label"
+                                disabled={cancel && cancel.isCancel}
                                 loading={isLoading}
                                 variant={"outlined"}
-                                startIcon={(<AttachFileIcon/>)}
+                                startIcon={(cancel && cancel.isCancel
+                                    ? (<DoDisturbAltIcon/>)
+                                    : (<AttachFileIcon/>))}
                             >
-                                Загрузить
+                                {cancel && cancel.isCancel
+                                    ? "Отменён"
+                                    : "Загрузить"}
                                 <input
                                     type="file"
                                     accept="image/*, application/pdf"

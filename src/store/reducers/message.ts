@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IMessage} from "../../models/IMessage";
+import {IMessage} from "../../models/iMessage";
 import {MESSAGE_SEVERITY} from "../../utils/const";
 
 interface IMessageState {
