@@ -16,6 +16,15 @@ export const getAuthErrorMessage = (state: RootState): string => {
 export const getAllUsers = (state: RootState): IUser [] => {
     return state.auth.allUsers;
 };
-export const getAllUserById = (state: RootState, userId: string): IUser => {
+export const getUserById = (state: RootState, userId: string): IUser => {
     return state.auth.allUsers.filter(user => user.id === userId)[0];
+};
+
+export const getUserFullNameById = (state: RootState, userId: string): string => {
+    const user = getUserById(state, userId);
+    if (user && user.firstName) {
+        return `${user.firstName} ${user.middleName}`;
+    } else {
+        return "";
+    }
 };

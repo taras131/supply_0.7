@@ -5,6 +5,8 @@ export enum MESSAGE_SEVERITY {
     success = "success"
 }
 
+export const commentPanelId = "commentPanel";
+
 export const EDITION_GUIDE_ID = "edition_guide_id";
 export const NEW_GUIDE = "new_guide";
 export const OUTLINED = "outlined";
