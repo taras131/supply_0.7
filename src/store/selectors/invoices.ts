@@ -8,15 +8,15 @@ export const getInvoices = (state: RootState,
     if (!isShowCanceledInvoice) {
         arr = arr.filter(invoice => {
             if (invoice.cancel && invoice.cancel.isCancel) {
-                return false
+                return false;
             } else {
-                return true
+                return true;
             }
 
-        })
+        });
     }
     if (!isShowPaidInvoice) {
-        arr = arr.filter(invoice => !invoice.paid.isPaid)
+        arr = arr.filter(invoice => !invoice.paid.isPaid);
     }
         return arr.sort((a, b) => {
             return b.author.date - a.author.date;
