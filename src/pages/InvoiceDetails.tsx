@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useLocation, useParams} from "react-router-dom";
 import {
     Button, Paper,
     Stack,
@@ -15,13 +15,19 @@ import InvoiceDetailsItem from "../components/InvoiceDetailsItem";
 import InvoiceDetailsActions from "../components/InvoiceDetailsActions";
 import InvoiceDetailsCancel from "../components/InvoiceDetailsCancel";
 import InvoiceDetailsComments from "../components/InvoiceDetailsComments";
+import {TLocation} from "../../models/i-location";
+import {commentPanelId} from "../utils/const";
 
 const InvoiceDetails = () => {
     const invoiceId = useParams().invoiceId || "0";
+    const location = useLocation() as TLocation;
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
-    const [expanded, setExpanded] = useState<string | false>("panel2");
+    const [expanded, setExpanded] = useState<string | false>(false);
+    useEffect(() => {
+        if (location.state && location.state.isCommentClick) setExpanded(commentPanelId);
+    }, [location]);
     const handleExpandedChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };

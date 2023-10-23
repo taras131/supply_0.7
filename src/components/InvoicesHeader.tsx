@@ -141,7 +141,11 @@ const InvoicesHeader: FC<IProps> = ({
                         : "Платёжное"}
                     <input
                         type="file"
+<<<<<<< HEAD
                         accept="application/pdf"
+=======
+                        accept="image/*, application/pdf"
+>>>>>>> f4f6f5c79b5283f658de8d90186c2766f62d3e81
                         hidden
                         onChange={handleFileChange}
                     />

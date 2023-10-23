@@ -3,8 +3,15 @@ import Box from "@mui/material/Box";
 import {Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
 import {convertMillisecondsToDate} from "../utils/services";
 import {IInvoice} from "../models/iInvoices";
+import {useAppSelector} from "../hooks/redux";
+import {getUserFullNameById} from "../store/selectors/auth";
 
-const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) => {
+const InvoiceDetailsStepper: FC<IInvoice> = ({
+                                                 approved,
+                                                 paid,
+                                                 author,
+                                                 cancel,
+                                             }) => {
     let activeStep = 0;
     if (approved.isApproved) {
         activeStep = 1;
@@ -12,6 +19,9 @@ const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) =
     if (paid.isPaid) {
         activeStep = 2;
     }
+    const authorFullName = useAppSelector(state => getUserFullNameById(state, author.userId));
+    const approvedAuthorFullName = useAppSelector(state => getUserFullNameById(state, approved.userId));
+    const paidAuthorFullName = useAppSelector(state => getUserFullNameById(state, paid.userId));
     return (
         <Box sx={{maxWidth: "1200px", width: "100%", paddingTop: "60px"}}>
             <Stepper activeStep={activeStep} alternativeLabel>
@@ -21,7 +31,7 @@ const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) =
                             <Typography fontSize={16} fontWeight={600}>
                                 Добавлен {convertMillisecondsToDate(author.date)}
                             </Typography>
-                            <Typography>{author.userId}</Typography>
+                            <Typography>{authorFullName}</Typography>
                         </Stack>
                     </StepLabel>
                 </Step>
@@ -29,14 +39,14 @@ const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) =
                     <StepLabel error={cancel && cancel.isCancel}>
                         <Stack spacing={1}>
                             {cancel && cancel.isCancel
-                            ?(
+                                ? (
                                     <Typography fontSize={16} fontWeight={600}>
                                         Отменён {cancel.isCancel && (
                                         " " + convertMillisecondsToDate(cancel.date)
                                     )}
                                     </Typography>
                                 )
-                            :(
+                                : (
                                     <Typography fontSize={16} fontWeight={600}>
                                         Одобрен
                                         {approved.isApproved && (
@@ -44,9 +54,7 @@ const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) =
                                         )}
                                     </Typography>
                                 )}
-
-
-                            <Typography>{paid.userId}</Typography>
+                            <Typography>{approvedAuthorFullName || ""}</Typography>
                         </Stack>
                     </StepLabel>
                 </Step>
@@ -59,7 +67,7 @@ const InvoiceDetailsStepper: FC<IInvoice> = ({approved, paid, author, cancel}) =
                                     " " + convertMillisecondsToDate(paid.date)
                                 )}
                             </Typography>
-                            <Typography>{paid.userId}</Typography>
+                            <Typography>{paidAuthorFullName || ""}</Typography>
                         </Stack>
                     </StepLabel>
                 </Step>

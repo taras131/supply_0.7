@@ -59,7 +59,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
     }, [invoice]);
     const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
         const newPaid = {
-            isPaid: true, userId: "", date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
+            isPaid: true, userId: id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
         };
         dispatch(fetchUpdateInvoice({invoiceId: invoice.id, newPaid: newPaid}));
     };
@@ -88,6 +88,13 @@ const Invoice: FC<IInvoice> = (invoice) => {
     const handleAmountClick = () => {
         navigator.clipboard.writeText(invoice.amount);
         dispatch(setMessage({text: "Сумма скопирована", severity: MESSAGE_SEVERITY.success}));
+    };
+    const handleCommentClick = () => {
+        navigate(`${routes.invoices}/${invoice.id}`, {
+            state: {
+                isCommentClick: true,
+            },
+        });
     };
     const handleMoreClick = () => {
         navigate(`${routes.invoices}/${invoice.id}`);
@@ -201,7 +208,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
                     )}
             </TableCell>
             <TableCell>
-                <IconButton aria-label="add to shopping cart" onClick={handleMoreClick} color={"success"}>
+                <IconButton aria-label="add to shopping cart" onClick={handleCommentClick} color={"success"}>
                     {comments.length
                         ? (<MarkUnreadChatAltIcon/>)
                         : ("")}

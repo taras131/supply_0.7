@@ -71,7 +71,7 @@ const InvoicesAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
     const handleAddClick = async () => {
         dispatch(fetchAddInvoice({
             ...emptyInvoice,
-            author: {...emptyInvoice.author, date: getDateInMilliseconds(), userId: user.uid},
+            author: {...emptyInvoice.author, date: getDateInMilliseconds(), userId: user.id},
             isWithVAT: isWithVAT,
             supplierId: selectedSupplierId,
             number: inputValue.number,

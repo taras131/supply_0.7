@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
-    CENTER,
+    CENTER, commentPanelId,
     FORM_CONTROL_HEIGHT_PX, PRIMARY,
     SECONDARY_TEXT_COLOR, START,
     STRING_EMPTY,
@@ -65,7 +65,7 @@ const InvoiceDetailsComments: FC<IProps> = ({invoiceId, expanded, handleExpanded
     };
     return (
         <AccordionWithTitleCounterIcon title={"Комментарии"} count={comments.length} expanded={expanded}
-                                       panelId={"panel2"}
+                                       panelId={commentPanelId}
                                        handleExpandedChange={handleExpandedChange}
                                        icon={<ChatBubbleOutlineIcon color={PRIMARY}/>}>
             <Stack spacing={3}>
