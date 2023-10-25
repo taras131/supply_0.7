@@ -28,6 +28,10 @@ import InvoiceDetails from "../pages/InvoiceDetails";
 import {drawerWidth} from "../utils/const";
 import {setComments, setCommentsLoading} from "../store/reducers/coments";
 import {IComment} from "../models/iComents";
+import Shipments from "../pages/Shipments";
+import ShipmentsAddNew from "../pages/ShipmentsAddNew";
+import {IShipments} from "../models/iShipments";
+import {setShipments, setShipmentsLoading} from "../store/reducers/shipment";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -111,7 +115,6 @@ function App() {
             return () => unsubscribe();
         });
     }, []);
-
     useEffect(() => {
         const q = query(collection(db, "comments"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -125,6 +128,24 @@ function App() {
                 dispatch(setCommentsLoading(false));
             } catch (e) {
                 dispatch(setCommentsLoading(false));
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, []);
+    useEffect(() => {
+        const q = query(collection(db, "shipments"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                dispatch(setCommentsLoading(true));
+                const shipmentsArr: IShipments [] = [];
+                querySnapshot.forEach((doc: any) => {
+                    shipmentsArr.push({...doc.data(), id: doc.id});
+                });
+                dispatch(setShipments(shipmentsArr));
+                dispatch(setShipmentsLoading(false));
+            } catch (e) {
+                dispatch(setShipmentsLoading(false));
                 alert(e);
             }
             return () => unsubscribe();
@@ -153,6 +174,8 @@ function App() {
                     <Route path={routes.invoices} element={<Invoices/>}/>
                     <Route path={routes.invoices + "/:invoiceId/"} element={<InvoiceDetails/>}/>
                     <Route path={routes.suppliers} element={<Suppliers/>}/>
+                    <Route path={routes.shipments} element={<Shipments/>}/>
+                    <Route path={routes.addNewShipments} element={<ShipmentsAddNew/>}/>
                     <Route path={routes.users} element={<Users/>}/>
                     <Route path={routes.login} element={<Auth/>}/>
                     <Route path={routes.register} element={<Auth/>}/>
