@@ -13,6 +13,7 @@ import {IFileData, IUpdateApprovedData, IUpdateCancelData, IUpdatePaidData} from
 import {getDateInMilliseconds, transliterate} from "../utils/services";
 import {IAuthData, IRegisterData} from "../models/iAuth";
 import {INewComment} from "../models/iComents";
+import {INewShipments} from "../models/iShipments";
 
 
 class Api {
@@ -25,6 +26,12 @@ class Api {
     };
     addComment = async (comment: INewComment) => {
         const res = await addDoc(collection(db, "comments"),
+            comment
+        );
+        return res;
+    };
+    addShipment = async (comment: INewShipments) => {
+        const res = await addDoc(collection(db, "shipments"),
             comment
         );
         return res;
