@@ -14,6 +14,7 @@ import {getDateInMilliseconds, transliterate} from "../utils/services";
 import {IAuthData, IRegisterData} from "../models/iAuth";
 import {INewComment} from "../models/iComents";
 import {INewShipments} from "../models/iShipments";
+import {IReceivingData} from "../store/actionsCreators/shipments";
 
 
 class Api {
@@ -49,6 +50,16 @@ class Api {
                 userId: updatePaidData.newPaid.userId,
                 date: updatePaidData.newPaid.date,
                 paymentOrderFileLink: updatePaidData.newPaid.paymentOrderFileLink,
+            },
+        });
+        return res;
+    };
+    updateReceiving = async (updateReceivingData: IReceivingData) => {
+        const res = await updateDoc(doc(db, "shipments", updateReceivingData.shipmentId), {
+            receiving: {
+                userId: updateReceivingData.newReceiving.userId,
+                dateCreating: updateReceivingData.newReceiving.dateCreating,
+                isReceived: updateReceivingData.newReceiving.isReceived,
             },
         });
         return res;

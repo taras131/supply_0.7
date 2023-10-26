@@ -137,7 +137,7 @@ function App() {
         const q = query(collection(db, "shipments"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             try {
-                dispatch(setCommentsLoading(true));
+                dispatch(setShipmentsLoading(true));
                 const shipmentsArr: IShipments [] = [];
                 querySnapshot.forEach((doc: any) => {
                     shipmentsArr.push({...doc.data(), id: doc.id});

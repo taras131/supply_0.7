@@ -49,7 +49,7 @@ const Invoices = () => {
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     Поставщик
                                 </Typography></TableCell>
                             <TableCell align={"center"}>
@@ -63,7 +63,7 @@ const Invoices = () => {
                                 </Typography>
                             </TableCell>
                             <TableCell align={"center"}>
-                                <Typography fontSize="18px" fontWeight={600}>
+                                <Typography fontSize="14px" fontWeight={600}>
                                     НДС
                                 </Typography>
                             </TableCell>
@@ -84,7 +84,7 @@ const Invoices = () => {
                             </TableCell>
                             <TableCell align="center">
                                 <Typography fontSize="14px" fontWeight={600}>
-                                    Ком
+
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">

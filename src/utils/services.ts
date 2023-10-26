@@ -1,3 +1,5 @@
+import {TShipmentsType} from "../models/iShipments";
+
 const padTo2Digits = (num: number) => {
     return num.toString().padStart(2, "0");
 };
@@ -122,4 +124,14 @@ export const transliterate = (text: string) => {
         .replace(/\u044E/g, "yu");
 
     return text;
+};
+
+const millisecondsInDay = 86400000;
+
+export const getProjectedArrivalDate = (dispatchDate: number, shipmentsType: TShipmentsType): string => {
+    if (shipmentsType === "air") {
+        return convertMillisecondsToDate(dispatchDate + millisecondsInDay * 4);
+    } else {
+        return convertMillisecondsToDate(dispatchDate + millisecondsInDay * 45);
+    }
 };

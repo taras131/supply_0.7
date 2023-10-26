@@ -23,6 +23,7 @@ import {getCommentsByInvoiceId, getCommentsIsLoading} from "../store/selectors/c
 import {getUser} from "../store/selectors/auth";
 import InvoiceDetailsCommentsItem from "./InvoiceDetailsCommentsItem";
 import {fetchAddComment} from "../store/actionsCreators/comments";
+import Divider from "@mui/material/Divider";
 
 interface IProps {
     invoiceId: string
@@ -38,6 +39,7 @@ const InvoiceDetailsComments: FC<IProps> = ({invoiceId, expanded, handleExpanded
     const [errorCommentText, setErrorCommentText] = useState(STRING_WITH_SPACE);
     const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoiceId));
     const isLoading = useAppSelector(state => getCommentsIsLoading(state));
+    console.log(isLoading)
     const user = useAppSelector(state => getUser(state));
     const commentsList = comments.map(comment => <InvoiceDetailsCommentsItem
         key={comment.id}
@@ -69,6 +71,7 @@ const InvoiceDetailsComments: FC<IProps> = ({invoiceId, expanded, handleExpanded
                                        handleExpandedChange={handleExpandedChange}
                                        icon={<ChatBubbleOutlineIcon color={PRIMARY}/>}>
             <Stack spacing={3}>
+                <Divider/>
                 {user.id === STRING_EMPTY && (
                     <Typography color={SECONDARY_TEXT_COLOR} fontSize={"16px"} fontWeight={500} mt={4} mb={4}>
                                 <span onClick={handleLoginClick}

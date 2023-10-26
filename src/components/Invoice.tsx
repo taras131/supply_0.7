@@ -21,19 +21,23 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {fetchUpdateInvoice, fetchUpdateInvoiceApproved, fetchUploadFile} from "../store/actionsCreators/invoices";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {setMessage} from "../store/reducers/message";
-import {MESSAGE_SEVERITY} from "../utils/const";
+import {MESSAGE_SEVERITY, PRIMARY} from "../utils/const";
 import {routes} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {getUser} from "../store/selectors/auth";
 import {getCommentsByInvoiceId} from "../store/selectors/coments";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import {getIsShipmentByInvoiceId} from "../store/selectors/shipments";
+
 
 const Invoice: FC<IInvoice> = (invoice) => {
     const dispatch = useAppDispatch();
     const checkboxId = useId();
     const navigate = useNavigate();
     const user = useAppSelector(state => getUser(state));
+    const isShipment = useAppSelector(state => getIsShipmentByInvoiceId(state, invoice.id))
     const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
@@ -108,6 +112,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
         >
             <TableCell align={"center"}>
                 <FormControlLabel
+                    label={""}
                     control={<Checkbox checked={invoice.approved.isApproved}
                                        onChange={handleApprovedChange}
                                        color={"success"}
@@ -209,8 +214,8 @@ const Invoice: FC<IInvoice> = (invoice) => {
             </TableCell>
             <TableCell>
                 <IconButton aria-label="add to shopping cart" onClick={handleCommentClick} color={"success"}>
-                    {comments.length
-                        ? (<MarkUnreadChatAltIcon/>)
+                    {isShipment
+                        ? (<LocalShippingIcon color="success"/>)
                         : ("")}
                 </IconButton>
             </TableCell>

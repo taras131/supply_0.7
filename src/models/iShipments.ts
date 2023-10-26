@@ -7,16 +7,18 @@ export interface IShipmentsInvoice {
 
 export type TShipmentsType = "railway" | "air"
 
+export interface IReceiving {
+    userId: string
+    dateCreating: number
+    isReceived: boolean
+}
+
 export interface INewShipments {
     author: {
         userId: string
         dateCreating: number
     }
-    receiving: {
-        userId: string
-        dateCreating: number
-        isReceived: boolean
-    }
+    receiving: IReceiving
     ladingNumber: string
     ladingNumberFilePath: string
     transporter: string
