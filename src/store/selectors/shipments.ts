@@ -16,3 +16,14 @@ export const getShipmentsByInvoiceId = (state: RootState, invoiceId: string): IS
     });
     return shipments;
 };
+export const getIsShipmentByInvoiceId = (state: RootState, invoiceId: string): boolean => {
+    let isShipment = false;
+    state.shipments.list.forEach(shipment => {
+        shipment.invoicesList.forEach(invoice => {
+            if(invoice.invoiceId === invoiceId) {
+                isShipment = true
+            }
+        });
+    });
+    return isShipment;
+};

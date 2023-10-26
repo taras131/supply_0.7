@@ -17,6 +17,9 @@ import InvoiceDetailsCancel from "../components/InvoiceDetailsCancel";
 import InvoiceDetailsComments from "../components/InvoiceDetailsComments";
 import {TLocation} from "../../models/i-location";
 import {commentPanelId} from "../utils/const";
+import {shipmentPanelId} from "../utils/const";
+import {getShipmentsByInvoiceId} from "../store/selectors/shipments";
+import InvoiceDetailsShipment from "../components/InvoiceDetailsShipment";
 
 const InvoiceDetails = () => {
     const invoiceId = useParams().invoiceId || "0";
@@ -24,6 +27,7 @@ const InvoiceDetails = () => {
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
+    const shipments = useAppSelector(state => getShipmentsByInvoiceId(state, invoiceId));
     const [expanded, setExpanded] = useState<string | false>(false);
     useEffect(() => {
         if (location.state && location.state.isCommentClick) setExpanded(commentPanelId);
@@ -53,14 +57,20 @@ const InvoiceDetails = () => {
                         <InvoiceDetailsItem title={"Сумма :"} value={invoice.amount + " руб."}/>
                         <InvoiceDetailsItem title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
                         <InvoiceDetailsItem title={"Оплачен :"} value={invoice.paid.isPaid ? "Да" : "Нет"}/>
+                        <InvoiceDetailsItem title={"Отгружен :"} value={shipments.length > 0 ? "Да" : "Нет"}/>
                         <InvoiceDetailsActions {...invoice}/>
                         <InvoiceDetailsStepper {...invoice}/>
                         <InvoiceDetailsCancel {...invoice}/>
                     </Stack>
                 </Stack>
             </Paper>
+            {shipments.length > 0 && (
+                <InvoiceDetailsShipment shipments={shipments}
+                                        handleExpandedChange={handleExpandedChange(shipmentPanelId)}
+                                        expanded={expanded}/>
+            )}
             <InvoiceDetailsComments expanded={expanded}
-                                    handleExpandedChange={handleExpandedChange}
+                                    handleExpandedChange={handleExpandedChange(commentPanelId)}
                                     invoiceId={invoiceId}/>
         </Stack>
     );

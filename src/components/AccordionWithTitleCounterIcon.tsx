@@ -28,7 +28,7 @@ const AccordionWithTitleCounterIcon: FC<IProps> = ({
                                                    }) => {
     return (
         <Accordion expanded={expanded === panelId}
-                   onChange={handleExpandedChange(panelId)}
+                   onChange={handleExpandedChange}
                    sx={{maxWidth: "1000px", width: "100%"}}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon/>}

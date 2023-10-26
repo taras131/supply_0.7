@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IComment} from "../../models/iComents";
+import {fetchAddComment} from "../actionsCreators/comments";
 
 interface ICommentsState {
     list: IComment[]
@@ -24,7 +25,19 @@ export const CommentsSlice = createSlice({
             state.isLoading = action.payload;
         },
     },
-    extraReducers: {},
+    extraReducers: {
+        [fetchAddComment.fulfilled.type]: (state) => {
+            state.isLoading = false;
+        },
+        [fetchAddComment.pending.type]: (state) => {
+            state.isLoading = true;
+            state.errorMessage = "";
+        },
+        [fetchAddComment.rejected.type]: (state, action: PayloadAction<string>) => {
+            state.isLoading = false;
+            state.errorMessage = action.payload;
+        },
+    },
 });
 
 export const {
