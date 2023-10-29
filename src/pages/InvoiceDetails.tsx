@@ -11,7 +11,7 @@ import {getSupplierINNById, getSupplierNameById} from "../store/selectors/suppli
 import {routes} from "../utils/routes";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import InvoiceDetailsStepper from "../components/InvoiceDetailsStepper";
-import InvoiceDetailsItem from "../components/InvoiceDetailsItem";
+import NameWithValue from "../components/NameWithValue";
 import InvoiceDetailsActions from "../components/InvoiceDetailsActions";
 import InvoiceDetailsCancel from "../components/InvoiceDetailsCancel";
 import InvoiceDetailsComments from "../components/InvoiceDetailsComments";
@@ -20,6 +20,7 @@ import {commentPanelId} from "../utils/const";
 import {shipmentPanelId} from "../utils/const";
 import {getShipmentsByInvoiceId} from "../store/selectors/shipments";
 import InvoiceDetailsShipment from "../components/InvoiceDetailsShipment";
+import ApprovedInvoiceCheckbox from "../components/ApprovedInvoiceCheckbox";
 
 const InvoiceDetails = () => {
     const invoiceId = useParams().invoiceId || "0";
@@ -51,13 +52,16 @@ const InvoiceDetails = () => {
                         </Link>
                     </Stack>
                     <Stack sx={{width: "100%"}} spacing={3}>
-                        <InvoiceDetailsItem title={"№ :"} value={invoice.number}/>
-                        <InvoiceDetailsItem title={"Поставщик :"} value={supplierName}/>
-                        <InvoiceDetailsItem title={"ИНН :"} value={supplierINN}/>
-                        <InvoiceDetailsItem title={"Сумма :"} value={invoice.amount + " руб."}/>
-                        <InvoiceDetailsItem title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
-                        <InvoiceDetailsItem title={"Оплачен :"} value={invoice.paid.isPaid ? "Да" : "Нет"}/>
-                        <InvoiceDetailsItem title={"Отгружен :"} value={shipments.length > 0 ? "Да" : "Нет"}/>
+                        <NameWithValue title={"№ :"} value={invoice.number}/>
+                        <NameWithValue title={"Поставщик :"} value={supplierName}/>
+                        <NameWithValue title={"ИНН :"} value={supplierINN}/>
+                        <NameWithValue title={"Сумма :"} value={invoice.amount + " руб."}/>
+                        <NameWithValue title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
+                        <NameWithValue title={"Оплачен :"} value={invoice.paid.isPaid ? "Да" : "Нет"}/>
+                        <NameWithValue title={"Отгружен :"} value={shipments.length > 0 ? "Да" : "Нет"}/>
+                        <NameWithValue title={"Одобрен :"}>
+                            <ApprovedInvoiceCheckbox invoice={invoice}/>
+                        </NameWithValue>
                         <InvoiceDetailsActions {...invoice}/>
                         <InvoiceDetailsStepper {...invoice}/>
                         <InvoiceDetailsCancel {...invoice}/>

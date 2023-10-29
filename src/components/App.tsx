@@ -1,4 +1,3 @@
-import MainPage from "../pages/MainPage";
 import Invoices from "../pages/Invoices";
 import Auth from "../pages/Auth";
 import {routes} from "../utils/routes";
@@ -32,6 +31,7 @@ import Shipments from "../pages/Shipments";
 import ShipmentsAddNew from "../pages/ShipmentsAddNew";
 import {IShipments} from "../models/iShipments";
 import {setShipments, setShipmentsLoading} from "../store/reducers/shipment";
+import MainMenu from "../pages/MainMenu";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -170,7 +170,7 @@ function App() {
             <Main open={open} sx={{backgroundColor: "#f3f7fa"}}>
                 <DrawerHeader/>
                 <Routes>
-                    <Route path={routes.main} element={<MainPage/>}/>
+                    <Route path={routes.main} element={<MainMenu/>}/>
                     <Route path={routes.invoices} element={<Invoices/>}/>
                     <Route path={routes.invoices + "/:invoiceId/"} element={<InvoiceDetails/>}/>
                     <Route path={routes.suppliers} element={<Suppliers/>}/>

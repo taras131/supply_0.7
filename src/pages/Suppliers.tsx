@@ -19,7 +19,7 @@ const Suppliers = () => {
     const suppliers = useAppSelector(state => getSuppliers(state));
     const suppliersList = suppliers.map(supplier => (<Supplier key={supplier.id} {...supplier}/>));
     return (
-        <Stack style={{minHeight: "calc(100vh - 60px"}} alignItems="center">
+        <Stack spacing={3} alignItems="center">
             <SuppliersHeader/>
             <TableContainer component={Paper} sx={{maxWidth: 850}}>
                 <Table aria-label="simple table">
