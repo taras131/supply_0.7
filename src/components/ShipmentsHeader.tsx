@@ -11,7 +11,7 @@ const ShipmentsHeader = () => {
         navigate(routes.addNewShipments);
     };
     return (
-        <Stack sx={{maxWidth: "900px", width: "100%", padding: "20px 0"}}
+        <Stack sx={{maxWidth: "900px", width: "100%"}}
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>

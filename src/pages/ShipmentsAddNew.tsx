@@ -12,15 +12,17 @@ import {IShipmentsInvoice, TShipmentInvoiceValue, TShipmentsType} from "../model
 import {fetchAddShipment} from "../store/actionsCreators/shipments";
 import {getUser} from "../store/selectors/auth";
 import {getDateInMilliseconds} from "../utils/services";
+import {useNavigate} from "react-router-dom";
+import {routes} from "../utils/routes";
 
-const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия"];
+const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия", "Дмитрий Павлович"];
 
 export interface IType {
     name: TShipmentsType,
     value: string
 }
 
-const types: IType [] = [{name: "air", value: "Авиа"}, {name: "railway", value: "ЖД"}];
+export const shipmentTypes: IType [] = [{name: "air", value: "Авиа"}, {name: "railway", value: "ЖД"}];
 
 export interface IInvoiceValue {
     value: TShipmentInvoiceValue,
@@ -33,9 +35,10 @@ export const invoiceValues: IInvoiceValue[] = [
 
 const ShipmentsAddNew: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const user = useAppSelector(state => getUser(state));
     const [transporter, setTransporter] = useState("");
-    const [type, setType] = useState<TShipmentsType>(types[0].name);
+    const [type, setType] = useState<TShipmentsType>(shipmentTypes[0].name);
     const [filePatch, setFilePatch] = useState("");
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
     const [fileName, setFileName] = useState("");
@@ -71,7 +74,7 @@ const ShipmentsAddNew: FC = () => {
     const transporterList = transporters.map(transporter => (
         <MenuItem key={transporter}
                   value={transporter}>{transporter}</MenuItem>));
-    const typeList = types.map(type => (
+    const typeList = shipmentTypes.map(type => (
         <MenuItem key={type.name}
                   value={type.name}>{type.value}</MenuItem>));
     const handleAddClick = () => {
@@ -91,6 +94,14 @@ const ShipmentsAddNew: FC = () => {
             type: type,
             invoicesList: selectedInvoices,
         }));
+        setFilePatch("");
+        setFileName("");
+        setTransporter("");
+        setType(shipmentTypes[0].name);
+        setIsValidate(false);
+        setSelectedInvoices([]);
+        setLadingNumber("");
+        navigate(routes.shipments);
     };
     const handleTransporterChange = (e: SelectChangeEvent) => {
         setTransporter(e.target.value as string);

@@ -25,7 +25,7 @@ const ShipmentHeader:FC<IProps> = ({shipment}) => {
             </Grid>
             <Grid xs={5}>
                 <Typography sx={{flexShrink: 0}} fontWeight={600} ml={1}>
-                    Накладная: {shipment.ladingNumber}
+                    № {shipment.ladingNumber}
                 </Typography>
             </Grid>
             <Grid xs={1}>

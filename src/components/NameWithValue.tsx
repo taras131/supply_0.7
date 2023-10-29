@@ -5,10 +5,11 @@ import Divider from "@mui/material/Divider";
 
 interface IProps {
     title: string
-    value: string | number
+    value?: string | number
+    children?: React.ReactNode
 }
 
-const InvoiceDetailsItem: FC<IProps> = ({title, value}) => {
+const NameWithValue: FC<IProps> = ({title, value, children}) => {
     return (
         <>
             <Grid container sx={{width: "100%"}} alignItems="center">
@@ -18,9 +19,11 @@ const InvoiceDetailsItem: FC<IProps> = ({title, value}) => {
                     </Typography>
                 </Grid>
                 <Grid xs={9}>
-                    <Typography fontWeight={600}>
-                        {value}
-                    </Typography>
+                    {value
+                        ? (<Typography fontWeight={600}>
+                            {value}
+                        </Typography>)
+                        : children}
                 </Grid>
             </Grid>
             <Divider/>
@@ -28,4 +31,4 @@ const InvoiceDetailsItem: FC<IProps> = ({title, value}) => {
     );
 };
 
-export default InvoiceDetailsItem;
+export default NameWithValue;

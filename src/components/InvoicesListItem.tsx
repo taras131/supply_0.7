@@ -1,8 +1,6 @@
-import React, {FC, useEffect, useId, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
-    Checkbox,
     Chip,
-    FormControlLabel,
     IconButton,
     Stack,
     TableCell,
@@ -18,27 +16,23 @@ import DownloadIcon from "@mui/icons-material/Download";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {fetchUpdateInvoice, fetchUpdateInvoiceApproved, fetchUploadFile} from "../store/actionsCreators/invoices";
+import {fetchUpdateInvoice, fetchUploadFile} from "../store/actionsCreators/invoices";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {setMessage} from "../store/reducers/message";
-import {MESSAGE_SEVERITY, PRIMARY} from "../utils/const";
+import {MESSAGE_SEVERITY} from "../utils/const";
 import {routes} from "../utils/routes";
 import {useNavigate} from "react-router-dom";
-import {getUser} from "../store/selectors/auth";
-import {getCommentsByInvoiceId} from "../store/selectors/coments";
-import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import {getIsShipmentByInvoiceId} from "../store/selectors/shipments";
+import ApprovedInvoiceCheckbox from "./ApprovedInvoiceCheckbox";
 
 
-const Invoice: FC<IInvoice> = (invoice) => {
+const InvoicesListItem: FC<IInvoice> = (invoice) => {
     const dispatch = useAppDispatch();
-    const checkboxId = useId();
     const navigate = useNavigate();
-    const user = useAppSelector(state => getUser(state));
-    const isShipment = useAppSelector(state => getIsShipmentByInvoiceId(state, invoice.id))
-    const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
+    const isShipment = useAppSelector(state => getIsShipmentByInvoiceId(state, invoice.id));
+    //const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
@@ -75,16 +69,6 @@ const Invoice: FC<IInvoice> = (invoice) => {
             setIsUpdateFileLoading: setIsUploadFileLoading,
         }));
     };
-    const handleApprovedChange = () => {
-        dispatch(fetchUpdateInvoiceApproved({
-            invoiceId: invoice.id,
-            newApproved: {
-                userId: user.uid,
-                date: getDateInMilliseconds(),
-                isApproved: !invoice.approved.isApproved,
-            },
-        }));
-    };
     const handleINNClick = () => {
         navigator.clipboard.writeText(supplierINN);
         dispatch(setMessage({text: "ИНН скопирован", severity: MESSAGE_SEVERITY.success}));
@@ -111,14 +95,7 @@ const Invoice: FC<IInvoice> = (invoice) => {
             }}
         >
             <TableCell align={"center"}>
-                <FormControlLabel
-                    label={""}
-                    control={<Checkbox checked={invoice.approved.isApproved}
-                                       onChange={handleApprovedChange}
-                                       color={"success"}
-                                       id={checkboxId}
-                                       disabled={invoice.paid.isPaid || invoice.cancel && invoice.cancel.isCancel}
-                                       sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
+                <ApprovedInvoiceCheckbox invoice={invoice}/>
             </TableCell>
             <TableCell sx={{color: textColor}}>{convertMillisecondsToDate(invoice.author.date)}</TableCell>
             <TableCell sx={{color: textColor}}>{supplierName}</TableCell>
@@ -228,4 +205,4 @@ const Invoice: FC<IInvoice> = (invoice) => {
     );
 };
 
-export default Invoice;
+export default InvoicesListItem;
