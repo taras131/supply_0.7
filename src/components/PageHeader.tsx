@@ -1,28 +1,32 @@
-import React from "react";
-import {Button, Stack, Typography} from "@mui/material";
+import React, {FC} from "react";
 import {useNavigate} from "react-router-dom";
-import {routes} from "../utils/routes";
+import {Button, Stack, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
+interface IProps {
+    route: string
+    title: string
+    buttonText: string
+}
 
-const ShipmentsHeader = () => {
+const PageHeader:FC<IProps> = ({route, title, buttonText}) => {
     const navigate = useNavigate();
     const handleAddClick = () => {
-        navigate(routes.addNewShipments);
+        navigate(route);
     };
     return (
-        <Stack sx={{maxWidth: "900px", width: "100%"}}
+        <Stack sx={{maxWidth: "1000px", width: "100%"}}
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>
             <Typography variant="h2" fontSize="24px" fontWeight={700}>
-                Отгрузки:
+                {title}
             </Typography>
             <Button startIcon={<AddIcon/>} variant="contained" size="large" onClick={handleAddClick}>
-                Отгрузка
+                {buttonText}
             </Button>
         </Stack>
     );
 };
 
-export default ShipmentsHeader;
+export default PageHeader;

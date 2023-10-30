@@ -8,7 +8,7 @@ const SuppliersHeader = () => {
         setIsOpenAddNewModal(prev => !prev);
     };
     return (
-        <Stack sx={{maxWidth: 850, width: "100%"}} direction="row" alignItems="center"
+        <Stack sx={{maxWidth: 1000, width: "100%"}} direction="row" alignItems="center"
                justifyContent="space-between">
             <Typography variant="h2" fontSize="24px" fontWeight={700}>
                 Поставщики
