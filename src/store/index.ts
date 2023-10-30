@@ -6,6 +6,7 @@ import MessageReducer from "./reducers/message";
 import authReducer from "./reducers/auth";
 import commentsReducer from "./reducers/coments";
 import shipmentsReducer from "./reducers/shipment";
+import ordersReducer from "./reducers/orders";
 
 const rootReducer = combineReducers({
     invoices: InvoicesReducer,
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     comments: commentsReducer,
     shipments: shipmentsReducer,
-
+    orders: ordersReducer,
 });
 export const setupStore = () => {
     return configureStore({

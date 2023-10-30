@@ -1,21 +1,21 @@
 import React, {FC} from "react";
 import {Button, Stack, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {routes} from "../utils/routes";
 
 interface IProps {
+    backRoute: string
+    title: string
     isValidate: boolean
     handleAddClick: () => void
 }
 
-const ShipmentsAddNewHeader: FC<IProps> = ({isValidate, handleAddClick}) => {
+const PageHeaderWithBackButton: FC<IProps> = ({backRoute, title, isValidate, handleAddClick}) => {
     const navigate = useNavigate();
     const handleBackClick = () => {
-        navigate(routes.shipments);
+        navigate(backRoute);
     };
-
     return (
-        <Stack sx={{maxWidth: 850, width: "100%", padding: "20px 0"}}
+        <Stack sx={{maxWidth: 1000, width: "100%"}}
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>
@@ -23,7 +23,7 @@ const ShipmentsAddNewHeader: FC<IProps> = ({isValidate, handleAddClick}) => {
                 Назад
             </Button>
             <Typography variant="h2" fontSize="24px" fontWeight={700}>
-                Новая отгрузка
+                {title}
             </Typography>
             <Button variant="contained" size="large" onClick={handleAddClick} disabled={!isValidate}>
                 Добавить
@@ -32,4 +32,4 @@ const ShipmentsAddNewHeader: FC<IProps> = ({isValidate, handleAddClick}) => {
     );
 };
 
-export default ShipmentsAddNewHeader;
+export default PageHeaderWithBackButton;

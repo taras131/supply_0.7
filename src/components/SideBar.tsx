@@ -60,6 +60,7 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
                 <SideBarMenuItem title={"Счета"} route={routes.invoices} count={countUnpaidInvoices}/>
                 <SideBarMenuItem title={"Поставщики"} route={routes.suppliers}/>
                 <SideBarMenuItem title={"Отгрузки"} route={routes.shipments}/>
+                <SideBarMenuItem title={"Заявки"} route={routes.orders}/>
                 <SideBarMenuItem title={"Сотрудники"} route={routes.users}/>
                 {isAuth
                     ? (<SideBarMenuItem title={"Профиль"} route={routes.profile}/>)

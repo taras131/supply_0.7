@@ -15,6 +15,7 @@ import {IAuthData, IRegisterData} from "../models/iAuth";
 import {INewComment} from "../models/iComents";
 import {INewShipments} from "../models/iShipments";
 import {IReceivingData} from "../store/actionsCreators/shipments";
+import {INewOrder} from "../models/iOrders";
 
 
 class Api {
@@ -31,9 +32,15 @@ class Api {
         );
         return res;
     };
-    addShipment = async (comment: INewShipments) => {
+    addShipment = async (shipment: INewShipments) => {
         const res = await addDoc(collection(db, "shipments"),
-            comment
+            shipment
+        );
+        return res;
+    };
+    addOrder = async (order: INewOrder) => {
+        const res = await addDoc(collection(db, "orders"),
+            order
         );
         return res;
     };

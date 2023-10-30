@@ -14,6 +14,7 @@ import {getUser} from "../store/selectors/auth";
 import {getDateInMilliseconds} from "../utils/services";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
+import PageHeaderWithBackButton from "../components/PageHeaderWithBackButton";
 
 const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия", "Дмитрий Павлович"];
 
@@ -129,9 +130,12 @@ const ShipmentsAddNew: FC = () => {
         setLadingNumber(e.target.value);
     };
     return (
-        <Stack style={{minHeight: "calc(100vh - 120px"}} alignItems="center">
-            <ShipmentsAddNewHeader isValidate={isValidate} handleAddClick={handleAddClick}/>
-            <Paper sx={{maxWidth: "850px", width: "100%", padding: "20px"}}>
+        <Stack alignItems="center" spacing={4} pt={3}>
+            <PageHeaderWithBackButton backRoute={routes.shipments}
+                                      title={"Новая отгрузка"}
+                                      isValidate={isValidate}
+                                      handleAddClick={handleAddClick}/>
+            <Paper sx={{maxWidth: "1000px", width: "100%", padding: "20px"}}>
                 <Stack spacing={2} sx={{width: "100%"}}>
                     <Grid container sx={{width: "100%"}} alignItems="center">
                         <Grid xs={3}>

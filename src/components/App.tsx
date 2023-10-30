@@ -32,6 +32,8 @@ import ShipmentsAddNew from "../pages/ShipmentsAddNew";
 import {IShipments} from "../models/iShipments";
 import {setShipments, setShipmentsLoading} from "../store/reducers/shipment";
 import MainMenu from "../pages/MainMenu";
+import Orders from "../pages/Orders";
+import OrdersAddNew from "../pages/OrdersAddNew";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -176,6 +178,8 @@ function App() {
                     <Route path={routes.suppliers} element={<Suppliers/>}/>
                     <Route path={routes.shipments} element={<Shipments/>}/>
                     <Route path={routes.addNewShipments} element={<ShipmentsAddNew/>}/>
+                    <Route path={routes.orders} element={<Orders/>}/>
+                    <Route path={routes.addNewOrders} element={<OrdersAddNew/>}/>
                     <Route path={routes.users} element={<Users/>}/>
                     <Route path={routes.login} element={<Auth/>}/>
                     <Route path={routes.register} element={<Auth/>}/>
