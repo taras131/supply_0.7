@@ -11,12 +11,12 @@ const ShipmentsInfo = () => {
                justifyContent="space-between">
             <Stack direction="row" spacing={1}>
                 <Typography color={"gray"}>Авиа грузов в пути:</Typography>
-                <Typography color={"darkblue"} fontSize="16px" fontWeight={600}>{numberAirShipmentsRoute}</Typography>
+                <Typography color={"darkblue"} fontSize="16px" fontWeight={600}>{numberAirShipmentsRoute}.</Typography>
             </Stack>
             <Stack direction="row" spacing={1}>
                 <Typography color={"gray"}>ЖД грузов в пути:</Typography>
                 <Typography color={"darkblue"} fontSize="16px" fontWeight={600}>
-                    {new Intl.NumberFormat("ru-RU").format(numberRailShipmentsRoute)} руб.
+                    {numberRailShipmentsRoute}.
                 </Typography>
             </Stack>
         </Stack>

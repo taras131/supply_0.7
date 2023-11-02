@@ -1,6 +1,6 @@
 import {RootState} from "../index";
 import {IShipments} from "../../models/iShipments";
-import {shipmentTypes} from "../../pages/ShipmentsAddNew";
+import {shipmentTypes} from "../../utils/const";
 
 export const getShipments = (state: RootState): IShipments[] => {
     const arr = [...state.shipments.list];

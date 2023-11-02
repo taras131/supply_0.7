@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useId, useState} from "react";
 import {FormControl, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography} from "@mui/material";
-import ShipmentsAddNewHeader from "../components/ShipmentsAddNewHeader";
 import Grid from "@mui/material/Unstable_Grid2";
 import LoadingButton from "@mui/lab/LoadingButton";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
@@ -15,15 +14,9 @@ import {getDateInMilliseconds} from "../utils/services";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import PageHeaderWithBackButton from "../components/PageHeaderWithBackButton";
+import {shipmentTypes} from "../utils/const";
 
 const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия", "Дмитрий Павлович"];
-
-export interface IType {
-    name: TShipmentsType,
-    value: string
-}
-
-export const shipmentTypes: IType [] = [{name: "air", value: "Авиа"}, {name: "railway", value: "ЖД"}];
 
 export interface IInvoiceValue {
     value: TShipmentInvoiceValue,

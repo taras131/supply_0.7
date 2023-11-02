@@ -1,3 +1,6 @@
+import {TShipmentsType} from "../models/iShipments";
+import {TOrdersType} from "../models/iOrders";
+
 export enum MESSAGE_SEVERITY {
     error = "error",
     warning = "warning",
@@ -40,6 +43,19 @@ export const INHERIT = "inherit";
 export const STATIC = "static";
 export const SECONDARY_TEXT_COLOR = "text.secondary";
 export const drawerWidth = 240;
+
+interface IShipmentType {
+    name: TShipmentsType
+    value: string
+}
+
+interface IOrderType {
+    name: TOrdersType,
+    value: string
+}
+
+export const shipmentTypes: IShipmentType [] = [{name: "air", value: "Авиа"}, {name: "railway", value: "ЖД"}];
+export const ordersTypes: IOrderType [] = [{name: "current", value: "Текущая"}, {name: "annual", value: "Годовая"}];
 
 
 
