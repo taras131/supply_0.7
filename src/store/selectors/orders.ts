@@ -10,3 +10,11 @@ export const getOrders = (state: RootState): IOrder[] => {
 export const getOrdersIsLoading = (state: RootState): boolean => {
     return state.orders.isLoading;
 };
+
+export const getCurrentOrder = (state: RootState): IOrder => {
+    return state.orders.currentOrder;
+};
+
+export const getCurrentOrderIsEdit = (state: RootState): boolean => {
+    return state.orders.isEdit;
+};

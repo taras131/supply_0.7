@@ -39,12 +39,10 @@ const InvoiceDetailsComments: FC<IProps> = ({invoiceId, expanded, handleExpanded
     const [errorCommentText, setErrorCommentText] = useState(STRING_WITH_SPACE);
     const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoiceId));
     const isLoading = useAppSelector(state => getCommentsIsLoading(state));
-    console.log(isLoading)
     const user = useAppSelector(state => getUser(state));
     const commentsList = comments.map(comment => <InvoiceDetailsCommentsItem
         key={comment.id}
         {...comment} userId={user.id}/>);
-
     const handleLoginClick = () => {
         navigate(routes.login, {state: {from: location.pathname}});
     };

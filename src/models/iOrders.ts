@@ -1,4 +1,7 @@
 import {TShipmentsType} from "./iShipments";
+import {ordersTypes, shipmentTypes} from "../utils/const";
+
+export type TOrdersType = "current" | "annual"
 
 export interface IOrderItem {
     id: number
@@ -14,7 +17,9 @@ export interface INewOrder {
         userId: string
         dateCreating: number
     }
-    type: TShipmentsType
+    title: string
+    shipmentType: TShipmentsType
+    orderType: TOrdersType
     orderItems: IOrderItem []
     comment: string
 }
@@ -22,3 +27,25 @@ export interface INewOrder {
 export interface IOrder extends INewOrder {
     id: string
 }
+
+export const emptyOrder: IOrder = {
+    id: "new",
+    author: {
+        userId: "",
+        dateCreating: 0,
+    },
+    title: "",
+    shipmentType: shipmentTypes[0].name,
+    orderType: ordersTypes[0].name,
+    orderItems: [
+        {
+            id: 0,
+            name: "",
+            catalogNumber: "",
+            count: 1,
+            comment: "",
+            isOrdered: false,
+        },
+    ],
+    comment: "",
+};
