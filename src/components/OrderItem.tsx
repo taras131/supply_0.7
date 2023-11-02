@@ -1,13 +1,34 @@
 import React, {FC} from "react";
 import {IOrderItem} from "../models/iOrders";
 import {styled} from "@mui/material/styles";
-import {TableRow, TextField} from "@mui/material";
+import {Stack, TableRow, TextField} from "@mui/material";
 import {StyledTableCell} from "./OrderItemList";
+import {useAppDispatch} from "../hooks/redux";
+import {removeOrderItem, updateItemsCount, updateItemsValues} from "../store/reducers/orders";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 interface IProps {
     orderItem: IOrderItem
     isEdit: boolean
+    index: number
 }
+
+export const StyledTextField = styled(TextField)(({theme}) => ({
+    "& input[type=number]": {
+        "-moz-appearance": "textfield",
+    },
+    "& input[type=number]::-webkit-outer-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+    },
+    "& input[type=number]::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+    },
+}));
 
 const StyledTableRow = styled(TableRow)(({theme}) => ({
     "&:nth-of-type(odd)": {
@@ -19,31 +40,89 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     },
 }));
 
-const OrderItem: FC<IProps> = ({orderItem, isEdit}) => {
+const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
+    const dispatch = useAppDispatch()
+    const handleInputChange = (e: any) => {
+        dispatch(updateItemsValues({
+            id: orderItem.id,
+            name: e.target.name,
+            newValue: e.target.value,
+        }))
+    }
+    const handleCountChange = (e: any) => {
+        const value = +e.target.value
+        if (value > 0) {
+            dispatch(updateItemsCount({id: orderItem.id, newValue: value}))
+        }
+    }
+    const handleMinusClick = () => {
+        dispatch(updateItemsCount({id: orderItem.id, newValue: orderItem.count - 1}));
+    };
+    const handlePlusClick = () => {
+        dispatch(updateItemsCount({id: orderItem.id, newValue: orderItem.count + 1}));
+    };
+    const handleRemoveClick = () => {
+        if (orderItem.id !== 0) {
+            dispatch(removeOrderItem(orderItem.id))
+        }
+    }
     return (
         <StyledTableRow>
-            <StyledTableCell component="th" scope="row">
-                {orderItem.id + 1}
+            <StyledTableCell component="th" scope="row" sx={{paddingTop: 0, paddingBottom: 0}}>
+                {index + 1}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
                 {isEdit
-                    ? (<TextField value={orderItem.name} variant="filled"/>)
+                    ? (<TextField name={"name"}
+                                  value={orderItem.name}
+                                  variant="standard"
+                                  onChange={handleInputChange}/>)
                     : orderItem.name}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
                 {isEdit
-                    ? (<TextField value={orderItem.catalogNumber} variant="filled"/>)
+                    ? (<TextField name={"catalogNumber"}
+                                  value={orderItem.catalogNumber}
+                                  variant="standard"
+                                  onChange={handleInputChange}/>)
                     : orderItem.catalogNumber}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
                 {isEdit
-                    ? (<TextField value={orderItem.count} variant="filled"/>)
+                    ? (<Stack direction={"row"} alignItems={"center"} spacing={1}>
+                        <IconButton aria-label="delete"
+                                    onClick={handleMinusClick}
+                                    disabled={orderItem.count < 2}>
+                            <RemoveIcon/>
+                        </IconButton>
+                        <StyledTextField name={"count"}
+                                         value={orderItem.count}
+                                         inputProps={{style: {textAlign: "center"}}}
+                                         type={"number"}
+                                         variant="standard"
+                                         sx={{width: "60px"}}
+                                         onChange={handleCountChange}
+                        />
+                        <IconButton aria-label="delete" onClick={handlePlusClick}>
+                            <AddIcon/>
+                        </IconButton>
+                    </Stack>)
                     : orderItem.count}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
                 {isEdit
-                    ? (<TextField value={orderItem.comment} variant="filled"/>)
+                    ? (<TextField name={"comment"}
+                                  value={orderItem.comment}
+                                  variant="standard"
+                                  onChange={handleInputChange}/>)
                     : orderItem.comment}
+            </StyledTableCell>
+            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+                {orderItem.id !== 0
+                    ? (<IconButton aria-label="delete" onClick={handleRemoveClick}>
+                        <DeleteIcon/>
+                    </IconButton>)
+                    : ""}
             </StyledTableCell>
         </StyledTableRow>
     );

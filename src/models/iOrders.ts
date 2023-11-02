@@ -28,6 +28,15 @@ export interface IOrder extends INewOrder {
     id: string
 }
 
+export const emptyOrderItem: IOrderItem = {
+    id: 0,
+    name: "",
+    catalogNumber: "",
+    count: 1,
+    comment: "",
+    isOrdered: false,
+}
+
 export const emptyOrder: IOrder = {
     id: "new",
     author: {
@@ -37,15 +46,6 @@ export const emptyOrder: IOrder = {
     title: "",
     shipmentType: shipmentTypes[0].name,
     orderType: ordersTypes[0].name,
-    orderItems: [
-        {
-            id: 0,
-            name: "",
-            catalogNumber: "",
-            count: 1,
-            comment: "",
-            isOrdered: false,
-        },
-    ],
+    orderItems: [emptyOrderItem],
     comment: "",
 };
