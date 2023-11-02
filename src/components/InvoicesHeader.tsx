@@ -42,16 +42,20 @@ const InvoicesHeader: FC<IProps> = ({
     const [text, setText] = useState("");
     useEffect(() => {
         let amount = 0;
+        let isPaymentOrder = false
         if (text.length > 0) {
             const textArr = text.split(" ");
             for (let i = 0; i < textArr.length - 1; i++) {
+                if (textArr[i] === "ПЛАТЕЖНОЕ" && textArr[i + 1] === "ПОРУЧЕНИЕ") {
+                    isPaymentOrder = true
+                }
                 if (textArr[i] === "Сумма") {
                     amount = +textArr[i + 1].split("-").join(".");
                 }
             }
         }
         const currentInvoice = invoices.filter(invoice => invoice.amount === amount)[0];
-        if (currentInvoice && currentInvoice.id && file) {
+        if (currentInvoice && currentInvoice.id && file && isPaymentOrder) {
             const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
                 const newPaid = {
                     isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
@@ -67,19 +71,28 @@ const InvoicesHeader: FC<IProps> = ({
                 text: "Платёжное поручение успешно прикреплено",
                 severity: MESSAGE_SEVERITY.success,
             }));
-        }
-        if (file && !amount) {
-            dispatch(setMessage({text: "Не удалось распознать сумму", severity: MESSAGE_SEVERITY.error}));
         } else {
-            if (file && !currentInvoice) {
+            if (!isPaymentOrder && file) {
                 dispatch(setMessage({
-                    text: `Нет неоплаченных счетов с суммой ${amount}`,
+                    text: "Не является платёжным поручением",
                     severity: MESSAGE_SEVERITY.error,
                 }));
+            } else {
+                if (file && !amount) {
+                    dispatch(setMessage({text: "Не удалось распознать сумму", severity: MESSAGE_SEVERITY.error}));
+                } else {
+                    if (file && !currentInvoice) {
+                        dispatch(setMessage({
+                            text: `Нет неоплаченных счетов с суммой ${amount}`,
+                            severity: MESSAGE_SEVERITY.error,
+                        }));
+                    }
+                }
             }
         }
         setFile(null);
         setIsUploadFileLoading(false);
+        console.log(isPaymentOrder)
     }, [text]);
 
     const handleFileChange = async (event: any) => {
