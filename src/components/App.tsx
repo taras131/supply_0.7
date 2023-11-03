@@ -33,7 +33,9 @@ import {IShipments} from "../models/iShipments";
 import {setShipments, setShipmentsLoading} from "../store/reducers/shipment";
 import MainMenu from "../pages/MainMenu";
 import Orders from "../pages/Orders";
-import OrdersAddNew from "../pages/OrdersAddNew";
+import Order from "../pages/Order";
+import {setOrders, setOrdersLoading} from "../store/reducers/orders";
+import {IOrder} from "../models/iOrders";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -153,7 +155,24 @@ function App() {
             return () => unsubscribe();
         });
     }, []);
-
+    useEffect(() => {
+        const q = query(collection(db, "orders"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                dispatch(setOrdersLoading(true));
+                const ordersArr: IOrder [] = [];
+                querySnapshot.forEach((doc: any) => {
+                    ordersArr.push({...doc.data(), id: doc.id});
+                });
+                dispatch(setOrders(ordersArr));
+                dispatch(setOrdersLoading(false));
+            } catch (e) {
+                dispatch(setOrdersLoading(false));
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, []);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -179,7 +198,7 @@ function App() {
                     <Route path={routes.shipments} element={<Shipments/>}/>
                     <Route path={routes.addNewShipments} element={<ShipmentsAddNew/>}/>
                     <Route path={routes.orders} element={<Orders/>}/>
-                    <Route path={routes.addNewOrders} element={<OrdersAddNew/>}/>
+                    <Route path={routes.orders + "/:orderId/"} element={<Order/>}/>
                     <Route path={routes.users} element={<Users/>}/>
                     <Route path={routes.login} element={<Auth/>}/>
                     <Route path={routes.register} element={<Auth/>}/>

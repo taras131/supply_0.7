@@ -71,7 +71,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
             <StyledTableCell component="th" scope="row" sx={{paddingTop: 0, paddingBottom: 0}}>
                 {index + 1}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell sx={{paddingTop: 1, paddingBottom: 1}}>
                 {isEdit
                     ? (<TextField name={"name"}
                                   value={orderItem.name}
@@ -79,7 +79,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                                   onChange={handleInputChange}/>)
                     : orderItem.name}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell sx={{paddingTop: 1, paddingBottom: 1}}>
                 {isEdit
                     ? (<TextField name={"catalogNumber"}
                                   value={orderItem.catalogNumber}
@@ -87,7 +87,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                                   onChange={handleInputChange}/>)
                     : orderItem.catalogNumber}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell sx={{paddingTop: 1, paddingBottom: 1}}>
                 {isEdit
                     ? (<Stack direction={"row"} alignItems={"center"} spacing={1}>
                         <IconButton aria-label="delete"
@@ -109,7 +109,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                     </Stack>)
                     : orderItem.count}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell sx={{paddingTop: 1, paddingBottom: 1}}>
                 {isEdit
                     ? (<TextField name={"comment"}
                                   value={orderItem.comment}
@@ -117,13 +117,15 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                                   onChange={handleInputChange}/>)
                     : orderItem.comment}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
-                {orderItem.id !== 0
-                    ? (<IconButton aria-label="delete" onClick={handleRemoveClick}>
+            {isEdit && (
+                <StyledTableCell sx={{paddingTop: 1, paddingBottom: 1}}>
+                    <IconButton aria-label="delete"
+                                onClick={handleRemoveClick}
+                                disabled={orderItem.id === 0}>
                         <DeleteIcon/>
-                    </IconButton>)
-                    : ""}
-            </StyledTableCell>
+                    </IconButton>
+                </StyledTableCell>
+            )}
         </StyledTableRow>
     );
 };

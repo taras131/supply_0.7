@@ -7,7 +7,7 @@ import {routes} from "../utils/routes";
 const Orders = () => {
     return (
         <Stack alignItems="center" spacing={4} pt={3}>
-            <PageHeader title={"Заявки:"} route={routes.addNewOrders} buttonText={"Заявка"}/>
+            <PageHeader title={"Заявки:"} route={`${routes.orders}/new_order`} buttonText={"Заявка"}/>
             <OrdersList/>
         </Stack>
     );

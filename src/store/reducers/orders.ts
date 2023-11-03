@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {emptyOrder, emptyOrderItem, IOrder} from "../../models/iOrders";
+import {emptyOrder, emptyOrderItem, IOrder, TOrdersType} from "../../models/iOrders";
+import {TShipmentsType} from "../../models/iShipments";
 
 interface IUpdateOrderItems {
     id: number
@@ -43,6 +44,15 @@ export const OrdersSlice = createSlice({
         },
         setCurrenOrderIsEdit: (state, action: PayloadAction<boolean>) => {
             state.isEdit = action.payload;
+        },
+        updateCurrentOrderTitle: (state, action: PayloadAction<string>) => {
+            state.currentOrder.title = action.payload;
+        },
+        updateCurrentOrderShipmentType: (state, action: PayloadAction<TShipmentsType>) => {
+            state.currentOrder.shipmentType = action.payload;
+        },
+        updateCurrentOrderType: (state, action: PayloadAction<TOrdersType>) => {
+            state.currentOrder.orderType = action.payload;
         },
         updateItemsValues: (state, action: PayloadAction<IUpdateOrderItems>) => {
             const {id, name, newValue} = action.payload;
@@ -93,6 +103,9 @@ export const {
     updateItemsCount,
     addEmptyOrderItem,
     removeOrderItem,
+    updateCurrentOrderTitle,
+    updateCurrentOrderShipmentType,
+    updateCurrentOrderType,
 } = OrdersSlice.actions;
 
 export default OrdersSlice.reducer;
