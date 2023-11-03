@@ -4,43 +4,67 @@ import PageHeaderWithBackButton from "../components/PageHeaderWithBackButton";
 import {routes} from "../utils/routes";
 import useFormWithValidation from "../hooks/useFormWithValidation";
 import {ordersTypes, shipmentTypes} from "../utils/const";
-import {useLocation} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {setCurrenOrderIsEdit, setCurrentOrder} from "../store/reducers/orders";
-import {emptyOrder} from "../models/iOrders";
-import {getCurrentOrder, getCurrentOrderIsEdit} from "../store/selectors/orders";
+import {
+    setCurrenOrderIsEdit,
+    setCurrentOrder,
+    updateCurrentOrderShipmentType,
+    updateCurrentOrderTitle, updateCurrentOrderType,
+} from "../store/reducers/orders";
+import {emptyOrder, TOrdersType} from "../models/iOrders";
+import {getCurrentOrder, getCurrentOrderIsEdit, getOrderById} from "../store/selectors/orders";
 import OrderItemList from "../components/OrderItemList";
+import {TShipmentsType} from "../models/iShipments";
+import {fetchAddOrder} from "../store/actionsCreators/orders";
+import {getDateInMilliseconds} from "../utils/services";
 
 
-const OrdersAddNew = () => {
+const Order = () => {
     const [isValidate, setIsValidate] = useState(false);
     const shipmentTypeRadioId = useId();
     const dispatch = useAppDispatch();
-    const {pathname} = useLocation();
+    const orderId = useParams().orderId || "0";
     const currentOrder = useAppSelector(state => getCurrentOrder(state));
+    const order = useAppSelector(state => getOrderById(state, orderId));
     const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
-    const [radioState, setRadioState] = useState({
-        shipmentTypes: currentOrder.shipmentType,
-        ordersTypes: currentOrder.orderType,
-    });
+    const isNewOrder = orderId === "new_order"
     useEffect(() => {
-        if (pathname === routes.addNewOrders) {
+        if (isNewOrder) {
             dispatch(setCurrentOrder(emptyOrder));
             dispatch(setCurrenOrderIsEdit(true));
         } else {
+            dispatch(setCurrentOrder(order));
             dispatch(setCurrenOrderIsEdit(false));
         }
     }, []);
-    const {handleChange, isValid, errors, values, setValues, setIsValid} =
-        useFormWithValidation();
+    useEffect(() => {
+        if (currentOrder.title.length > 4 && currentOrder.orderItems[0].name.length > 2) {
+            setIsValidate(true);
+        } else {
+            setIsValidate(false);
+        }
+        console.log(isValidate)
+    }, [currentOrder.title, currentOrder.orderItems[0].name])
+
     const handleAddClick = () => {
+        if (isNewOrder) {
+            const {id, ...newOrder} = currentOrder
+            dispatch(fetchAddOrder({...newOrder, author: {userId: "", dateCreating: getDateInMilliseconds()}}))
+            dispatch(setCurrentOrder(emptyOrder));
+        } else {
+
+        }
         setIsValidate(false);
     };
-    const handleFormSubmit = () => {
-        console.log(values);
+    const handleTitleChange = (e: any) => {
+        dispatch(updateCurrentOrderTitle(e.target.value))
     };
-    const handleChangeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRadioState({...radioState, [e.target.name]: e.target.value});
+    const handleShipmentTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateCurrentOrderShipmentType(e.target.value as TShipmentsType))
+    };
+    const handleOrdersTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateCurrentOrderType(e.target.value as TOrdersType))
     };
     return (
         <Stack alignItems="center" spacing={4} pt={3}>
@@ -49,12 +73,11 @@ const OrdersAddNew = () => {
                                       handleAddClick={handleAddClick}
                                       backRoute={routes.orders}/>
             <form
-                name="accountData"
-                onSubmit={handleFormSubmit}
+                name="orderData"
             >
-                <TextField value={values.title || ""}
+                <TextField value={currentOrder.title}
                            name={"title"}
-                           onChange={handleChange}
+                           onChange={handleTitleChange}
                            label={"Заголовок заявки"}/>
             </form>
             <Stack direction={"row"} spacing={2} sx={{maxWidth: "1000px", width: "100%"}} alignItems={"center"}
@@ -65,8 +88,8 @@ const OrdersAddNew = () => {
                         name={"shipmentTypes"}
                         row
                         aria-labelledby={shipmentTypeRadioId}
-                        value={radioState.shipmentTypes}
-                        onChange={handleChangeRadioChange}
+                        value={currentOrder.shipmentType}
+                        onChange={handleShipmentTypeChange}
                     >
                         <FormControlLabel value={shipmentTypes[0].name} control={<Radio/>}
                                           label={shipmentTypes[0].value}/>
@@ -80,8 +103,8 @@ const OrdersAddNew = () => {
                         row
                         name={"ordersTypes"}
                         aria-labelledby={shipmentTypeRadioId}
-                        value={radioState.ordersTypes}
-                        onChange={handleChangeRadioChange}
+                        value={currentOrder.orderType}
+                        onChange={handleOrdersTypeChange}
                     >
                         <FormControlLabel value={ordersTypes[1].name}
                                           control={<Radio/>}
@@ -99,4 +122,4 @@ const OrdersAddNew = () => {
     );
 };
 
-export default OrdersAddNew;
+export default Order;

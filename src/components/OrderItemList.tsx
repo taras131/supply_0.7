@@ -50,9 +50,9 @@ const OrderItemList: FC<IProps> = ({orderItems, isEdit}) => {
                         <StyledTableCell>№</StyledTableCell>
                         <StyledTableCell>Наименование</StyledTableCell>
                         <StyledTableCell>Каталожный номер</StyledTableCell>
-                        <StyledTableCell  alignItems={"center"} >Количество</StyledTableCell>
+                        <StyledTableCell>Количество</StyledTableCell>
                         <StyledTableCell>Комментарий</StyledTableCell>
-                        <StyledTableCell></StyledTableCell>
+                        {isEdit && (<StyledTableCell></StyledTableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -60,7 +60,7 @@ const OrderItemList: FC<IProps> = ({orderItems, isEdit}) => {
                 </TableBody>
             </Table>
             <IconButton aria-label="delete" color={"primary"} onClick={handleAddClick}>
-                <AddIcon />
+                <AddIcon/>
             </IconButton>
         </TableContainer>
     );
