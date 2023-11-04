@@ -1,5 +1,6 @@
 import {TShipmentsType} from "./iShipments";
 import {ordersTypes, shipmentTypes} from "../utils/const";
+import {IApproved} from "./iInvoices";
 
 export type TOrdersType = "current" | "annual"
 
@@ -22,6 +23,7 @@ export interface INewOrder {
     orderType: TOrdersType
     orderItems: IOrderItem []
     comment: string
+    approved: IApproved
 }
 
 export interface IOrder extends INewOrder {
@@ -48,4 +50,9 @@ export const emptyOrder: IOrder = {
     orderType: ordersTypes[0].name,
     orderItems: [emptyOrderItem],
     comment: "",
+    approved: {
+        isApproved: false,
+        userId: "",
+        date: 0,
+    },
 };

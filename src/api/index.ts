@@ -15,8 +15,8 @@ import {IAuthData, IRegisterData} from "../models/iAuth";
 import {INewComment} from "../models/iComents";
 import {INewShipments} from "../models/iShipments";
 import {IReceivingData} from "../store/actionsCreators/shipments";
-import {INewOrder} from "../models/iOrders";
-
+import {INewOrder, IOrder} from "../models/iOrders";
+import {IUpdateApprovedOrderData} from "../store/actionsCreators/orders";
 
 class Api {
     auth = getAuth();
@@ -88,6 +88,26 @@ class Api {
                 userId: updateApprovedData.newApproved.userId,
                 date: updateApprovedData.newApproved.date,
             },
+        });
+        return res;
+    };
+    updateOrderApproved = async (updateApprovedOrderData: IUpdateApprovedOrderData) => {
+        const res = await updateDoc(doc(db, "orders", updateApprovedOrderData.orderId), {
+            approved: {
+                isApproved: updateApprovedOrderData.newApproved.isApproved,
+                userId: updateApprovedOrderData.newApproved.userId,
+                date: updateApprovedOrderData.newApproved.date,
+            },
+        });
+        return res;
+    };
+    updateOrder = async (order: IOrder) => {
+        const res = await updateDoc(doc(db, "orders", order.id), {
+            title: order.title,
+            shipmentType: order.shipmentType,
+            orderType: order.orderType,
+            orderItems: order.orderItems,
+            comment: order.comment,
         });
         return res;
     };

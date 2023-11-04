@@ -59,9 +59,11 @@ const OrderItemList: FC<IProps> = ({orderItems, isEdit}) => {
                     {orderItemsList}
                 </TableBody>
             </Table>
-            <IconButton aria-label="delete" color={"primary"} onClick={handleAddClick}>
-                <AddIcon/>
-            </IconButton>
+            {isEdit && (
+                <IconButton aria-label="delete" color={"primary"} onClick={handleAddClick}>
+                    <AddIcon/>
+                </IconButton>
+            )}
         </TableContainer>
     );
 };

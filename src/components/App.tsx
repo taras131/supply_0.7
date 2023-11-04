@@ -33,7 +33,8 @@ import {IShipments} from "../models/iShipments";
 import {setShipments, setShipmentsLoading} from "../store/reducers/shipment";
 import MainMenu from "../pages/MainMenu";
 import Orders from "../pages/Orders";
-import Order from "../pages/Order";
+import OrderDetails from "../pages/OrderDetails";
+
 import {setOrders, setOrdersLoading} from "../store/reducers/orders";
 import {IOrder} from "../models/iOrders";
 
@@ -198,7 +199,7 @@ function App() {
                     <Route path={routes.shipments} element={<Shipments/>}/>
                     <Route path={routes.addNewShipments} element={<ShipmentsAddNew/>}/>
                     <Route path={routes.orders} element={<Orders/>}/>
-                    <Route path={routes.orders + "/:orderId/"} element={<Order/>}/>
+                    <Route path={routes.orders + "/:orderId/"} element={<OrderDetails/>}/>
                     <Route path={routes.users} element={<Users/>}/>
                     <Route path={routes.login} element={<Auth/>}/>
                     <Route path={routes.register} element={<Auth/>}/>

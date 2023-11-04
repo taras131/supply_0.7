@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {IOrder} from "../models/iOrders";
 import {Chip, IconButton, Stack, TableCell, TableRow, Typography} from "@mui/material";
 import {convertMillisecondsToDate} from "../utils/services";
@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {useAppSelector} from "../hooks/redux";
 import {getUserFullNameById} from "../store/selectors/auth";
+import ApprovedOrderCheckbox from "./ApprovedOrderCheckbox";
 
 interface IProps {
     order: IOrder
@@ -14,7 +15,15 @@ interface IProps {
 
 const OrdersListItem: FC<IProps> = ({order}) => {
     const navigate = useNavigate()
+    const [backgroundColor, setBackgroundColor] = useState("grey");
     const authorFullName = useAppSelector(state => getUserFullNameById(state, order.author.userId)) || ""
+    useEffect(() => {
+        if (order.approved.isApproved) {
+            setBackgroundColor("white")
+        } else {
+            setBackgroundColor("grey")
+        }
+    }, [order.approved.isApproved])
     const handleMoreClick = () => {
         navigate(`${routes.orders}/${order.id}`);
     }
@@ -22,13 +31,12 @@ const OrdersListItem: FC<IProps> = ({order}) => {
         <TableRow
             sx={{
                 "&:last-child td, &:last-child th": {border: 0},
-                backgroundColor: "white",
+                backgroundColor: backgroundColor,
             }}
         >
             <TableCell align={"center"}>
-
+                <ApprovedOrderCheckbox order={order}/>
             </TableCell>
-
             <TableCell sx={{color: "black"}}>{convertMillisecondsToDate(order.author.dateCreating) || ""}</TableCell>
             <TableCell sx={{color: "black"}}>{order.title}</TableCell>
             <TableCell sx={{cursor: "pointer"}}>
