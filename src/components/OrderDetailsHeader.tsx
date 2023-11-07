@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Button, Stack, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 
 interface IProps {
@@ -19,15 +19,20 @@ const OrderDetailsHeader: FC<IProps> = ({
                                             toggleIsEdit,
                                         }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location)
     const handleBackClick = () => {
-        navigate(routes.orders);
+        if (location.state && location.state.from) {
+            navigate(location.state.from);
+        } else {
+            navigate(routes.orders);
+        }
     };
     return (
         <Stack sx={{maxWidth: 1000, width: "100%"}}
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>
-
             {isEdit && !isNewOrder
                 ? (<Button variant="outlined" size="large" onClick={toggleIsEdit}>Отмена</Button>)
                 : (<Button variant="outlined" size="large" onClick={handleBackClick}>Назад</Button>)}
