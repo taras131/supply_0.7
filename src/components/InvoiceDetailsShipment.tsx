@@ -2,10 +2,11 @@ import React, {FC} from "react";
 import {IShipments} from "../models/iShipments";
 import ShipmentHeader from "./ShipmentHeader";
 import AccordionWithTitleCounterIcon from "./AccordionWithTitleCounterIcon";
-import {shipmentPanelId, PRIMARY} from "../utils/const";
+import {shipmentPanelId} from "../utils/const";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
+import {PRIMARY} from "../styles/const";
 
 interface IProps {
     shipments: IShipments []

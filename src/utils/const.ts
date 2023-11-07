@@ -10,38 +10,10 @@ export enum MESSAGE_SEVERITY {
 
 export const commentPanelId = "commentPanel";
 export const shipmentPanelId = "shipment";
-
-export const EDITION_GUIDE_ID = "edition_guide_id";
-export const NEW_GUIDE = "new_guide";
-export const OUTLINED = "outlined";
-export const CENTER = "center";
-export const SPACE_BETWEEN = "space-between";
-export const SPACE_AROUND = "space-around";
-export const H3 = "h3";
-export const H4 = "h4";
-export const H5 = "h5";
-export const H6 = "h6";
-export const START = "start";
-export const END = "end";
-export const LEFT = "left";
-export const RIGHT = "right";
-export const COLUMN = "column";
-export const ROW = "row";
-export const HIDDEN = "hidden";
-export const PRIMARY = "primary";
-export const DIV = "div";
-export const CONTAINED = "contained";
-export const SMALL = "small";
-export const FORM_CONTROL_HEIGHT_PX = "80px";
-export const TEXT_FIELD_MAX_WIDTH_PX = "390px";
 export const STRING_EMPTY = "";
 export const STRING_WITH_SPACE = " ";
 export const ADD_BUTTON_TEXT = "Добавить";
-export const NONE = "none";
-export const WHITE = "white";
-export const INHERIT = "inherit";
-export const STATIC = "static";
-export const SECONDARY_TEXT_COLOR = "text.secondary";
+
 export const drawerWidth = 240;
 
 interface IShipmentType {
@@ -56,6 +28,16 @@ interface IOrderType {
 
 export const shipmentTypes: IShipmentType [] = [{name: "air", value: "Авиа"}, {name: "railway", value: "ЖД"}];
 export const ordersTypes: IOrderType [] = [{name: "current", value: "Текущая"}, {name: "annual", value: "Годовая"}];
+
+export const CANCEL_TEXT = "Отменён";
+export const DOWNLOAD_TEXT = "Скачать";
+export const UPLOAD_TEXT = "Загрузить";
+export const NO_TEXT = "Нет";
+export const YES_TEXT = "Да";
+export const COPY_TEXT = "скопировать";
+export const INN_COPY_TEXT = "ИНН скопирован";
+export const AMOUNT_COPY_TEXT = "Сумма скопирована";
+export const FILE_TYPE = "file";
 
 
 

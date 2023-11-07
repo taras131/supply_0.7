@@ -18,8 +18,7 @@ const PageHeaderWithBackButton: FC<IProps> = ({
     const navigate = useNavigate();
     const location: any = useLocation();
     const handleBackClick = () => {
-        console.log(location.state.from)
-        if (location.state && location.state.from) {
+        if (location && location.state && location.state.from) {
             navigate(location.state.from);
         } else {
             navigate(backRoute);

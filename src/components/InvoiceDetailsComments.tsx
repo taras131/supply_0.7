@@ -5,9 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
-    CENTER, commentPanelId,
-    FORM_CONTROL_HEIGHT_PX, PRIMARY,
-    SECONDARY_TEXT_COLOR, START,
+    commentPanelId,
     STRING_EMPTY,
     STRING_WITH_SPACE,
 } from "../utils/const";
@@ -24,6 +22,7 @@ import {getUser} from "../store/selectors/auth";
 import InvoiceDetailsCommentsItem from "./InvoiceDetailsCommentsItem";
 import {fetchAddComment} from "../store/actionsCreators/comments";
 import Divider from "@mui/material/Divider";
+import {CENTER, FORM_CONTROL_HEIGHT_PX, PRIMARY, SECONDARY_TEXT_COLOR, START} from "../styles/const";
 
 interface IProps {
     invoiceId: string
