@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Link, useLocation, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {
     Button, Paper,
     Stack,
@@ -25,6 +25,7 @@ import ApprovedInvoiceCheckbox from "../components/ApprovedInvoiceCheckbox";
 const InvoiceDetails = () => {
     const invoiceId = useParams().invoiceId || "0";
     const location = useLocation() as TLocation;
+    const navigate = useNavigate();
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
@@ -36,6 +37,13 @@ const InvoiceDetails = () => {
     const handleExpandedChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const handleBackClick = () => {
+        if (location.state && location.state.from) {
+            navigate(location.state.from);
+        } else {
+            navigate(routes.orders);
+        }
+    };
     return (
         <Stack alignItems="center" spacing={2}>
             <Paper sx={{maxWidth: "1000px", width: "100%", backgroundColor: "white", padding: "20px"}}>
@@ -45,11 +53,10 @@ const InvoiceDetails = () => {
                         <Typography variant={"h2"} fontWeight={700} fontSize={"20px"}>
                             Подробная информация по счёту:
                         </Typography>
-                        <Link to={routes.invoices}>
-                            <Button fullWidth variant={"contained"} startIcon={<ArrowBackIosIcon/>}>
-                                Назад
-                            </Button>
-                        </Link>
+                        <Button sx={{width: "150px"}} onClick={handleBackClick} fullWidth variant={"contained"}
+                                startIcon={<ArrowBackIosIcon/>}>
+                            Назад
+                        </Button>
                     </Stack>
                     <Stack sx={{width: "100%"}} spacing={3}>
                         <NameWithValue title={"№ :"} value={invoice.number}/>

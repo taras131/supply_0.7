@@ -1,22 +1,28 @@
-import React from "react";
+import React, {FC} from "react";
 import {useAppSelector} from "../hooks/redux";
 import {getOrders} from "../store/selectors/orders";
 import OrdersListItem from "./OrdersListItem";
-import {Paper, Table, TableBody, TableContainer} from "@mui/material";
-import OrdersListHeader from "./OrdersListHeader";
 
-const OrdersList = () => {
-    const orders = useAppSelector(state => getOrders(state))
-    const ordersList = orders.map(order => (<OrdersListItem key={order.id} order={order}/>))
+interface IProps {
+    isSelectPositionMode?: boolean
+}
+
+const OrdersList: FC<IProps> = ({isSelectPositionMode = false}) => {
+    const [expanded, setExpanded] = React.useState<string | false>(false);
+    const handleChange =
+        (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+            setExpanded(isExpanded ? panel : false);
+        };
+    const orders = useAppSelector(state => getOrders(state, isSelectPositionMode));
+    const ordersList = orders.map(order => (<OrdersListItem key={order.id}
+                                                            order={order}
+                                                            handleChange={handleChange(order.id)}
+                                                            expanded={expanded}
+                                                            isSelectPositionMode={isSelectPositionMode}/>));
     return (
-        <TableContainer component={Paper} sx={{maxWidth: 1000, mt: 3}}>
-            <Table aria-label="simple table">
-                <OrdersListHeader/>
-                <TableBody>
-                    {ordersList ? ordersList : "пока нет заявок"}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div style={{maxWidth: "1000px", width: "100%"}}>
+            {ordersList}
+        </div>
     );
 };
 

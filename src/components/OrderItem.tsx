@@ -1,19 +1,26 @@
-import React, {FC} from "react";
+import React, {FC, useId} from "react";
 import {IOrderItem} from "../models/iOrders";
 import {styled} from "@mui/material/styles";
-import {Stack, TableRow, TextField} from "@mui/material";
+import {Checkbox, Stack, TableRow, TextField} from "@mui/material";
 import {StyledTableCell} from "./OrderItemList";
-import {useAppDispatch} from "../hooks/redux";
+import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {removeOrderItem, updateItemsCount, updateItemsValues} from "../store/reducers/orders";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import {setSelectedOrderPosition} from "../store/reducers/invoices";
+import {getIsPositionSelected} from "../store/selectors/invoices";
+import Button from "@mui/material/Button";
+import {useNavigate} from "react-router-dom";
+import {routes} from "../utils/routes";
 
 interface IProps {
     orderItem: IOrderItem
     isEdit: boolean
     index: number
+    orderId: string
+    isSelectPositionMode: boolean
 }
 
 export const StyledTextField = styled(TextField)(({theme}) => ({
@@ -40,21 +47,32 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     },
 }));
 
-const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
-    const dispatch = useAppDispatch()
+const OrderItem: FC<IProps> = ({orderItem, isEdit, index, isSelectPositionMode, orderId}) => {
+    const positionCheckBoxId = useId();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const isPositionSelected = useAppSelector(state => getIsPositionSelected(state, orderId, orderItem.id));
+    const handleSelectPosition = () => {
+        dispatch(setSelectedOrderPosition({orderId: orderId, positionId: orderItem.id}));
+    };
+    const handleInvoiceClick = () => {
+        if (orderItem.invoiceId) {
+            navigate(`${routes.invoices}/${orderItem.invoiceId}`, {state: {from: routes.orders}});
+        }
+    };
     const handleInputChange = (e: any) => {
         dispatch(updateItemsValues({
             id: orderItem.id,
             name: e.target.name,
             newValue: e.target.value,
-        }))
-    }
+        }));
+    };
     const handleCountChange = (e: any) => {
-        const value = +e.target.value
+        const value = +e.target.value;
         if (value > 0) {
-            dispatch(updateItemsCount({id: orderItem.id, newValue: value}))
+            dispatch(updateItemsCount({id: orderItem.id, newValue: value}));
         }
-    }
+    };
     const handleMinusClick = () => {
         dispatch(updateItemsCount({id: orderItem.id, newValue: orderItem.count - 1}));
     };
@@ -63,15 +81,15 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
     };
     const handleRemoveClick = () => {
         if (orderItem.id !== 0) {
-            dispatch(removeOrderItem(orderItem.id))
+            dispatch(removeOrderItem(orderItem.id));
         }
-    }
+    };
     return (
-        <StyledTableRow >
-            <StyledTableCell component="th" scope="row" sx={{paddingTop: 0, paddingBottom: 0}}>
+        <StyledTableRow sx={{width: "100%"}}>
+            <StyledTableCell component="th" scope="row" sx={{paddingTop: 1, paddingBottom: 1}}>
                 {index + 1}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell>
                 {isEdit
                     ? (<TextField name={"name"}
                                   value={orderItem.name}
@@ -79,7 +97,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                                   onChange={handleInputChange}/>)
                     : orderItem.name}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell>
                 {isEdit
                     ? (<TextField name={"catalogNumber"}
                                   value={orderItem.catalogNumber}
@@ -87,7 +105,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                                   onChange={handleInputChange}/>)
                     : orderItem.catalogNumber}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell>
                 {isEdit
                     ? (<Stack direction={"row"} alignItems={"center"} spacing={1}>
                         <IconButton aria-label="delete"
@@ -109,7 +127,7 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                     </Stack>)
                     : orderItem.count}
             </StyledTableCell>
-            <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell>
                 {isEdit
                     ? (<TextField name={"comment"}
                                   value={orderItem.comment}
@@ -117,15 +135,30 @@ const OrderItem: FC<IProps> = ({orderItem, isEdit, index}) => {
                                   onChange={handleInputChange}/>)
                     : orderItem.comment}
             </StyledTableCell>
-            {isEdit && (
-                <StyledTableCell sx={{paddingTop: 0, paddingBottom: 0}}>
+            <StyledTableCell>
+                {isEdit && (
+
                     <IconButton aria-label="delete"
                                 onClick={handleRemoveClick}
                                 disabled={orderItem.id === 0}>
                         <DeleteIcon/>
                     </IconButton>
-                </StyledTableCell>
-            )}
+
+                )}
+                {isSelectPositionMode && (
+                    <Checkbox
+                        id={positionCheckBoxId}
+                        checked={isPositionSelected}
+                        onChange={handleSelectPosition}
+                        inputProps={{"aria-label": "controlled"}}
+                    />
+                )}
+                {!isEdit && !isSelectPositionMode && orderItem.invoiceId && (
+                    <Button variant={"contained"} size={"small"} onClick={handleInvoiceClick}>
+                        Счёт
+                    </Button>
+                )}
+            </StyledTableCell>
         </StyledTableRow>
     );
 };

@@ -1,5 +1,6 @@
 import {IInvoice} from "../../models/iInvoices";
 import {RootState} from "../index";
+import {ISelectedOrderPosition} from "../../models/iOrders";
 
 export const getInvoices = (state: RootState,
                             isShowCanceledInvoice: boolean,
@@ -18,9 +19,9 @@ export const getInvoices = (state: RootState,
     if (!isShowPaidInvoice) {
         arr = arr.filter(invoice => !invoice.paid.isPaid);
     }
-        return arr.sort((a, b) => {
-            return b.author.date - a.author.date;
-        });
+    return arr.sort((a, b) => {
+        return b.author.date - a.author.date;
+    });
 };
 export const getCountUnpaidInvoices = (state: RootState): number => {
     const unPaidInvoices = [...state.invoices.list.filter(invoice => !invoice.paid.isPaid)];
@@ -46,4 +47,17 @@ export const getAmountBySupplierId = (state: RootState, supplierId: string): num
 };
 export const getInvoiceById = (state: RootState, invoiceId: string) => {
     return state.invoices.list.filter(invoice => invoice.id === invoiceId)[0];
+};
+export const getSelectedOrderPosition = (state: RootState): ISelectedOrderPosition => {
+    return state.invoices.selectedPosition;
+};
+export const getIsPositionSelected = (state: RootState, orderId: string, positionId: number): boolean => {
+    let res = false;
+    if (state.invoices.selectedPosition[orderId]) {
+        const positionArr = [...state.invoices.selectedPosition[orderId]];
+        if (positionArr.find(item => item === positionId)) {
+            res = true;
+        }
+    }
+    return res;
 };

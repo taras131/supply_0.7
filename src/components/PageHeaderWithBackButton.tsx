@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Button, Stack, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface IProps {
     backRoute: string
@@ -16,8 +16,14 @@ const PageHeaderWithBackButton: FC<IProps> = ({
                                                   handleAddClick,
                                               }) => {
     const navigate = useNavigate();
+    const location: any = useLocation();
     const handleBackClick = () => {
-        navigate(backRoute);
+        console.log(location.state.from)
+        if (location.state && location.state.from) {
+            navigate(location.state.from);
+        } else {
+            navigate(backRoute);
+        }
     };
 
     return (

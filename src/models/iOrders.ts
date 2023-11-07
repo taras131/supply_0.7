@@ -4,6 +4,10 @@ import {IApproved} from "./iInvoices";
 
 export type TOrdersType = "current" | "annual"
 
+export interface ISelectedOrderPosition {
+    [key: string]: number []
+}
+
 export interface IOrderItem {
     id: number
     name: string
@@ -11,6 +15,7 @@ export interface IOrderItem {
     count: number
     comment: string
     isOrdered: boolean
+    invoiceId?: string
 }
 
 export interface INewOrder {
@@ -31,13 +36,13 @@ export interface IOrder extends INewOrder {
 }
 
 export const emptyOrderItem: IOrderItem = {
-    id: 0,
+    id: 1,
     name: "",
     catalogNumber: "",
     count: 1,
     comment: "",
     isOrdered: false,
-}
+};
 
 export const emptyOrder: IOrder = {
     id: "new",

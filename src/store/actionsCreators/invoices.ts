@@ -2,12 +2,19 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import api from "../../api";
 import {handlerError} from "./handleError";
 import {IApproved, ICancel, INewInvoice, IPaid} from "../../models/iInvoices";
+import {IOrder, ISelectedOrderPosition} from "../../models/iOrders";
+
+export interface IAddInvoiceData {
+    invoice: INewInvoice
+    orders: IOrder []
+    selectedPosition: ISelectedOrderPosition
+}
 
 export const fetchAddInvoice = createAsyncThunk(
     "fetch_add_invoice",
-    async (invoice: INewInvoice, ThunkAPI) => {
+    async (addInvoiceData: IAddInvoiceData, ThunkAPI) => {
         try {
-            const res = await api.addInvoice(invoice);
+            const res = await api.addInvoice(addInvoiceData);
             return res;
         } catch (e) {
             return ThunkAPI.rejectWithValue(handlerError(e));

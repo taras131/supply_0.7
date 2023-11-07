@@ -4,6 +4,7 @@ export interface IPaid {
     date: number
     paymentOrderFileLink: string
 }
+
 export interface IApproved {
     isApproved: boolean
     userId: string
@@ -61,4 +62,9 @@ export const emptyInvoice: INewInvoice = {
     shipmentId: "",
     supplierId: "",
     invoiceFileLink: "",
+    cancel: {
+        isCancel: false,
+        userId: "",
+        date: 0,
+    },
 };

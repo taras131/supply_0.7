@@ -33,10 +33,10 @@ export const StyledTableCell = styled(TableCell)(({theme}) => ({
 }));
 
 const OrderItemList: FC<IProps> = ({orderItems, isEdit}) => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
     const handleAddClick = () => {
-        dispatch(addEmptyOrderItem(getDateInMilliseconds()))
-    }
+        dispatch(addEmptyOrderItem(getDateInMilliseconds()));
+    };
     const orderItemsList = orderItems.map((orderItem, index) => (<OrderItem
         key={orderItem.id}
         index={index}

@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
 import {Button, ButtonGroup, Checkbox, FormControlLabel, FormGroup, Stack, Typography} from "@mui/material";
-import InvoicesAddNew from "./InvoicesAddNew";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {pdfjs} from "react-pdf";
@@ -13,6 +12,8 @@ import {getUser} from "../store/selectors/auth";
 import {setMessage} from "../store/reducers/message";
 import {MESSAGE_SEVERITY} from "../utils/const";
 import AddIcon from "@mui/icons-material/Add";
+import {useNavigate} from "react-router-dom";
+import {routes} from "../utils/routes";
 
 // Установка пути к рабочему потоку
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
@@ -31,23 +32,23 @@ const InvoicesHeader: FC<IProps> = ({
                                         handlePaidInvoiceChange,
                                     }) => {
     const dispatch = useAppDispatch();
-    const [isOpenAddNewModal, setIsOpenAddNewModal] = useState(false);
+    const navigate = useNavigate();
     const [file, setFile] = useState<null | File>(null);
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
     const user = useAppSelector(state => getUser(state));
     const invoices = useAppSelector(state => getInvoices(state, false, false));
-    const toggleIsOpenAddNewModal = () => {
-        setIsOpenAddNewModal(prev => !prev);
+    const handleAddInvoiceClick = () => {
+        navigate(routes.invoices + "/add_new");
     };
     const [text, setText] = useState("");
     useEffect(() => {
         let amount = 0;
-        let isPaymentOrder = false
+        let isPaymentOrder = false;
         if (text.length > 0) {
             const textArr = text.split(" ");
             for (let i = 0; i < textArr.length - 1; i++) {
                 if (textArr[i] === "ПЛАТЕЖНОЕ" && textArr[i + 1] === "ПОРУЧЕНИЕ") {
-                    isPaymentOrder = true
+                    isPaymentOrder = true;
                 }
                 if (textArr[i] === "Сумма") {
                     amount = +textArr[i + 1].split("-").join(".");
@@ -92,9 +93,7 @@ const InvoicesHeader: FC<IProps> = ({
         }
         setFile(null);
         setIsUploadFileLoading(false);
-        console.log(isPaymentOrder)
     }, [text]);
-
     const handleFileChange = async (event: any) => {
         setIsUploadFileLoading(true);
         const file = event.target.files[0];
@@ -162,11 +161,10 @@ const InvoicesHeader: FC<IProps> = ({
                 <Button startIcon={(<AddIcon/>)}
                         variant="contained"
                         size="large"
-                        onClick={toggleIsOpenAddNewModal}>
+                        onClick={handleAddInvoiceClick}>
                     Счёт
                 </Button>
             </ButtonGroup>
-            <InvoicesAddNew isOpenModal={isOpenAddNewModal} handleToggleOpen={toggleIsOpenAddNewModal}/>
         </Stack>
     );
 };

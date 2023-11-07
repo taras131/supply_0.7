@@ -37,6 +37,7 @@ import OrderDetails from "../pages/OrderDetails";
 
 import {setOrders, setOrdersLoading} from "../store/reducers/orders";
 import {IOrder} from "../models/iOrders";
+import InvoicesAddNew from "../pages/InvoicesAddNew";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -195,6 +196,7 @@ function App() {
                     <Route path={routes.main} element={<MainMenu/>}/>
                     <Route path={routes.invoices} element={<Invoices/>}/>
                     <Route path={routes.invoices + "/:invoiceId/"} element={<InvoiceDetails/>}/>
+                    <Route path={routes.invoices + "/add_new"} element={<InvoicesAddNew/>}/>
                     <Route path={routes.suppliers} element={<Suppliers/>}/>
                     <Route path={routes.shipments} element={<Shipments/>}/>
                     <Route path={routes.addNewShipments} element={<ShipmentsAddNew/>}/>

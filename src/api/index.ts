@@ -9,7 +9,13 @@ import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sig
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {INewSupplier} from "../models/iSuppliers";
 import {INewInvoice} from "../models/iInvoices";
-import {IFileData, IUpdateApprovedData, IUpdateCancelData, IUpdatePaidData} from "../store/actionsCreators/invoices";
+import {
+    IAddInvoiceData,
+    IFileData,
+    IUpdateApprovedData,
+    IUpdateCancelData,
+    IUpdatePaidData,
+} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds, transliterate} from "../utils/services";
 import {IAuthData, IRegisterData} from "../models/iAuth";
 import {INewComment} from "../models/iComents";
@@ -44,10 +50,37 @@ class Api {
         );
         return res;
     };
-    addInvoice = async (invoice: INewInvoice) => {
+    updateOrder = async (order: IOrder) => {
+        const res = await updateDoc(doc(db, "orders", order.id), {
+            title: order.title,
+            shipmentType: order.shipmentType,
+            orderType: order.orderType,
+            orderItems: order.orderItems,
+            comment: order.comment,
+        });
+        return res;
+    };
+    addInvoice = async (addInvoiceData: IAddInvoiceData) => {
+        const {invoice, orders, selectedPosition} = addInvoiceData;
         const res = await addDoc(collection(db, "invoices"),
             invoice
         );
+        for (const key in selectedPosition) {
+            let order = orders.find(order => order.id === key);
+            if (order) {
+                order = {
+                    ...order, orderItems: [...order.orderItems.map(orderItems => {
+                        if(selectedPosition[key].includes(orderItems.id)){
+                            return {...orderItems, invoiceId: res.id};
+                        } else {
+                            return orderItems;
+                        }
+                    })],
+                };
+                await this.updateOrder(order);
+            }
+        }
+        console.log(res.id);
         return res;
     };
     updateInvoice = async (updatePaidData: IUpdatePaidData) => {
@@ -98,16 +131,6 @@ class Api {
                 userId: updateApprovedOrderData.newApproved.userId,
                 date: updateApprovedOrderData.newApproved.date,
             },
-        });
-        return res;
-    };
-    updateOrder = async (order: IOrder) => {
-        const res = await updateDoc(doc(db, "orders", order.id), {
-            title: order.title,
-            shipmentType: order.shipmentType,
-            orderType: order.orderType,
-            orderItems: order.orderItems,
-            comment: order.comment,
         });
         return res;
     };
