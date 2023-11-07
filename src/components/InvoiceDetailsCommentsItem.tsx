@@ -4,11 +4,12 @@ import Grid from "@mui/material/Unstable_Grid2";
 import {deepPurple} from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import {CENTER, SECONDARY_TEXT_COLOR, SPACE_BETWEEN, START} from "../utils/const";
+import {} from "../utils/const";
 import {useAppSelector} from "../hooks/redux";
 import {IComment} from "../models/iComents";
 import {getUserById} from "../store/selectors/auth";
 import {convertMillisecondsToDate} from "../utils/services";
+import {CENTER, SECONDARY_TEXT_COLOR, SPACE_BETWEEN, START} from "../styles/const";
 
 interface IProps extends IComment {
     userId: string
