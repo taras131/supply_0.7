@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
+import {Step, StepLabel, Stepper, Typography} from "@mui/material";
 import {convertMillisecondsToDate} from "../utils/services";
 import {IInvoice} from "../models/iInvoices";
 import {useAppSelector} from "../hooks/redux";
@@ -15,7 +15,7 @@ const InvoiceDetailsStepper: FC<IProps> = ({invoice, shipment}) => {
         const {approved, paid, author, cancel} = invoice;
         const [activeStep, setActiveStep] = useState(0);
         const delay = (time: number) => {
-            return new Promise((resolve, reject) => setTimeout(resolve, time));
+            return new Promise((resolve) => setTimeout(resolve, time));
         };
         useEffect(() => {
             delay(400)

@@ -2,9 +2,6 @@ import React, {FC, useEffect, useState} from "react";
 import {
     Button,
     ButtonGroup,
-    Checkbox,
-    FormControlLabel,
-    FormGroup,
     Stack,
     Typography,
     useMediaQuery,
@@ -23,7 +20,6 @@ import {MESSAGE_SEVERITY} from "../utils/const";
 import AddIcon from "@mui/icons-material/Add";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
-import Grid from "@mui/material/Unstable_Grid2";
 import {CENTER, SPACE_BETWEEN} from "../styles/const";
 import InvoicesHeaderCheckBoxes from "./InvoicesHeaderCheckBoxes";
 

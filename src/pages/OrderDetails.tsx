@@ -92,7 +92,9 @@ const OrderDetails = () => {
             <OrderDetailsTypes isEdit={isEdit} currentOrder={currentOrder}/>
             <Stack alignItems={"center"} sx={{width: "100%"}}>
                 <OrderPositionsList orderItems={currentOrder.orderItems}
-                                    isEdit={isEdit}/>
+                                    isEdit={isEdit}
+                                    orderId={orderId}
+                                    isSelectPositionMode={false}/>
             </Stack>
             {relatedInvoices && !isEdit && (
                 <Box sx={{width: 1350}}>

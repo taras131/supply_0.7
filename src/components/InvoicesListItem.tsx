@@ -129,7 +129,7 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                     : invoiceCreatedDate.split(".")[0] + "." + invoiceCreatedDate.split(".")[1]}
             </TableCell>
             <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}>
-                {matches_700 ? supplierName : supplierName.split(STRING_WITH_SPACE)[1].replace(/['"]+/g, '')}
+                {matches_700 ? supplierName : supplierName.split(STRING_WITH_SPACE)[1].replace(/['"]+/g, "")}
             </TableCell>
             {matches_1050 && (
                 <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}

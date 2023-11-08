@@ -23,8 +23,6 @@ import InvoiceDetailsShipment from "../components/InvoiceDetailsShipment";
 import ApprovedInvoiceCheckbox from "../components/ApprovedInvoiceCheckbox";
 import Grid from "@mui/material/Unstable_Grid2";
 import Divider from "@mui/material/Divider";
-import Box from "@mui/material/Box";
-import InvoicesList from "../components/InvoicesList";
 import OrdersList from "../components/OrdersList";
 import {getRelatedOrdersByInvoiceId} from "../store/selectors/orders";
 import {CENTER} from "../styles/const";

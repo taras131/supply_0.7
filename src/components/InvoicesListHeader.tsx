@@ -1,6 +1,5 @@
 import React from "react";
 import {TableCell, TableHead, TableRow, Typography, useMediaQuery} from "@mui/material";
-import {INHERIT} from "../styles/const";
 
 const InvoicesListHeader = () => {
     const matches_1300 = useMediaQuery("(min-width:1300px)");

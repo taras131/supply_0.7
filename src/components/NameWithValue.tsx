@@ -1,9 +1,6 @@
 import React, {FC} from "react";
-import Grid from "@mui/material/Unstable_Grid2";
 import {Stack, Typography} from "@mui/material";
-import Divider from "@mui/material/Divider";
 import {ROW, SPACE_BETWEEN} from "../styles/const";
-import Box from "@mui/material/Box";
 
 interface IProps {
     title: string
