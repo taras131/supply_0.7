@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import {Button, Stack, Typography} from "@mui/material";
+import {Button, Stack, Typography, useMediaQuery} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
@@ -21,6 +21,8 @@ import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}) => {
     const user = useAppSelector(state => getUser(state));
     const dispatch = useAppDispatch();
+    const matches_700 = useMediaQuery("(min-width:700px)");
+    const matches_470 = useMediaQuery("(min-width:470px)");
     const [isLoading, setIsLoading] = useState(false);
     let paymentOrderFileName = "";
     if (paid.paymentOrderFileLink) {
@@ -51,8 +53,8 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
     };
 
     return (
-        <Grid container sx={{width: "100%", height: "100px"}} alignItems="start" spacing={2}>
-            <Grid xs={6}>
+        <Grid container sx={{width: "100%", minHeight: "100px"}} alignItems="start" spacing={2}>
+            <Grid xs={matches_700 ? 6 : 12}>
                 <Stack spacing={2}>
                     <Typography color="darkblue" fontWeight={600}>
                         Счёт :
@@ -71,7 +73,7 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                     </Typography>
                 </Stack>
             </Grid>
-            <Grid xs={6}>
+            <Grid xs={matches_700 ? 6 : 12}>
                 <Stack spacing={2}>
                     <Typography color="darkblue" fontWeight={600}>
                         Платёжное поручение :
@@ -84,19 +86,21 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                                         variant={"contained"}>
                                     Скачать
                                 </Button>
-                                <LoadingButton
-                                    loading={isLoading}
-                                    component="label"
-                                    variant={"outlined"}
-                                    startIcon={(<PublishedWithChangesIcon/>)}
-                                >
-                                    Заменить
-                                    <input
-                                        type="file"
-                                        hidden
-                                        onChange={handleChangePaymentOrderFile}
-                                    />
-                                </LoadingButton>
+                                {matches_470 && (
+                                    <LoadingButton
+                                        loading={isLoading}
+                                        component="label"
+                                        variant={"outlined"}
+                                        startIcon={(<PublishedWithChangesIcon/>)}
+                                    >
+                                        Заменить
+                                        <input
+                                            type="file"
+                                            hidden
+                                            onChange={handleChangePaymentOrderFile}
+                                        />
+                                    </LoadingButton>
+                                )}
                                 <Button
                                     color={"secondary"}
                                     variant={"contained"}

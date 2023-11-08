@@ -8,7 +8,7 @@ const InvoicesListHeader = () => {
     return (
         <TableHead>
             <TableRow>
-                <TableCell sx={{padding: matches_1050 ? "16px" : "6px"}}>
+                <TableCell sx={{padding: matches_1050 ? "16px" : "2px"}}>
                     <Typography fontSize="14px" fontWeight={600}>
                         {matches_700 ? "Одобрен" : "Од-н"}
                     </Typography>

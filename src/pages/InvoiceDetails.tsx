@@ -3,7 +3,7 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {
     Button, Paper,
     Stack,
-    Typography,
+    Typography, useMediaQuery,
 } from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 import {getInvoiceById} from "../store/selectors/invoices";
@@ -28,6 +28,7 @@ import {getRelatedOrdersByInvoiceId} from "../store/selectors/orders";
 import {CENTER} from "../styles/const";
 
 const InvoiceDetails = () => {
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const invoiceId = useParams().invoiceId || "0";
     const location = useLocation() as TLocation;
     const navigate = useNavigate();
@@ -57,7 +58,7 @@ const InvoiceDetails = () => {
                     <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}
                            sx={{width: "100%"}}>
                         <Typography variant={"h2"} fontWeight={700} fontSize={"20px"}>
-                            Подробная информация по счёту:
+                            Информация по счёту:
                         </Typography>
                         <Button sx={{width: "150px"}} onClick={handleBackClick} fullWidth variant={"contained"}
                                 startIcon={<ArrowBackIosIcon/>}>
@@ -65,7 +66,7 @@ const InvoiceDetails = () => {
                         </Button>
                     </Stack>
                     <Grid container sx={{width: "100%"}} spacing={6}>
-                        <Grid xs={8}>
+                        <Grid xs={matches_700 ? 7 : 12}>
                             <NameWithValue title={"№ :"} value={invoice.number}/>
                             <Divider/>
                             <NameWithValue title={"Поставщик :"} value={supplierName}/>
@@ -80,18 +81,20 @@ const InvoiceDetails = () => {
                                 <ApprovedInvoiceCheckbox invoice={invoice}/>
                             </NameWithValue>
                         </Grid>
-                        <Grid xs={4}>
+                        <Grid xs={matches_700 ? 5 : 12}>
                             <InvoiceDetailsStepper invoice={invoice} shipment={shipments[0] ? shipments[0] : false}/>
                         </Grid>
                     </Grid>
                     <Stack sx={{width: "100%"}} spacing={3}>
                         <InvoiceDetailsActions {...invoice}/>
-                        <InvoiceDetailsCancel {...invoice}/>
+                        {invoice.paid && !invoice.paid.isPaid && (
+                            <InvoiceDetailsCancel {...invoice}/>
+                        )}
                     </Stack>
                 </Stack>
             </Paper>
             {relatedOrders && relatedOrders.length > 0 && (
-                <Stack sx={{maxWidth: 1000 ,width: "100%"}} spacing={2}>
+                <Stack sx={{maxWidth: 1000, width: "100%"}} spacing={2}>
                     <Typography fontSize={"20px"} fontWeight={600}>
                         Связанные заявки:
                     </Typography>
