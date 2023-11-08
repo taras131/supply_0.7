@@ -195,7 +195,7 @@ function App() {
             <SideBar open={open} handleDrawerClose={handleDrawerClose}/>
             <Main open={open} sx={{backgroundColor: "#f3f7fa"}} style={{
                 paddingLeft: matches_700 ? 20 : 5,
-                paddingRight: matches_700 ? 20 : 5
+                paddingRight: matches_700 ? 20 : 5,
             }}>
                 <DrawerHeader/>
                 <Routes>
