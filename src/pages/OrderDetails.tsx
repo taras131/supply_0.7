@@ -8,13 +8,20 @@ import {
     updateCurrentOrderTitle,
 } from "../store/reducers/orders";
 import {emptyOrder} from "../models/iOrders";
-import {getCurrentOrder, getCurrentOrderIsEdit, getOrderById} from "../store/selectors/orders";
-import OrderItemList from "../components/OrderItemList";
+import {
+    getCurrentOrder,
+    getCurrentOrderIsEdit,
+    getOrderById,
+    getRelatedInvoicesByOrderID,
+} from "../store/selectors/orders";
+import OrderPositionsList from "../components/OrderPositionsList";
 import {fetchAddOrder, fetchUpdateOrder} from "../store/actionsCreators/orders";
 import {getDateInMilliseconds} from "../utils/services";
 import ApprovedOrderCheckbox from "../components/ApprovedOrderCheckbox";
 import OrderDetailsHeader from "../components/OrderDetailsHeader";
 import OrderDetailsTypes from "../components/OrderDetailsTypes";
+import InvoicesList from "../components/InvoicesList";
+import Box from "@mui/material/Box";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -23,6 +30,7 @@ const OrderDetails = () => {
     const currentOrder = useAppSelector(state => getCurrentOrder(state));
     const order = useAppSelector(state => getOrderById(state, orderId));
     const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
+    const relatedInvoices = useAppSelector(state => getRelatedInvoicesByOrderID(state, orderId));
     const isNewOrder = orderId === "new_order";
     useEffect(() => {
         if (isNewOrder) {
@@ -58,14 +66,14 @@ const OrderDetails = () => {
         dispatch(setCurrenOrderIsEdit(!isEdit));
     };
     return (
-        <Stack alignItems="center" spacing={4} pt={3}>
+        <Stack alignItems="center" spacing={4} pt={3} pb={6}>
             <OrderDetailsHeader isNewOrder={isNewOrder}
                                 isValidate={isValidate}
                                 handleAddClick={handleAddClick}
                                 isEdit={isEdit}
                                 toggleIsEdit={toggleIsEdit}/>
             <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}
-                   sx={{maxWidth: "1000px", width: "100%"}}>
+                   sx={{maxWidth: 1350, width: "100%"}}>
                 {isEdit
                     ? (<TextField value={currentOrder.title}
                                   name={"title"}
@@ -83,8 +91,17 @@ const OrderDetails = () => {
             </Stack>
             <OrderDetailsTypes isEdit={isEdit} currentOrder={currentOrder}/>
             <Stack alignItems={"center"} sx={{width: "100%"}}>
-                <OrderItemList orderItems={currentOrder.orderItems} isEdit={isEdit}/>
+                <OrderPositionsList orderItems={currentOrder.orderItems}
+                                    isEdit={isEdit}/>
             </Stack>
+            {relatedInvoices && !isEdit && (
+                <Box sx={{width: 1350}}>
+                    <Typography fontSize={"20px"} fontWeight={600}>
+                        Связанные счета:
+                    </Typography>
+                    <InvoicesList invoices={relatedInvoices}/>
+                </Box>
+            )}
         </Stack>
     );
 };

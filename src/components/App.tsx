@@ -9,13 +9,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Header from "./Header";
 import SideBar from "./SideBar";
 import Suppliers from "../pages/Suppliers";
-import {useAppDispatch} from "../hooks/redux";
+import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {useEffect, useState} from "react";
 import {collection, onSnapshot, query} from "firebase/firestore";
 import {db} from "../firebase";
 import {ISupplier} from "../models/iSuppliers";
 import {setSuppliers} from "../store/reducers/suppliers";
-import {Typography} from "@mui/material";
+import {Typography, useMediaQuery} from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {setInvoices} from "../store/reducers/invoices";
 import Message from "./Message";
@@ -38,6 +38,7 @@ import OrderDetails from "../pages/OrderDetails";
 import {setOrders, setOrdersLoading} from "../store/reducers/orders";
 import {IOrder} from "../models/iOrders";
 import InvoicesAddNew from "../pages/InvoicesAddNew";
+import {getSuppliersIsLoading} from "../store/selectors/suppliers";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -71,6 +72,8 @@ const DrawerHeader = styled("div")(({theme}) => ({
 function App() {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const supplierIsLoading = useAppSelector(state => getSuppliersIsLoading(state));
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const dispatch = useAppDispatch();
     useEffect(() => {
         const q = query(collection(db, "invoices"));
@@ -182,7 +185,7 @@ function App() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    if (isLoading) {
+    if (isLoading || supplierIsLoading) {
         return (<Typography>...Загрузка...</Typography>);
     }
     return (
@@ -190,7 +193,10 @@ function App() {
             <CssBaseline/>
             <Header open={open} handleDrawerOpen={handleDrawerOpen}/>
             <SideBar open={open} handleDrawerClose={handleDrawerClose}/>
-            <Main open={open} sx={{backgroundColor: "#f3f7fa"}}>
+            <Main open={open} sx={{backgroundColor: "#f3f7fa"}} style={{
+                paddingLeft: matches_700 ? 20 : 5,
+                paddingRight: matches_700 ? 20 : 5
+            }}>
                 <DrawerHeader/>
                 <Routes>
                     <Route path={routes.main} element={<MainMenu/>}/>

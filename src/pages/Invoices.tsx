@@ -19,7 +19,7 @@ const Invoices = () => {
     };
 
     return (
-        <Stack style={{minHeight: "calc(100vh - 100px"}} alignItems="center" spacing={3} pt={1}>
+        <Stack style={{minHeight: "calc(100vh - 100px"}} alignItems="center" spacing={3}>
             <InvoicesHeader isShowCanceledInvoice={isShowCanceledInvoice}
                             isShowPaidInvoice={isShowPaidInvoice}
                             handleCanceledInvoiceChange={handleCanceledInvoiceChange}

@@ -1,3 +1,6 @@
+import {styled} from "@mui/material/styles";
+import {TableCell, tableCellClasses, TableRow, TextField} from "@mui/material";
+
 export const  APPROVED_GRADIENT = "linear-gradient(90deg, rgba(192,189,246,1) 0%, rgba(123,179,246,1) 48%)";
 export const  SUCCESS_GRADIENT = "linear-gradient(90deg, rgba(144,231,112,1) 0%, rgba(117,232,94,1) 48%)";
 export const  CANCEL_GRADIENT = "linear-gradient(90deg, rgba(227,164,112,1) 0%, rgba(223,165,77,1) 48%)";
@@ -34,3 +37,34 @@ export const CURSOR_POINTER = "pointer";
 export const FORM_CONTROL_HEIGHT_PX = "80px";
 export const TEXT_FIELD_MAX_WIDTH_PX = "390px";
 export const SECONDARY_TEXT_COLOR = "text.secondary";
+export const StyledTableCell = styled(TableCell)(({theme}) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: "#272e3d",
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+export const StyledTextField = styled(TextField)(({theme}) => ({
+    "& input[type=number]": {
+        "-moz-appearance": "textfield",
+    },
+    "& input[type=number]::-webkit-outer-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+    },
+    "& input[type=number]::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0,
+    },
+}));
+export const StyledTableRow = styled(TableRow)(({theme}) => ({
+    "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+        border: 0,
+    },
+}));

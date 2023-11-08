@@ -20,7 +20,6 @@ const OrderDetailsHeader: FC<IProps> = ({
                                         }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location)
     const handleBackClick = () => {
         if (location.state && location.state.from) {
             navigate(location.state.from);
@@ -29,7 +28,7 @@ const OrderDetailsHeader: FC<IProps> = ({
         }
     };
     return (
-        <Stack sx={{maxWidth: 1000, width: "100%"}}
+        <Stack sx={{maxWidth: 1350, width: "100%"}}
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>

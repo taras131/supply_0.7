@@ -23,7 +23,7 @@ const OrderDetailsTypes:FC<IProps> = ({isEdit,currentOrder}) => {
         dispatch(updateCurrentOrderType(e.target.value as TOrdersType));
     };
     return (
-        <Stack direction={"row"} spacing={2} sx={{maxWidth: "1000px", width: "100%"}} alignItems={"center"}
+        <Stack direction={"row"} spacing={2} sx={{maxWidth: 1350, width: "100%"}} alignItems={"center"}
                justifyContent={"space-between"}>
             {isEdit
                 ? (<>

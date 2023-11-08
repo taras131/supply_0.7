@@ -27,6 +27,7 @@ const ApprovedInvoiceCheckbox: FC<IProps> = ({invoice}) => {
     return (
         <>
             <FormControlLabel
+                sx={{marginRight: 0}}
                 label={""}
                 control={<Checkbox checked={invoice.approved.isApproved}
                                    onChange={handleApprovedChange}

@@ -8,7 +8,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const InvoicesHelper = () => {
     return (
-        <Grid container spacing={2} sx={{maxWidth: 1350, width: "100%", mt: 4}}>
+        <Grid container spacing={2} sx={{maxWidth: 1350, width: "100%"}}>
             <Grid xs={6}>
                 <Stack direction={"row"} spacing={1} alignItems={"center"}>
                     <div style={{

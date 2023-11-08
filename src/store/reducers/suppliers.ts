@@ -9,7 +9,7 @@ interface ISuppliersState {
 
 const initialState: ISuppliersState = {
     list: [],
-    isLoading: false,
+    isLoading: true,
     errorMessage: "",
 };
 
@@ -19,6 +19,7 @@ export const SuppliersSlice = createSlice({
     reducers: {
         setSuppliers: (state, action: PayloadAction<ISupplier []>) => {
             state.list = action.payload;
+            state.isLoading = false;
         },
         setSuppliersLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload;

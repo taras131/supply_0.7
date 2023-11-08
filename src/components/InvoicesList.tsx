@@ -11,7 +11,7 @@ interface IProps {
 const InvoicesList:FC<IProps> = ({invoices}) => {
     const invoicesList = invoices.map(invoice => (<InvoicesListItem key={invoice.author.date} {...invoice}/>));
     return (
-        <TableContainer component={Paper} sx={{maxWidth: 1350, mt: 3}}>
+        <TableContainer component={Paper} sx={{maxWidth: 1350}}>
             <Table aria-label="simple table">
                 <InvoicesListHeader/>
                 <TableBody>
