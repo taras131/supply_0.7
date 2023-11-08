@@ -1,5 +1,7 @@
 import {RootState} from "../index";
 import {IOrder} from "../../models/iOrders";
+import {IInvoice} from "../../models/iInvoices";
+import {getInvoiceById} from "./invoices";
 
 export const getOrders = (state: RootState, isSelectPositionMode = false): IOrder[] => {
     let arr: IOrder [] = [];
@@ -36,4 +38,29 @@ export const getCurrentOrder = (state: RootState): IOrder => {
 
 export const getCurrentOrderIsEdit = (state: RootState): boolean => {
     return state.orders.isEdit;
+};
+
+export const getRelatedInvoicesByOrderID = (state: RootState, orderId: string): IInvoice[] => {
+    const invoiceIds: string[] = [];
+    const invoices: IInvoice[] = [];
+    const order = getOrderById(state, orderId);
+    order.orderItems.forEach(orderItem => {
+        if (orderItem.invoiceId && !invoiceIds.includes(orderItem.invoiceId)) {
+            invoiceIds.push(orderItem.invoiceId);
+        }
+    });
+    invoiceIds.forEach(id => {
+        invoices.push(getInvoiceById(state, id));
+    });
+    return invoices;
+};
+export const getRelatedOrdersByInvoiceId = (state: RootState, invoiceId: string): IOrder [] => {
+    const orders: IOrder[] = [];
+    state.orders.list.forEach(order => {
+        const include = order.orderItems.some(orderItems => orderItems.invoiceId && orderItems.invoiceId === invoiceId);
+        if (include) {
+            orders.push(order);
+        }
+    });
+    return orders;
 };

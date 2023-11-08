@@ -1,7 +1,9 @@
 import React, {FC} from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import {Typography} from "@mui/material";
+import {Stack, Typography} from "@mui/material";
 import Divider from "@mui/material/Divider";
+import {ROW, SPACE_BETWEEN} from "../styles/const";
+import Box from "@mui/material/Box";
 
 interface IProps {
     title: string
@@ -11,23 +13,16 @@ interface IProps {
 
 const NameWithValue: FC<IProps> = ({title, value, children}) => {
     return (
-        <>
-            <Grid container sx={{width: "100%"}} alignItems="center">
-                <Grid xs={3}>
-                    <Typography color="gray" fontWeight={600}>
-                        {title}
-                    </Typography>
-                </Grid>
-                <Grid xs={9}>
-                    {value
-                        ? (<Typography fontWeight={600}>
-                            {value}
-                        </Typography>)
-                        : children}
-                </Grid>
-            </Grid>
-            <Divider/>
-        </>
+        <Stack sx={{width: "100%", height: "50px"}} direction={ROW} alignItems="center" justifyContent={SPACE_BETWEEN}>
+            <Typography color="gray" fontWeight={600}>
+                {title}
+            </Typography>
+            {value
+                ? (<Typography fontWeight={600}>
+                    {value}
+                </Typography>)
+                : children}
+        </Stack>
     );
 };
 

@@ -7,18 +7,14 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import {convertMillisecondsToDate} from "../utils/services";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {useAppSelector} from "../hooks/redux";
-import {getUserFullNameById} from "../store/selectors/auth";
-import ApprovedOrderCheckbox from "./ApprovedOrderCheckbox";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Grid from "@mui/material/Unstable_Grid2";
-import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
-import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
 import OrderPositionsList from "./OrderPositionsList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import {getCurrentOrderIsEdit} from "../store/selectors/orders";
+import OrdersListItemHeader from "./OrdersListItemHeader";
 
 interface IProps {
     order: IOrder
@@ -27,13 +23,15 @@ interface IProps {
     isSelectPositionMode: boolean
 }
 
-const OrdersListItem: FC<IProps> = ({order,
+const OrdersListItem: FC<IProps> = ({
+                                        order,
                                         handleChange,
                                         expanded
-                                        ,isSelectPositionMode}) => {
+                                        , isSelectPositionMode,
+                                    }) => {
+    const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
     const navigate = useNavigate();
     const [backgroundColor, setBackgroundColor] = useState("grey");
-    const authorFullName = useAppSelector(state => getUserFullNameById(state, order.author.userId)) || "";
     useEffect(() => {
         if (order.approved.isApproved) {
             setBackgroundColor("white");
@@ -52,41 +50,14 @@ const OrdersListItem: FC<IProps> = ({order,
                 id={order.id}
                 sx={{backgroundColor: "white"}}
             >
-                <Grid sx={{width: "100%"}} container spacing={1} alignItems={"center"}>
-                    <Grid xs={2}>
-                        <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                            <Typography>
-                                Одобрена
-                            </Typography>
-                            <ApprovedOrderCheckbox order={order}/>
-                        </Stack>
-                    </Grid>
-                    <Grid xs={2}>
-                        <Typography sx={{flexShrink: 0}} fontWeight={600}>
-                            {convertMillisecondsToDate(order.author.dateCreating)}
-                        </Typography>
-                    </Grid>
-                    <Grid xs={5}>
-                        <Typography sx={{flexShrink: 0}} fontWeight={600}>
-                            {order.title}
-                        </Typography>
-                    </Grid>
-                    <Grid xs={2}>
-                        <Typography sx={{flexShrink: 0}}>
-                            {authorFullName}
-                        </Typography>
-                    </Grid>
-                    <Grid xs={1}>
-                        <Grid container direction="row-reverse" sx={{marginRight: "16px"}}>
-                            {order.shipmentType === "air"
-                                ? (<AirplanemodeActiveIcon/>)
-                                : (<DirectionsSubwayIcon/>)}
-                        </Grid>
-                    </Grid>
-                </Grid>
+                <OrdersListItemHeader order={order}/>
             </AccordionSummary>
             <AccordionDetails>
-                <OrderPositionsList orderId ={order.id} positions={order.orderItems} isSelectPositionMode={isSelectPositionMode}/>
+                <OrderPositionsList isEdit={isEdit}
+                                    orderId={order.id}
+                                    orderItems={order.orderItems}
+                                    isSelectPositionMode={isSelectPositionMode}
+                                    isLimitedOverview/>
                 <Stack direction={"row"} alignItems={"center"} spacing={2} justifyContent={"end"}
                        sx={{width: "100%", cursor: "pointer", mt: 2}} onClick={handleMoreClick}>
                     <Typography>

@@ -1,5 +1,14 @@
 import React, {FC, useEffect, useState} from "react";
-import {Button, ButtonGroup, Checkbox, FormControlLabel, FormGroup, Stack, Typography} from "@mui/material";
+import {
+    Button,
+    ButtonGroup,
+    Checkbox,
+    FormControlLabel,
+    FormGroup,
+    Stack,
+    Typography,
+    useMediaQuery,
+} from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {pdfjs} from "react-pdf";
@@ -14,6 +23,9 @@ import {MESSAGE_SEVERITY} from "../utils/const";
 import AddIcon from "@mui/icons-material/Add";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
+import Grid from "@mui/material/Unstable_Grid2";
+import {CENTER, SPACE_BETWEEN} from "../styles/const";
+import InvoicesHeaderCheckBoxes from "./InvoicesHeaderCheckBoxes";
 
 // Установка пути к рабочему потоку
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
@@ -35,6 +47,7 @@ const InvoicesHeader: FC<IProps> = ({
     const navigate = useNavigate();
     const [file, setFile] = useState<null | File>(null);
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
+    const matches_1050 = useMediaQuery("(min-width:1050px)");
     const user = useAppSelector(state => getUser(state));
     const invoices = useAppSelector(state => getInvoices(state, false, false));
     const handleAddInvoiceClick = () => {
@@ -125,47 +138,47 @@ const InvoicesHeader: FC<IProps> = ({
     };
 
     return (
-        <Stack sx={{maxWidth: 1350, width: "100%"}} direction="row" alignItems="center"
-               justifyContent="space-between">
-            <Typography variant="h2" fontSize="24px" fontWeight={700}>
-                Счета
-            </Typography>
-            <FormGroup sx={{width: "100%"}}>
-                <Stack sx={{width: "100%"}} direction={"row"} alignItems={"center"} justifyContent={"space-around"}>
-                    <FormControlLabel
-                        control={<Checkbox checked={isShowCanceledInvoice}
-                                           onChange={handleCanceledInvoiceChange}/>}
-                        label="показать отменённые"/>
-                    <FormControlLabel
-                        control={<Checkbox checked={isShowPaidInvoice}
-                                           onChange={handlePaidInvoiceChange}/>}
-                        label="показать оплаченные"/>
-                </Stack>
-            </FormGroup>
-            <ButtonGroup aria-label="outlined primary button group">
-                <LoadingButton
-                    component="label"
-                    loading={isUploadFileLoading}
-                    variant={"outlined"}
-                    startIcon={(<AttachFileIcon/>)}>
-                    {isUploadFileLoading
-                        ? ".....Анализ....."
-                        : "Платёжное"}
-                    <input
-                        type="file"
-                        accept="application/pdf"
-                        hidden
-                        onChange={handleFileChange}
-                    />
-                </LoadingButton>
-                <Button startIcon={(<AddIcon/>)}
-                        variant="contained"
-                        size="large"
-                        onClick={handleAddInvoiceClick}>
-                    Счёт
-                </Button>
-            </ButtonGroup>
+        <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={3}>
+            <Stack sx={{width: "100%"}}
+                   direction="row" alignItems={CENTER}
+                   justifyContent={SPACE_BETWEEN}>
+                <Typography variant="h2" fontSize="24px" fontWeight={700}>
+                    Счета
+                </Typography>
+                {matches_1050 && (<InvoicesHeaderCheckBoxes isShowCanceledInvoice={isShowCanceledInvoice}
+                                                            handleCanceledInvoiceChange={handleCanceledInvoiceChange}
+                                                            isShowPaidInvoice={isShowPaidInvoice}
+                                                            handlePaidInvoiceChange={handlePaidInvoiceChange}/>)}
+                <ButtonGroup aria-label="outlined primary button group">
+                    <LoadingButton
+                        component="label"
+                        loading={isUploadFileLoading}
+                        variant={"outlined"}
+                        startIcon={(<AttachFileIcon/>)}>
+                        {isUploadFileLoading
+                            ? ".....Анализ....."
+                            : "Платёжное"}
+                        <input
+                            type="file"
+                            accept="application/pdf"
+                            hidden
+                            onChange={handleFileChange}
+                        />
+                    </LoadingButton>
+                    <Button startIcon={(<AddIcon/>)}
+                            variant="contained"
+                            size="large"
+                            onClick={handleAddInvoiceClick}>
+                        Счёт
+                    </Button>
+                </ButtonGroup>
+            </Stack>
+            {!matches_1050 && (<InvoicesHeaderCheckBoxes isShowCanceledInvoice={isShowCanceledInvoice}
+                                                         handleCanceledInvoiceChange={handleCanceledInvoiceChange}
+                                                         isShowPaidInvoice={isShowPaidInvoice}
+                                                         handlePaidInvoiceChange={handlePaidInvoiceChange}/>)}
         </Stack>
+
     );
 };
 

@@ -26,8 +26,7 @@ import {useNavigate} from "react-router-dom";
 import OrdersList from "../components/OrdersList";
 import {resetSelectedOrderPosition} from "../store/reducers/invoices";
 import {getSelectedOrderPosition} from "../store/selectors/invoices";
-import {IOrder} from "../models/iOrders";
-import {getOrderById, getOrders} from "../store/selectors/orders";
+import {getOrders} from "../store/selectors/orders";
 
 const InvoicesAddNew: FC = () => {
     const dispatch = useAppDispatch();

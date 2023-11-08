@@ -6,7 +6,7 @@ import {
     TableCell,
     TableRow,
     Tooltip,
-    Typography,
+    Typography, useMediaQuery,
 } from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {convertMillisecondsToDate, getDateInMilliseconds} from "../utils/services";
@@ -25,11 +25,11 @@ import {
     DOWNLOAD_TEXT,
     FILE_TYPE, INN_COPY_TEXT,
     MESSAGE_SEVERITY, NO_TEXT,
-    STRING_EMPTY,
+    STRING_EMPTY, STRING_WITH_SPACE,
     UPLOAD_TEXT, YES_TEXT,
 } from "../utils/const";
 import {routes} from "../utils/routes";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import {getIsShipmentByInvoiceId} from "../store/selectors/shipments";
@@ -45,18 +45,23 @@ import {
 } from "../styles/const";
 import {getUser} from "../store/selectors/auth";
 
-
 const InvoicesListItem: FC<IInvoice> = (invoice) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {pathname} = useLocation();
     const user = useAppSelector(state => getUser(state));
     const isShipment = useAppSelector(state => getIsShipmentByInvoiceId(state, invoice.id));
+    const matches_1300 = useMediaQuery("(min-width:1300px)");
+    const matches_1050 = useMediaQuery("(min-width:1050px)");
+    const matches_700 = useMediaQuery("(min-width:700px)");
+    const matches_470 = useMediaQuery("(min-width:470px)");
     //const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
     const [backgroundGradient, setBackgroundGradient] = useState(WHITE_COLOR);
     const [textColor, setTextColor] = useState(BLACK_COLOR);
+    const invoiceCreatedDate = convertMillisecondsToDate(invoice.author.date);
     useEffect(() => {
         setBackgroundGradient(WHITE_COLOR);
         setTextColor(BLACK_COLOR);
@@ -104,7 +109,7 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
         });
     };
     const handleMoreClick = () => {
-        navigate(`${routes.invoices}/${invoice.id}`);
+        navigate(`${routes.invoices}/${invoice.id}`, {state: {from: pathname}});
     };
     return (
         <TableRow
@@ -112,110 +117,140 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                 "&:last-child td, &:last-child th": {border: 0},
                 background: backgroundGradient,
                 color: textColor,
+                padding: matches_1300 ? "16px" : 0,
             }}
         >
-            <TableCell align={CENTER}>
+            <TableCell align={CENTER} sx={{padding: matches_1050 ? "16px" : "2px"}}>
                 <ApprovedInvoiceCheckbox invoice={invoice}/>
             </TableCell>
-            <TableCell sx={{color: INHERIT}}>{convertMillisecondsToDate(invoice.author.date)}</TableCell>
-            <TableCell sx={{color: INHERIT}}>{supplierName}</TableCell>
-            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT}} onClick={handleINNClick}>
-                <Tooltip title={COPY_TEXT}>
-                    <Stack direction={ROW} alignItems={CENTER} spacing={1}>
-                        <Typography>
-                            {supplierINN}
-                        </Typography>
-                        <ContentCopyIcon color={SUCCESS}/>
-                    </Stack>
-                </Tooltip>
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : 0}} align={CENTER}>
+                {matches_700
+                    ? invoiceCreatedDate
+                    : invoiceCreatedDate.split(".")[0] + "." + invoiceCreatedDate.split(".")[1]}
             </TableCell>
-            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT}} align={RIGHT} onClick={handleAmountClick}>
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}>
+                {matches_700 ? supplierName : supplierName.split(STRING_WITH_SPACE)[1].replace(/['"]+/g, '')}
+            </TableCell>
+            {matches_1050 && (
+                <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}
+                           onClick={handleINNClick}>
+                    <Tooltip title={COPY_TEXT}>
+                        <Stack direction={ROW} alignItems={CENTER} spacing={1}>
+                            <Typography>
+                                {supplierINN}
+                            </Typography>
+                            <ContentCopyIcon color={SUCCESS}/>
+                        </Stack>
+                    </Tooltip>
+                </TableCell>
+            )}
+            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}
+                       align={RIGHT}
+                       onClick={handleAmountClick}>
                 <Tooltip title={COPY_TEXT}>
                     <Stack sx={{width: "100%"}} direction={ROW} alignItems={CENTER} justifyContent={END}
                            spacing={1}>
                         <Typography>
-                            {new Intl.NumberFormat("ru-RU").format(invoice.amount)} руб.
+                            {new Intl.NumberFormat("ru-RU").format(invoice.amount)} {matches_470 ? " руб." : ""}
                         </Typography>
-                        <ContentCopyIcon color={SUCCESS}/>
+                        {matches_700 && (
+                            <ContentCopyIcon color={SUCCESS}/>
+                        )}
                     </Stack>
                 </Tooltip>
             </TableCell>
-            <TableCell sx={{color: INHERIT}} align={CENTER}>
-                {invoice.isWithVAT
-                    ? (<Typography>
-                        {YES_TEXT}
-                    </Typography>)
-                    : (<Typography>
-                        {NO_TEXT}
-                    </Typography>)}
-            </TableCell>
-            <TableCell
-                sx={{color: INHERIT}}
-                align={CENTER}>
-                {invoice.paid.isPaid
-                    ? convertMillisecondsToDate(invoice.paid.date)
-                    : (
-                        <Typography color={INHERIT}>
-                            {invoice.cancel && invoice.cancel.isCancel
-                                ? CANCEL_TEXT
-                                : NO_TEXT}
-                        </Typography>
-                    )}
-            </TableCell>
-            <TableCell sx={{color: INHERIT}} align={CENTER}>
-                <Chip
-                    label={DOWNLOAD_TEXT}
-                    component={COMPONENT_A}
-                    href={invoice.invoiceFileLink}
-                    icon={<DownloadIcon/>}
-                    color={SUCCESS}
-                    clickable
-                />
-            </TableCell>
-            <TableCell sx={{color: INHERIT}} align={CENTER}>
-                {invoice.paid.isPaid
+            {matches_1300 && (
+                <TableCell sx={{color: INHERIT}} align={CENTER}>
+                    {invoice.isWithVAT
+                        ? (<Typography>
+                            {YES_TEXT}
+                        </Typography>)
+                        : (<Typography>
+                            {NO_TEXT}
+                        </Typography>)}
+                </TableCell>
+            )}
+            {matches_1050 && (
+                <TableCell
+                    sx={{color: INHERIT}}
+                    align={CENTER}>
+                    {invoice.paid.isPaid
+                        ? convertMillisecondsToDate(invoice.paid.date)
+                        : (
+                            <Typography color={INHERIT}>
+                                {invoice.cancel && invoice.cancel.isCancel
+                                    ? CANCEL_TEXT
+                                    : NO_TEXT}
+                            </Typography>
+                        )}
+                </TableCell>
+            )}
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : 0}}
+                       align={CENTER}>
+                {matches_700
                     ? (<Chip
-                        sx={{width: "100%"}}
                         label={DOWNLOAD_TEXT}
                         component={COMPONENT_A}
-                        href={invoice.paid.paymentOrderFileLink}
+                        href={invoice.invoiceFileLink}
                         icon={<DownloadIcon/>}
                         color={SUCCESS}
                         clickable
                     />)
-                    : (
-                        <LoadingButton
-                            variant={CONTAINED_VARIANT}
-                            sx={{borderRadius: LOADING_BUTTON_BORDER_RADIUS, textTransform: NONE}}
-                            component={LABEL}
-                            loading={isUploadFileLoading}
-                            fullWidth
-                            disabled={invoice.cancel && invoice.cancel.isCancel}
-                            size={SIZE_SMALL}
-                            startIcon={(invoice.cancel && invoice.cancel.isCancel
-                                ? (<DoDisturbAltIcon/>)
-                                : (<AttachFileIcon/>))}
-                        >
-                            {invoice.cancel && invoice.cancel.isCancel
-                                ? CANCEL_TEXT
-                                : UPLOAD_TEXT}
-                            <input
-                                type={FILE_TYPE}
-                                hidden
-                                accept="image/*, application/pdf"
-                                onChange={handleChangeInputFile}
-                            />
-                        </LoadingButton>
-                    )}
+                    : (<IconButton color="primary"
+                                   aria-label="download invoice"
+                                   component={COMPONENT_A}
+                                   href={invoice.invoiceFileLink}>
+                        <DownloadIcon/>
+                    </IconButton>)}
             </TableCell>
-            <TableCell>
-                <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
-                    {isShipment
-                        ? (<LocalShippingIcon color={SUCCESS}/>)
-                        : (STRING_EMPTY)}
-                </IconButton>
-            </TableCell>
-            <TableCell>
+            {matches_1300 && (
+                <>
+                    <TableCell sx={{color: INHERIT}} align={CENTER}>
+                        {invoice.paid.isPaid
+                            ? (<Chip
+                                sx={{width: "100%"}}
+                                label={DOWNLOAD_TEXT}
+                                component={COMPONENT_A}
+                                href={invoice.paid.paymentOrderFileLink}
+                                icon={<DownloadIcon/>}
+                                color={SUCCESS}
+                                clickable
+                            />)
+                            : (
+                                <LoadingButton
+                                    variant={CONTAINED_VARIANT}
+                                    sx={{borderRadius: LOADING_BUTTON_BORDER_RADIUS, textTransform: NONE}}
+                                    component={LABEL}
+                                    loading={isUploadFileLoading}
+                                    fullWidth
+                                    disabled={invoice.cancel && invoice.cancel.isCancel}
+                                    size={SIZE_SMALL}
+                                    startIcon={(invoice.cancel && invoice.cancel.isCancel
+                                        ? (<DoDisturbAltIcon/>)
+                                        : (<AttachFileIcon/>))}
+                                >
+                                    {invoice.cancel && invoice.cancel.isCancel
+                                        ? CANCEL_TEXT
+                                        : UPLOAD_TEXT}
+                                    <input
+                                        type={FILE_TYPE}
+                                        hidden
+                                        accept="image/*, application/pdf"
+                                        onChange={handleChangeInputFile}
+                                    />
+                                </LoadingButton>
+                            )}
+                    </TableCell>
+                    <TableCell sx={{padding: matches_1050 ? "16px" : "6px"}}>
+                        <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
+                            {isShipment
+                                ? (<LocalShippingIcon color={SUCCESS}/>)
+                                : (STRING_EMPTY)}
+                        </IconButton>
+                    </TableCell>
+                </>
+            )}
+            <TableCell sx={{padding: matches_1050 ? "16px" : 0}}>
                 <IconButton aria-label="show more" onClick={handleMoreClick}>
                     <MoreVertIcon color={SUCCESS}/>
                 </IconButton>

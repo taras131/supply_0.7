@@ -1,6 +1,7 @@
 import {IInvoice} from "../../models/iInvoices";
 import {RootState} from "../index";
 import {ISelectedOrderPosition} from "../../models/iOrders";
+import {getSupplierNameById} from "./suppliers";
 
 export const getInvoices = (state: RootState,
                             isShowCanceledInvoice: boolean,
@@ -13,7 +14,6 @@ export const getInvoices = (state: RootState,
             } else {
                 return true;
             }
-
         });
     }
     if (!isShowPaidInvoice) {
@@ -60,4 +60,12 @@ export const getIsPositionSelected = (state: RootState, orderId: string, positio
         }
     }
     return res;
+};
+export const getSupplierNameByInvoiceId = (state: RootState, invoiceId: string) => {
+    const invoice = state.invoices.list.find(invoice => invoice.id === invoiceId);
+    if(invoice && invoice.supplierId) {
+        return getSupplierNameById(state, invoice.supplierId);
+    } else {
+        return "";
+    }
 };
