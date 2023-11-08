@@ -1,5 +1,5 @@
 import React, {FC, useId} from "react";
-import {Checkbox, FormControlLabel} from "@mui/material";
+import {Checkbox, FormControlLabel, useMediaQuery} from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {fetchUpdateInvoiceApproved} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds} from "../utils/services";
@@ -24,6 +24,7 @@ const ApprovedInvoiceCheckbox: FC<IProps> = ({invoice}) => {
             },
         }));
     };
+    const matches_470 = useMediaQuery("(min-width:470px)");
     return (
         <>
             <FormControlLabel
@@ -34,7 +35,7 @@ const ApprovedInvoiceCheckbox: FC<IProps> = ({invoice}) => {
                                    color={"success"}
                                    id={checkboxId}
                                    disabled={invoice.paid.isPaid || invoice.cancel && invoice.cancel.isCancel}
-                                   sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
+                                   sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}}}/>}/>
         </>
     );
 };

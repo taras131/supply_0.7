@@ -20,11 +20,11 @@ const InvoicesHeaderCheckBoxes: FC<IProps> = ({
                 <FormControlLabel
                     control={<Checkbox checked={isShowCanceledInvoice}
                                        onChange={handleCanceledInvoiceChange}/>}
-                    label="показать отменённые"/>
+                    label="Отменённые"/>
                 <FormControlLabel
                     control={<Checkbox checked={isShowPaidInvoice}
                                        onChange={handlePaidInvoiceChange}/>}
-                    label="показать оплаченные"/>
+                    label="Оплаченные"/>
             </Stack>
         </FormGroup>
     );
