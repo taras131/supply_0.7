@@ -8,7 +8,6 @@ import {
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {INewSupplier} from "../models/iSuppliers";
-import {INewInvoice} from "../models/iInvoices";
 import {
     IAddInvoiceData,
     IFileData,
@@ -80,7 +79,6 @@ class Api {
                 await this.updateOrder(order);
             }
         }
-        console.log(res.id);
         return res;
     };
     updateInvoice = async (updatePaidData: IUpdatePaidData) => {

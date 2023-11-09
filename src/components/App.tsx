@@ -42,14 +42,15 @@ import {getSuppliersIsLoading} from "../store/selectors/suppliers";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
-}>(({theme, open}) => ({
+    matches_1600?: boolean;
+}>(({theme, open, matches_1600}) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `-${drawerWidth}px`,
+    marginLeft: matches_1600 ? `-${drawerWidth}px` : 0,
     ...(open && {
         transition: theme.transitions.create("margin", {
             easing: theme.transitions.easing.easeOut,
@@ -73,6 +74,7 @@ function App() {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const supplierIsLoading = useAppSelector(state => getSuppliersIsLoading(state));
+    const matches_1600 = useMediaQuery("(min-width:1600px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
     const dispatch = useAppDispatch();
     useEffect(() => {
@@ -193,7 +195,7 @@ function App() {
             <CssBaseline/>
             <Header open={open} handleDrawerOpen={handleDrawerOpen}/>
             <SideBar open={open} handleDrawerClose={handleDrawerClose}/>
-            <Main open={open} sx={{backgroundColor: "#f3f7fa"}} style={{
+            <Main open={open} matches_1600={matches_1600} sx={{backgroundColor: "#f3f7fa"}} style={{
                 paddingLeft: matches_700 ? 20 : 5,
                 paddingRight: matches_700 ? 20 : 5,
             }}>

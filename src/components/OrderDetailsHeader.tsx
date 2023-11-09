@@ -1,7 +1,8 @@
 import React, {FC} from "react";
-import {Button, Stack, Typography} from "@mui/material";
+import {Button, Stack, Typography, useMediaQuery} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
+import {LARGE, SMALL} from "../styles/const";
 
 interface IProps {
     isValidate: boolean
@@ -20,6 +21,7 @@ const OrderDetailsHeader: FC<IProps> = ({
                                         }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const handleBackClick = () => {
         if (location.state && location.state.from) {
             navigate(location.state.from);
@@ -33,17 +35,22 @@ const OrderDetailsHeader: FC<IProps> = ({
                alignItems={"center"}
                justifyContent={"space-between"}>
             {isEdit && !isNewOrder
-                ? (<Button variant="outlined" size="large" onClick={toggleIsEdit}>Отмена</Button>)
-                : (<Button variant="outlined" size="large" onClick={handleBackClick}>Назад</Button>)}
-            <Typography variant="h2" fontSize="24px" fontWeight={700}>
+                ? (<Button variant="outlined" size={matches_700 ? LARGE : SMALL} onClick={toggleIsEdit}>
+                    Отмена
+                </Button>)
+                : (<Button variant="outlined" size={matches_700 ? LARGE : SMALL} onClick={handleBackClick}>
+                    Назад
+                </Button>)}
+            <Typography variant="h2" fontSize={matches_700 ? "24px" : "18px"} fontWeight={matches_700 ? 600 : 500}>
                 {isNewOrder && "Новая заявка"}
                 {!isNewOrder && isEdit && "Редактирование"}
             </Typography>
             {isEdit
-                ? (<Button variant="contained" size="large" onClick={handleAddClick} disabled={!isValidate}>
+                ? (<Button variant="contained" size={matches_700 ? LARGE : SMALL} onClick={handleAddClick}
+                           disabled={!isValidate}>
                     Сохранить
                 </Button>)
-                : (<Button variant="contained" size="large" onClick={toggleIsEdit}>
+                : (<Button variant="contained" size={matches_700 ? LARGE : SMALL} onClick={toggleIsEdit}>
                     Редактировать
                 </Button>)}
         </Stack>

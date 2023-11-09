@@ -16,6 +16,8 @@ import {
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getUser} from "../store/selectors/auth";
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
+import InvoiceDetailsCancel from "./InvoiceDetailsCancel";
+import {CENTER, START} from "../styles/const";
 
 
 const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}) => {
@@ -53,9 +55,9 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
     };
 
     return (
-        <Grid container sx={{width: "100%", minHeight: "100px"}} alignItems="start" spacing={2}>
-            <Grid xs={matches_700 ? 6 : 12}>
-                <Stack spacing={2}>
+        <Grid container sx={{width: "100%", minHeight: "100px"}} alignItems={START} spacing={2}>
+            <Grid xs={matches_700 ? 6: 12}>
+                <Stack sx={{width: "100%"}} spacing={matches_700 ? 2 : 1} justifyContent={CENTER}>
                     <Typography color="darkblue" fontWeight={600}>
                         Счёт :
                     </Typography>
@@ -74,7 +76,7 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                 </Stack>
             </Grid>
             <Grid xs={matches_700 ? 6 : 12}>
-                <Stack spacing={2}>
+                <Stack sx={{width: "100%"}} spacing={matches_700 ? 2 : 1} justifyContent={CENTER}>
                     <Typography color="darkblue" fontWeight={600}>
                         Платёжное поручение :
                     </Typography>
@@ -136,6 +138,16 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                         </Typography>
                     )}
                 </Stack>
+            </Grid>
+            <Grid xs={12}>
+                {paid && !paid.isPaid && (
+                    <Stack spacing={matches_700 ? 2 : 1} sx={{width: "100%"}} justifyContent={CENTER}>
+                        <Typography color="darkblue" fontWeight={600}>
+                            Действие:
+                        </Typography>
+                        <InvoiceDetailsCancel id={id} cancel={cancel} paid={paid}/>
+                    </Stack>
+                )}
             </Grid>
         </Grid>
     );

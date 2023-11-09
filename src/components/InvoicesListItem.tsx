@@ -9,7 +9,12 @@ import {
     Typography, useMediaQuery,
 } from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
-import {convertMillisecondsToDate, getDateInMilliseconds} from "../utils/services";
+import {
+    convertMillisecondsToDate,
+    deleteYearFromString,
+    extractAllText,
+    getDateInMilliseconds,
+} from "../utils/services";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getSupplierINNById, getSupplierNameById} from "../store/selectors/suppliers";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -25,7 +30,7 @@ import {
     DOWNLOAD_TEXT,
     FILE_TYPE, INN_COPY_TEXT,
     MESSAGE_SEVERITY, NO_TEXT,
-    STRING_EMPTY, STRING_WITH_SPACE,
+    STRING_EMPTY,
     UPLOAD_TEXT, YES_TEXT,
 } from "../utils/const";
 import {routes} from "../utils/routes";
@@ -118,20 +123,21 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                 background: backgroundGradient,
                 color: textColor,
                 padding: matches_1300 ? "16px" : 0,
+                fontSize: matches_470 ? "14px" : "11px",
             }}
         >
-            <TableCell align={CENTER} sx={{padding: matches_1050 ? "16px" : "2px"}}>
+            <TableCell align={CENTER} sx={{padding: matches_1050 ? "16px" : 0, paddingLeft: "6px"}}>
                 <ApprovedInvoiceCheckbox invoice={invoice}/>
             </TableCell>
             <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : 0}} align={CENTER}>
                 {matches_700
                     ? invoiceCreatedDate
-                    : invoiceCreatedDate.split(".")[0] + "." + invoiceCreatedDate.split(".")[1]}
+                    : deleteYearFromString(invoiceCreatedDate)}
             </TableCell>
-            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}>
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : "2px"}}>
                 {matches_700
                     ? supplierName
-                    : supplierName.split(STRING_WITH_SPACE)[1].replace(/['"]+/g, "").slice(0, 12)}
+                    : extractAllText(supplierName).slice(0, 12)}
             </TableCell>
             {matches_1050 && (
                 <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}
@@ -146,7 +152,7 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                     </Tooltip>
                 </TableCell>
             )}
-            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}
+            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "2px"}}
                        align={RIGHT}
                        onClick={handleAmountClick}>
                 <Tooltip title={COPY_TEXT}>

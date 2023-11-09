@@ -1,16 +1,16 @@
 import React from "react";
 import {TableCell, TableHead, TableRow, Typography, useMediaQuery} from "@mui/material";
 
-const InvoicesListHeader = () => {
+const InvoicesListTableHeader = () => {
     const matches_1300 = useMediaQuery("(min-width:1300px)");
     const matches_1050 = useMediaQuery("(min-width:1050px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
     return (
         <TableHead>
             <TableRow>
-                <TableCell sx={{padding: matches_1050 ? "16px" : "2px"}}>
+                <TableCell sx={{padding: matches_1050 ? "16px" : "2px"}} align={"center"}>
                     <Typography fontSize="14px" fontWeight={600}>
-                        {matches_700 ? "Одобрен" : "Од-н"}
+                        {matches_700 ? "Одобрен" : "Од."}
                     </Typography>
                 </TableCell>
                 <TableCell sx={{padding: matches_1050 ? "16px" : "3px"}}>
@@ -77,4 +77,4 @@ const InvoicesListHeader = () => {
     );
 };
 
-export default InvoicesListHeader;
+export default InvoicesListTableHeader;

@@ -13,10 +13,9 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import InvoiceDetailsStepper from "../components/InvoiceDetailsStepper";
 import NameWithValue from "../components/NameWithValue";
 import InvoiceDetailsActions from "../components/InvoiceDetailsActions";
-import InvoiceDetailsCancel from "../components/InvoiceDetailsCancel";
 import InvoiceDetailsComments from "../components/InvoiceDetailsComments";
 import {TLocation} from "../../models/i-location";
-import {commentPanelId} from "../utils/const";
+import {commentPanelId, STRING_EMPTY} from "../utils/const";
 import {shipmentPanelId} from "../utils/const";
 import {getShipmentsByInvoiceId} from "../store/selectors/shipments";
 import InvoiceDetailsShipment from "../components/InvoiceDetailsShipment";
@@ -33,7 +32,13 @@ const InvoiceDetails = () => {
     const location = useLocation() as TLocation;
     const navigate = useNavigate();
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
-    const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
+    const supplierName = useAppSelector(state => {
+        if (invoice.supplierId) {
+            return getSupplierNameById(state, invoice.supplierId);
+        } else {
+            return STRING_EMPTY;
+        }
+    });
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
     const shipments = useAppSelector(state => getShipmentsByInvoiceId(state, invoiceId));
     const relatedOrders = useAppSelector(state => getRelatedOrdersByInvoiceId(state, invoiceId));
@@ -54,7 +59,7 @@ const InvoiceDetails = () => {
     return (
         <Stack alignItems={CENTER} spacing={2}>
             <Paper sx={{maxWidth: "1000px", width: "100%", backgroundColor: "white", padding: "20px"}}>
-                <Stack spacing={5} alignItems="center">
+                <Stack spacing={matches_700 ? 3 : 1} alignItems="center">
                     <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}
                            sx={{width: "100%"}}>
                         <Typography variant={"h2"} fontWeight={700} fontSize={"20px"}>
@@ -65,18 +70,20 @@ const InvoiceDetails = () => {
                             Назад
                         </Button>
                     </Stack>
-                    <Grid container sx={{width: "100%"}} spacing={6}>
+                    <Grid container sx={{width: "100%"}} spacing={matches_700 ? 6 : 1}>
                         <Grid xs={matches_700 ? 7 : 12}>
-                            <NameWithValue title={"№ :"} value={invoice.number}/>
-                            <Divider/>
-                            <NameWithValue title={"Поставщик :"} value={supplierName}/>
-                            <Divider/>
-                            <NameWithValue title={"ИНН :"} value={supplierINN}/>
-                            <Divider/>
-                            <NameWithValue title={"Сумма :"} value={invoice.amount + " руб."}/>
-                            <Divider/>
-                            <NameWithValue title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
-                            <Divider/>
+                            <Stack spacing={2}>
+                                <NameWithValue title={"№ :"} value={invoice.number}/>
+                                <Divider/>
+                                <NameWithValue title={"Поставщик :"} value={supplierName}/>
+                                <Divider/>
+                                <NameWithValue title={"ИНН :"} value={supplierINN}/>
+                                <Divider/>
+                                <NameWithValue title={"Сумма :"} value={invoice.amount + " руб."}/>
+                                <Divider/>
+                                <NameWithValue title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
+                                <Divider/>
+                            </Stack>
                             <NameWithValue title={"Одобрен :"}>
                                 <ApprovedInvoiceCheckbox invoice={invoice}/>
                             </NameWithValue>
@@ -87,9 +94,6 @@ const InvoiceDetails = () => {
                     </Grid>
                     <Stack sx={{width: "100%"}} spacing={3}>
                         <InvoiceDetailsActions {...invoice}/>
-                        {invoice.paid && !invoice.paid.isPaid && (
-                            <InvoiceDetailsCancel {...invoice}/>
-                        )}
                     </Stack>
                 </Stack>
             </Paper>

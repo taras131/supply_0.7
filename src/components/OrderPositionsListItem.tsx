@@ -1,6 +1,6 @@
 import React, {FC, useId} from "react";
 import {IOrderItem} from "../models/iOrders";
-import {Checkbox, Chip, Stack, TextField} from "@mui/material";
+import {Checkbox, Chip, Stack, TextField, useMediaQuery} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {removeOrderItem, updateItemsCount, updateItemsValues} from "../store/reducers/orders";
 import IconButton from "@mui/material/IconButton";
@@ -11,7 +11,9 @@ import {setSelectedOrderPosition} from "../store/reducers/invoices";
 import {getIsPositionSelected, getSupplierNameByInvoiceId} from "../store/selectors/invoices";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
-import {CENTER, PRIMARY, RIGHT, ROW, StyledTableCell, StyledTableRow, StyledTextField} from "../styles/const";
+import {CENTER, PRIMARY, ROW, StyledTableCell, StyledTableRow, StyledTextField} from "../styles/const";
+import {extractAllText} from "../utils/services";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 
 interface IProps {
     index: number
@@ -33,6 +35,8 @@ const OrderPositionsListItem: FC<IProps> = ({
     const positionCheckBoxId = useId();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const matches_700 = useMediaQuery("(min-width:700px)");
+    const matches_500 = useMediaQuery("(min-width:500px)");
     const isPositionSelected = useAppSelector(state => getIsPositionSelected(state, orderId, orderItem.id));
     const supplierName = useAppSelector(state => {
         if (orderItem.invoiceId && orderItem.invoiceId.length && orderItem.invoiceId.length > 4) {
@@ -75,10 +79,12 @@ const OrderPositionsListItem: FC<IProps> = ({
     };
     return (
         <StyledTableRow sx={{width: "100%"}}>
-            <StyledTableCell component="th" scope="row" sx={{paddingTop: 1, paddingBottom: 1}}>
+            <StyledTableCell component="th" scope="row"
+                             sx={{padding: matches_700 ? "8px" : "2px"}}
+                             align={CENTER}>
                 {index + 1}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}>
                 {isEdit
                     ? (<TextField name={"name"}
                                   value={orderItem.name}
@@ -86,7 +92,7 @@ const OrderPositionsListItem: FC<IProps> = ({
                                   onChange={handleInputChange}/>)
                     : orderItem.name}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}>
                 {isEdit
                     ? (<TextField name={"catalogNumber"}
                                   value={orderItem.catalogNumber}
@@ -94,14 +100,15 @@ const OrderPositionsListItem: FC<IProps> = ({
                                   onChange={handleInputChange}/>)
                     : orderItem.catalogNumber}
             </StyledTableCell>
-            <StyledTableCell align={RIGHT}>
+            <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : 0}}>
                 {isEdit
-                    ? (<Stack direction={ROW} alignItems={CENTER} spacing={1}>
-                        <IconButton aria-label="delete"
-                                    onClick={handleMinusClick}
-                                    disabled={orderItem.count < 2}>
-                            <RemoveIcon/>
-                        </IconButton>
+                    ? (<Stack direction={ROW} alignItems={CENTER} spacing={matches_700 ? 1 : 0}>
+                        {matches_500 && (
+                            <IconButton aria-label="minus"
+                                        onClick={handleMinusClick}
+                                        disabled={orderItem.count < 2}>
+                                <RemoveIcon/>
+                            </IconButton>)}
                         <StyledTextField name={"count"}
                                          value={orderItem.count}
                                          inputProps={{style: {textAlign: "center"}}}
@@ -110,14 +117,16 @@ const OrderPositionsListItem: FC<IProps> = ({
                                          sx={{width: "60px"}}
                                          onChange={handleCountChange}
                         />
-                        <IconButton aria-label="delete" onClick={handlePlusClick}>
-                            <AddIcon/>
-                        </IconButton>
+                        {matches_500 && (
+                            <IconButton aria-label="plus" onClick={handlePlusClick}>
+                                <AddIcon/>
+                            </IconButton>
+                        )}
                     </Stack>)
                     : orderItem.count}
             </StyledTableCell>
-            {!isLimitedOverview && (
-                <StyledTableCell>
+            {!isLimitedOverview && matches_700 && (
+                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}>
                     {isEdit
                         ? (<TextField name={"comment"}
                                       value={orderItem.comment}
@@ -126,7 +135,7 @@ const OrderPositionsListItem: FC<IProps> = ({
                         : orderItem.comment}
                 </StyledTableCell>
             )}
-            <StyledTableCell align={CENTER}>
+            <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : 0}}>
                 {isEdit && (<IconButton aria-label="delete"
                                         onClick={handleRemoveClick}
                                         disabled={orderItem.id === 0}>
@@ -138,9 +147,16 @@ const OrderPositionsListItem: FC<IProps> = ({
                     onChange={handleSelectPosition}
                     inputProps={{"aria-label": "controlled"}}
                 />)}
-                {!isEdit && !isSelectPositionMode && orderItem.invoiceId && (
-                    <Chip onClick={handleInvoiceClick} label={supplierName} color={PRIMARY}/>
-                )}
+                {!isEdit && !isSelectPositionMode && orderItem.invoiceId &&  (
+                    <>
+                        {matches_700
+                            ? (<Chip onClick={handleInvoiceClick}
+                                     label={extractAllText(supplierName)}
+                                     color={PRIMARY}/>)
+                            : (<IconButton onClick={handleInvoiceClick} color={PRIMARY}>
+                                <ReceiptIcon/>
+                            </IconButton>)}
+                    </>)}
             </StyledTableCell>
         </StyledTableRow>
     );

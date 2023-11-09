@@ -5,17 +5,21 @@ import NameWithValue from "./NameWithValue";
 import {IOrder, TOrdersType} from "../models/iOrders";
 import {updateCurrentOrderShipmentType, updateCurrentOrderType} from "../store/reducers/orders";
 import {TShipmentsType} from "../models/iShipments";
-import {useAppDispatch} from "../hooks/redux";
+import {useAppDispatch, useAppSelector} from "../hooks/redux";
+import {CENTER, SPACE_BETWEEN} from "../styles/const";
+import {getUserFullNameById} from "../store/selectors/auth";
 
 interface IProps {
     isEdit: boolean
     currentOrder: IOrder
+    isNewOrder: boolean
 }
 
-const OrderDetailsTypes:FC<IProps> = ({isEdit,currentOrder}) => {
+const OrderDetailsTypes:FC<IProps> = ({isEdit,currentOrder, isNewOrder}) => {
     const shipmentTypeRadioId = useId();
     const orderTypeRadioId = useId();
     const dispatch = useAppDispatch();
+    const authorFullName = useAppSelector(state => getUserFullNameById(state, currentOrder.author.userId));
     const handleShipmentTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(updateCurrentOrderShipmentType(e.target.value as TShipmentsType));
     };
@@ -23,8 +27,8 @@ const OrderDetailsTypes:FC<IProps> = ({isEdit,currentOrder}) => {
         dispatch(updateCurrentOrderType(e.target.value as TOrdersType));
     };
     return (
-        <Stack direction={"row"} spacing={2} sx={{maxWidth: 1350, width: "100%"}} alignItems={"center"}
-               justifyContent={"space-between"}>
+        <Stack direction={"row"} spacing={1} sx={{maxWidth: 1350, width: "100%"}}
+               justifyContent={SPACE_BETWEEN} alignItems={CENTER}>
             {isEdit
                 ? (<>
                     <FormControl>
@@ -67,6 +71,11 @@ const OrderDetailsTypes:FC<IProps> = ({isEdit,currentOrder}) => {
                     <NameWithValue title={"Тип заявки:"}>
                         {currentOrder.orderType === "current" ? "Текущая" : "Годовая"}
                     </NameWithValue>
+                    {!isNewOrder && authorFullName && (
+                        <NameWithValue title={"Автор:"}>
+                            {authorFullName}
+                        </NameWithValue>
+                    )}
                 </>)}
 
         </Stack>
