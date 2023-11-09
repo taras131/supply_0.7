@@ -3,7 +3,7 @@ module.exports = {
     "rules": {
         "no-console": "warn",
         "prefer-const": "error",
-        "quotes": ["error", "double"],
+        "quotes": ["warn", "double"],
         "jsx-quotes": ["error", "prefer-double"],
         "comma-dangle": ["error", "always-multiline"], "semi": ["warn", "always"],
         "@typescript-eslint/no-explicit-any": "off"

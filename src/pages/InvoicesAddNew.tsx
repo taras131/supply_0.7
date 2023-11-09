@@ -12,7 +12,7 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
-    Checkbox, FormControlLabel,
+    Checkbox, FormControlLabel, useMediaQuery,
 } from "@mui/material";
 import {getSuppliers} from "../store/selectors/suppliers";
 import {emptyInvoice} from "../models/iInvoices";
@@ -27,6 +27,7 @@ import OrdersList from "../components/OrdersList";
 import {resetSelectedOrderPosition} from "../store/reducers/invoices";
 import {getSelectedOrderPosition} from "../store/selectors/invoices";
 import {getOrders} from "../store/selectors/orders";
+import {CENTER, StyledTextField} from "../styles/const";
 
 const InvoicesAddNew: FC = () => {
     const dispatch = useAppDispatch();
@@ -34,9 +35,11 @@ const InvoicesAddNew: FC = () => {
         amount: 0,
         number: "",
     });
-    const orders = useAppSelector(state => getOrders(state));
+    const orders = useAppSelector(state => getOrders(state, true));
     const navigate = useNavigate();
     const [isWithVAT, setIsWithVAT] = useState(true);
+    const matches_700 = useMediaQuery("(min-width:700px)");
+    const matches_500 = useMediaQuery("(min-width:500px)");
     const user = useAppSelector(state => getUser(state));
     const [selectedSupplierId, setSelectedSupplierId] = useState("");
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
@@ -112,13 +115,14 @@ const InvoicesAddNew: FC = () => {
 
     };
     return (
-        <Stack alignItems="center" spacing={4} mt={4} mb={2}>
+        <Stack alignItems="center" spacing={matches_700 ? 3 : 1} mt={matches_700 ? 3 : 1} pb={3}>
             <PageHeaderWithBackButton backRoute={routes.invoices}
                                       title={"Новый счёт:"}
                                       isValidate={!disabled}
-                                      handleAddClick={handleAddClick}/>
-            <Grid container spacing={3} sx={{maxWidth: "1024px", width: "100%"}}>
-                <Grid xs={6}>
+                                      handleAddClick={handleAddClick}
+                                      errorMessage={disabled ? "не все поля заполнены" : ""}/>
+            <Grid container spacing={matches_500 ? 3 : 1} sx={{maxWidth: "1374px", width: "100%", padding: 0}}>
+                <Grid xs={matches_500 ? 6 : 12}>
                     <FormControl fullWidth>
                         <InputLabel id={selectLabelId}>Поставщик</InputLabel>
                         <Select
@@ -135,7 +139,7 @@ const InvoicesAddNew: FC = () => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid xs={6}>
+                <Grid xs={matches_500 ? 6 : 12}>
                     <TextField value={inputValue.number}
                                onChange={handleInputChange}
                                name="number"
@@ -143,15 +147,15 @@ const InvoicesAddNew: FC = () => {
                                fullWidth/>
                 </Grid>
             </Grid>
-            <Grid container spacing={3} sx={{maxWidth: "1024px", width: "100%"}}>
-                <Grid xs={4}>
-                    <TextField value={inputValue.amount}
+            <Grid container spacing={matches_500 ? 3 : 1} sx={{maxWidth: "1374px", width: "100%"}}>
+                <Grid xs={matches_500 ? 4 : 6}>
+                    <StyledTextField value={inputValue.amount}
                                onChange={handleInputChange}
                                name="amount"
                                type={"number"}
                                label="Сумма"/>
                 </Grid>
-                <Grid xs={4}>
+                <Grid xs={matches_500 ? 4 : 6} pl={4}>
                     <FormControlLabel
                         control={<Checkbox checked={isWithVAT}
                                            onChange={handleIsWithVATSelected}
@@ -159,8 +163,8 @@ const InvoicesAddNew: FC = () => {
                                            sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}
                         label="C НДС"/>
                 </Grid>
-                <Grid xs={4}>
-                    <Stack sx={{width: "100%"}} spacing={1}>
+                <Grid xs={matches_500 ? 4 : 12}>
+                    <Stack sx={{width: "100%"}} spacing={1} alignItems={CENTER}>
                         <LoadingButton
                             variant="outlined"
                             component="label"
@@ -183,10 +187,12 @@ const InvoicesAddNew: FC = () => {
                     </Stack>
                 </Grid>
             </Grid>
-            <Typography mt={"-10px"}>
-                {disabled ? "Не все поля заполнены" : ""}
-            </Typography>
-            <OrdersList isSelectPositionMode/>
+            <Stack spacing={2} sx={{maxWidth: 1350, width: "100%"}}>
+                <Typography fontSize={"16px"} fontWeight={600}>
+                    Отметьте в заявках, входящие в счёт позиции:
+                </Typography>
+                <OrdersList isSelectPositionMode orders={orders}/>
+            </Stack>
         </Stack>
     );
 };

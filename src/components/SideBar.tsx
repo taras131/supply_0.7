@@ -1,5 +1,5 @@
-import {FC} from "react";
-import {Drawer, Stack, styled, Typography} from "@mui/material";
+import {FC, useEffect} from "react";
+import {Drawer, Stack, styled, Typography, useMediaQuery} from "@mui/material";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -10,6 +10,7 @@ import {useAppSelector} from "../hooks/redux";
 import {getCountUnpaidInvoices} from "../store/selectors/invoices";
 import {getIsAuth} from "../store/selectors/auth";
 import {drawerWidth} from "../utils/const";
+import {useLocation} from "react-router-dom";
 
 interface IProps {
     open: boolean
@@ -26,7 +27,12 @@ const DrawerHeader = styled("div")(({theme}) => ({
 
 const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
     const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state));
+    const matches_1600 = useMediaQuery("(min-width:1600px)");
+    const {pathname} = useLocation();
     const isAuth = useAppSelector(state => getIsAuth(state));
+    useEffect(() => {
+        handleDrawerClose();
+    }, [pathname]);
     return (
         <Drawer
             sx={{
@@ -39,7 +45,7 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
                     color: "white",
                 },
             }}
-            variant="persistent"
+            variant={matches_1600 ? "persistent" : "temporary"}
             anchor="left"
             open={open}
         >
@@ -52,7 +58,6 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
                         <MenuIcon/>
                     </IconButton>
                 </Stack>
-
             </DrawerHeader>
             <Divider color={"#404854"}/>
             <List disablePadding>

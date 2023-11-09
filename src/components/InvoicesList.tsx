@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Paper, Table, TableBody, TableContainer} from "@mui/material";
-import InvoicesListHeader from "./InvoicesListHeader";
+import InvoicesListTableHeader from "./InvoicesListTableHeader";
 import InvoicesListItem from "./InvoicesListItem";
 import {IInvoice} from "../models/iInvoices";
 
@@ -13,7 +13,7 @@ const InvoicesList:FC<IProps> = ({invoices}) => {
     return (
         <TableContainer component={Paper} sx={{maxWidth: 1350}}>
             <Table aria-label="simple table">
-                <InvoicesListHeader/>
+                <InvoicesListTableHeader/>
                 <TableBody>
                     {invoicesList ? invoicesList : ""}
                 </TableBody>

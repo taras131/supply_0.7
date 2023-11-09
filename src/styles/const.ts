@@ -31,6 +31,7 @@ export const PRIMARY = "primary";
 export const DIV = "div";
 export const CONTAINED = "contained";
 export const SMALL = "small";
+export const LARGE = "large";
 export const WHITE_COLOR = "white";
 export const BLACK_COLOR = "black";
 export const CURSOR_POINTER = "pointer";
@@ -46,7 +47,7 @@ export const StyledTableCell = styled(TableCell)(({theme}) => ({
         fontSize: 14,
     },
 }));
-export const StyledTextField = styled(TextField)(({theme}) => ({
+export const StyledTextField = styled(TextField)(() => ({
     "& input[type=number]": {
         "-moz-appearance": "textfield",
     },

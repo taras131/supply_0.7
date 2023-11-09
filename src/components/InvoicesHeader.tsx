@@ -44,6 +44,7 @@ const InvoicesHeader: FC<IProps> = ({
     const [file, setFile] = useState<null | File>(null);
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
     const matches_1050 = useMediaQuery("(min-width:1050px)");
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const user = useAppSelector(state => getUser(state));
     const invoices = useAppSelector(state => getInvoices(state, false, false));
     const handleAddInvoiceClick = () => {
@@ -134,7 +135,7 @@ const InvoicesHeader: FC<IProps> = ({
     };
 
     return (
-        <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={3}>
+        <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={matches_700 ? 3 : 1}>
             <Stack sx={{width: "100%"}}
                    direction="row" alignItems={CENTER}
                    justifyContent={SPACE_BETWEEN}>
@@ -145,8 +146,9 @@ const InvoicesHeader: FC<IProps> = ({
                                                             handleCanceledInvoiceChange={handleCanceledInvoiceChange}
                                                             isShowPaidInvoice={isShowPaidInvoice}
                                                             handlePaidInvoiceChange={handlePaidInvoiceChange}/>)}
-                <ButtonGroup aria-label="outlined primary button group">
+                <ButtonGroup aria-label="outlined primary button group"  size={matches_700 ? "medium" : "small"}>
                     <LoadingButton
+                        size={matches_700 ? "medium" : "small"}
                         component="label"
                         loading={isUploadFileLoading}
                         variant={"outlined"}

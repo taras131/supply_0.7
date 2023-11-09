@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Stack, TextField, Typography} from "@mui/material";
+import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {
     setCurrenOrderIsEdit,
     setCurrentOrder,
-    updateCurrentOrderTitle,
 } from "../store/reducers/orders";
 import {emptyOrder} from "../models/iOrders";
 import {
@@ -17,21 +16,27 @@ import {
 import OrderPositionsList from "../components/OrderPositionsList";
 import {fetchAddOrder, fetchUpdateOrder} from "../store/actionsCreators/orders";
 import {getDateInMilliseconds} from "../utils/services";
-import ApprovedOrderCheckbox from "../components/ApprovedOrderCheckbox";
 import OrderDetailsHeader from "../components/OrderDetailsHeader";
 import OrderDetailsTypes from "../components/OrderDetailsTypes";
 import InvoicesList from "../components/InvoicesList";
-import Box from "@mui/material/Box";
+import OrderDetailsTitle from "../components/OrderDetailsTitle";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
     const dispatch = useAppDispatch();
     const orderId = useParams().orderId || "0";
+    const isNewOrder = orderId === "new_order";
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const currentOrder = useAppSelector(state => getCurrentOrder(state));
     const order = useAppSelector(state => getOrderById(state, orderId));
     const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
-    const relatedInvoices = useAppSelector(state => getRelatedInvoicesByOrderID(state, orderId));
-    const isNewOrder = orderId === "new_order";
+    const relatedInvoices = useAppSelector(state => {
+        if (isNewOrder) {
+            return null;
+        } else {
+            return getRelatedInvoicesByOrderID(state, orderId);
+        }
+    });
     useEffect(() => {
         if (isNewOrder) {
             dispatch(setCurrentOrder(emptyOrder));
@@ -59,50 +64,36 @@ const OrderDetails = () => {
         }
         setIsValidate(false);
     };
-    const handleTitleChange = (e: any) => {
-        dispatch(updateCurrentOrderTitle(e.target.value));
-    };
+
     const toggleIsEdit = () => {
         dispatch(setCurrenOrderIsEdit(!isEdit));
     };
     return (
-        <Stack alignItems="center" spacing={4} pt={3} pb={6}>
+        <Stack alignItems="center" spacing={matches_700 ? 3 : 2}>
             <OrderDetailsHeader isNewOrder={isNewOrder}
                                 isValidate={isValidate}
                                 handleAddClick={handleAddClick}
                                 isEdit={isEdit}
                                 toggleIsEdit={toggleIsEdit}/>
-            <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}
-                   sx={{maxWidth: 1350, width: "100%"}}>
-                {isEdit
-                    ? (<TextField value={currentOrder.title}
-                                  name={"title"}
-                                  onChange={handleTitleChange}
-                                  label={"Заголовок заявки"}/>)
-                    : (<Typography fontWeight={600} fontSize={24}>
-                        {currentOrder.title}
-                    </Typography>)}
-                {!isNewOrder && (<Stack direction={"row"} alignItems={"center"} spacing={1}>
-                    <Typography fontWeight={600}>
-                        Одобрена:
-                    </Typography>
-                    <ApprovedOrderCheckbox order={order}/>
-                </Stack>)}
-            </Stack>
-            <OrderDetailsTypes isEdit={isEdit} currentOrder={currentOrder}/>
+            <OrderDetailsTitle currentOrder={currentOrder}
+                               isEdit={isEdit}
+                               isNewOrder={isNewOrder}/>
+            <OrderDetailsTypes isEdit={isEdit}
+                               currentOrder={currentOrder}
+                               isNewOrder={isNewOrder}/>
             <Stack alignItems={"center"} sx={{width: "100%"}}>
                 <OrderPositionsList orderItems={currentOrder.orderItems}
                                     isEdit={isEdit}
                                     orderId={orderId}
                                     isSelectPositionMode={false}/>
             </Stack>
-            {relatedInvoices && !isEdit && (
-                <Box sx={{width: 1350}}>
+            {relatedInvoices && relatedInvoices.length > 0 && !isEdit && (
+                <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={2}>
                     <Typography fontSize={"20px"} fontWeight={600}>
                         Связанные счета:
                     </Typography>
                     <InvoicesList invoices={relatedInvoices}/>
-                </Box>
+                </Stack>
             )}
         </Stack>
     );

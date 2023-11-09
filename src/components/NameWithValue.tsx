@@ -10,7 +10,7 @@ interface IProps {
 
 const NameWithValue: FC<IProps> = ({title, value, children}) => {
     return (
-        <Stack sx={{width: "100%", height: "50px"}} direction={ROW} alignItems="center" justifyContent={SPACE_BETWEEN}>
+        <Stack sx={{width: "100%"}} direction={ROW} alignItems="center" justifyContent={SPACE_BETWEEN}>
             <Typography color="gray" fontWeight={600}>
                 {title}
             </Typography>

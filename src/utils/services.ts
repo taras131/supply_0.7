@@ -1,4 +1,5 @@
 import {TShipmentsType} from "../models/iShipments";
+import {IOrderItem} from "../models/iOrders";
 
 const padTo2Digits = (num: number) => {
     return num.toString().padStart(2, "0");
@@ -134,4 +135,23 @@ export const getProjectedArrivalDate = (dispatchDate: number, shipmentsType: TSh
     } else {
         return convertMillisecondsToDate(dispatchDate + millisecondsInDay * 45);
     }
+};
+
+export const extractAllText = (str: string): string => {
+    const matches = str.split("\"");
+    return matches[1] ? matches[1] : str;
+};
+
+export const deleteYearFromString = (str: string) => {
+    const arr = str.split(".");
+    return `${arr[0]}.${arr[1]}`;
+};
+export const getIsCompleteOrder = (orderItems: IOrderItem []): boolean => {
+    let isComplete = true;
+    orderItems.forEach(orderItem => {
+        if (!orderItem.invoiceId || orderItem.invoiceId.length < 5) {
+            isComplete = false;
+        }
+    });
+    return isComplete;
 };

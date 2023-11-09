@@ -7,15 +7,16 @@ interface IProps {
     route: string
     title: string
     buttonText: string
+    maxWidth?: string
 }
 
-const PageHeader:FC<IProps> = ({route, title, buttonText}) => {
+const PageHeader: FC<IProps> = ({route, title, buttonText, maxWidth = "1350px"}) => {
     const navigate = useNavigate();
     const handleAddClick = () => {
         navigate(route);
     };
     return (
-        <Stack sx={{maxWidth: "1000px", width: "100%"}}
+        <Stack sx={{maxWidth: maxWidth, width: "100%"}}
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>
