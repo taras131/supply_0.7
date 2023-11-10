@@ -7,15 +7,17 @@ import {
     IconButton, MenuItem, Select, SelectChangeEvent,
     TableCell,
     TableRow,
-    Typography,
+    Typography, useMediaQuery,
 } from "@mui/material";
-import {convertMillisecondsToDate} from "../utils/services";
+import {convertMillisecondsToDate, deleteYearFromString, extractAllText} from "../utils/services";
 import DownloadIcon from "@mui/icons-material/Download";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {useAppSelector} from "../hooks/redux";
 import {getSupplierNameById} from "../store/selectors/suppliers";
 import {IShipmentsInvoice, TShipmentInvoiceValue} from "../models/iShipments";
 import {invoiceValues} from "../pages/ShipmentsAddNew";
+import {DOWNLOAD_TEXT} from "../utils/const";
+import {COMPONENT_A, PRIMARY, SUCCESS} from "../styles/const";
 
 interface IProps {
     invoice: IInvoice
@@ -25,7 +27,6 @@ interface IProps {
 }
 
 
-
 const ShipmentsAddNewInvoiceItem: FC<IProps> = ({
                                                     invoice,
                                                     selectedInvoices,
@@ -33,6 +34,10 @@ const ShipmentsAddNewInvoiceItem: FC<IProps> = ({
                                                     handleValueChange,
                                                 }) => {
     const currentSelected = selectedInvoices.find(selectedInvoice => selectedInvoice.invoiceId === invoice.id);
+    const matches_900 = useMediaQuery("(min-width:900px)");
+    const matches_800 = useMediaQuery("(min-width:800px)");
+    const matches_600 = useMediaQuery("(min-width:600px)");
+    const matches_500 = useMediaQuery("(min-width:500px)");
     const isSelected = currentSelected !== undefined;
     const checkboxId = useId();
     const selectId = useId();
@@ -43,40 +48,54 @@ const ShipmentsAddNewInvoiceItem: FC<IProps> = ({
         handleValueChange(invoice.id, e.target.value as TShipmentInvoiceValue);
     };
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
+    const dateCreated = convertMillisecondsToDate(invoice.author.date)
     const valueList = invoiceValues.map(value => (<MenuItem key={value.value}
                                                             value={value.value}>{value.title}</MenuItem>));
     return (
         <TableRow sx={{"&:last-child td, &:last-child th": {border: 0}}}>
-            <TableCell align={"center"}>
-                <FormControlLabel
-                    control={<Checkbox checked={isSelected}
-                                       onChange={handleInvoiceChange}
-                                       color={"success"}
-                                       id={checkboxId}
-                                       sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
+            <TableCell align={"center"} sx={{padding: matches_900 ? "16px" : 0}}>
+                <Checkbox
+                    checked={isSelected}
+                    onChange={handleInvoiceChange}
+                    id={checkboxId}
+                    inputProps={{'aria-label': 'controlled'}}
+                    sx={{"& .MuiSvgIcon-root": {fontSize: matches_600 ? 38 : 22}}}
+                />
             </TableCell>
-            <TableCell sx={{color: "black"}}>{convertMillisecondsToDate(invoice.author.date)}</TableCell>
-            <TableCell sx={{color: "black"}}>{supplierName}</TableCell>
-            <TableCell sx={{cursor: "pointer"}} align={"right"}>
-                <Typography sx={{color: "black"}}>
-                    {new Intl.NumberFormat("ru-RU").format(invoice.amount)} руб.
+            {matches_600 && (
+                <TableCell sx={{
+                    color: "black",
+                    padding: matches_900 ? "16px" : "4px",
+                }}>
+                    {matches_800 ? dateCreated : deleteYearFromString(dateCreated)}
+                </TableCell>
+            )}
+            <TableCell
+                sx={{color: "black", padding: matches_900 ? "16px" : "4px", fontSize: matches_500 ? "16px" : "12px"}}>
+                {matches_800 ? supplierName : extractAllText(supplierName)}
+            </TableCell>
+            <TableCell sx={{cursor: "pointer", padding: matches_900 ? "16px" : "4px"}} align={"right"}>
+                <Typography sx={{color: "black", fontSize: matches_500 ? "16px" : "12px"}}>
+                    {new Intl.NumberFormat("ru-RU").format(invoice.amount)} {matches_600 ? " руб." : ""}
                 </Typography>
             </TableCell>
-            <TableCell
-                sx={{color: "black"}}
-                align={"center"}>
-                {invoice.paid.isPaid
-                    ? convertMillisecondsToDate(invoice.paid.date)
-                    : (
-                        <Typography color={invoice.cancel && invoice.cancel.isCancel ? "#FF0033" : "black"}
-                                    fontWeight={invoice.cancel && invoice.cancel.isCancel ? 600 : 400}>
-                            {invoice.cancel && invoice.cancel.isCancel
-                                ? "Отменён"
-                                : "Нет"}
-                        </Typography>
-                    )}
-            </TableCell>
-            <TableCell sx={{color: "black"}} align="center">
+            {matches_900 && (
+                <TableCell
+                    sx={{color: "black", padding: matches_900 ? "16px" : "4px"}}
+                    align={"center"}>
+                    {invoice.paid.isPaid
+                        ? convertMillisecondsToDate(invoice.paid.date)
+                        : (
+                            <Typography color={invoice.cancel && invoice.cancel.isCancel ? "#FF0033" : "black"}
+                                        fontWeight={invoice.cancel && invoice.cancel.isCancel ? 600 : 400}>
+                                {invoice.cancel && invoice.cancel.isCancel
+                                    ? "Отменён"
+                                    : "Нет"}
+                            </Typography>
+                        )}
+                </TableCell>
+            )}
+            <TableCell sx={{color: "black", padding: matches_900 ? "16px" : 0}} align="center">
                 {isSelected
                     ? (<FormControl fullWidth sx={{width: "100%"}}>
                             <Select
@@ -90,20 +109,31 @@ const ShipmentsAddNewInvoiceItem: FC<IProps> = ({
                             </Select>
                         </FormControl>
                     )
-                    : (<Chip
-                        label={"Скачать"}
-                        component="a"
-                        href={invoice.invoiceFileLink}
-                        icon={<DownloadIcon/>}
-                        color={"success"}
-                        clickable
-                    />)}
+                    : (<>
+                        {matches_900
+                            ? (<Chip
+                                label={DOWNLOAD_TEXT}
+                                component={COMPONENT_A}
+                                href={invoice.invoiceFileLink}
+                                icon={<DownloadIcon/>}
+                                color={SUCCESS}
+                                clickable
+                            />)
+                            : (<IconButton color={PRIMARY}
+                                           aria-label="download invoice"
+                                           component={COMPONENT_A}
+                                           href={invoice.invoiceFileLink}>
+                                <DownloadIcon/>
+                            </IconButton>)}
+                    </>)}
             </TableCell>
-            <TableCell>
-                <IconButton aria-label="add to shopping cart">
-                    <MoreVertIcon color="success"/>
-                </IconButton>
-            </TableCell>
+            {matches_500 && (
+                <TableCell sx={{padding: matches_900 ? "16px" : 0}}>
+                    <IconButton aria-label="add to shopping cart">
+                        <MoreVertIcon color="success"/>
+                    </IconButton>
+                </TableCell>
+            )}
         </TableRow>
     );
 };

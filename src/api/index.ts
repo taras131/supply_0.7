@@ -5,7 +5,13 @@ import {
     updateDoc,
     doc,
 } from "firebase/firestore";
-import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    signInWithCustomToken,
+} from "firebase/auth";
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {INewSupplier} from "../models/iSuppliers";
 import {
@@ -22,6 +28,7 @@ import {INewShipments} from "../models/iShipments";
 import {IReceivingData} from "../store/actionsCreators/shipments";
 import {INewOrder, IOrder} from "../models/iOrders";
 import {IUpdateApprovedOrderData} from "../store/actionsCreators/orders";
+import {startSession} from "./session";
 
 class Api {
     auth = getAuth();
@@ -69,7 +76,7 @@ class Api {
             if (order) {
                 order = {
                     ...order, orderItems: [...order.orderItems.map(orderItems => {
-                        if(selectedPosition[key].includes(orderItems.id)){
+                        if (selectedPosition[key].includes(orderItems.id)) {
                             return {...orderItems, invoiceId: res.id};
                         } else {
                             return orderItems;
@@ -178,6 +185,8 @@ class Api {
     };
     login = async (authData: IAuthData) => {
         const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password);
+        console.log(res.user)
+        startSession(res.user);
         return res.user.uid;
     };
     register = async (registerData: IRegisterData) => {
@@ -191,6 +200,11 @@ class Api {
             }
         );
         return user;
+    };
+    checkAuth = async (accessToken: string) => {
+        console.log(accessToken)
+        const res = await signInWithCustomToken(this.auth, accessToken);
+        console.log(res)
     };
     out = async () => {
         const res = await signOut(this.auth);

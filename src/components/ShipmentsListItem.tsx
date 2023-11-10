@@ -7,17 +7,23 @@ import {
     Checkbox,
     Chip,
     FormControlLabel, Stack,
-    Typography,
+    Typography, useMediaQuery,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {convertMillisecondsToDate, getDateInMilliseconds, getProjectedArrivalDate} from "../utils/services";
-import ShipmentsListItemInvoice from "./ShipmentsListItemInvoice";
-import List from "@mui/material/List";
+import {
+    convertMillisecondsToDate,
+    deleteYearFromString,
+    getDateInMilliseconds,
+    getProjectedArrivalDate,
+} from "../utils/services";
 import DownloadIcon from "@mui/icons-material/Download";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {fetchUpdateShipmentReceiving} from "../store/actionsCreators/shipments";
 import {getUser, getUserFullNameById} from "../store/selectors/auth";
 import ShipmentHeader from "./ShipmentHeader";
+import {getInvoicesByIds} from "../store/selectors/invoices";
+import InvoicesList from "./InvoicesList";
+import {CENTER, ROW, SPACE_BETWEEN, SUCCESS_GRADIENT} from "../styles/const";
 
 interface IProps {
     shipment: IShipments
@@ -26,14 +32,14 @@ interface IProps {
 }
 
 const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
+    const matches_600 = useMediaQuery("(min-width:600px)");
     const dispatch = useAppDispatch();
+    const createdDate = convertMillisecondsToDate(shipment.author.dateCreating);
     const checkboxId = useId();
     const user = useAppSelector(state => getUser(state));
     const receivingUserFullName = useAppSelector(state => getUserFullNameById(state, shipment.receiving.userId));
     const projectedArrivalDate = getProjectedArrivalDate(shipment.author.dateCreating, shipment.type);
-    const invoicesList = shipment.invoicesList.map(shipmentInvoice => <ShipmentsListItemInvoice
-        key={shipmentInvoice.invoiceId}
-        shipmentInvoice={shipmentInvoice}/>);
+    const invoices = useAppSelector(state => getInvoicesByIds(state, shipment.invoicesList));
     const handleReceivingChange = () => {
         if (shipment.receiving && shipment.receiving.isReceived) {
             dispatch(fetchUpdateShipmentReceiving({
@@ -56,48 +62,72 @@ const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
         }
     };
     return (
-        <Accordion expanded={expanded === shipment.id} onChange={handleChange} sx={{width: "100%"}}>
+        <Accordion expanded={expanded === shipment.id}
+                   onChange={handleChange}
+                   sx={{width: "100%", background: shipment.receiving.isReceived ? SUCCESS_GRADIENT : "white"}}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon/>}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
-                sx={{backgroundColor: shipment.receiving.isReceived ? "#00CC66" : "white"}}
+                sx={{
+                    paddingLeft: matches_600 ? "16px" : "4px", paddingRight: matches_600 ? "16px" : "4px", margin: 0,
+                }}
             >
                 <ShipmentHeader shipment={shipment}/>
             </AccordionSummary>
-            <AccordionDetails>
-                <List sx={{width: "100%"}}>
-                    {invoicesList}
-                </List>
-                <Stack sx={{width: "100%", marginTop: "36px"}}
-                       direction={"row"}
-                       alignItems={"center"}
-                       spacing={2}
-                       justifyContent={"space-between"}>
-                    <Chip
-                        label={"Транспортная накладная"}
-                        component="a"
-                        href={shipment.ladingNumberFilePath}
-                        icon={<DownloadIcon/>}
-                        color={"primary"}
-                        clickable
-                    />
-                    <Typography>
-                        {shipment.receiving && shipment.receiving.isReceived
-                            ? `${convertMillisecondsToDate(shipment.receiving.dateCreating)} ${receivingUserFullName}`
-                            : `Прогноз прибытия: ${projectedArrivalDate}`}
+            <AccordionDetails sx={{padding: 0}}>
+                <Stack sx={{width: "100%"}} spacing={2}>
+                    <Stack direction={ROW}
+                           sx={{width: "100%"}}
+                           pt={2}
+                           justifyContent={SPACE_BETWEEN}
+                           alignItems={CENTER}
+                           pl={matches_600 ? "16px" : "4px"}
+                           pr={matches_600 ? "16px" : "4px"}>
+                        <Typography fontWeight={600}>
+                            Отгруженные счета:
+                        </Typography>
+                        <Chip
+                            label={"Накладная"}
+                            component="a"
+                            href={shipment.ladingNumberFilePath}
+                            icon={<DownloadIcon/>}
+                            color={"primary"}
+                            clickable
+                        />
+                    </Stack>
+                    <InvoicesList invoices={invoices} forShipmentMode={true}/>
+                    <Stack
+                        direction={"row"}
+                        alignItems={CENTER}
+                        justifyContent={"space-between"}>
+                        <Stack direction={ROW} alignItems={CENTER}>
+                            <FormControlLabel
+                                sx={{padding: 0, margin: 0}}
+                                label={"получен"}
+                                labelPlacement={"end"}
+                                control={<Checkbox checked={shipment.receiving && shipment.receiving.isReceived}
+                                                   onChange={handleReceivingChange}
+                                                   color={"primary"}
+                                                   id={checkboxId}
+                                                   sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
 
-                    </Typography>
-                    <FormControlLabel
-                        label={"Получен"}
-                        labelPlacement={"start"}
-                        control={<Checkbox checked={shipment.receiving && shipment.receiving.isReceived}
-                                           onChange={handleReceivingChange}
-                                           color={"primary"}
-                                           id={checkboxId}
-                                           sx={{"& .MuiSvgIcon-root": {fontSize: 38}}}/>}/>
-
-
+                            {shipment.receiving && shipment.receiving.isReceived && (
+                                <Typography pl={1}>
+                                    {convertMillisecondsToDate(shipment.receiving.dateCreating)} {receivingUserFullName}
+                                </Typography>
+                            )}
+                        </Stack>
+                        {!shipment.receiving || !shipment.receiving.isReceived && (
+                            <Typography pl={1}>
+                                {matches_600 ? "Прогноз прибытия:" : "Прогноз: "}
+                                {matches_600 ? projectedArrivalDate : deleteYearFromString(projectedArrivalDate)}
+                            </Typography>
+                        )}
+                        <Typography pr={1}>
+                            Отгружен: {matches_600 ? createdDate : deleteYearFromString(createdDate)}
+                        </Typography>
+                    </Stack>
                 </Stack>
             </AccordionDetails>
         </Accordion>

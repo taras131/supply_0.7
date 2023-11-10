@@ -10,7 +10,7 @@ export interface IAuthState {
     allUsers: IUser []
 }
 
-const emptyUser= {
+const emptyUser = {
     firstName: "",
     middleName: "",
     role: "",
@@ -37,8 +37,18 @@ export const AuthSlice = createSlice({
         cleanErrorMessage: (state) => {
             state.errorMessage = "";
         },
-        setAllUsers: (state, action:PayloadAction<IUser []>) =>{
+        setAllUsers: (state, action: PayloadAction<IUser []>) => {
             state.allUsers = action.payload;
+        },
+        setCurrentUser: (state, action: PayloadAction<string>) => {
+            if(state.allUsers.length > 0) {
+                const user = state.allUsers.filter(user => user.email === action.payload)[0];
+                if (user.uid) {
+                    state.isAuth = true;
+                    state.isLoading = false;
+                    state.user = user;
+                }
+            }
         },
     },
     extraReducers: {
@@ -86,6 +96,6 @@ export const AuthSlice = createSlice({
 });
 
 export const {
-    setIsAuth, setAllUsers,
+    setIsAuth, setAllUsers, setCurrentUser,
 } = AuthSlice.actions;
 export default AuthSlice.reducer;
