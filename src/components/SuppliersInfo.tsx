@@ -1,44 +1,46 @@
 import React from "react";
 import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
-import {getNumberAirShipmentsRoute, getNumberRailShipmentsRoute} from "../store/selectors/shipments";
 import {CENTER, COLUMN, ROW, SPACE_BETWEEN, START} from "../styles/const";
+import {getSuppliersCount} from "../store/selectors/suppliers";
+import {getTotalTurnover} from "../store/selectors/invoices";
 
-const ShipmentsInfo = () => {
-    const numberAirShipmentsRoute = useAppSelector(state => getNumberAirShipmentsRoute(state));
-    const numberRailShipmentsRoute = useAppSelector(state => getNumberRailShipmentsRoute(state));
+const SuppliersInfo = () => {
     const matches_500 = useMediaQuery("(min-width:500px)");
     const matches_400 = useMediaQuery("(min-width:400px)");
+    const countSuppliers = useAppSelector(state => getSuppliersCount(state));
+    const totalTurnover = useAppSelector(state => getTotalTurnover(state));
     return (
-        <Stack sx={{maxWidth: 1000, width: "100%"}}
+        <Stack sx={{maxWidth: 1350, width: "100%"}}
                direction={matches_400 ? ROW : COLUMN}
                alignItems={matches_400 ? CENTER : START}
-               justifyContent={matches_400 ? SPACE_BETWEEN : START}>
+               justifyContent={matches_400 ? SPACE_BETWEEN : START}
+               spacing={matches_400 ? 2 : 1}>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"}
                             fontSize={matches_500 ? "16px" : "12px"}
                             fontWeight={matches_500 ? 600 : 500}>
-                    Авиа грузов в пути:
+                    Поставщиков:
                 </Typography>
                 <Typography color={"darkblue"}
                             fontSize={matches_500 ? "16px" : "12px"}
                             fontWeight={matches_500 ? 600 : 500}>
-                    {numberAirShipmentsRoute}.
+                    {countSuppliers}
                 </Typography>
             </Stack>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"}
-                            fontSize={matches_500 ? "16px" : "12px"}
-                            fontWeight={matches_500 ? 600 : 500}>
-                    ЖД грузов в пути:</Typography>
+                            fontSize={matches_500 ? "16px" : "12px"}>
+                    Оборот:
+                </Typography>
                 <Typography color={"darkblue"}
                             fontSize={matches_500 ? "16px" : "12px"}
                             fontWeight={matches_500 ? 600 : 500}>
-                    {numberRailShipmentsRoute}.
+                    {new Intl.NumberFormat("ru-RU").format(totalTurnover)} руб.
                 </Typography>
             </Stack>
         </Stack>
     );
 };
 
-export default ShipmentsInfo;
+export default SuppliersInfo;

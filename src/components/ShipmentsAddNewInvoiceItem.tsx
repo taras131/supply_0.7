@@ -48,7 +48,7 @@ const ShipmentsAddNewInvoiceItem: FC<IProps> = ({
         handleValueChange(invoice.id, e.target.value as TShipmentInvoiceValue);
     };
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
-    const dateCreated = convertMillisecondsToDate(invoice.author.date)
+    const dateCreated = convertMillisecondsToDate(invoice.author.date);
     const valueList = invoiceValues.map(value => (<MenuItem key={value.value}
                                                             value={value.value}>{value.title}</MenuItem>));
     return (
@@ -58,7 +58,7 @@ const ShipmentsAddNewInvoiceItem: FC<IProps> = ({
                     checked={isSelected}
                     onChange={handleInvoiceChange}
                     id={checkboxId}
-                    inputProps={{'aria-label': 'controlled'}}
+                    inputProps={{"aria-label": "controlled"}}
                     sx={{"& .MuiSvgIcon-root": {fontSize: matches_600 ? 38 : 22}}}
                 />
             </TableCell>

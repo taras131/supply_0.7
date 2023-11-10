@@ -26,3 +26,8 @@ export const getSupplierINNById = (state: RootState, supplierId: string) => {
 export const getSuppliersIsLoading = (state: RootState) => {
     return state.suppliers.isLoading;
 };
+
+export const getSuppliersCount = (state: RootState): number => {
+    return state.suppliers.list.length;
+};
+
