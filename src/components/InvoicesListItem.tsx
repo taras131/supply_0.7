@@ -50,7 +50,12 @@ import {
 } from "../styles/const";
 import {getUser} from "../store/selectors/auth";
 
-const InvoicesListItem: FC<IInvoice> = (invoice) => {
+interface IProps {
+    invoice: IInvoice,
+    forShipmentMode: boolean
+}
+
+const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {pathname} = useLocation();
@@ -70,14 +75,13 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
     useEffect(() => {
         setBackgroundGradient(WHITE_COLOR);
         setTextColor(BLACK_COLOR);
-        if (invoice.paid.isPaid) {
+        if (invoice.approved.isApproved && !forShipmentMode) {
+            setBackgroundGradient(APPROVED_GRADIENT);
+            setTextColor(WHITE_COLOR);
+        }
+        if (invoice.paid.isPaid && !forShipmentMode) {
             setBackgroundGradient(SUCCESS_GRADIENT);
             setTextColor(WHITE_COLOR);
-        } else {
-            if (invoice.approved.isApproved) {
-                setBackgroundGradient(APPROVED_GRADIENT);
-                setTextColor(WHITE_COLOR);
-            }
         }
         if (invoice.cancel && invoice.cancel.isCancel) {
             setBackgroundGradient(CANCEL_GRADIENT);
@@ -126,9 +130,11 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                 fontSize: matches_470 ? "14px" : "11px",
             }}
         >
-            <TableCell align={CENTER} sx={{padding: matches_1050 ? "16px" : 0, paddingLeft: "6px"}}>
-                <ApprovedInvoiceCheckbox invoice={invoice}/>
-            </TableCell>
+            {!forShipmentMode && (
+                <TableCell align={CENTER} sx={{padding: matches_1050 ? "16px" : 0, paddingLeft: "6px"}}>
+                    <ApprovedInvoiceCheckbox invoice={invoice}/>
+                </TableCell>
+            )}
             <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : 0}} align={CENTER}>
                 {matches_700
                     ? invoiceCreatedDate
@@ -147,7 +153,9 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                             <Typography>
                                 {supplierINN}
                             </Typography>
-                            <ContentCopyIcon color={SUCCESS}/>
+                            {!forShipmentMode && (
+                                <ContentCopyIcon color={SUCCESS}/>
+                            )}
                         </Stack>
                     </Tooltip>
                 </TableCell>
@@ -161,13 +169,13 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                         <Typography>
                             {new Intl.NumberFormat("ru-RU").format(invoice.amount)} {matches_470 ? " руб." : ""}
                         </Typography>
-                        {matches_700 && (
+                        {matches_700 && !forShipmentMode && (
                             <ContentCopyIcon color={SUCCESS}/>
                         )}
                     </Stack>
                 </Tooltip>
             </TableCell>
-            {matches_1300 && (
+            {matches_1300 && !forShipmentMode && (
                 <TableCell sx={{color: INHERIT}} align={CENTER}>
                     {invoice.isWithVAT
                         ? (<Typography>
@@ -211,7 +219,7 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                         <DownloadIcon/>
                     </IconButton>)}
             </TableCell>
-            {matches_1300 && (
+            {matches_1300 && !forShipmentMode && (
                 <>
                     <TableCell sx={{color: INHERIT}} align={CENTER}>
                         {invoice.paid.isPaid
@@ -249,13 +257,15 @@ const InvoicesListItem: FC<IInvoice> = (invoice) => {
                                 </LoadingButton>
                             )}
                     </TableCell>
-                    <TableCell sx={{padding: matches_1050 ? "16px" : "6px"}}>
-                        <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
-                            {isShipment
-                                ? (<LocalShippingIcon color={SUCCESS}/>)
-                                : (STRING_EMPTY)}
-                        </IconButton>
-                    </TableCell>
+                    {!forShipmentMode && (
+                        <TableCell sx={{padding: matches_1050 ? "16px" : "6px"}}>
+                            <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
+                                {isShipment
+                                    ? (<LocalShippingIcon color={SUCCESS}/>)
+                                    : (STRING_EMPTY)}
+                            </IconButton>
+                        </TableCell>
+                    )}
                 </>
             )}
             <TableCell sx={{padding: matches_1050 ? "16px" : 0}}>

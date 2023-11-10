@@ -21,7 +21,7 @@ import {setInvoices} from "../store/reducers/invoices";
 import Message from "./Message";
 import Users from "../pages/Users";
 import {IUser} from "../models/iAuth";
-import {setAllUsers} from "../store/reducers/auth";
+import {setAllUsers, setCurrentUser} from "../store/reducers/auth";
 import Profile from "../pages/Profile";
 import InvoiceDetails from "../pages/InvoiceDetails";
 import {drawerWidth} from "../utils/const";
@@ -39,6 +39,10 @@ import {setOrders, setOrdersLoading} from "../store/reducers/orders";
 import {IOrder} from "../models/iOrders";
 import InvoicesAddNew from "../pages/InvoicesAddNew";
 import {getSuppliersIsLoading} from "../store/selectors/suppliers";
+import {isLoggedIn} from "../api/session";
+import api from "../api";
+import {getAuth} from "firebase/auth";
+import {getAllUsers} from "../store/selectors/auth";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -71,11 +75,12 @@ const DrawerHeader = styled("div")(({theme}) => ({
 
 
 function App() {
-    const [open, setOpen] = React.useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const supplierIsLoading = useAppSelector(state => getSuppliersIsLoading(state));
     const matches_1600 = useMediaQuery("(min-width:1600px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
+    const [open, setOpen] = React.useState(matches_1600 ? true : false);
+    const [isLoading, setIsLoading] = useState(true);
+    const supplierIsLoading = useAppSelector(state => getSuppliersIsLoading(state));
+
     const dispatch = useAppDispatch();
     useEffect(() => {
         const q = query(collection(db, "invoices"));
@@ -180,6 +185,15 @@ function App() {
             return () => unsubscribe();
         });
     }, []);
+    const users = useAppSelector(state => getAllUsers(state));
+    useEffect(() => {
+        getAuth().onAuthStateChanged(function (user) {
+            console.log(user)
+            if (user && user.email) {
+                dispatch(setCurrentUser(user.email))
+            }
+        });
+    }, [users])
     const handleDrawerOpen = () => {
         setOpen(true);
     };

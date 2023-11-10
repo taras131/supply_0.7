@@ -58,7 +58,12 @@ const InvoiceDetails = () => {
     };
     return (
         <Stack alignItems={CENTER} spacing={2}>
-            <Paper sx={{maxWidth: "1000px", width: "100%", backgroundColor: "white", padding: "20px"}}>
+            <Paper sx={{
+                maxWidth: "1000px",
+                width: "100%",
+                backgroundColor: "white",
+                padding: matches_700 ? "20px" : "6px",
+            }}>
                 <Stack spacing={matches_700 ? 3 : 1} alignItems="center">
                     <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}
                            sx={{width: "100%"}}>
@@ -70,7 +75,7 @@ const InvoiceDetails = () => {
                             Назад
                         </Button>
                     </Stack>
-                    <Grid container sx={{width: "100%"}} spacing={matches_700 ? 6 : 1}>
+                    <Grid container sx={{width: "100%"}} pt={matches_700 ? 0 : 2} spacing={matches_700 ? 6 : 1}>
                         <Grid xs={matches_700 ? 7 : 12}>
                             <Stack spacing={2}>
                                 <NameWithValue title={"№ :"} value={invoice.number}/>

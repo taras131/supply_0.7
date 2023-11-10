@@ -1,5 +1,15 @@
 import React, {FC, useEffect, useId, useState} from "react";
-import {FormControl, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography} from "@mui/material";
+import {
+    FormControl,
+    MenuItem,
+    Paper,
+    Select,
+    SelectChangeEvent,
+    Stack,
+    TextField,
+    Typography,
+    useMediaQuery,
+} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import LoadingButton from "@mui/lab/LoadingButton";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
@@ -24,11 +34,13 @@ export interface IInvoiceValue {
 }
 
 export const invoiceValues: IInvoiceValue[] = [
-    {value: "partly", title: "Частично"},
-    {value: "completely", title: "Полностью"}];
+    {value: "partly", title: "Часть"},
+    {value: "completely", title: "Весь"}];
 
 const ShipmentsAddNew: FC = () => {
     const dispatch = useAppDispatch();
+    const matches_870 = useMediaQuery("(min-width:870px)");
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const navigate = useNavigate();
     const user = useAppSelector(state => getUser(state));
     const [transporter, setTransporter] = useState("");
@@ -123,20 +135,21 @@ const ShipmentsAddNew: FC = () => {
         setLadingNumber(e.target.value);
     };
     return (
-        <Stack alignItems="center" spacing={4} pt={3}>
+        <Stack alignItems="center" spacing={matches_700 ? 4 : 2} pt={matches_700 ? 3 : 1}>
             <PageHeaderWithBackButton backRoute={routes.shipments}
                                       title={"Новая отгрузка"}
                                       isValidate={isValidate}
-                                      handleAddClick={handleAddClick}/>
-            <Paper sx={{maxWidth: "1000px", width: "100%", padding: "20px"}}>
-                <Stack spacing={2} sx={{width: "100%"}}>
+                                      handleAddClick={handleAddClick}
+                                      maxWidth="1000px"/>
+            <Paper sx={{maxWidth: "1000px", width: "100%", padding: matches_700 ? "20px" : "4px"}}>
+                <Stack spacing={2} sx={{width: "100%"}} pt={2}>
                     <Grid container sx={{width: "100%"}} alignItems="center">
-                        <Grid xs={3}>
+                        <Grid xs={matches_870 ? 3 : 12} spacing={1}>
                             <Typography color="gray" fontWeight={600}>
                                 Перевозчик:
                             </Typography>
                         </Grid>
-                        <Grid xs={9} spacing={2}>
+                        <Grid xs={matches_870 ? 9 : 12}>
                             <FormControl fullWidth sx={{width: "100%"}}>
                                 <Select
                                     id={selectTransporterId}
@@ -151,24 +164,25 @@ const ShipmentsAddNew: FC = () => {
                         </Grid>
                     </Grid>
                     <Grid container sx={{width: "100%"}} alignItems="center">
-                        <Grid xs={3}>
+                        <Grid xs={matches_870 ? 3 : 12} spacing={1}>
                             <Typography color="gray" fontWeight={600}>
                                 Транспортная накладная №
                             </Typography>
                         </Grid>
-                        <Grid xs={9} spacing={2}>
+                        <Grid xs={matches_870 ? 9 : 12}>
                             <TextField value={ladingNumber}
+                                       fullWidth
                                        onChange={handleInputChange}
                                        name="ladingNumber"/>
                         </Grid>
                     </Grid>
                     <Grid container sx={{width: "100%"}} alignItems="center">
-                        <Grid xs={3}>
+                        <Grid xs={matches_870 ? 3 : 12} spacing={1}>
                             <Typography color="gray" fontWeight={600}>
                                 Тип перевозки:
                             </Typography>
                         </Grid>
-                        <Grid xs={9} spacing={2}>
+                        <Grid xs={matches_870 ? 9 : 12}>
                             <FormControl fullWidth sx={{width: "100%"}}>
                                 <Select
                                     id={selectTypeId}
@@ -183,13 +197,14 @@ const ShipmentsAddNew: FC = () => {
                         </Grid>
                     </Grid>
                     <Grid container sx={{width: "100%"}} alignItems="center">
-                        <Grid xs={3}>
+                        <Grid xs={matches_870 ? 3 : 12} spacing={1}>
                             <Typography color="gray" fontWeight={600}>
                                 Транспортная накладная:
                             </Typography>
                         </Grid>
-                        <Grid xs={9} spacing={2}>
+                        <Grid xs={matches_870 ? 9 : 12}>
                             <LoadingButton
+                                sx={{height: "56px"}}
                                 variant="outlined"
                                 component="label"
                                 loading={isUploadFileLoading}

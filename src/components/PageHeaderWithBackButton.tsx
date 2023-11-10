@@ -10,6 +10,7 @@ interface IProps {
     isValidate: boolean
     handleAddClick: () => void
     errorMessage?: string
+    maxWidth?: string
 }
 
 const PageHeaderWithBackButton: FC<IProps> = ({
@@ -18,6 +19,7 @@ const PageHeaderWithBackButton: FC<IProps> = ({
                                                   isValidate,
                                                   handleAddClick,
                                                   errorMessage = STRING_EMPTY,
+                                                  maxWidth = "1350px",
                                               }) => {
     const navigate = useNavigate();
     const location: any = useLocation();
@@ -31,7 +33,7 @@ const PageHeaderWithBackButton: FC<IProps> = ({
     };
 
     return (
-        <Stack sx={{maxWidth: 1350, width: "100%"}}
+        <Stack sx={{maxWidth: maxWidth, width: "100%"}}
                direction={ROW}
                alignItems={START}
                justifyContent={SPACE_BETWEEN}>

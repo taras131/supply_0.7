@@ -1,7 +1,8 @@
 import React, {FC} from "react";
 import {useNavigate} from "react-router-dom";
-import {Button, Stack, Typography} from "@mui/material";
+import {Button, Stack, Typography, useMediaQuery} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import {LARGE, SMALL} from "../styles/const";
 
 interface IProps {
     route: string
@@ -12,6 +13,7 @@ interface IProps {
 
 const PageHeader: FC<IProps> = ({route, title, buttonText, maxWidth = "1350px"}) => {
     const navigate = useNavigate();
+    const matches_700 = useMediaQuery("(min-width:700px)");
     const handleAddClick = () => {
         navigate(route);
     };
@@ -20,10 +22,13 @@ const PageHeader: FC<IProps> = ({route, title, buttonText, maxWidth = "1350px"})
                direction={"row"}
                alignItems={"center"}
                justifyContent={"space-between"}>
-            <Typography variant="h2" fontSize="24px" fontWeight={700}>
+            <Typography variant="h2" fontSize={matches_700 ? "24px" : "18px"} fontWeight={matches_700 ? 700 : 600}>
                 {title}
             </Typography>
-            <Button startIcon={<AddIcon/>} variant="contained" size="large" onClick={handleAddClick}>
+            <Button startIcon={<AddIcon/>}
+                    variant="contained"
+                    size={matches_700 ? LARGE : SMALL}
+                    onClick={handleAddClick}>
                 {buttonText}
             </Button>
         </Stack>

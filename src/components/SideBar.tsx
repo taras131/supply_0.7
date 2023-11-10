@@ -31,7 +31,9 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
     const {pathname} = useLocation();
     const isAuth = useAppSelector(state => getIsAuth(state));
     useEffect(() => {
-        handleDrawerClose();
+        if(!matches_1600) {
+            handleDrawerClose();
+        }
     }, [pathname]);
     return (
         <Drawer
