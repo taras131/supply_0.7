@@ -77,3 +77,11 @@ export const getSupplierNameByInvoiceId = (state: RootState, invoiceId: string) 
         return "";
     }
 };
+
+export const getTotalTurnover = (state: RootState): number => {
+    let result = 0;
+     state.suppliers.list.forEach(supplier => {
+        result += getAmountBySupplierId(state, supplier.id);
+    });
+    return result;
+};

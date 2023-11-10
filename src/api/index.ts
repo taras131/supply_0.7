@@ -185,7 +185,7 @@ class Api {
     };
     login = async (authData: IAuthData) => {
         const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password);
-        console.log(res.user)
+        console.log(res.user);
         startSession(res.user);
         return res.user.uid;
     };
@@ -202,9 +202,9 @@ class Api {
         return user;
     };
     checkAuth = async (accessToken: string) => {
-        console.log(accessToken)
+        console.log(accessToken);
         const res = await signInWithCustomToken(this.auth, accessToken);
-        console.log(res)
+        console.log(res);
     };
     out = async () => {
         const res = await signOut(this.auth);

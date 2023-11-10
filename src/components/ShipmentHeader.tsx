@@ -16,7 +16,7 @@ const ShipmentHeader: FC<IProps> = ({shipment}) => {
     const matches_600 = useMediaQuery("(min-width:600px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
     const matches_730 = useMediaQuery("(min-width:730px)");
-    const createdDate = convertMillisecondsToDate(shipment.author.dateCreating)
+    const createdDate = convertMillisecondsToDate(shipment.author.dateCreating);
     return (
         <Grid sx={{width: "100%"}} alignItems={CENTER} container spacing={matches_600 ? 1 : 0} columns={18} pr={1}>
             {matches_430 && (

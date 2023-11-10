@@ -64,3 +64,11 @@ export const getRelatedOrdersByInvoiceId = (state: RootState, invoiceId: string)
     });
     return orders;
 };
+
+export const getNumberAnnualOrders = (state: RootState) => {
+    return state.orders.list.filter(order => order.orderType === "annual").length;
+};
+
+export const getCurrentAnnualOrders = (state: RootState) => {
+    return state.orders.list.filter(order => order.orderType === "current").length;
+};
