@@ -8,10 +8,15 @@ interface IProps {
     route: string
     title: string
     buttonText: string
+    icon?: React.ReactNode | false
     maxWidth?: string
 }
 
-const PageHeader: FC<IProps> = ({route, title, buttonText, maxWidth = "1350px"}) => {
+const PageHeaderWithTitleAndButton: FC<IProps> = ({route,
+                                                      title,
+                                                      buttonText,
+                                                      icon = false,
+                                                      maxWidth = "1350px"}) => {
     const navigate = useNavigate();
     const matches_700 = useMediaQuery("(min-width:700px)");
     const handleAddClick = () => {
@@ -25,7 +30,7 @@ const PageHeader: FC<IProps> = ({route, title, buttonText, maxWidth = "1350px"})
             <Typography variant="h2" fontSize={matches_700 ? "24px" : "18px"} fontWeight={matches_700 ? 700 : 600}>
                 {title}
             </Typography>
-            <Button startIcon={<AddIcon/>}
+            <Button startIcon={icon ? icon : <AddIcon/>}
                     variant="contained"
                     size={matches_700 ? LARGE : SMALL}
                     onClick={handleAddClick}>
@@ -35,4 +40,4 @@ const PageHeader: FC<IProps> = ({route, title, buttonText, maxWidth = "1350px"})
     );
 };
 
-export default PageHeader;
+export default PageHeaderWithTitleAndButton;

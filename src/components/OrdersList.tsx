@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import OrdersListItem from "./OrdersListItem";
 import {IOrder} from "../models/iOrders";
+import {Stack} from "@mui/material";
 
 interface IProps {
     isSelectPositionMode?: boolean
@@ -19,9 +20,9 @@ const OrdersList: FC<IProps> = ({orders, isSelectPositionMode = false}) => {
                                                             expanded={expanded}
                                                             isSelectPositionMode={isSelectPositionMode}/>));
     return (
-        <div style={{maxWidth: "1350px", width: "100%"}}>
+        <Stack sx={{width: "100%"}}>
             {ordersList}
-        </div>
+        </Stack>
     );
 };
 

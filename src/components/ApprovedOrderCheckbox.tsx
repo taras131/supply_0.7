@@ -27,16 +27,12 @@ const ApprovedOrderCheckbox: FC<IProps> = ({order}) => {
         }));
     };
     return (
-        <>
-            <FormControlLabel
-                label={""}
-                sx={{margin: 0}}
-                control={<Checkbox checked={order.approved.isApproved}
-                                   onChange={handleApprovedChange}
-                                   color={"success"}
-                                   id={checkboxId}
-                                   sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}}}/>}/>
-        </>
+        <Checkbox
+            checked={order.approved.isApproved}
+            onChange={handleApprovedChange}
+            sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}, margin: 0, padding: 0}}
+            id={checkboxId}
+        />
     );
 };
 

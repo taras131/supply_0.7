@@ -6,11 +6,12 @@ interface IProps {
     title: string
     value?: string | number
     children?: React.ReactNode
+    width?: string
 }
 
-const NameWithValue: FC<IProps> = ({title, value, children}) => {
+const NameWithValue: FC<IProps> = ({title, value, width = "100%", children}) => {
     return (
-        <Stack sx={{width: "100%"}} direction={ROW} alignItems="center" justifyContent={SPACE_BETWEEN}>
+        <Stack sx={{width: width}} direction={ROW} alignItems="center" justifyContent={SPACE_BETWEEN}>
             <Typography color="gray" fontWeight={600}>
                 {title}
             </Typography>

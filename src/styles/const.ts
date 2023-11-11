@@ -1,8 +1,8 @@
 import {styled} from "@mui/material/styles";
 import {TableCell, tableCellClasses, TableRow, TextField} from "@mui/material";
 
-export const  APPROVED_GRADIENT = "linear-gradient(90deg, rgba(192,189,246,1) 0%, rgba(123,179,246,1) 48%)";
-export const  SUCCESS_GRADIENT = "linear-gradient(90deg, rgba(144,231,112,1) 0%, rgba(117,232,94,1) 48%)";
+export const  APPROVED_GRADIENT = "linear-gradient(90deg, rgba(141,176,227,1) 0%, rgba(121,151,193,1) 48%)";
+export const  SUCCESS_GRADIENT = "linear-gradient(90deg, rgba(139,196,143,1) 0%, rgba(107,164,114,1) 48%)";
 export const  CANCEL_GRADIENT = "linear-gradient(90deg, rgba(227,164,112,1) 0%, rgba(223,165,77,1) 48%)";
 export const SUCCESS = "success";
 export const INHERIT ="inherit";

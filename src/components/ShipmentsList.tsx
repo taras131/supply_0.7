@@ -16,7 +16,7 @@ const ShipmentsList = () => {
                                                                         expanded={expanded}
     />));
     return (
-        <div style={{maxWidth: "1000px", width: "100%"}}>
+        <div style={{width: "100%"}}>
             {shipmentsList}
         </div>
     );

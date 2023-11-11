@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Stack, Typography, useMediaQuery} from "@mui/material";
-import {useParams} from "react-router-dom";
+import {Typography} from "@mui/material";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {
     setCurrenOrderIsEdit,
@@ -16,17 +16,20 @@ import {
 import OrderPositionsList from "../components/OrderPositionsList";
 import {fetchAddOrder, fetchUpdateOrder} from "../store/actionsCreators/orders";
 import {getDateInMilliseconds} from "../utils/services";
-import OrderDetailsHeader from "../components/OrderDetailsHeader";
-import OrderDetailsTypes from "../components/OrderDetailsTypes";
+import OrderDetailsInfo from "../components/OrderDetailsInfo";
 import InvoicesList from "../components/InvoicesList";
-import OrderDetailsTitle from "../components/OrderDetailsTitle";
+import {routes} from "../utils/routes";
+import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
+import PageLayout from "../components/PageLayout";
+import OrderDetailsEditTitle from "../components/OrderDetailsEditTitle";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
     const orderId = useParams().orderId || "0";
     const isNewOrder = orderId === "new_order";
-    const matches_700 = useMediaQuery("(min-width:700px)");
     const currentOrder = useAppSelector(state => getCurrentOrder(state));
     const order = useAppSelector(state => getOrderById(state, orderId));
     const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
@@ -68,34 +71,40 @@ const OrderDetails = () => {
     const toggleIsEdit = () => {
         dispatch(setCurrenOrderIsEdit(!isEdit));
     };
+    const handleBackClick = () => {
+        if (location.state && location.state.from) {
+            navigate(location.state.from);
+        } else {
+            navigate(routes.orders);
+        }
+    };
     return (
-        <Stack alignItems="center" spacing={matches_700 ? 3 : 2}>
-            <OrderDetailsHeader isNewOrder={isNewOrder}
-                                isValidate={isValidate}
-                                handleAddClick={handleAddClick}
+        <PageLayout>
+            <PageHeaderWithTitleAndTwoButtons leftButtonText={isEdit && !isNewOrder ? "Отмена" : "Назад"}
+                                              rightButtonText={isEdit ? "Сохранить" : "Редактировать"}
+                                              title={isNewOrder ? "Новая заявка" : currentOrder.title}
+                                              handleLeftButtonClick={isEdit && !isNewOrder ? toggleIsEdit : handleBackClick}
+                                              handleRightButtonClick={isEdit ? handleAddClick : toggleIsEdit}
+                                              isRightButtonDisabled={!isValidate}/>
+            {isEdit && (
+                <OrderDetailsEditTitle title={currentOrder.title}/>
+            )}
+            <OrderDetailsInfo isEdit={isEdit}
+                              currentOrder={currentOrder}
+                              isNewOrder={isNewOrder}/>
+            <OrderPositionsList orderItems={currentOrder.orderItems}
                                 isEdit={isEdit}
-                                toggleIsEdit={toggleIsEdit}/>
-            <OrderDetailsTitle currentOrder={currentOrder}
-                               isEdit={isEdit}
-                               isNewOrder={isNewOrder}/>
-            <OrderDetailsTypes isEdit={isEdit}
-                               currentOrder={currentOrder}
-                               isNewOrder={isNewOrder}/>
-            <Stack alignItems={"center"} sx={{width: "100%"}}>
-                <OrderPositionsList orderItems={currentOrder.orderItems}
-                                    isEdit={isEdit}
-                                    orderId={orderId}
-                                    isSelectPositionMode={false}/>
-            </Stack>
+                                orderId={orderId}
+                                isSelectPositionMode={false}/>
             {relatedInvoices && relatedInvoices.length > 0 && !isEdit && (
-                <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={2}>
+                <>
                     <Typography fontSize={"20px"} fontWeight={600}>
                         Связанные счета:
                     </Typography>
                     <InvoicesList invoices={relatedInvoices}/>
-                </Stack>
+                </>
             )}
-        </Stack>
+        </PageLayout>
     );
 };
 
