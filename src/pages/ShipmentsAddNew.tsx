@@ -23,8 +23,9 @@ import {getUser} from "../store/selectors/auth";
 import {getDateInMilliseconds} from "../utils/services";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
-import PageHeaderWithBackButton from "../components/PageHeaderWithBackButton";
+import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
 import {shipmentTypes} from "../utils/const";
+import PageLayout from "../components/PageLayout";
 
 const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия", "Дмитрий Павлович"];
 
@@ -134,13 +135,17 @@ const ShipmentsAddNew: FC = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setLadingNumber(e.target.value);
     };
+    const handleBackClick = () => {
+        navigate(routes.shipments)
+    }
     return (
-        <Stack alignItems="center" spacing={matches_700 ? 4 : 2} pt={matches_700 ? 3 : 1}>
-            <PageHeaderWithBackButton backRoute={routes.shipments}
-                                      title={"Новая отгрузка"}
-                                      isValidate={isValidate}
-                                      handleAddClick={handleAddClick}
-                                      maxWidth="1000px"/>
+        <PageLayout maxWidth={1000}>
+            <PageHeaderWithTitleAndTwoButtons leftButtonText={"Назад"}
+                                              rightButtonText={"Сохранить"}
+                                              title={"Новая отгрузка"}
+                                              handleLeftButtonClick={handleBackClick}
+                                              handleRightButtonClick={handleAddClick}
+                                              isRightButtonDisabled={!isValidate}/>
             <Paper sx={{maxWidth: "1000px", width: "100%", padding: matches_700 ? "20px" : "4px"}}>
                 <Stack spacing={2} sx={{width: "100%"}} pt={2}>
                     <Grid container sx={{width: "100%"}} alignItems="center">
@@ -230,7 +235,7 @@ const ShipmentsAddNew: FC = () => {
                                                 handleValueChange={handleValueChange}/>
                 </Stack>
             </Paper>
-        </Stack>
+        </PageLayout>
     );
 };
 

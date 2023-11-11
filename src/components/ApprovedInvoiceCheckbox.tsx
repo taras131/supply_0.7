@@ -16,25 +16,33 @@ const ApprovedInvoiceCheckbox: FC<IProps> = ({invoice}) => {
     const matches_470 = useMediaQuery("(min-width:470px)");
     const user = useAppSelector(state => getUser(state));
     const handleApprovedChange = () => {
-        dispatch(fetchUpdateInvoiceApproved({
-            invoiceId: invoice.id,
-            newApproved: {
-                userId: user.id,
-                date: getDateInMilliseconds(),
-                isApproved: !invoice.approved.isApproved,
-            },
-        }));
+        if (invoice.approved.isApproved) {
+            dispatch(fetchUpdateInvoiceApproved({
+                invoiceId: invoice.id,
+                newApproved: {
+                    userId: "",
+                    date: 0,
+                    isApproved: !invoice.approved.isApproved,
+                },
+            }));
+        } else {
+            dispatch(fetchUpdateInvoiceApproved({
+                invoiceId: invoice.id,
+                newApproved: {
+                    userId: user.id,
+                    date: getDateInMilliseconds(),
+                    isApproved: !invoice.approved.isApproved,
+                },
+            }));
+        }
     };
     return (
-        <FormControlLabel
-            sx={{marginRight: 0}}
-            label={""}
-            control={<Checkbox checked={invoice.approved.isApproved}
-                               onChange={handleApprovedChange}
-                               color={"success"}
-                               id={checkboxId}
-                               disabled={invoice.paid.isPaid || invoice.cancel && invoice.cancel.isCancel}
-                               sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}}}/>}/>
+        <Checkbox
+            checked={invoice.approved.isApproved}
+            onChange={handleApprovedChange}
+            sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}, margin: 0, padding: 0}}
+            id={checkboxId}
+        />
     );
 };
 

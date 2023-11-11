@@ -18,6 +18,7 @@ const InvoiceDetailsStepper: FC<IProps> = ({invoice, shipment}) => {
             return new Promise((resolve) => setTimeout(resolve, time));
         };
         useEffect(() => {
+            setActiveStep(0);
             delay(400)
                 .then(() => {
                     if (approved.isApproved) {
