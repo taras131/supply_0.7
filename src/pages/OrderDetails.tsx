@@ -22,6 +22,7 @@ import {routes} from "../utils/routes";
 import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
 import PageLayout from "../components/PageLayout";
 import OrderDetailsEditTitle from "../components/OrderDetailsEditTitle";
+import OrderDetailsEditHelper from "../components/OrderDetailsEditHelper";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -41,31 +42,51 @@ const OrderDetails = () => {
         }
     });
     useEffect(() => {
+        if (isNewOrder && currentOrder.id === "new") {
+            if (currentOrder.title || currentOrder.orderItems[0].name || currentOrder.orderItems[0].catalogNumber) {
+                localStorage.setItem("newOrder", JSON.stringify(currentOrder));
+            }
+        }
+    }, [currentOrder, isNewOrder]);
+    useEffect(() => {
         if (isNewOrder) {
-            dispatch(setCurrentOrder(emptyOrder));
+            const savedOrder = localStorage.getItem("newOrder");
+            if (savedOrder) {
+                dispatch(setCurrentOrder(JSON.parse(savedOrder)));
+            } else {
+                dispatch(setCurrentOrder(emptyOrder));
+            }
             dispatch(setCurrenOrderIsEdit(true));
         } else {
             dispatch(setCurrentOrder(order));
             dispatch(setCurrenOrderIsEdit(false));
         }
-    }, [order]);
+    }, [order, isNewOrder]);
     useEffect(() => {
-        if (currentOrder.title.length > 4 && currentOrder.orderItems[0].name.length > 2) {
+        const filteredOrderItems = currentOrder.orderItems.filter(orderItem => !!orderItem.name || !!orderItem.catalogNumber);
+        if (filteredOrderItems.length > 0 && currentOrder.title) {
             setIsValidate(true);
         } else {
             setIsValidate(false);
         }
     }, [currentOrder]);
     const handleAddClick = () => {
+        const filteredOrderItems = currentOrder.orderItems.filter(orderItem => !!orderItem.name || !!orderItem.catalogNumber);
         if (isNewOrder) {
             const {id, ...newOrder} = currentOrder;
-            dispatch(fetchAddOrder({...newOrder, author: {userId: "", dateCreating: getDateInMilliseconds()}}));
+            dispatch(fetchAddOrder({
+                ...newOrder,
+                orderItems: filteredOrderItems,
+                author: {userId: "", dateCreating: getDateInMilliseconds()},
+            }));
             dispatch(setCurrentOrder(emptyOrder));
+            localStorage.removeItem("newOrder");
         } else {
-            dispatch(fetchUpdateOrder(currentOrder));
+            dispatch(fetchUpdateOrder({...currentOrder, orderItems: filteredOrderItems}));
             dispatch(setCurrenOrderIsEdit(false));
         }
         setIsValidate(false);
+        navigate(routes.orders);
     };
 
     const toggleIsEdit = () => {
@@ -96,6 +117,9 @@ const OrderDetails = () => {
                                 isEdit={isEdit}
                                 orderId={orderId}
                                 isSelectPositionMode={false}/>
+            {isEdit && (
+                <OrderDetailsEditHelper/>
+            )}
             {relatedInvoices && relatedInvoices.length > 0 && !isEdit && (
                 <>
                     <Typography fontSize={"20px"} fontWeight={600}>

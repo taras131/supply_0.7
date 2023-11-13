@@ -3,7 +3,6 @@ import {IInvoice} from "../models/iInvoices";
 import {
     Checkbox,
     Chip, FormControl,
-    FormControlLabel,
     IconButton, MenuItem, Select, SelectChangeEvent,
     TableCell,
     TableRow,

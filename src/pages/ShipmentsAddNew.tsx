@@ -136,8 +136,8 @@ const ShipmentsAddNew: FC = () => {
         setLadingNumber(e.target.value);
     };
     const handleBackClick = () => {
-        navigate(routes.shipments)
-    }
+        navigate(routes.shipments);
+    };
     return (
         <PageLayout maxWidth={1000}>
             <PageHeaderWithTitleAndTwoButtons leftButtonText={"Назад"}

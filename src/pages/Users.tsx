@@ -4,7 +4,6 @@ import {
     Paper,
     Stack,
     Table,
-    TableBody,
     TableCell,
     TableContainer,
     TableHead,
@@ -12,43 +11,43 @@ import {
     Typography, useMediaQuery,
 } from "@mui/material";
 import {getAllUsers} from "../store/selectors/auth";
-import User from "../components/User";
+import UsersList from "../components/UsersList";
 
 const Users = () => {
-    const allUsers = useAppSelector(state => getAllUsers(state));
-    const matches_500 = useMediaQuery("(min-width:500px)");
-    const allUsersList = allUsers.map(user => (<User key={user.id} {...user}/>));
+    const users = useAppSelector(state => getAllUsers(state));
+    const matches_650 = useMediaQuery("(min-width:500px)");
+    const matches_550 = useMediaQuery("(min-width:550px)");
     return (
         <Stack style={{minHeight: "calc(100vh - 60px"}} alignItems="center">
             <TableContainer component={Paper} sx={{maxWidth: 850}}>
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="left" sx={{padding: matches_500 ? "12px" : "4px"}}>
-                                <Typography fontSize={matches_500 ? "18px" : "14px"} fontWeight={600}>
-                                    Имя
+                            <TableCell align="left" sx={{padding: matches_650 ? "12px" : "4px"}}>
+                                <Typography fontSize={matches_650 ? "18px" : "14px"} fontWeight={600}>
+                                    {matches_550 ? "Имя" : "ФИО"}
                                 </Typography>
                             </TableCell>
-                            <TableCell align="left" sx={{padding: matches_500 ? "12px" : "4px"}}>
-                                <Typography fontSize={matches_500 ? "18px" : "14px"} fontWeight={600}>
-                                    Отчество
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="left" sx={{padding: matches_500 ? "12px" : "4px"}}>
-                                <Typography fontSize={matches_500 ? "18px" : "14px"} fontWeight={600}>
+                            {matches_550 && (
+                                <TableCell align="left" sx={{padding: matches_650 ? "12px" : "4px"}}>
+                                    <Typography fontSize={matches_650 ? "18px" : "14px"} fontWeight={600}>
+                                        Отчество
+                                    </Typography>
+                                </TableCell>
+                            )}
+                            <TableCell align="left" sx={{padding: matches_650 ? "12px" : "4px"}}>
+                                <Typography fontSize={matches_650 ? "18px" : "14px"} fontWeight={600}>
                                     Email
                                 </Typography>
                             </TableCell>
-                            <TableCell align="left" sx={{padding: matches_500 ? "12px" : "4px"}}>
-                                <Typography fontSize={matches_500 ? "18px" : "14px"} fontWeight={600}>
+                            <TableCell align="left" sx={{padding: matches_650 ? "12px" : "4px"}}>
+                                <Typography fontSize={matches_650 ? "18px" : "14px"} fontWeight={600}>
                                     Должность
                                 </Typography>
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {allUsersList}
-                    </TableBody>
+                    <UsersList users={users}/>
                 </Table>
             </TableContainer>
         </Stack>);

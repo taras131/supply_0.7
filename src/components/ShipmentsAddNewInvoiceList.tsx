@@ -3,7 +3,6 @@ import {useAppSelector} from "../hooks/redux";
 import {getInvoices} from "../store/selectors/invoices";
 import ShipmentsAddNewInvoiceItem from "./ShipmentsAddNewInvoiceItem";
 import {
-    Paper,
     Table,
     TableBody,
     TableCell,

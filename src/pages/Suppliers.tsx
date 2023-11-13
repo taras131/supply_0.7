@@ -9,7 +9,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Typography, useMediaQuery,
+    Typography,
 } from "@mui/material";
 import {getSuppliers} from "../store/selectors/suppliers";
 import Supplier from "../components/Supplier";
