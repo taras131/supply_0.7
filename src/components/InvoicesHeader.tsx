@@ -54,49 +54,51 @@ const InvoicesHeader: FC<IProps> = ({
     useEffect(() => {
         let amount = 0;
         let isPaymentOrder = false;
-        if (text.length > 0) {
-            const textArr = text.split(" ");
-            for (let i = 0; i < textArr.length - 1; i++) {
-                if (textArr[i] === "ПЛАТЕЖНОЕ" && textArr[i + 1] === "ПОРУЧЕНИЕ") {
-                    isPaymentOrder = true;
-                }
-                if (textArr[i] === "Сумма") {
-                    amount = +textArr[i + 1].split("-").join(".");
+        if (file) {
+            if (text.length > 0) {
+                const textArr = text.split(" ");
+                for (let i = 0; i < textArr.length - 1; i++) {
+                    if (textArr[i] === "ПЛАТЕЖНОЕ" && textArr[i + 1] === "ПОРУЧЕНИЕ") {
+                        isPaymentOrder = true;
+                    }
+                    if (textArr[i] === "Сумма") {
+                        amount = +textArr[i + 1].split("-").join(".");
+                    }
                 }
             }
-        }
-        const currentInvoice = invoices.filter(invoice => invoice.amount === amount)[0];
-        if (currentInvoice && currentInvoice.id && file && isPaymentOrder) {
-            const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
-                const newPaid = {
-                    isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
+            const currentInvoice = invoices.filter(invoice => invoice.amount === amount)[0];
+            if (currentInvoice && currentInvoice.id && file && isPaymentOrder) {
+                const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
+                    const newPaid = {
+                        isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
+                    };
+                    dispatch(fetchUpdateInvoice({invoiceId: currentInvoice.id, newPaid: newPaid}));
                 };
-                dispatch(fetchUpdateInvoice({invoiceId: currentInvoice.id, newPaid: newPaid}));
-            };
-            dispatch(fetchUploadFile({
-                file: file,
-                updateFile: onLoadingPaymentOrderFile,
-                setIsUpdateFileLoading: setIsUploadFileLoading,
-            }));
-            dispatch(setMessage({
-                text: "Платёжное поручение успешно прикреплено",
-                severity: MESSAGE_SEVERITY.success,
-            }));
-        } else {
-            if (!isPaymentOrder && file) {
+                dispatch(fetchUploadFile({
+                    file: file,
+                    updateFile: onLoadingPaymentOrderFile,
+                    setIsUpdateFileLoading: setIsUploadFileLoading,
+                }));
                 dispatch(setMessage({
-                    text: "Не является платёжным поручением",
-                    severity: MESSAGE_SEVERITY.error,
+                    text: "Платёжное поручение успешно прикреплено",
+                    severity: MESSAGE_SEVERITY.success,
                 }));
             } else {
-                if (file && !amount) {
-                    dispatch(setMessage({text: "Не удалось распознать сумму", severity: MESSAGE_SEVERITY.error}));
+                if (!isPaymentOrder) {
+                    dispatch(setMessage({
+                        text: "Не является платёжным поручением",
+                        severity: MESSAGE_SEVERITY.error,
+                    }));
                 } else {
-                    if (file && !currentInvoice) {
-                        dispatch(setMessage({
-                            text: `Нет неоплаченных счетов с суммой ${amount}`,
-                            severity: MESSAGE_SEVERITY.error,
-                        }));
+                    if (file && !amount) {
+                        dispatch(setMessage({text: "Не удалось распознать сумму", severity: MESSAGE_SEVERITY.error}));
+                    } else {
+                        if (file && !currentInvoice) {
+                            dispatch(setMessage({
+                                text: `Нет неоплаченных счетов с суммой ${amount}`,
+                                severity: MESSAGE_SEVERITY.error,
+                            }));
+                        }
                     }
                 }
             }
@@ -107,10 +109,11 @@ const InvoicesHeader: FC<IProps> = ({
     const handleFileChange = async (event: any) => {
         setIsUploadFileLoading(true);
         const file = event.target.files[0];
-        if(file.name.split('.').pop() === "pdf") {
-            dispatch(setMessage({text: "Формат файла не pdf", severity: MESSAGE_SEVERITY.error}))
+        let isPDF = false;
+        if (file && file.name.split(".").pop() === "pdf") {
+            isPDF = true;
         }
-        if (file && file.name.split('.').pop() === "pdf") {
+        if (file && isPDF) {
             try {
                 setFile(file);
                 const fileReader = new FileReader();
@@ -134,6 +137,13 @@ const InvoicesHeader: FC<IProps> = ({
                 alert("Ошибка при чтении PDF файла:", error);
                 setIsUploadFileLoading(false);
             }
+        } else {
+            dispatch(setMessage({
+                text: "Формат файла не pdf",
+                severity: MESSAGE_SEVERITY.error,
+            }));
+            setFile(null)
+            setIsUploadFileLoading(false)
         }
     };
 
@@ -161,7 +171,7 @@ const InvoicesHeader: FC<IProps> = ({
                             : "Платёжное"}
                         <input
                             type="file"
-                            accept="application/pdf"
+
                             hidden
                             onChange={handleFileChange}
                         />
