@@ -142,8 +142,8 @@ const InvoicesHeader: FC<IProps> = ({
                 text: "Формат файла не pdf",
                 severity: MESSAGE_SEVERITY.error,
             }));
-            setFile(null)
-            setIsUploadFileLoading(false)
+            setFile(null);
+            setIsUploadFileLoading(false);
         }
     };
 
@@ -171,7 +171,7 @@ const InvoicesHeader: FC<IProps> = ({
                             : "Платёжное"}
                         <input
                             type="file"
-
+                            accept="application/pdf"
                             hidden
                             onChange={handleFileChange}
                         />
