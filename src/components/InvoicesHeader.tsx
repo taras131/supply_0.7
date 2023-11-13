@@ -107,7 +107,10 @@ const InvoicesHeader: FC<IProps> = ({
     const handleFileChange = async (event: any) => {
         setIsUploadFileLoading(true);
         const file = event.target.files[0];
-        if (file) {
+        if(file.name.split('.').pop() === "pdf") {
+            dispatch(setMessage({text: "Формат файла не pdf", severity: MESSAGE_SEVERITY.error}))
+        }
+        if (file && file.name.split('.').pop() === "pdf") {
             try {
                 setFile(file);
                 const fileReader = new FileReader();
@@ -146,7 +149,7 @@ const InvoicesHeader: FC<IProps> = ({
                                                             handleCanceledInvoiceChange={handleCanceledInvoiceChange}
                                                             isShowPaidInvoice={isShowPaidInvoice}
                                                             handlePaidInvoiceChange={handlePaidInvoiceChange}/>)}
-                <ButtonGroup aria-label="outlined primary button group"  size={matches_700 ? "medium" : "small"}>
+                <ButtonGroup aria-label="outlined primary button group" size={matches_700 ? "medium" : "small"}>
                     <LoadingButton
                         size={matches_700 ? "medium" : "small"}
                         component="label"
