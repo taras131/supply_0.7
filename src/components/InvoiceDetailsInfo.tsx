@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import {Stack} from "@mui/material";
 import NameWithValue from "./NameWithValue";
 import Divider from "@mui/material/Divider";

@@ -138,7 +138,7 @@ const OrderPositionsListItem: FC<IProps> = ({
             <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : 0}}>
                 {isEdit && (<IconButton aria-label="delete"
                                         onClick={handleRemoveClick}
-                                        disabled={orderItem.id === 0}>
+                                        disabled={orderItem.id === 1}>
                     <DeleteIcon/>
                 </IconButton>)}
                 {isSelectPositionMode && (<Checkbox

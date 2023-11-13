@@ -10,8 +10,10 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import {fetchOut} from "../store/actionsCreators/auth";
-import {Grid, Container} from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import {Container} from "@mui/material";
+import NameWithValue from "../components/NameWithValue";
+import Grid from "@mui/material/Unstable_Grid2";
+import {CENTER, START} from "../styles/const";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -28,37 +30,34 @@ const Profile = () => {
     if (isAuthLoading) return (<Preloader/>);
     return (
         <Container component="div" maxWidth="xs" style={{marginTop: "150px"}}>
-            <CssBaseline/>
-            <Stack spacing={4} justifyContent="center" alignItems="center">
-                <Typography variant="h3" component="h2" fontWeight={700}>
-                    Профиль
+            <Stack spacing={4} justifyContent="center" alignItems="center" sx={{width: "350px"}}>
+                <Typography variant="h2" component="h2" fontWeight={700} fontSize={"26px"}>
+                    Профиль:
                 </Typography>
-                <Grid container spacing={3} justifyContent="center" alignItems="center" style={{maxWidth: "600px"}}>
-                    <Grid item>
-                        <Avatar sx={{bgcolor: deepPurple[500]}}>{user.email.substring(0, 2)}</Avatar>
+                <Grid container
+                      spacing={3}
+                      sx={{width: "100%"}}>
+                    <Grid xs={4} alignItems={CENTER} justifyContent={CENTER}>
+                        <Stack sx={{width: "100%", height: "100%"}} alignItems={START} justifyContent={CENTER}>
+                            <Avatar sx={{bgcolor: deepPurple[500], width: "70px", height: "70px"}}>
+                                {user.firstName[0]} {user.middleName[0]}
+                            </Avatar>
+                        </Stack>
                     </Grid>
-                    <Grid item>
-                        <Stack spacing={3} direction="row" alignItems="center">
-                            <Typography component="span" fontWeight={600}>Имя:</Typography>
-                            <p>{user.firstName}</p>
-                        </Stack>
-                        <Stack spacing={3} direction="row" alignItems="center">
-                            <Typography component="span" fontWeight={600}>Отчество:</Typography>
-                            <p>{user.middleName}</p>
-                        </Stack>
-                        <Stack spacing={3} direction="row" alignItems="center">
-                            <Typography component="span" fontWeight={600}>Должность:</Typography>
-                            <p>{user.role}</p>
-                        </Stack>
-                        <Stack spacing={3} direction="row" alignItems="center">
-                            <Typography component="span" fontWeight={600}>id:</Typography>
-                            <p>{user.id}</p>
-                        </Stack>
-                        <Stack spacing={2} direction="row" alignItems="center">
-                            <Typography component="span" fontWeight={600}>
-                                email:
-                            </Typography>
-                            <p>{user.email}</p>
+                    <Grid xs={4}>
+                        <Stack spacing={2}>
+                            <NameWithValue width={"220px"} title={"Имя:"}>
+                                {user.firstName}
+                            </NameWithValue>
+                            <NameWithValue width={"220px"} title={"Отчество:"}>
+                                {user.middleName}
+                            </NameWithValue>
+                            <NameWithValue width={"220px"} title={"id:"}>
+                                {user.id}
+                            </NameWithValue>
+                            <NameWithValue width={"220px"} title={"email:"}>
+                                {user.email}
+                            </NameWithValue>
                         </Stack>
                     </Grid>
                 </Grid>

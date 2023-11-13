@@ -1,14 +1,15 @@
 import React from "react";
-import {Stack} from "@mui/material";
+import {} from "@mui/material";
 import MainMenuHeader from "../components/MainMenuHeader";
 import MainMenuList from "../components/MainMenuList";
+import PageLayout from "../components/PageLayout";
 
 const MainMenu = () => {
     return (
-        <Stack alignItems="center" spacing={1} sx={{color: "black"}}>
+        <PageLayout maxWidth={1000}>
             <MainMenuHeader/>
             <MainMenuList/>
-        </Stack>
+        </PageLayout>
     );
 };
 

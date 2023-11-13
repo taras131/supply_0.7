@@ -15,50 +15,49 @@ import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {fetchLogin, fetchRegister} from "../store/actionsCreators/auth";
 import {getAuthErrorMessage, getIsAuth, getIsAuthLoading} from "../store/selectors/auth";
 import MessageWindow from "../components/MessageWindow";
-import {validateEmail} from "../utils/services";
 import {setMessage} from "../store/reducers/message";
 import {MESSAGE_SEVERITY} from "../utils/const";
-import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
-
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {useInput} from "../hooks/useInput";
 
 const Auth = () => {
     const location: any = useLocation();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const selectLabelId = useId();
+    const selectUserRoleId = useId();
     const isAuth = useAppSelector(state => getIsAuth(state));
     const isLoading = useAppSelector(state => getIsAuthLoading(state));
-    const selectLabelId = useId();
-    const selectId = useId();
-    const selectUserRoleId = useId();
     const errorMessage = useAppSelector(state => getAuthErrorMessage(state));
-    const [inputValues, setInputValues] = useState({
-        email: "",
-        password: "",
-        firstName: "",
-        middleName: "",
-    });
-    const [validationErrors, setValidationErrors] = useState({
-        email: "",
-        password: "",
-        firstName: "",
-        middleName: "",
-    });
-    const [textErrors, setTextErrors] = useState({
-        email: "",
-        password: "",
-        firstName: "",
-        middleName: "",
-    });
-    const [selectedUserRole, setSelectedUserRole] = useState("");
-    const handleUserRoleChange = (e: SelectChangeEvent) => {
-        setSelectedUserRole(e.target.value as string);
-    };
     const {pathname} = useLocation();
     const isRegister = pathname === routes.register;
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
-    const toggleIsOpenErrorMessageWindow = () => {
-        setIsOpenErrorMessageWindow(prev => !prev);
-    };
+    const email = useInput("", {isEmpty: true, minLength: 4, isEmail: true});
+    const password = useInput("", {isEmpty: true, minLength: 6});
+    const firstName = useInput("", {isEmpty: true, minLength: 2});
+    const middleName = useInput("", {isEmpty: true, minLength: 4});
+    const role = useInput("", {isEmpty: true});
+    useEffect(() => {
+        if (isRegister) {
+            if (email.isValid && password.isValid && firstName.isValid
+                && middleName.isValid && role.isValid) {
+                setIsSubmitDisabled(false);
+            } else {
+                setIsSubmitDisabled(true);
+            }
+        } else {
+            if (email.isValid && password.isValid) {
+                setIsSubmitDisabled(false);
+            } else {
+                setIsSubmitDisabled(true);
+            }
+        }
+
+    }, [
+        email.isValid, password.isValid, firstName.isValid, middleName.isValid,
+        role.isValid, isRegister,
+    ]);
     useEffect(() => {
         if (errorMessage) {
             setIsOpenErrorMessageWindow(true);
@@ -77,48 +76,23 @@ const Auth = () => {
             }));
         }
     }, [isAuth]);
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.name === "email") {
-            setValidationErrors({...validationErrors, email: ""});
-            setTextErrors({...textErrors, email: ""});
-            if (!validateEmail(e.target.value)) {
-                setValidationErrors({...validationErrors, email: "Введён не email"});
-            }
-        } else {
-            setValidationErrors({...validationErrors, password: ""});
-            setTextErrors({...textErrors, password: ""});
-            if (e.target.value.length < 6) {
-                setValidationErrors({...validationErrors, password: "Пароль должен быть не менее 6 символов"});
-            }
-        }
-        setInputValues({...inputValues, [e.target.name]: e.target.value});
+    const toggleIsOpenErrorMessageWindow = () => {
+        setIsOpenErrorMessageWindow(prev => !prev);
     };
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (isRegister) {
             dispatch(fetchRegister({
-                firstName: inputValues.firstName,
-                middleName: inputValues.middleName,
-                password: inputValues.password,
-                email: inputValues.email,
-                role: selectedUserRole,
+                firstName: firstName.value,
+                middleName: middleName.value,
+                password: password.value,
+                email: email.value,
+                role: role.value,
             }));
         } else {
-            dispatch(fetchLogin(inputValues));
+            dispatch(fetchLogin({email: email.value, password: password.value}));
         }
     };
-    useEffect(() => {
-        const validationTimeout = setTimeout(() => {
-            if (validationErrors.email) {
-                setTextErrors({...textErrors, email: validationErrors.email});
-            }
-            if (validationErrors.password) {
-                setTextErrors({...textErrors, password: validationErrors.password});
-            }
-        }, 1300);
-
-        return () => clearTimeout(validationTimeout);
-    }, [validationErrors.email, validationErrors.password, inputValues.email, inputValues.password]);
     return (
         <Container component="div" maxWidth="xs">
             <CssBaseline/>
@@ -138,84 +112,107 @@ const Auth = () => {
                         ? "Регистрация"
                         : "Вход"}
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                    <TextField
-                        onChange={handleInputChange}
-                        value={inputValues.email}
-                        margin="normal"
-                        fullWidth
-                        id="email"
-                        label="Email"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        error={!!textErrors.email}
-                        helperText={textErrors.email}
-                    />
-                    <TextField
-                        onChange={handleInputChange}
-                        value={inputValues.password}
-                        margin="normal"
-                        fullWidth
-                        name="password"
-                        label="Пароль"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        error={!!textErrors.password}
-                        helperText={textErrors.password}
-                    />
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1, width: "300px"}}>
+                    <div style={{height: 95}}>
+                        <TextField
+                            onChange={email.onChange}
+                            value={email.value}
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            label="Email"
+                            name="email"
+                            autoComplete="email"
+                            error={!!email.error}
+                            type={"email"}
+                        />
+                        {email.error && (<Typography fontSize={12} color="error">
+                            {email.error}
+                        </Typography>)}
+                    </div>
+                    <div style={{height: 95}}>
+                        <TextField
+                            onChange={password.onChange}
+                            value={password.value}
+                            margin="normal"
+                            fullWidth
+                            name="password"
+                            label="Пароль"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            error={!!password.error}
+                        />
+                        {password.error && (<Typography fontSize={12} color="error">
+                            {password.error}
+                        </Typography>)}
+                    </div>
                     {isRegister && (
                         <>
-                            <TextField
-                                onChange={handleInputChange}
-                                value={inputValues.firstName}
-                                margin="normal"
-                                fullWidth
-                                name="firstName"
-                                label="Имя"
-                                type="text"
-                                id="firstName"
-                                autoComplete="firstName"
-                                error={!!textErrors.firstName}
-                                helperText={textErrors.firstName}
-                            />
-                            <TextField
-                                onChange={handleInputChange}
-                                value={inputValues.middleName}
-                                margin="normal"
-                                fullWidth
-                                name="middleName"
-                                label="Отчество"
-                                type="text"
-                                id="middleName"
-                                autoComplete="middleName"
-                                error={!!textErrors.middleName}
-                                helperText={textErrors.middleName}
-                            />
-                            <FormControl fullWidth sx={{width: "100%", marginTop: "16px"}}>
-                                <InputLabel id={selectLabelId}>Роль</InputLabel>
-                                <Select
-                                    id={selectId}
-                                    name={selectUserRoleId}
-                                    labelId={selectLabelId}
-                                    defaultValue={""}
-                                    value={selectedUserRole}
-                                    label={selectLabelId}
-                                    onChange={handleUserRoleChange}
-                                    sx={{overflow: "hidden"}}
-                                >
-                                    <MenuItem key={1} value={"Директор"}>
-                                        Директор
-                                    </MenuItem>
-                                    <MenuItem key={2} value={"Снабженец"}>
-                                        Снабженец
-                                    </MenuItem>
-                                    <MenuItem key={3} value={"Бухгалтер"}>
-                                        Бухгалтер
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
+                            <div style={{height: 95}}>
+                                <TextField
+                                    onChange={firstName.onChange}
+                                    value={firstName.value}
+                                    margin="normal"
+                                    fullWidth
+                                    name="firstName"
+                                    label="Имя"
+                                    type="text"
+                                    id="firstName"
+                                    autoComplete="firstName"
+                                    error={!!firstName.error}
+
+                                />
+                                {firstName.error && (<Typography fontSize={12} color="error">
+                                    {firstName.error}
+                                </Typography>)}
+                            </div>
+                            <div style={{height: 95}}>
+                                <TextField
+                                    onChange={middleName.onChange}
+                                    value={middleName.value}
+                                    margin="normal"
+                                    fullWidth
+                                    name="middleName"
+                                    label="Отчество"
+                                    type="text"
+                                    id="middleName"
+                                    autoComplete="middleName"
+                                    error={!!middleName.error}
+                                />
+                                {middleName.error && (<Typography fontSize={12} color="error">
+                                    {middleName.error}
+                                </Typography>)}
+                            </div>
+                            <div style={{height: 95}}>
+                                <FormControl fullWidth sx={{width: "100%", marginTop: "16px"}}>
+                                    <InputLabel id={selectLabelId}>Роль</InputLabel>
+                                    <Select
+                                        id={selectUserRoleId}
+                                        name={"role"}
+                                        labelId={selectLabelId}
+                                        defaultValue={""}
+                                        value={role.value}
+                                        label={selectLabelId}
+                                        onChange={role.onChange}
+                                        sx={{overflow: "hidden"}}
+                                        error={!!role.error}
+                                    >
+                                        <MenuItem key={1} value={"Директор"}>
+                                            Директор
+                                        </MenuItem>
+                                        <MenuItem key={2} value={"Снабженец"}>
+                                            Снабженец
+                                        </MenuItem>
+                                        <MenuItem key={3} value={"Бухгалтер"}>
+                                            Бухгалтер
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                                {role.error && (<Typography fontSize={12} color="error">
+                                    {role.error}
+                                </Typography>)}
+                            </div>
                         </>
                     )}
                     <LoadingButton
@@ -225,10 +222,7 @@ const Auth = () => {
                         fullWidth
                         variant="contained"
                         sx={{mt: 3, mb: 2}}
-                        disabled={!!validationErrors.email
-                            || !!validationErrors.password
-                            || inputValues.password.length === 0
-                            || inputValues.email.length === 0}
+                        disabled={isSubmitDisabled}
                     >
                         {isRegister
                             ? "Регистрация"

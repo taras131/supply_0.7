@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Stack, Typography} from "@mui/material";
+import {STRING_EMPTY} from "../utils/const";
 
 const subTitle = "Эффективное управление, учет и документооборот.";
 
 const MainMenuHeader = () => {
-    const [showSubtitle, setShowSubtitle] = useState("");
+    const [showSubtitle, setShowSubtitle] = useState(STRING_EMPTY);
     const updateSubtitle = (char: string) => {
         setShowSubtitle(prev => prev + char);
     };
@@ -20,7 +21,7 @@ const MainMenuHeader = () => {
         return () => clearTimeout(timeout);
     }, []);
     return (
-        <Stack spacing={1} justifyContent={"start"} sx={{maxWidth: "1000px", width: "100%", padding: "16px 16px"}}>
+        <Stack spacing={1} sx={{width: "100%", height: "90px", paddingLeft: "16px", paddingRight: "16px"}}>
             <Typography fontWeight={700} fontSize={40}>
                 Иткана
             </Typography>
