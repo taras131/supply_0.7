@@ -6,6 +6,8 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Grid from "@mui/material/Unstable_Grid2";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {APPROVED_GRADIENT, CANCEL_GRADIENT, SUCCESS_GRADIENT} from "../styles/const";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+
 
 const InvoicesHelper = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");
@@ -53,6 +55,12 @@ const InvoicesHelper = () => {
                     <MoreVertIcon color="action"/>
                     <Typography>
                         - получить более подробную информацию.
+                    </Typography>
+                </Stack>
+                <Stack direction={"row"} spacing={3} alignItems={"center"} mt={matches_700 ? 2 : 1}>
+                    <LocalShippingIcon color="action"/>
+                    <Typography>
+                        - счёт отгружен.
                     </Typography>
                 </Stack>
             </Grid>

@@ -27,7 +27,7 @@ const ShipmentsHelper = () => {
             <Grid xs={matches_700 ? 6 : 12}>
                 <Stack direction={"row"} spacing={3} alignItems={"center"}>
                     <AirplanemodeActiveIcon/>
-                    <Typography>- отпарвлен ави доставкой.</Typography>
+                    <Typography>- отправлен авиа доставкой.</Typography>
                 </Stack>
                 <Stack direction={"row"} spacing={3} alignItems={"center"} mt={matches_700 ? 2 : 1}>
                     <DirectionsSubwayIcon/>

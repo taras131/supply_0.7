@@ -3,6 +3,7 @@ import ModalWindow from "./ModalWindow";
 import {Button, Stack, TextField} from "@mui/material";
 import {useAppDispatch} from "../hooks/redux";
 import {fetchAddSupplier} from "../store/actionsCreators/suppliers";
+import {StyledTextField} from "../styles/const";
 
 interface IProps {
     isOpenModal: boolean
@@ -52,7 +53,7 @@ const SuppliersAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
                            name="name"
                            label="Поставщик"
                            helperText={inputValueError.name}/>
-                <TextField value={inputValue.INN}
+                <StyledTextField value={inputValue.INN}
                            onChange={handleInputChange}
                            name="INN"
                            label="ИНН"

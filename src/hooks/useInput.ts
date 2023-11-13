@@ -35,18 +35,21 @@ export const useInput = (initialValue: string, validations: IValidations) => {
     const [value, setValue] = useState(initialValue);
     const [isValid, setIsValid] = useState(false);
     const [error, setError] = useState("");
+    const [isHappenedFocus, setIsHappenedFocus] = useState(false);
     const valid = useValidation(value, validations);
     let timeout: NodeJS.Timeout;
     const setErrorText = () => {
         setError("");
-        if (valid.isEmailError) {
-            setError("не является email");
-        }
-        if (valid.minLengthError) {
-            setError(`поле не может быть короче ${validations.minLength} символов`);
-        }
-        if (valid.isEmpty) {
-            setError("поле не может быть пустым");
+        if (isHappenedFocus) {
+            if (valid.isEmailError) {
+                setError("не является email");
+            }
+            if (valid.minLengthError) {
+                setError(`поле не может быть короче ${validations.minLength} символов`);
+            }
+            if (valid.isEmpty) {
+                setError("поле не может быть пустым");
+            }
         }
     };
     useEffect(() => {
@@ -65,8 +68,13 @@ export const useInput = (initialValue: string, validations: IValidations) => {
         setError("");
         setValue(e.target.value);
     };
+    const onFocus = () => {
+        if (!isHappenedFocus) {
+            setIsHappenedFocus(true)
+        }
+    }
     const set = (str: string) => {
         setValue(str);
     };
-    return {value, onChange, isValid, error, set};
+    return {value, onChange, isValid, error, set, onFocus};
 };

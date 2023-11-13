@@ -14,7 +14,7 @@ const SuppliersInfo = () => {
         <Stack sx={{maxWidth: 1350, width: "100%"}}
                direction={matches_400 ? ROW : COLUMN}
                alignItems={matches_400 ? CENTER : START}
-               justifyContent={matches_400 ? SPACE_BETWEEN : START}
+               justifyContent={START}
                spacing={matches_400 ? 2 : 1}>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"}
@@ -30,7 +30,8 @@ const SuppliersInfo = () => {
             </Stack>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"}
-                            fontSize={matches_500 ? "16px" : "12px"}>
+                            fontSize={matches_500 ? "16px" : "12px"}
+                            fontWeight={matches_500 ? 600 : 500}>
                     Оборот:
                 </Typography>
                 <Typography color={"darkblue"}
