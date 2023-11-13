@@ -71,7 +71,7 @@ const OrdersListItem: FC<IProps> = ({
                            sx={{width: "100%", cursor: "pointer"}}
                            onClick={handleMoreClick}
                            mt={2} pr={2}>
-                        <Typography>
+                        <Typography color={"primary"}>
                             Подробнее
                         </Typography>
                         <MoreHorizIcon color={"primary"}/>

@@ -2,7 +2,7 @@ import React from "react";
 import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 import {getCurrentAnnualOrders, getNumberAnnualOrders} from "../store/selectors/orders";
-import {CENTER, COLUMN, ROW, SPACE_BETWEEN, START} from "../styles/const";
+import {CENTER, COLUMN, ROW, START} from "../styles/const";
 
 const OrdersInfo = () => {
     const matches_500 = useMediaQuery("(min-width:500px)");
@@ -13,7 +13,7 @@ const OrdersInfo = () => {
         <Stack sx={{maxWidth: 1000, width: "100%"}}
                direction={matches_400 ? ROW : COLUMN}
                alignItems={matches_400 ? CENTER : START}
-               justifyContent={matches_400 ? SPACE_BETWEEN : START}
+               justifyContent={START}
                spacing={matches_400 ? 2 : 1}>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"} fontSize={matches_500 ? "16px" : "12px"}

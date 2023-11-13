@@ -125,6 +125,7 @@ const Auth = () => {
                             autoComplete="email"
                             error={!!email.error}
                             type={"email"}
+                            onFocus={email.onFocus}
                         />
                         {email.error && (<Typography fontSize={12} color="error">
                             {email.error}
@@ -142,6 +143,7 @@ const Auth = () => {
                             id="password"
                             autoComplete="current-password"
                             error={!!password.error}
+                            onFocus={password.onFocus}
                         />
                         {password.error && (<Typography fontSize={12} color="error">
                             {password.error}
@@ -161,7 +163,7 @@ const Auth = () => {
                                     id="firstName"
                                     autoComplete="firstName"
                                     error={!!firstName.error}
-
+                                    onFocus={firstName.onFocus}
                                 />
                                 {firstName.error && (<Typography fontSize={12} color="error">
                                     {firstName.error}
@@ -179,6 +181,7 @@ const Auth = () => {
                                     id="middleName"
                                     autoComplete="middleName"
                                     error={!!middleName.error}
+                                    onFocus={middleName.onFocus}
                                 />
                                 {middleName.error && (<Typography fontSize={12} color="error">
                                     {middleName.error}
@@ -197,6 +200,7 @@ const Auth = () => {
                                         onChange={role.onChange}
                                         sx={{overflow: "hidden"}}
                                         error={!!role.error}
+                                        onFocus={email.role}
                                     >
                                         <MenuItem key={1} value={"Директор"}>
                                             Директор

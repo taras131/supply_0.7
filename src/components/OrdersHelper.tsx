@@ -50,12 +50,6 @@ const OrdersHelper = () => {
                         - разыернуть содержимое заявки.
                     </Typography>
                 </Stack>
-                <Stack direction={"row"} spacing={3} alignItems={"center"} mt={matches_700 ? 2 : 1}>
-                    <MoreHorizIcon/>
-                    <Typography>
-                        - перейти к более детальной информации.
-                    </Typography>
-                </Stack>
             </Grid>
         </Grid>
     );

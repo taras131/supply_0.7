@@ -67,13 +67,12 @@ const InvoicesAddNewInputFields: FC<IProps> = ({
                     <FormControl fullWidth>
                         <InputLabel id={selectLabelId}>Поставщик</InputLabel>
                         <Select
-
                             id={selectId}
                             name={selectSupplier}
                             labelId={selectLabelId}
                             defaultValue={""}
                             value={selectedSupplierId}
-                            label={selectLabelId}
+                            label={"Поставщик"}
                             onChange={handleSupplierChange}
                             sx={{overflow: "hidden"}}
                         >

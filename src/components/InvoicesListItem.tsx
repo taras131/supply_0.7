@@ -126,27 +126,27 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                 "&:last-child td, &:last-child th": {border: 0},
                 background: backgroundGradient,
                 color: textColor,
-                padding: matches_1300 ? "16px" : 0,
+                padding: matches_1300 ? "8px" : 0,
                 fontSize: matches_470 ? "14px" : "11px",
             }}
         >
             {!forShipmentMode && (
-                <TableCell align={CENTER} sx={{padding: matches_1050 ? "16px" : 0, paddingLeft: "6px"}}>
+                <TableCell align={CENTER} sx={{padding: matches_1050 ? "8px" : 0, paddingLeft: "6px"}}>
                     <ApprovedInvoiceCheckbox invoice={invoice}/>
                 </TableCell>
             )}
-            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : 0}} align={CENTER}>
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : 0}} align={CENTER}>
                 {matches_700
                     ? invoiceCreatedDate
                     : deleteYearFromString(invoiceCreatedDate)}
             </TableCell>
-            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : "2px"}}>
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : 0}}>
                 {matches_700
                     ? supplierName
                     : extractAllText(supplierName).slice(0, 12)}
             </TableCell>
             {matches_1050 && (
-                <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "6px"}}
+                <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "8px" : "4px"}}
                            onClick={handleINNClick}>
                     <Tooltip title={COPY_TEXT}>
                         <Stack direction={ROW} alignItems={CENTER} spacing={1}>
@@ -160,7 +160,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                     </Tooltip>
                 </TableCell>
             )}
-            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "16px" : "2px"}}
+            <TableCell sx={{cursor: CURSOR_POINTER, color: INHERIT, padding: matches_1050 ? "8px" : 0}}
                        align={RIGHT}
                        onClick={handleAmountClick}>
                 <Tooltip title={COPY_TEXT}>
@@ -176,7 +176,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                 </Tooltip>
             </TableCell>
             {matches_1300 && !forShipmentMode && (
-                <TableCell sx={{color: INHERIT}} align={CENTER}>
+                <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : "4px"}} align={CENTER}>
                     {invoice.isWithVAT
                         ? (<Typography>
                             {YES_TEXT}
@@ -188,7 +188,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
             )}
             {matches_1050 && (
                 <TableCell
-                    sx={{color: INHERIT}}
+                    sx={{color: INHERIT, padding: matches_1050 ? "8px" : "4px"}}
                     align={CENTER}>
                     {invoice.paid.isPaid
                         ? convertMillisecondsToDate(invoice.paid.date)
@@ -201,11 +201,11 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                         )}
                 </TableCell>
             )}
-            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "16px" : 0}}
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : 0}}
                        align={CENTER}>
                 {matches_700
                     ? (<Chip
-                        label={DOWNLOAD_TEXT}
+                        label={"Счёт"}
                         component={COMPONENT_A}
                         href={invoice.invoiceFileLink}
                         icon={<DownloadIcon/>}
@@ -221,7 +221,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
             </TableCell>
             {matches_1300 && !forShipmentMode && (
                 <>
-                    <TableCell sx={{color: INHERIT}} align={CENTER}>
+                    <TableCell sx={{color: INHERIT}} align={CENTER} sx={{padding: matches_1050 ? "8px" : "4px"}}>
                         {invoice.paid.isPaid
                             ? (<Chip
                                 sx={{width: "100%"}}
@@ -258,7 +258,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                             )}
                     </TableCell>
                     {!forShipmentMode && (
-                        <TableCell sx={{padding: matches_1050 ? "16px" : "6px"}}>
+                        <TableCell sx={{padding: matches_1050 ? "8px" : "4px"}}>
                             <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
                                 {isShipment
                                     ? (<LocalShippingIcon color={SUCCESS}/>)
@@ -268,7 +268,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                     )}
                 </>
             )}
-            <TableCell sx={{padding: matches_1050 ? "16px" : 0}}>
+            <TableCell sx={{padding: matches_1050 ? "8px" : 0}}>
                 <IconButton aria-label="show more" onClick={handleMoreClick}>
                     <MoreVertIcon color={SUCCESS}/>
                 </IconButton>

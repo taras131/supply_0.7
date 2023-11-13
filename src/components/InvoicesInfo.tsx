@@ -10,10 +10,10 @@ const InvoicesInfo = () => {
     const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state));
     const amountUnpaidInvoices = useAppSelector(state => getAmountUnpaidInvoices(state));
     return (
-        <Stack sx={{maxWidth: 1350, width: "100%"}}
+        <Stack sx={{width: "100%", maxWidth: 1350}}
                direction={matches_400 ? ROW : COLUMN}
                alignItems={matches_400 ? CENTER : START}
-               justifyContent={matches_400 ? SPACE_BETWEEN : START}
+               justifyContent={START}
                spacing={matches_400 ? 2 : 1}>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"}
@@ -29,7 +29,8 @@ const InvoicesInfo = () => {
             </Stack>
             <Stack direction={ROW} spacing={1}>
                 <Typography color={"gray"}
-                            fontSize={matches_500 ? "16px" : "12px"}>
+                            fontSize={matches_500 ? "16px" : "12px"}
+                            fontWeight={matches_500 ? 600 : 500}>
                     На сумму:
                 </Typography>
                 <Typography color={"darkblue"}
