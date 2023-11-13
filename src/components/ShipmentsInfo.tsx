@@ -2,7 +2,7 @@ import React from "react";
 import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
 import {getNumberAirShipmentsRoute, getNumberRailShipmentsRoute} from "../store/selectors/shipments";
-import {CENTER, COLUMN, ROW, SPACE_BETWEEN, START} from "../styles/const";
+import {CENTER, COLUMN, ROW, START} from "../styles/const";
 
 const ShipmentsInfo = () => {
     const numberAirShipmentsRoute = useAppSelector(state => getNumberAirShipmentsRoute(state));

@@ -41,7 +41,6 @@ const InvoicesAddNewInputFields: FC<IProps> = ({
                                                    setIsWithVAT, selectedSupplierId, isWithVAT,
                                                    fileName, isUploadFileLoading, handleChangeInputFile,
                                                }) => {
-    const matches_700 = useMediaQuery("(min-width:700px)");
     const matches_500 = useMediaQuery("(min-width:500px)");
     const selectLabelId = useId();
     const selectId = useId();

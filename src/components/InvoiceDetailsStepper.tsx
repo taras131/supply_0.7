@@ -98,14 +98,14 @@ const InvoiceDetailsStepper: FC<IProps> = ({invoice, shipment}) => {
             ? convertMillisecondsToDate(shipment.author.dateCreating) : "";
         return (
             <Stepper activeStep={activeStep} orientation={"vertical"} sx={{height: "100%"}}>
-                <Step key={0}>
+                <Step key={"Добавлен"}>
                     <StepLabel>
                         <Typography fontSize={"16px"} fontWeight={550}>
                             {`Добавлен ${createdDate} ${authorInvoiceFullName}`}
                         </Typography>
                     </StepLabel>
                 </Step>
-                <Step key={1}>
+                <Step key={"Одобрен"}>
                     <StepLabel error={cancel && cancel.isCancel}>
                         <Typography fontSize={"16px"} fontWeight={550}>
                             {cancel && cancel.isCancel
@@ -114,21 +114,21 @@ const InvoiceDetailsStepper: FC<IProps> = ({invoice, shipment}) => {
                         </Typography>
                     </StepLabel>
                 </Step>
-                <Step key={2}>
+                <Step key={"Оплачен"}>
                     <StepLabel>
                         <Typography fontSize={"16px"} fontWeight={550}>
                             {`Оплачен ${paidDate} ${paidAuthorFullName}`}
                         </Typography>
                     </StepLabel>
                 </Step>
-                <Step key={3}>
+                <Step key={"Отгружен"}>
                     <StepLabel>
                         <Typography fontSize={"16px"} fontWeight={550}>
                             {`Отгружен ${shipmentDate} ${shipmentAuthorFullName}`}
                         </Typography>
                     </StepLabel>
                 </Step>
-                <Step key={4}>
+                <Step key={"Получен"}>
                     <StepLabel>
                         <Typography fontSize={"16px"} fontWeight={550}>
                             {`Получен ${receivingDate} ${receivingAuthorFullName}`}

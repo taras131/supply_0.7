@@ -35,12 +35,12 @@ export const useInput = (initialValue: string, validations: IValidations) => {
     const [value, setValue] = useState(initialValue);
     const [isValid, setIsValid] = useState(false);
     const [error, setError] = useState("");
-    const [isHappenedFocus, setIsHappenedFocus] = useState(false);
+    const [isHappenedChange, setIsHappenedChange] = useState(false);
     const valid = useValidation(value, validations);
     let timeout: NodeJS.Timeout;
     const setErrorText = () => {
         setError("");
-        if (isHappenedFocus) {
+        if (isHappenedChange) {
             if (valid.isEmailError) {
                 setError("не является email");
             }
@@ -62,19 +62,18 @@ export const useInput = (initialValue: string, validations: IValidations) => {
         return () => clearTimeout(timeout);
     }, [valid]);
     const onChange = (e: any) => {
+        if(!isHappenedChange) {
+            setIsHappenedChange(true);
+        }
         if (timeout) {
             clearTimeout(timeout);
         }
         setError("");
         setValue(e.target.value);
     };
-    const onFocus = () => {
-        if (!isHappenedFocus) {
-            setIsHappenedFocus(true)
-        }
-    }
+
     const set = (str: string) => {
         setValue(str);
     };
-    return {value, onChange, isValid, error, set, onFocus};
+    return {value, onChange, isValid, error, set};
 };
