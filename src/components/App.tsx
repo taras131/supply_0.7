@@ -34,13 +34,10 @@ import {setShipments, setShipmentsLoading} from "../store/reducers/shipment";
 import MainMenu from "../pages/MainMenu";
 import Orders from "../pages/Orders";
 import OrderDetails from "../pages/OrderDetails";
-
 import {setOrders, setOrdersLoading} from "../store/reducers/orders";
 import {IOrder} from "../models/iOrders";
 import InvoicesAddNew from "../pages/InvoicesAddNew";
 import {getSuppliersIsLoading} from "../store/selectors/suppliers";
-import {isLoggedIn} from "../api/session";
-import api from "../api";
 import {getAuth} from "firebase/auth";
 import {getAllUsers} from "../store/selectors/auth";
 
@@ -211,7 +208,7 @@ function App() {
             <CssBaseline/>
             <Header open={open} handleDrawerOpen={handleDrawerOpen}/>
             <SideBar open={open} handleDrawerClose={handleDrawerClose}/>
-            <Main open={open} matches_1600={matches_1600} sx={{backgroundColor: "#f3f7fa"}} style={{
+            <Main open={open} matches_1600={!!matches_1600} sx={{backgroundColor: "#f3f7fa"}} style={{
                 paddingLeft: matches_700 ? 20 : 5,
                 paddingRight: matches_700 ? 20 : 5,
             }}>

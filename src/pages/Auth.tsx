@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {useEffect, useId, useState} from "react";
+import {useEffect, useId, useRef, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -24,6 +24,7 @@ const Auth = () => {
     const location: any = useLocation();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const ref: React.RefObject<HTMLInputElement> = useRef(null)
     const selectLabelId = useId();
     const selectUserRoleId = useId();
     const isAuth = useAppSelector(state => getIsAuth(state));
@@ -93,6 +94,12 @@ const Auth = () => {
             dispatch(fetchLogin({email: email.value, password: password.value}));
         }
     };
+    useEffect(()=>{
+        console.log(ref)
+        if(ref && ref.current) {
+            ref.current.focus();
+        }
+    },[ref, ref.current])
     return (
         <Container component="div" maxWidth="xs">
             <CssBaseline/>
@@ -113,7 +120,7 @@ const Auth = () => {
                         : "Вход"}
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1, width: "300px"}}>
-                    <div style={{height: 95}}>
+                    <div style={{height: 95}} >
                         <TextField
                             onChange={email.onChange}
                             value={email.value}
@@ -125,6 +132,7 @@ const Auth = () => {
                             autoComplete="email"
                             error={!!email.error}
                             type={"email"}
+                            inputRef ={ref}
                         />
                         {email.error && (<Typography fontSize={12} color="error">
                             {email.error}
@@ -216,6 +224,7 @@ const Auth = () => {
                     )}
                     <LoadingButton
                         loading={isLoading}
+                        ref={ref}
                         loadingIndicator="Загрузка…"
                         type="submit"
                         fullWidth

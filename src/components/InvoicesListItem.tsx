@@ -30,7 +30,6 @@ import {
     DOWNLOAD_TEXT,
     FILE_TYPE, INN_COPY_TEXT,
     MESSAGE_SEVERITY, NO_TEXT,
-    STRING_EMPTY,
     UPLOAD_TEXT, YES_TEXT,
 } from "../utils/const";
 import {routes} from "../utils/routes";
@@ -49,6 +48,8 @@ import {
     SUCCESS_GRADIENT, WHITE_COLOR,
 } from "../styles/const";
 import {getUser} from "../store/selectors/auth";
+import {getCommentsByInvoiceId} from "../store/selectors/coments";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 
 interface IProps {
     invoice: IInvoice,
@@ -65,7 +66,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
     const matches_1050 = useMediaQuery("(min-width:1050px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
     const matches_470 = useMediaQuery("(min-width:470px)");
-    //const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
+    const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
@@ -117,6 +118,13 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
             },
         });
     };
+    const handleShipmentClick = () => {
+        navigate(`${routes.invoices}/${invoice.id}`, {
+            state: {
+                isShipmentClick: true,
+            },
+        });
+    };
     const handleMoreClick = () => {
         navigate(`${routes.invoices}/${invoice.id}`, {state: {from: pathname}});
     };
@@ -126,16 +134,16 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                 "&:last-child td, &:last-child th": {border: 0},
                 background: backgroundGradient,
                 color: textColor,
-                padding: matches_1300 ? "8px" : 0,
+                padding: 0,
                 fontSize: matches_470 ? "14px" : "11px",
             }}
         >
             {!forShipmentMode && (
-                <TableCell align={CENTER} sx={{padding: matches_1050 ? "8px" : 0, paddingLeft: "6px"}}>
+                <TableCell align={CENTER} sx={{padding: 0}}>
                     <ApprovedInvoiceCheckbox invoice={invoice}/>
                 </TableCell>
             )}
-            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : 0}} align={CENTER}>
+            <TableCell sx={{color: INHERIT, padding: 0}} align={CENTER}>
                 {matches_700
                     ? invoiceCreatedDate
                     : deleteYearFromString(invoiceCreatedDate)}
@@ -258,18 +266,23 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                             )}
                     </TableCell>
                     {!forShipmentMode && (
-                        <TableCell sx={{padding: matches_1050 ? "8px" : "4px"}}>
-                            <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
-                                {isShipment
-                                    ? (<LocalShippingIcon color={SUCCESS}/>)
-                                    : (STRING_EMPTY)}
-                            </IconButton>
+                        <TableCell sx={{padding: 0}} align={RIGHT}>
+                            {isShipment && (
+                                <IconButton aria-label="show comments" onClick={handleShipmentClick} color={SUCCESS}>
+                                    <LocalShippingIcon color={SUCCESS}/>
+                                </IconButton>
+                            )}
+                            {!isShipment && comments.length > 0 && (
+                                <IconButton aria-label="show comments" onClick={handleCommentClick} color={SUCCESS}>
+                                    <ChatBubbleIcon color={SUCCESS}/>
+                                </IconButton>
+                            )}
                         </TableCell>
                     )}
                 </>
             )}
-            <TableCell sx={{padding: matches_1050 ? "8px" : 0}}>
-                <IconButton aria-label="show more" onClick={handleMoreClick}>
+            <TableCell sx={{padding: 0}} align={CENTER}>
+                <IconButton aria-label="show more" onClick={handleMoreClick} sx={{padding: 0}}>
                     <MoreVertIcon color={SUCCESS}/>
                 </IconButton>
             </TableCell>

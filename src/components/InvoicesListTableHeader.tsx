@@ -8,7 +8,7 @@ const InvoicesListTableHeader = () => {
     return (
         <TableHead>
             <TableRow>
-                <TableCell sx={{padding: matches_1050 ? "16px" : "2px"}} align={"center"}>
+                <TableCell sx={{padding: "2px"}} align={"center"}>
                     <Typography fontSize="14px" fontWeight={600}>
                         {matches_700 ? "Одобрен" : "Од."}
                     </Typography>
@@ -55,8 +55,8 @@ const InvoicesListTableHeader = () => {
                 </TableCell>
                 {matches_1300 && (
                     <>
-                        <TableCell align="center">
-                            <Typography fontSize="14px" fontWeight={600}>
+                        <TableCell align="center" sx={{maxWidth: 90, padding: "4px"}}>
+                            <Typography fontSize="14px" fontWeight={600} lineHeight={1}>
                                 Платёжное поручение
                             </Typography>
                         </TableCell>
@@ -67,7 +67,7 @@ const InvoicesListTableHeader = () => {
                         </TableCell>
                     </>
                 )}
-                <TableCell align="center" sx={{padding: matches_1050 ? "16px" : "6px"}}>
+                <TableCell align="center" sx={{padding: "3px"}}>
                     <Typography fontSize="14px" fontWeight={600}>
                         Ещё
                     </Typography>
