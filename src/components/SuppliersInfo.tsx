@@ -1,7 +1,7 @@
 import React from "react";
 import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useAppSelector} from "../hooks/redux";
-import {CENTER, COLUMN, ROW, SPACE_BETWEEN, START} from "../styles/const";
+import {CENTER, COLUMN, ROW, START} from "../styles/const";
 import {getSuppliersCount} from "../store/selectors/suppliers";
 import {getTotalTurnover} from "../store/selectors/invoices";
 

@@ -15,13 +15,14 @@ import {TLocation} from "../../models/i-location";
 import {commentPanelId} from "../utils/const";
 import {shipmentPanelId} from "../utils/const";
 import {getShipmentsByInvoiceId} from "../store/selectors/shipments";
-import InvoiceDetailsShipment from "../components/InvoiceDetailsShipment";
 import Grid from "@mui/material/Unstable_Grid2";
 import OrdersList from "../components/OrdersList";
 import {getRelatedOrdersByInvoiceId} from "../store/selectors/orders";
 import PageHeaderWithTitleAndButton from "../components/PageHeaderWithTitleAndButton";
 import PageLayout from "../components/PageLayout";
 import InvoiceDetailsInfo from "../components/InvoiceDetailsInfo";
+import ShipmentsList from "../components/ShipmentsList";
+import {CENTER, START} from "../styles/const";
 
 const InvoiceDetails = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");
@@ -33,11 +34,12 @@ const InvoiceDetails = () => {
     const [expanded, setExpanded] = useState<string | false>(false);
     useEffect(() => {
         if (location.state && location.state.isCommentClick) setExpanded(commentPanelId);
+        if (location.state && location.state.isShipmentClick) setExpanded(shipmentPanelId);
     }, [location]);
     const handleExpandedChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-    const backRoute = location.state && location.state.from ? location.state.from : routes.orders;
+    const backRoute = location.state && location.state.from ? location.state.from : routes.invoices;
     return (
         <PageLayout maxWidth={1000}>
             <PageHeaderWithTitleAndButton
@@ -68,9 +70,15 @@ const InvoiceDetails = () => {
                 </Stack>
             )}
             {shipments.length > 0 && (
-                <InvoiceDetailsShipment shipments={shipments}
-                                        handleExpandedChange={handleExpandedChange(shipmentPanelId)}
-                                        expanded={expanded}/>
+                <>
+                    <Stack sx={{width: "100%"}} alignItems={START}>
+                        <Typography fontSize={"16px"} fontWeight={600}>
+                            Связанные отгрузки:
+                        </Typography>
+                    </Stack>
+                    <ShipmentsList shipments={shipments}
+                                   extendShipmentId={shipments.length && location.state && location.state.isShipmentClick ? shipments[0].id : false}/>
+                </>
             )}
             <InvoiceDetailsComments expanded={expanded}
                                     handleExpandedChange={handleExpandedChange(commentPanelId)}

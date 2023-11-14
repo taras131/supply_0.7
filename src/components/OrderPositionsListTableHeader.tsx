@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {TableHead, TableRow, useMediaQuery} from "@mui/material";
-import {CENTER, StyledTableCell} from "../styles/const";
+import {CENTER, LEFT, StyledTableCell} from "../styles/const";
 
 interface IProps {
     isLimitedOverview: boolean
@@ -13,17 +13,22 @@ const OrderPositionsListTableHeader: FC<IProps> = ({isLimitedOverview}) => {
         <TableHead>
             <TableRow sx={{padding: matches_700 ? "10px" : "2px"}}>
                 <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}} align={CENTER}>№</StyledTableCell>
-                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}} align={CENTER}>Наименование</StyledTableCell>
-                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}>{matches_700 ? "Каталожный номер" : "Номер"}</StyledTableCell>
+                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}} align={LEFT}>
+                    Наименование
+                </StyledTableCell>
+                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}>
+                    {matches_700 ? "Каталожный номер" : "Номер"}
+                </StyledTableCell>
                 <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : "2px"}}>
                     {matches_1000 ? "Количество" : "К_во"}
                 </StyledTableCell>
-                {!isLimitedOverview &&  matches_700 && (
+                {!isLimitedOverview && matches_700 && (
                     <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : "2px"}}>
                         Комментарий
                     </StyledTableCell>
                 )}
-                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}} align={CENTER}>{matches_700 ? "Поставщик" : ""}</StyledTableCell>
+                <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}
+                                 align={CENTER}>{matches_700 ? "Поставщик" : ""}</StyledTableCell>
             </TableRow>
         </TableHead>
     );

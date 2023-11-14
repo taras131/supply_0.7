@@ -5,8 +5,11 @@ import PageHeaderWithTitleAndButton from "../components/PageHeaderWithTitleAndBu
 import {routes} from "../utils/routes";
 import ShipmentsHelper from "../components/ShipmentsHelper";
 import PageLayout from "../components/PageLayout";
+import {useAppSelector} from "../hooks/redux";
+import {getShipments} from "../store/selectors/shipments";
 
 const Shipments = () => {
+    const shipments = useAppSelector(state => getShipments(state));
     return (
         <PageLayout maxWidth={1000}>
             <PageHeaderWithTitleAndButton route={routes.addNewShipments}
@@ -14,7 +17,7 @@ const Shipments = () => {
                                           buttonText={"Отгрузка"}
                                           maxWidth={"1000px"}/>
             <ShipmentsInfo/>
-            <ShipmentsList/>
+            <ShipmentsList shipments={shipments}/>
             <ShipmentsHelper/>
         </PageLayout>
     );

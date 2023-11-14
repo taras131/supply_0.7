@@ -1,6 +1,6 @@
 import React, {FC, useId} from "react";
 import {IOrderItem} from "../models/iOrders";
-import {Checkbox, Chip, Stack, TextField, useMediaQuery} from "@mui/material";
+import {Checkbox, Chip, Stack, TextField, Typography, useMediaQuery} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {removeOrderItem, updateItemsCount, updateItemsValues} from "../store/reducers/orders";
 import IconButton from "@mui/material/IconButton";
@@ -11,9 +11,20 @@ import {setSelectedOrderPosition} from "../store/reducers/invoices";
 import {getIsPositionSelected, getSupplierNameByInvoiceId} from "../store/selectors/invoices";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
-import {CENTER, PRIMARY, ROW, StyledTableCell, StyledTableRow, StyledTextField} from "../styles/const";
+import {
+    CENTER,
+    CURSOR_POINTER,
+    PRIMARY,
+    ROW, SPACE_BETWEEN,
+    StyledTableCell,
+    StyledTableRow,
+    StyledTextField, SUCCESS,
+} from "../styles/const";
 import {extractAllText} from "../utils/services";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {setMessage} from "../store/reducers/message";
+import {MESSAGE_SEVERITY} from "../utils/const";
 
 interface IProps {
     index: number
@@ -77,6 +88,14 @@ const OrderPositionsListItem: FC<IProps> = ({
             dispatch(removeOrderItem(orderItem.id));
         }
     };
+    const handleNameClick = () => {
+        navigator.clipboard.writeText(`${orderItem.name} ${orderItem.catalogNumber}`);
+        dispatch(setMessage({text: "полное название скопировано", severity: MESSAGE_SEVERITY.success}));
+    };
+    const handleNumberClick = () => {
+        navigator.clipboard.writeText(orderItem.catalogNumber);
+        dispatch(setMessage({text: "номер скопирован", severity: MESSAGE_SEVERITY.success}));
+    };
     return (
         <StyledTableRow sx={{width: "100%"}}>
             <StyledTableCell component="th" scope="row"
@@ -90,7 +109,16 @@ const OrderPositionsListItem: FC<IProps> = ({
                                   value={orderItem.name}
                                   variant="standard"
                                   onChange={handleInputChange}/>)
-                    : orderItem.name}
+                    : (<Stack sx={{width: "100%", cursor: CURSOR_POINTER}} direction={ROW} alignItems={CENTER}
+                              justifyContent={SPACE_BETWEEN}
+                              spacing={1} onClick={handleNameClick}>
+                        <Typography>
+                            {orderItem.name}
+                        </Typography>
+                        {matches_700 && (
+                            <ContentCopyIcon color={SUCCESS}/>
+                        )}
+                    </Stack>)}
             </StyledTableCell>
             <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}}>
                 {isEdit
@@ -98,7 +126,16 @@ const OrderPositionsListItem: FC<IProps> = ({
                                   value={orderItem.catalogNumber}
                                   variant="standard"
                                   onChange={handleInputChange}/>)
-                    : orderItem.catalogNumber}
+                    : (<Stack sx={{width: "100%", cursor: CURSOR_POINTER}} direction={ROW} alignItems={CENTER}
+                              justifyContent={SPACE_BETWEEN}
+                              spacing={1} onClick={handleNumberClick}>
+                        <Typography>
+                            {orderItem.catalogNumber}
+                        </Typography>
+                        {matches_700 && (
+                            <ContentCopyIcon color={SUCCESS}/>
+                        )}
+                    </Stack>)}
             </StyledTableCell>
             <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : 0}}>
                 {isEdit
@@ -147,7 +184,7 @@ const OrderPositionsListItem: FC<IProps> = ({
                     onChange={handleSelectPosition}
                     inputProps={{"aria-label": "controlled"}}
                 />)}
-                {!isEdit && !isSelectPositionMode && orderItem.invoiceId &&  (
+                {!isEdit && !isSelectPositionMode && orderItem.invoiceId && (
                     <>
                         {matches_700
                             ? (<Chip onClick={handleInvoiceClick}
