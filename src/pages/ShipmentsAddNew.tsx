@@ -27,7 +27,7 @@ import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleA
 import {shipmentTypes} from "../utils/const";
 import PageLayout from "../components/PageLayout";
 
-const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия", "Дмитрий Павлович"];
+export const transporters = ["Адамант", "Байкал", "Деловые Линии", "Почта", "ПЭК", "СДЭК", "Энергия", "Дмитрий Павлович"];
 
 export interface IInvoiceValue {
     value: TShipmentInvoiceValue,
@@ -55,7 +55,7 @@ const ShipmentsAddNew: FC = () => {
     const selectTransporterId = useId();
     const selectTypeId = useId();
     useEffect(() => {
-        if (transporter && type && filePatch && !isUploadFileLoading && selectedInvoices.length > 0 && ladingNumber) {
+        if (transporter && type && !isUploadFileLoading && selectedInvoices.length > 0 && ladingNumber) {
             setIsValidate(true);
         } else {
             setIsValidate(false);

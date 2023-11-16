@@ -10,4 +10,6 @@ export const routes = {
     addNewOrders: "/orders/add_new",
     users: "/users",
     profile: "/profile",
+    machinery: "/machinery",
+    addNewMachinery: "/machinery/add_new",
 };

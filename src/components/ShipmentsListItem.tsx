@@ -23,7 +23,7 @@ import {getUser, getUserFullNameById} from "../store/selectors/auth";
 import ShipmentHeader from "./ShipmentHeader";
 import {getInvoicesByIds} from "../store/selectors/invoices";
 import InvoicesList from "./InvoicesList";
-import {CENTER, ROW, SPACE_BETWEEN, SUCCESS_GRADIENT} from "../styles/const";
+import {CENTER, ROW, SPACE_BETWEEN, START, SUCCESS_GRADIENT} from "../styles/const";
 
 interface IProps {
     shipment: IShipments
@@ -80,21 +80,23 @@ const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
                     <Stack direction={ROW}
                            sx={{width: "100%"}}
                            pt={2}
-                           justifyContent={SPACE_BETWEEN}
+                           justifyContent={shipment.ladingNumberFilePath ? SPACE_BETWEEN : START}
                            alignItems={CENTER}
                            pl={matches_600 ? "16px" : "4px"}
                            pr={matches_600 ? "16px" : "4px"}>
                         <Typography fontWeight={600}>
                             Отгруженные счета:
                         </Typography>
-                        <Chip
-                            label={"Накладная"}
-                            component="a"
-                            href={shipment.ladingNumberFilePath}
-                            icon={<DownloadIcon/>}
-                            color={"primary"}
-                            clickable
-                        />
+                        {shipment.ladingNumberFilePath && (
+                            <Chip
+                                label={"Накладная"}
+                                component="a"
+                                href={shipment.ladingNumberFilePath}
+                                icon={<DownloadIcon/>}
+                                color={"primary"}
+                                clickable
+                            />
+                        )}
                     </Stack>
                     <InvoicesList invoices={invoices} forShipmentMode={true}/>
                     <Stack

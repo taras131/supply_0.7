@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {useEffect, useId, useRef, useState} from "react";
+import {useEffect, useId, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
