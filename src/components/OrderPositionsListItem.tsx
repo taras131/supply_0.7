@@ -139,7 +139,7 @@ const OrderPositionsListItem: FC<IProps> = ({
             </StyledTableCell>
             <StyledTableCell align={CENTER} sx={{padding: matches_700 ? "8px" : 0}}>
                 {isEdit
-                    ? (<Stack direction={ROW} alignItems={CENTER} spacing={matches_700 ? 1 : 0}>
+                    ? (<Stack direction={ROW} alignItems={CENTER} justifyContent={CENTER} spacing={matches_700 ? 1 : 0}>
                         {matches_500 && (
                             <IconButton aria-label="minus"
                                         onClick={handleMinusClick}

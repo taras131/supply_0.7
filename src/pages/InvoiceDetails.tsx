@@ -22,7 +22,7 @@ import PageHeaderWithTitleAndButton from "../components/PageHeaderWithTitleAndBu
 import PageLayout from "../components/PageLayout";
 import InvoiceDetailsInfo from "../components/InvoiceDetailsInfo";
 import ShipmentsList from "../components/ShipmentsList";
-import {CENTER, START} from "../styles/const";
+import {START} from "../styles/const";
 
 const InvoiceDetails = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");

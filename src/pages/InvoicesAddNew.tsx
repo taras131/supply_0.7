@@ -22,10 +22,10 @@ const InvoicesAddNew: FC = () => {
         amount: 0,
         number: "",
     });
-    const orders = useAppSelector(state => getOrders(state, true));
+    const forSelectPositionsOrders = useAppSelector(state => getOrders(state, true));
+    const allOrders = useAppSelector(state => getOrders(state, false));
     const navigate = useNavigate();
     const [isWithVAT, setIsWithVAT] = useState(true);
-
     const user = useAppSelector(state => getUser(state));
     const [selectedSupplierId, setSelectedSupplierId] = useState("");
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
@@ -57,7 +57,7 @@ const InvoicesAddNew: FC = () => {
                 amount: +inputValue.amount,
                 invoiceFileLink: filePatch,
             },
-            orders: orders,
+            orders: allOrders,
             selectedPosition: selectedPosition,
         }));
         setInputValue({
@@ -104,7 +104,7 @@ const InvoicesAddNew: FC = () => {
                 <Typography fontSize={"16px"} fontWeight={600}>
                     Отметьте в заявках, входящие в счёт позиции:
                 </Typography>
-                <OrdersList isSelectPositionMode orders={orders}/>
+                <OrdersList isSelectPositionMode orders={forSelectPositionsOrders}/>
             </Stack>
         </PageLayout>
     );
