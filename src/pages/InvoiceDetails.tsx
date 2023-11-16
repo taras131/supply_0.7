@@ -49,7 +49,7 @@ const InvoiceDetails = () => {
                 maxWidth={"1000px"}
                 icon={(<ArrowBackIosIcon/>)}
             />
-            <Grid container sx={{width: "100%"}} pt={matches_700 ? 0 : 2} spacing={matches_700 ? 6 : 1}>
+            <Grid container sx={{width: "100%"}} pt={matches_700 ? 0 : 2} spacing={matches_700 ? 6 : 4}>
                 <Grid xs={matches_700 ? 7 : 12}>
                     <InvoiceDetailsInfo invoice={invoice}/>
                 </Grid>

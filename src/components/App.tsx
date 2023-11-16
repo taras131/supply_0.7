@@ -40,6 +40,9 @@ import InvoicesAddNew from "../pages/InvoicesAddNew";
 import {getSuppliersIsLoading} from "../store/selectors/suppliers";
 import {getAuth} from "firebase/auth";
 import {getAllUsers} from "../store/selectors/auth";
+import Machinery from "../pages/Machinery";
+import MachineryDetails from "../pages/MachineryDetails";
+import MachineryAddNew from "../pages/MachineryAddNew";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -227,6 +230,9 @@ function App() {
                     <Route path={routes.login} element={<Auth/>}/>
                     <Route path={routes.register} element={<Auth/>}/>
                     <Route path={routes.profile} element={<Profile/>}/>
+                    <Route path={routes.machinery} element={<Machinery/>}/>
+                    <Route path={routes.addNewMachinery} element={<MachineryAddNew/>}/>
+                    <Route path={routes.machinery + "/:machineryId/"} element={<MachineryDetails/>}/>
                 </Routes>
             </Main>
             <Message/>

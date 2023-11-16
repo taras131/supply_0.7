@@ -5,6 +5,7 @@ import {IInvoice} from "../models/iInvoices";
 import {useAppSelector} from "../hooks/redux";
 import {getUserFullNameById} from "../store/selectors/auth";
 import {IShipments} from "../models/iShipments";
+import Box from "@mui/material/Box";
 
 interface IProps {
     invoice: IInvoice
@@ -100,39 +101,66 @@ const InvoiceDetailsStepper: FC<IProps> = ({invoice, shipment}) => {
             <Stepper activeStep={activeStep} orientation={"vertical"} sx={{height: "100%"}}>
                 <Step key={"Добавлен"}>
                     <StepLabel>
-                        <Typography fontSize={"16px"} fontWeight={550}>
-                            {`Добавлен ${createdDate} ${authorInvoiceFullName}`}
-                        </Typography>
+                        <Box ml={2}>
+                            <Typography fontSize={"16px"} fontWeight={550}>
+                                {`Добавлен ${createdDate}`}
+                            </Typography>
+                            <Typography fontSize={"16px"} fontWeight={500}>
+                                {authorInvoiceFullName}
+                            </Typography>
+                        </Box>
                     </StepLabel>
                 </Step>
                 <Step key={"Одобрен"}>
                     <StepLabel error={cancel && cancel.isCancel}>
-                        <Typography fontSize={"16px"} fontWeight={550}>
-                            {cancel && cancel.isCancel
-                                ? `Отменён ${cancelDate} ${cancelAuthorFullName}`
-                                : `Одобрен ${approvedDate} ${approvedAuthorFullName}`}
-                        </Typography>
+                        <Box ml={2}>
+                            <Typography fontSize={"16px"} fontWeight={550}>
+                                {cancel && cancel.isCancel
+                                    ? `Отменён ${cancelDate}`
+                                    : `Одобрен ${approvedDate}`}
+                            </Typography>
+                            <Typography fontSize={"16px"} fontWeight={500}>
+                                {cancel && cancel.isCancel
+                                    ? cancelAuthorFullName
+                                    : approvedAuthorFullName}
+                            </Typography>
+                        </Box>
                     </StepLabel>
                 </Step>
                 <Step key={"Оплачен"}>
                     <StepLabel>
-                        <Typography fontSize={"16px"} fontWeight={550}>
-                            {`Оплачен ${paidDate} ${paidAuthorFullName}`}
-                        </Typography>
+                        <Box ml={2}>
+                            <Typography fontSize={"16px"} fontWeight={550}>
+                                {`Оплачен ${paidDate}`}
+                            </Typography>
+                            <Typography fontSize={"16px"} fontWeight={500}>
+                                {paidAuthorFullName}
+                            </Typography>
+                        </Box>
                     </StepLabel>
                 </Step>
                 <Step key={"Отгружен"}>
                     <StepLabel>
-                        <Typography fontSize={"16px"} fontWeight={550}>
-                            {`Отгружен ${shipmentDate} ${shipmentAuthorFullName}`}
-                        </Typography>
+                        <Box ml={2}>
+                            <Typography fontSize={"16px"} fontWeight={550}>
+                                {`Отгружен ${shipmentDate}`}
+                            </Typography>
+                            <Typography fontSize={"16px"} fontWeight={500}>
+                                {shipmentAuthorFullName}
+                            </Typography>
+                        </Box>
                     </StepLabel>
                 </Step>
                 <Step key={"Получен"}>
                     <StepLabel>
-                        <Typography fontSize={"16px"} fontWeight={550}>
-                            {`Получен ${receivingDate} ${receivingAuthorFullName}`}
-                        </Typography>
+                        <Box ml={2}>
+                            <Typography fontSize={"16px"} fontWeight={550}>
+                                {`Получен ${receivingDate}`}
+                            </Typography>
+                            <Typography fontSize={"16px"} fontWeight={500}>
+                                {receivingAuthorFullName}
+                            </Typography>
+                        </Box>
                     </StepLabel>
                 </Step>
             </Stepper>

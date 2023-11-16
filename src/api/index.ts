@@ -27,7 +27,6 @@ import {INewShipments} from "../models/iShipments";
 import {IReceivingData} from "../store/actionsCreators/shipments";
 import {INewOrder, IOrder} from "../models/iOrders";
 import {IUpdateApprovedOrderData} from "../store/actionsCreators/orders";
-import {startSession} from "./session";
 
 class Api {
     auth = getAuth();

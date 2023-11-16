@@ -1,5 +1,5 @@
 import React, {FC, useId, useState} from "react";
-import {Checkbox, FormControlLabel, useMediaQuery} from "@mui/material";
+import {Checkbox, useMediaQuery} from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {fetchUpdateInvoiceApproved} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds} from "../utils/services";

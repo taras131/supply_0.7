@@ -31,7 +31,7 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
     const {pathname} = useLocation();
     const isAuth = useAppSelector(state => getIsAuth(state));
     useEffect(() => {
-        if(!matches_1600) {
+        if (!matches_1600) {
             handleDrawerClose();
         }
     }, [pathname]);
@@ -68,6 +68,7 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
                 <SideBarMenuItem title={"Поставщики"} route={routes.suppliers}/>
                 <SideBarMenuItem title={"Отгрузки"} route={routes.shipments}/>
                 <SideBarMenuItem title={"Заявки"} route={routes.orders}/>
+                <SideBarMenuItem title={"Техника"} route={routes.machinery}/>
                 <SideBarMenuItem title={"Сотрудники"} route={routes.users}/>
                 {isAuth
                     ? (<SideBarMenuItem title={"Профиль"} route={routes.profile}/>)

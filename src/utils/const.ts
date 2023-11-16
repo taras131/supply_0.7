@@ -8,7 +8,7 @@ export enum MESSAGE_SEVERITY {
     success = "success"
 }
 
-export const userRoles = {boss: "Директор", supplier: "Снабженец", accountant: "Бухгалтер"}
+export const userRoles = {boss: "Директор", supplier: "Снабженец", accountant: "Бухгалтер"};
 
 export const commentPanelId = "commentPanel";
 export const shipmentPanelId = "shipment";
