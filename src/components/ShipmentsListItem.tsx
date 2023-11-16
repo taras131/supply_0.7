@@ -75,7 +75,7 @@ const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
             >
                 <ShipmentHeader shipment={shipment}/>
             </AccordionSummary>
-            <AccordionDetails sx={{padding: 0}}>
+            <AccordionDetails sx={{padding: "0 6px 0 6px"}}>
                 <Stack sx={{width: "100%"}} spacing={2}>
                     <Stack direction={ROW}
                            sx={{width: "100%"}}

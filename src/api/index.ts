@@ -10,7 +10,6 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
-    signInWithCustomToken,
 } from "firebase/auth";
 import {ref, deleteObject, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {INewSupplier} from "../models/iSuppliers";
@@ -75,11 +74,11 @@ class Api {
             let order = orders.find(order => order.id === key);
             if (order) {
                 order = {
-                    ...order, orderItems: [...order.orderItems.map(orderItems => {
-                        if (selectedPosition[key].includes(orderItems.id)) {
-                            return {...orderItems, invoiceId: res.id};
+                    ...order, orderItems: [...order.orderItems.map(orderItem => {
+                        if (selectedPosition[key].includes(orderItem.id)) {
+                            return {...orderItem, invoiceId: res.id};
                         } else {
-                            return orderItems;
+                            return orderItem;
                         }
                     })],
                 };
@@ -185,7 +184,6 @@ class Api {
     };
     login = async (authData: IAuthData) => {
         const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password);
-        console.log(res.user);
         startSession(res.user);
         return res.user.uid;
     };
@@ -200,11 +198,6 @@ class Api {
             }
         );
         return user;
-    };
-    checkAuth = async (accessToken: string) => {
-        console.log(accessToken);
-        const res = await signInWithCustomToken(this.auth, accessToken);
-        console.log(res);
     };
     out = async () => {
         const res = await signOut(this.auth);

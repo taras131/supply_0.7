@@ -16,7 +16,7 @@ import {fetchLogin, fetchRegister} from "../store/actionsCreators/auth";
 import {getAuthErrorMessage, getIsAuth, getIsAuthLoading} from "../store/selectors/auth";
 import MessageWindow from "../components/MessageWindow";
 import {setMessage} from "../store/reducers/message";
-import {MESSAGE_SEVERITY} from "../utils/const";
+import {MESSAGE_SEVERITY, userRoles} from "../utils/const";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {useInput} from "../hooks/useInput";
 
@@ -24,7 +24,6 @@ const Auth = () => {
     const location: any = useLocation();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const ref: React.RefObject<HTMLInputElement> = useRef(null)
     const selectLabelId = useId();
     const selectUserRoleId = useId();
     const isAuth = useAppSelector(state => getIsAuth(state));
@@ -94,12 +93,6 @@ const Auth = () => {
             dispatch(fetchLogin({email: email.value, password: password.value}));
         }
     };
-    useEffect(()=>{
-        console.log(ref)
-        if(ref && ref.current) {
-            ref.current.focus();
-        }
-    },[ref, ref.current])
     return (
         <Container component="div" maxWidth="xs">
             <CssBaseline/>
@@ -120,7 +113,7 @@ const Auth = () => {
                         : "Вход"}
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1, width: "300px"}}>
-                    <div style={{height: 95}} >
+                    <div style={{height: 95}}>
                         <TextField
                             onChange={email.onChange}
                             value={email.value}
@@ -132,7 +125,6 @@ const Auth = () => {
                             autoComplete="email"
                             error={!!email.error}
                             type={"email"}
-                            inputRef ={ref}
                         />
                         {email.error && (<Typography fontSize={12} color="error">
                             {email.error}
@@ -205,14 +197,11 @@ const Auth = () => {
                                         sx={{overflow: "hidden"}}
                                         error={!!role.error}
                                     >
-                                        <MenuItem key={1} value={"Директор"}>
-                                            Директор
+                                        <MenuItem key={2} value={userRoles.supplier}>
+                                            {userRoles.supplier}
                                         </MenuItem>
-                                        <MenuItem key={2} value={"Снабженец"}>
-                                            Снабженец
-                                        </MenuItem>
-                                        <MenuItem key={3} value={"Бухгалтер"}>
-                                            Бухгалтер
+                                        <MenuItem key={3} value={userRoles.accountant}>
+                                            {userRoles.accountant}
                                         </MenuItem>
                                     </Select>
                                 </FormControl>
@@ -224,7 +213,6 @@ const Auth = () => {
                     )}
                     <LoadingButton
                         loading={isLoading}
-                        ref={ref}
                         loadingIndicator="Загрузка…"
                         type="submit"
                         fullWidth

@@ -1,31 +1,30 @@
-import React, {FC, useId} from "react";
+import React, {FC, useId, useState} from "react";
 import {Checkbox, FormControlLabel, useMediaQuery} from "@mui/material";
 import {IInvoice} from "../models/iInvoices";
 import {fetchUpdateInvoiceApproved} from "../store/actionsCreators/invoices";
 import {getDateInMilliseconds} from "../utils/services";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getUser} from "../store/selectors/auth";
+import MessageWindow from "./MessageWindow";
+import {userRoles} from "../utils/const";
 
 interface IProps {
     invoice: IInvoice
 }
 
+const errorMessage = "Только руководитель может одобрять счета на оплату. Если вы не вошли в систему, авторизируйтесь.";
+
 const ApprovedInvoiceCheckbox: FC<IProps> = ({invoice}) => {
     const checkboxId = useId();
     const dispatch = useAppDispatch();
+    const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
     const matches_470 = useMediaQuery("(min-width:470px)");
     const user = useAppSelector(state => getUser(state));
+    const toggleIsOpenErrorMessageWindow = () => {
+        setIsOpenErrorMessageWindow(prev => !prev);
+    };
     const handleApprovedChange = () => {
-        if (invoice.approved.isApproved) {
-            dispatch(fetchUpdateInvoiceApproved({
-                invoiceId: invoice.id,
-                newApproved: {
-                    userId: "",
-                    date: 0,
-                    isApproved: !invoice.approved.isApproved,
-                },
-            }));
-        } else {
+        if (user && user.role === userRoles.boss) {
             dispatch(fetchUpdateInvoiceApproved({
                 invoiceId: invoice.id,
                 newApproved: {
@@ -34,15 +33,22 @@ const ApprovedInvoiceCheckbox: FC<IProps> = ({invoice}) => {
                     isApproved: !invoice.approved.isApproved,
                 },
             }));
+        } else {
+            toggleIsOpenErrorMessageWindow();
         }
     };
     return (
-        <Checkbox
-            checked={invoice.approved.isApproved}
-            onChange={handleApprovedChange}
-            sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}, margin: 0, padding: 0}}
-            id={checkboxId}
-        />
+        <>
+            <Checkbox
+                checked={invoice.approved.isApproved}
+                onChange={handleApprovedChange}
+                sx={{"& .MuiSvgIcon-root": {fontSize: matches_470 ? 38 : 24}, margin: 0, padding: 0}}
+                id={checkboxId}
+            />
+            <MessageWindow isOpenModal={isOpenErrorMessageWindow}
+                           handleToggleOpen={toggleIsOpenErrorMessageWindow}
+                           message={errorMessage}/>
+        </>
     );
 };
 

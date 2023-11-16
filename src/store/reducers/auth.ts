@@ -43,7 +43,7 @@ export const AuthSlice = createSlice({
         setCurrentUser: (state, action: PayloadAction<string>) => {
             if(state.allUsers.length > 0) {
                 const user = state.allUsers.filter(user => user.email === action.payload)[0];
-                if (user.uid) {
+                if (user && user.uid) {
                     state.isAuth = true;
                     state.isLoading = false;
                     state.user = user;

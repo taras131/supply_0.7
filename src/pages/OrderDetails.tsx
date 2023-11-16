@@ -83,8 +83,8 @@ const OrderDetails = () => {
             localStorage.removeItem("newOrder");
         } else {
             dispatch(fetchUpdateOrder({...currentOrder, orderItems: filteredOrderItems}));
-            dispatch(setCurrenOrderIsEdit(false));
         }
+        dispatch(setCurrenOrderIsEdit(false));
         setIsValidate(false);
         navigate(routes.orders);
     };
@@ -98,6 +98,7 @@ const OrderDetails = () => {
         } else {
             navigate(routes.orders);
         }
+        dispatch(setCurrenOrderIsEdit(false));
     };
     return (
         <PageLayout>

@@ -18,12 +18,12 @@ const MessageWindow: FC<IMessageWindowProps> = ({
         handleToggleOpen();
     };
     return (
-        <ModalWindow handleToggleOpen={handleToggleOpen} isOpenModal={isOpenModal}>
-            <Stack>
+        <ModalWindow handleToggleOpen={handleToggleOpen} isOpenModal={isOpenModal} title={"Внимание"}>
+            <Stack spacing={2}>
                 <Typography fontSize="20px">
                     {message}
                 </Typography>
-                <Button onClick={handleOkClick}>Добро</Button>
+                <Button onClick={handleOkClick}>Хорошо</Button>
             </Stack>
         </ModalWindow>
     );

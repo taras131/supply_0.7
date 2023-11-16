@@ -20,17 +20,17 @@ const InvoiceDetailsCommentsItem: FC<IProps> = ({
                                                     text,
                                                     dateCreation,
                                                 }) => {
-    const user = useAppSelector(state => getUserById(state, authorId));
+    const user = useAppSelector(state => getUserById(state, authorId)) || "";
     return (
         <Stack spacing={2}>
             <Grid container spacing={1} alignItems={CENTER} justifyContent={SPACE_BETWEEN}>
                 <Grid container alignItems={CENTER} justifyContent={START} spacing={1}>
                     <Avatar sx={{bgcolor: deepPurple[500]}}>
-                        {`${user.firstName.split("")[0]}${user.middleName.split("")[0]}`}
+                        {user && `${user.firstName.split("")[0]}${user.middleName.split("")[0]}`}
                     </Avatar>
                     <Stack ml={1}>
                         <Typography fontSize={"14px"}>
-                            {`${user.firstName} ${user.middleName}`}
+                            {user ? `${user.firstName} ${user.middleName}` : "пользователь удалён"}
                         </Typography>
                         <Typography fontSize={"12px"} color={SECONDARY_TEXT_COLOR}>
                             {convertMillisecondsToDate(dateCreation)}
