@@ -59,7 +59,7 @@ const InvoiceDetails = () => {
                 </Grid>
             </Grid>
             <Stack sx={{width: "100%"}} spacing={3}>
-                <InvoiceDetailsActions {...invoice}/>
+                <InvoiceDetailsActions invoice={invoice}/>
             </Stack>
             {relatedOrders && relatedOrders.length > 0 && (
                 <Stack sx={{width: "100%"}} spacing={1}>

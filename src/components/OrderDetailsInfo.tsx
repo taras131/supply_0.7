@@ -34,7 +34,6 @@ const OrderDetailsInfo: FC<IProps> = ({isEdit, currentOrder, isNewOrder}) => {
     const shipmentTypeRadioId = useId();
     const orderTypeRadioId = useId();
     const matches_850 = useMediaQuery("(min-width:850px)");
-    const matches_700 = useMediaQuery("(min-width:700px)");
     const authorFullName = useAppSelector(state => getUserFullNameById(state, currentOrder.author.userId));
     const handleShipmentTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(updateCurrentOrderShipmentType(e.target.value as TShipmentsType));
