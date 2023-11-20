@@ -8,8 +8,6 @@ import {
 } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {pdfjs} from "react-pdf";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.entry";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getInvoices} from "../store/selectors/invoices";
 import {getDateInMilliseconds} from "../utils/services";
@@ -22,9 +20,7 @@ import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {CENTER, SPACE_BETWEEN} from "../styles/const";
 import InvoicesHeaderCheckBoxes from "./InvoicesHeaderCheckBoxes";
-
-// Установка пути к рабочему потоку
-pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
+import {useUploadFile} from "../hooks/useUploadFile";
 
 interface IProps {
     isShowCanceledInvoice: boolean
@@ -41,33 +37,19 @@ const InvoicesHeader: FC<IProps> = ({
                                     }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [file, setFile] = useState<null | File>(null);
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
     const matches_1050 = useMediaQuery("(min-width:1050px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
+    const {file, onFileChange, paymentErrorMessage, amount, isLoading} = useUploadFile();
     const user = useAppSelector(state => getUser(state));
     const invoices = useAppSelector(state => getInvoices(state, false, false));
     const handleAddInvoiceClick = () => {
         navigate(routes.invoices + "/add_new");
     };
-    const [text, setText] = useState("");
     useEffect(() => {
-        let amount = 0;
-        let isPaymentOrder = false;
-        if (file) {
-            if (text.length > 0) {
-                const textArr = text.split(" ");
-                for (let i = 0; i < textArr.length - 1; i++) {
-                    if (textArr[i] === "ПЛАТЕЖНОЕ" && textArr[i + 1] === "ПОРУЧЕНИЕ") {
-                        isPaymentOrder = true;
-                    }
-                    if (textArr[i] === "Сумма") {
-                        amount = +textArr[i + 1].split("-").join(".");
-                    }
-                }
-            }
+        if (file && !paymentErrorMessage && amount) {
             const currentInvoice = invoices.filter(invoice => invoice.amount === amount)[0];
-            if (currentInvoice && currentInvoice.id && file && isPaymentOrder) {
+            if (currentInvoice) {
                 const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
                     const newPaid = {
                         isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
@@ -84,69 +66,20 @@ const InvoicesHeader: FC<IProps> = ({
                     severity: MESSAGE_SEVERITY.success,
                 }));
             } else {
-                if (!isPaymentOrder) {
-                    dispatch(setMessage({
-                        text: "Не является платёжным поручением",
-                        severity: MESSAGE_SEVERITY.error,
-                    }));
-                } else {
-                    if (file && !amount) {
-                        dispatch(setMessage({text: "Не удалось распознать сумму", severity: MESSAGE_SEVERITY.error}));
-                    } else {
-                        if (file && !currentInvoice) {
-                            dispatch(setMessage({
-                                text: `Нет неоплаченных счетов с суммой ${amount}`,
-                                severity: MESSAGE_SEVERITY.error,
-                            }));
-                        }
-                    }
-                }
-            }
-        }
-        setFile(null);
-        setIsUploadFileLoading(false);
-    }, [text]);
-    const handleFileChange = async (event: any) => {
-        setIsUploadFileLoading(true);
-        const file = event.target.files[0];
-        let isPDF = false;
-        if (file && file.name.split(".").pop() === "pdf") {
-            isPDF = true;
-        }
-        if (file && isPDF) {
-            try {
-                setFile(file);
-                const fileReader = new FileReader();
-                fileReader.onload = async () => {
-                    const url = fileReader.result;
-                    const pdf = await pdfjs.getDocument(url).promise;
-                    const totalPages = pdf.numPages;
-                    let fullText = "";
-
-                    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-                        const page = await pdf.getPage(pageNum);
-                        const content = await page.getTextContent();
-                        const pageText = content.items.map((item) => item.str).join(" ");
-                        fullText += pageText + " ";
-                    }
-                    setText(fullText);
-                };
-
-                fileReader.readAsDataURL(file);
-            } catch (error) {
-                alert("Ошибка при чтении PDF файла:", error);
-                setIsUploadFileLoading(false);
+                dispatch(setMessage({
+                    text: `Нет неоплаченных счетов на сумму ${amount} руб.`,
+                    severity: MESSAGE_SEVERITY.error,
+                }));
             }
         } else {
-            dispatch(setMessage({
-                text: "Формат файла не pdf",
-                severity: MESSAGE_SEVERITY.error,
-            }));
-            setFile(null);
-            setIsUploadFileLoading(false);
+            if (file && paymentErrorMessage) {
+                dispatch(setMessage({
+                    text: paymentErrorMessage,
+                    severity: MESSAGE_SEVERITY.error,
+                }));
+            }
         }
-    };
-
+    }, [file, isLoading, paymentErrorMessage, amount]);
     return (
         <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={matches_700 ? 3 : 1}>
             <Stack sx={{width: "100%"}}
@@ -163,7 +96,7 @@ const InvoicesHeader: FC<IProps> = ({
                     <LoadingButton
                         size={matches_700 ? "medium" : "small"}
                         component="label"
-                        loading={isUploadFileLoading}
+                        loading={isLoading}
                         variant={"outlined"}
                         startIcon={(<AttachFileIcon/>)}>
                         {isUploadFileLoading
@@ -173,7 +106,7 @@ const InvoicesHeader: FC<IProps> = ({
                             type="file"
                             accept="application/pdf"
                             hidden
-                            onChange={handleFileChange}
+                            onChange={onFileChange}
                         />
                     </LoadingButton>
                     <Button startIcon={(<AddIcon/>)}

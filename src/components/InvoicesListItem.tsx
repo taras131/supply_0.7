@@ -13,43 +13,33 @@ import {
     convertMillisecondsToDate,
     deleteYearFromString,
     extractAllText,
-    getDateInMilliseconds,
 } from "../utils/services";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {getSupplierINNById, getSupplierNameById} from "../store/selectors/suppliers";
 import DownloadIcon from "@mui/icons-material/Download";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import LoadingButton from "@mui/lab/LoadingButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {fetchUpdateInvoice, fetchUploadFile} from "../store/actionsCreators/invoices";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {setMessage} from "../store/reducers/message";
 import {
     AMOUNT_COPY_TEXT,
     CANCEL_TEXT, COPY_TEXT,
-    DOWNLOAD_TEXT,
-    FILE_TYPE, INN_COPY_TEXT,
-    MESSAGE_SEVERITY, NO_TEXT,
-    UPLOAD_TEXT, YES_TEXT,
+    DOWNLOAD_TEXT, INN_COPY_TEXT,
+    MESSAGE_SEVERITY, NO_TEXT, YES_TEXT,
 } from "../utils/const";
 import {routes} from "../utils/routes";
 import {useLocation, useNavigate} from "react-router-dom";
-import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import {getIsShipmentByInvoiceId} from "../store/selectors/shipments";
 import ApprovedInvoiceCheckbox from "./ApprovedInvoiceCheckbox";
 import {
     APPROVED_GRADIENT, BLACK_COLOR,
-    CANCEL_GRADIENT, CENTER, COMPONENT_A, CONTAINED_VARIANT, CURSOR_POINTER, END,
-    INHERIT, LABEL,
-    LOADING_BUTTON_BORDER_RADIUS, NONE, RIGHT, ROW,
-    SIZE_SMALL,
-    SUCCESS,
+    CANCEL_GRADIENT, CENTER, COMPONENT_A, CURSOR_POINTER, END,
+    INHERIT, RIGHT, ROW, SUCCESS,
     SUCCESS_GRADIENT, WHITE_COLOR,
 } from "../styles/const";
-import {getUser} from "../store/selectors/auth";
 import {getCommentsByInvoiceId} from "../store/selectors/coments";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import UploadPayment from "./UploadPayment";
 
 interface IProps {
     invoice: IInvoice,
@@ -60,7 +50,6 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {pathname} = useLocation();
-    const user = useAppSelector(state => getUser(state));
     const isShipment = useAppSelector(state => getIsShipmentByInvoiceId(state, invoice.id));
     const matches_1300 = useMediaQuery("(min-width:1300px)");
     const matches_1050 = useMediaQuery("(min-width:1050px)");
@@ -69,7 +58,6 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
     const comments = useAppSelector(state => getCommentsByInvoiceId(state, invoice.id));
     const supplierName = useAppSelector(state => getSupplierNameById(state, invoice.supplierId));
     const supplierINN = useAppSelector(state => getSupplierINNById(state, invoice.supplierId));
-    const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
     const [backgroundGradient, setBackgroundGradient] = useState(WHITE_COLOR);
     const [textColor, setTextColor] = useState(BLACK_COLOR);
     const invoiceCreatedDate = convertMillisecondsToDate(invoice.author.date);
@@ -89,20 +77,6 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
             setTextColor(BLACK_COLOR);
         }
     }, [invoice]);
-    const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
-        const newPaid = {
-            isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
-        };
-        dispatch(fetchUpdateInvoice({invoiceId: invoice.id, newPaid: newPaid}));
-    };
-    const handleChangeInputFile = (e: any) => {
-        setIsUploadFileLoading(true);
-        dispatch(fetchUploadFile({
-            file: e.target.files[0],
-            updateFile: onLoadingPaymentOrderFile,
-            setIsUpdateFileLoading: setIsUploadFileLoading,
-        }));
-    };
     const handleINNClick = () => {
         navigator.clipboard.writeText(supplierINN);
         dispatch(setMessage({text: INN_COPY_TEXT, severity: MESSAGE_SEVERITY.success}));
@@ -240,35 +214,12 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                                 color={SUCCESS}
                                 clickable
                             />)
-                            : (
-                                <LoadingButton
-                                    variant={CONTAINED_VARIANT}
-                                    sx={{borderRadius: LOADING_BUTTON_BORDER_RADIUS, textTransform: NONE}}
-                                    component={LABEL}
-                                    loading={isUploadFileLoading}
-                                    fullWidth
-                                    disabled={invoice.cancel && invoice.cancel.isCancel}
-                                    size={SIZE_SMALL}
-                                    startIcon={(invoice.cancel && invoice.cancel.isCancel
-                                        ? (<DoDisturbAltIcon/>)
-                                        : (<AttachFileIcon/>))}
-                                >
-                                    {invoice.cancel && invoice.cancel.isCancel
-                                        ? CANCEL_TEXT
-                                        : UPLOAD_TEXT}
-                                    <input
-                                        type={FILE_TYPE}
-                                        hidden
-                                        accept="image/*, application/pdf"
-                                        onChange={handleChangeInputFile}
-                                    />
-                                </LoadingButton>
-                            )}
+                            : (<UploadPayment invoice={invoice}/>)}
                     </TableCell>
                     {!forShipmentMode && (
                         <TableCell sx={{padding: 0}} align={RIGHT}>
                             {isShipment && (
-                                <IconButton aria-label="show comments" onClick={handleShipmentClick} color={SUCCESS}>
+                                <IconButton aria-label="show shipping" onClick={handleShipmentClick} color={SUCCESS}>
                                     <LocalShippingIcon color={SUCCESS}/>
                                 </IconButton>
                             )}

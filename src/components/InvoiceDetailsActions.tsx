@@ -1,62 +1,39 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import {Button, Stack, Typography, useMediaQuery} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import LoadingButton from "@mui/lab/LoadingButton";
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import {IInvoice} from "../models/iInvoices";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import {getDateInMilliseconds} from "../utils/services";
 import {
     fetchRemoveFile,
     fetchUpdateInvoice,
-    fetchUploadFile,
 } from "../store/actionsCreators/invoices";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {getUser} from "../store/selectors/auth";
-import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
+import {useAppDispatch} from "../hooks/redux";
 import InvoiceDetailsCancel from "./InvoiceDetailsCancel";
 import {CENTER, START} from "../styles/const";
+import UploadPayment from "./UploadPayment";
 
+interface IProps {
+    invoice: IInvoice
+}
 
-const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}) => {
-    const user = useAppSelector(state => getUser(state));
+const InvoiceDetailsActions: FC<IProps> = ({invoice}) => {
+    const {id, invoiceFileLink, paid, cancel} = invoice;
     const dispatch = useAppDispatch();
     const matches_700 = useMediaQuery("(min-width:700px)");
-    const matches_470 = useMediaQuery("(min-width:470px)");
-    const [isLoading, setIsLoading] = useState(false);
     let paymentOrderFileName = "";
     if (paid.paymentOrderFileLink) {
         paymentOrderFileName = paid.paymentOrderFileLink.split("/")[7].split("?")[0];
     }
     const invoiceFileName = invoiceFileLink.split("/")[7].split("?")[0];
-    const onLoadingPaymentOrderFile = (name: string, filePatch: string) => {
-        const newPaid = {
-            isPaid: true, userId: user.id, date: getDateInMilliseconds(), paymentOrderFileLink: filePatch,
-        };
-        dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}));
-    };
     const handleRemovePaymentOrderFile = () => {
         dispatch(fetchRemoveFile(paymentOrderFileName));
         const newPaid = {isPaid: false, userId: "", date: 0, paymentOrderFileLink: ""};
         dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}));
     };
-    const handleChangePaymentOrderFile = (e: any) => {
-        setIsLoading(true);
-        if (paymentOrderFileName) {
-            handleRemovePaymentOrderFile();
-        }
-        dispatch(fetchUploadFile({
-            file: e.target.files[0],
-            updateFile: onLoadingPaymentOrderFile,
-            setIsUpdateFileLoading: setIsLoading,
-        }));
-    };
-
     return (
         <Grid container sx={{width: "100%", minHeight: "100px"}} alignItems={START} spacing={2}>
-            <Grid xs={matches_700 ? 6: 12}>
+            <Grid xs={matches_700 ? 4 : 12}>
                 <Stack sx={{width: "100%"}} spacing={matches_700 ? 2 : 1} justifyContent={CENTER}>
                     <Typography color="darkblue" fontWeight={600}>
                         Счёт :
@@ -75,7 +52,7 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                     </Typography>
                 </Stack>
             </Grid>
-            <Grid xs={matches_700 ? 6 : 12}>
+            <Grid xs={matches_700 ? 4 : 12}>
                 <Stack sx={{width: "100%"}} spacing={matches_700 ? 2 : 1} justifyContent={CENTER}>
                     <Typography color="darkblue" fontWeight={600}>
                         Платёжное поручение :
@@ -88,21 +65,6 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                                         variant={"contained"}>
                                     Скачать
                                 </Button>
-                                {matches_470 && (
-                                    <LoadingButton
-                                        loading={isLoading}
-                                        component="label"
-                                        variant={"outlined"}
-                                        startIcon={(<PublishedWithChangesIcon/>)}
-                                    >
-                                        Заменить
-                                        <input
-                                            type="file"
-                                            hidden
-                                            onChange={handleChangePaymentOrderFile}
-                                        />
-                                    </LoadingButton>
-                                )}
                                 <Button
                                     color={"secondary"}
                                     variant={"contained"}
@@ -112,25 +74,7 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                                     Удалить
                                 </Button>
                             </>)
-                            : (<LoadingButton
-                                component="label"
-                                disabled={cancel && cancel.isCancel}
-                                loading={isLoading}
-                                variant={"outlined"}
-                                startIcon={(cancel && cancel.isCancel
-                                    ? (<DoDisturbAltIcon/>)
-                                    : (<AttachFileIcon/>))}
-                            >
-                                {cancel && cancel.isCancel
-                                    ? "Отменён"
-                                    : "Загрузить"}
-                                <input
-                                    type="file"
-                                    accept="image/*, application/pdf"
-                                    hidden
-                                    onChange={handleChangePaymentOrderFile}
-                                />
-                            </LoadingButton>)}
+                            : (<UploadPayment invoice={invoice} forDetailsMode/>)}
                     </Stack>
                     {paymentOrderFileName && (
                         <Typography color={"gray"} fontWeight={500}>
@@ -139,7 +83,7 @@ const InvoiceDetailsActions: FC<IInvoice> = ({id, invoiceFileLink, paid, cancel}
                     )}
                 </Stack>
             </Grid>
-            <Grid xs={12}>
+            <Grid xs={4}>
                 {paid && !paid.isPaid && (
                     <Stack spacing={matches_700 ? 2 : 1} sx={{width: "100%"}} justifyContent={CENTER}>
                         <Typography color="darkblue" fontWeight={600}>
