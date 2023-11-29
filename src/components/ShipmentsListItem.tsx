@@ -87,16 +87,6 @@ const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
                         <Typography fontWeight={600}>
                             Отгруженные счета:
                         </Typography>
-                        {shipment.ladingNumberFilePath && (
-                            <Chip
-                                label={"Накладная"}
-                                component="a"
-                                href={shipment.ladingNumberFilePath}
-                                icon={<DownloadIcon/>}
-                                color={"primary"}
-                                clickable
-                            />
-                        )}
                     </Stack>
                     <InvoicesList invoices={invoices} forShipmentMode={true}/>
                     <Stack

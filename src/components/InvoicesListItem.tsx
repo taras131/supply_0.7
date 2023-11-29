@@ -183,7 +183,7 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                         )}
                 </TableCell>
             )}
-            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : 0}}
+            <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : "2px"}}
                        align={CENTER}>
                 {matches_700
                     ? (<Chip

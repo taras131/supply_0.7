@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IShipments} from "../../models/iShipments";
+import {IMachinery} from "../../models/iMachinery";
 
 interface IMachineryState {
-    list: IShipments[]
+    list: IMachinery[]
     isLoading: boolean
     errorMessage: string
 }
@@ -17,7 +17,7 @@ export const MachinerySlice = createSlice({
     name: "machinery",
     initialState,
     reducers: {
-        setMachinery: (state, action: PayloadAction<IShipments[]>) => {
+        setMachinery: (state, action: PayloadAction<IMachinery[]>) => {
             state.list = action.payload;
         },
         setMachineryLoading: (state, action: PayloadAction<boolean>) => {

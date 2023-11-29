@@ -1,8 +1,10 @@
 export interface INewMachinery {
     brand: string
     model: string
-    yearOfManufacture: number
-    categoryId: string
+    yearManufacture: string
+    type: string
+    vin: string
+    stateNumber: string
 }
 
 export interface IMachinery extends INewMachinery {

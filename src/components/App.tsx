@@ -43,6 +43,9 @@ import {getAllUsers} from "../store/selectors/auth";
 import Machinery from "../pages/Machinery";
 import MachineryDetails from "../pages/MachineryDetails";
 import MachineryAddNew from "../pages/MachineryAddNew";
+import {IMachinery} from "../models/iMachinery";
+import {setMachinery, setMachineryLoading} from "../store/reducers/machinery";
+import Preloader from "./Preloader";
 
 const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
     open?: boolean;
@@ -184,6 +187,24 @@ function App() {
             return () => unsubscribe();
         });
     }, []);
+    useEffect(() => {
+        const q = query(collection(db, "machinery"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            try {
+                dispatch(setOrdersLoading(true));
+                const machineryArr: IMachinery [] = [];
+                querySnapshot.forEach((doc: any) => {
+                    machineryArr.push({...doc.data(), id: doc.id});
+                });
+                dispatch(setMachinery(machineryArr));
+                dispatch(setMachineryLoading(false));
+            } catch (e) {
+                dispatch(setMachineryLoading(false));
+                alert(e);
+            }
+            return () => unsubscribe();
+        });
+    }, []);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -204,7 +225,7 @@ function App() {
     }, [users]);
 
     if (isLoading || supplierIsLoading) {
-        return (<Typography>...Загрузка...</Typography>);
+        return (<Preloader/>);
     }
     return (
         <Box sx={{display: "flex"}}>

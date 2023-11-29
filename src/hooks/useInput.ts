@@ -5,30 +5,45 @@ interface IValidations {
     [key: string]: string | number | boolean
 }
 
-const useValidation = (value: string, validations: IValidations) => {
+const useValidation = (value: string | number, validations: IValidations) => {
     const [isEmpty, setIsEmpty] = useState(true);
     const [minLengthError, setMinLengthError] = useState(false);
     const [maxLengthError, setMaxLengthError] = useState(false);
+    const [minValueError, setMinValueError] = useState(false);
+    const [maxValueError, setMaxValueError] = useState(false);
     const [isEmailError, setIsEmailError] = useState(false);
     useEffect(() => {
         for (const validation in validations) {
-            switch (validation) {
-                case "minLength":
-                    setMinLengthError(value.length < validations[validation]);
-                    break;
-                case "maxLength":
-                    setMaxLengthError(value.length > validations[validation]);
-                    break;
-                case "isEmpty":
-                    setIsEmpty(!value);
-                    break;
-                case "isEmail":
-                    setIsEmailError(!validateEmail(value));
-                    break;
+            if (typeof value === "string") {
+                switch (validation) {
+                    case "minLength":
+                        setMinLengthError(value.length < validations[validation]);
+                        break;
+                    case "maxLength":
+                        setMaxLengthError(value.length > validations[validation]);
+                        break;
+                    case "isEmpty":
+                        setIsEmpty(!value);
+                        break;
+                    case "isEmail":
+                        setIsEmailError(!validateEmail(value));
+                        break;
+                }
+            }
+            if (typeof value === "number") {
+                switch (validation) {
+                    case "minValue":
+                        setMinValueError(value < validations[validation]);
+                        break;
+                    case "maxValue":
+                        setMaxValueError(value > validations[validation]);
+                        break;
+
+                }
             }
         }
     }, [value]);
-    return {isEmpty, minLengthError, isEmailError, maxLengthError};
+    return {isEmpty, minLengthError, isEmailError, maxLengthError, minValueError, maxValueError};
 };
 
 export const useInput = (initialValue: string, validations: IValidations) => {
@@ -50,6 +65,12 @@ export const useInput = (initialValue: string, validations: IValidations) => {
             if (valid.isEmpty) {
                 setError("поле не может быть пустым");
             }
+            if (valid.minValueError) {
+                setError(`Значение не может быть меньше ${validations.minValue}`);
+            }
+            if (valid.maxValueError) {
+                setError(`Значение не может быть больше ${validations.maxValue}`);
+            }
         }
     };
     useEffect(() => {
@@ -62,14 +83,19 @@ export const useInput = (initialValue: string, validations: IValidations) => {
         return () => clearTimeout(timeout);
     }, [valid]);
     const onChange = (e: any) => {
-        if(!isHappenedChange) {
+        if (!isHappenedChange) {
             setIsHappenedChange(true);
         }
         if (timeout) {
             clearTimeout(timeout);
         }
         setError("");
-        setValue(e.target.value);
+        if (typeof value === "number") {
+            setValue(+e.target.value);
+        } else {
+            setValue(e.target.value);
+        }
+
     };
 
     const set = (str: string) => {

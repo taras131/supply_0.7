@@ -4,6 +4,8 @@ import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {SUCCESS_GRADIENT} from "../styles/const";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
+import DownloadIcon from "@mui/icons-material/Download";
+
 
 const ShipmentsHelper = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");
@@ -32,6 +34,10 @@ const ShipmentsHelper = () => {
                 <Stack direction={"row"} spacing={3} alignItems={"center"} mt={matches_700 ? 2 : 1}>
                     <DirectionsSubwayIcon/>
                     <Typography>- отправлен ЖД доставкой.</Typography>
+                </Stack>
+                <Stack direction={"row"} spacing={3} alignItems={"center"} mt={matches_700 ? 2 : 1}>
+                    <DownloadIcon/>
+                    <Typography>- скачать транспортную накладную или счёт.</Typography>
                 </Stack>
             </Grid>
         </Grid>

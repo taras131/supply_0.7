@@ -27,6 +27,7 @@ import {INewShipments} from "../models/iShipments";
 import {IReceivingData} from "../store/actionsCreators/shipments";
 import {INewOrder, IOrder} from "../models/iOrders";
 import {IUpdateApprovedOrderData} from "../store/actionsCreators/orders";
+import {INewMachinery} from "../models/iMachinery";
 
 class Api {
     auth = getAuth();
@@ -62,6 +63,13 @@ class Api {
             orderItems: order.orderItems,
             comment: order.comment,
         });
+        return res;
+    };
+    addMachinery = async (machinery: INewMachinery) => {
+        console.log(machinery)
+        const res = await addDoc(collection(db, "machinery"),
+            machinery
+        );
         return res;
     };
     addInvoice = async (addInvoiceData: IAddInvoiceData) => {
@@ -183,7 +191,6 @@ class Api {
     };
     login = async (authData: IAuthData) => {
         const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password);
-        startSession(res.user);
         return res.user.uid;
     };
     register = async (registerData: IRegisterData) => {

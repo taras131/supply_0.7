@@ -38,6 +38,7 @@ export const NO_TEXT = "Нет";
 export const YES_TEXT = "Да";
 export const COPY_TEXT = "скопировать";
 export const INN_COPY_TEXT = "ИНН скопирован";
+export const VIN_COPY_TEXT = "VIN скопирован";
 export const AMOUNT_COPY_TEXT = "Сумма скопирована";
 export const FILE_TYPE = "file";
 

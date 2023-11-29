@@ -1,11 +1,12 @@
 import React, {FC} from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import {Typography, useMediaQuery} from "@mui/material";
+import {IconButton, Stack, Typography, useMediaQuery} from "@mui/material";
 import {convertMillisecondsToDate, deleteYearFromString} from "../utils/services";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
 import {IShipments} from "../models/iShipments";
-import {CENTER} from "../styles/const";
+import {CENTER, COMPONENT_A, END, ROW, SPACE_BETWEEN, START} from "../styles/const";
+import DownloadIcon from "@mui/icons-material/Download";
 
 interface IProps {
     shipment: IShipments
@@ -27,9 +28,20 @@ const ShipmentHeader: FC<IProps> = ({shipment}) => {
                 </Grid>
             )}
             <Grid xs={matches_430 ? 8 : 9}>
-                <Typography sx={{flexShrink: 0}} fontWeight={600}>
-                    {shipment.transporter}
-                </Typography>
+                <Stack direction={ROW} alignItems={CENTER} justifyContent={SPACE_BETWEEN} sx={{width: "100%"}}>
+                    <Typography sx={{flexShrink: 0}} fontWeight={600}>
+                        {shipment.transporter}
+                    </Typography>
+                    {shipment.ladingNumberFilePath && (
+                        <IconButton sx={{padding: 0}}
+                                    color="primary"
+                                    aria-label="download invoice"
+                                    component={COMPONENT_A}
+                                    href={shipment.ladingNumberFilePath}>
+                            <DownloadIcon/>
+                        </IconButton>
+                    )}
+                </Stack>
             </Grid>
             <Grid xs={matches_430 ? 7 : 8}>
                 <Typography sx={{flexShrink: 0}} fontWeight={600} ml={1}>

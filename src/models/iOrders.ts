@@ -29,6 +29,7 @@ export interface INewOrder {
     orderItems: IOrderItem []
     comment: string
     approved: IApproved
+    machineryId?: string
 }
 
 export interface IOrder extends INewOrder {
@@ -60,4 +61,5 @@ export const emptyOrder: IOrder = {
         userId: "",
         date: 0,
     },
+    machineryId: "",
 };

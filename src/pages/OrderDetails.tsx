@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Typography} from "@mui/material";
+import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
 import {
@@ -23,6 +23,14 @@ import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleA
 import PageLayout from "../components/PageLayout";
 import OrderDetailsEditTitle from "../components/OrderDetailsEditTitle";
 import OrderDetailsEditHelper from "../components/OrderDetailsEditHelper";
+import MachineryList from "../components/MachineryList";
+import {getMachineryById} from "../store/selectors/machinery";
+import NameWithValue from "../components/NameWithValue";
+import {getUser, getUserFullNameById} from "../store/selectors/auth";
+import Grid from "@mui/material/Unstable_Grid2";
+import {CENTER, LEFT, ROW, SPACE_AROUND, SPACE_BETWEEN} from "../styles/const";
+import ApprovedOrderCheckbox from "../components/ApprovedOrderCheckbox";
+import Box from "@mui/material/Box";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -34,6 +42,16 @@ const OrderDetails = () => {
     const currentOrder = useAppSelector(state => getCurrentOrder(state));
     const order = useAppSelector(state => getOrderById(state, orderId));
     const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
+    const authorFullName = useAppSelector(state => getUserFullNameById(state, currentOrder.author.userId));
+    const user = useAppSelector(state => getUser(state));
+    const matches_700 = useMediaQuery("(min-width:700px)");
+    const machinery = useAppSelector(state => {
+        if (order && order.machineryId) {
+            return getMachineryById(state, order.machineryId);
+        } else {
+            return "";
+        }
+    });
     const relatedInvoices = useAppSelector(state => {
         if (isNewOrder) {
             return null;
@@ -77,12 +95,16 @@ const OrderDetails = () => {
             dispatch(fetchAddOrder({
                 ...newOrder,
                 orderItems: filteredOrderItems,
-                author: {userId: "", dateCreating: getDateInMilliseconds()},
+                author: {userId: user.id, dateCreating: getDateInMilliseconds()},
             }));
             dispatch(setCurrentOrder(emptyOrder));
             localStorage.removeItem("newOrder");
         } else {
-            dispatch(fetchUpdateOrder({...currentOrder, orderItems: filteredOrderItems}));
+            dispatch(fetchUpdateOrder({
+                ...currentOrder,
+                orderItems: filteredOrderItems,
+                author: {...currentOrder.author, userId: user.id},
+            }));
         }
         dispatch(setCurrenOrderIsEdit(false));
         setIsValidate(false);
@@ -121,14 +143,40 @@ const OrderDetails = () => {
             {isEdit && (
                 <OrderDetailsEditHelper/>
             )}
+            {machinery && !isEdit && (
+                <>
+                    <Box sx={{width: "100%"}}>
+                        <Typography fontSize={matches_700 ? "18px" : "14px"} fontWeight={550}>
+                            Прикреплённая техника:
+                        </Typography>
+                    </Box>
+                    <MachineryList machinery={machinery}/>
+                </>
+            )}
             {relatedInvoices && relatedInvoices.length > 0 && !isEdit && (
                 <>
-                    <Typography fontSize={"20px"} fontWeight={600}>
-                        Связанные счета:
-                    </Typography>
+                    <Box sx={{width: "100%"}}>
+                        <Typography fontSize={matches_700 ? "18px" : "14px"} fontWeight={550}>
+                            Связанные счета:
+                        </Typography>
+                    </Box>
                     <InvoicesList invoices={relatedInvoices}/>
                 </>
             )}
+            <Stack direction={ROW} alignItems={CENTER}
+                   justifyContent={SPACE_BETWEEN} sx={{width: "100%"}}>
+                {authorFullName && (
+                    <NameWithValue width={"200px"} title={"Автор:"}>
+                        {authorFullName ? authorFullName : "неизвестен"}
+                    </NameWithValue>
+                )}
+                <Stack direction={ROW} alignItems={CENTER} spacing={1}>
+                    <Typography fontWeight={600}>
+                        Одобрена
+                    </Typography>
+                    <ApprovedOrderCheckbox order={currentOrder}/>
+                </Stack>
+            </Stack>
         </PageLayout>
     );
 };

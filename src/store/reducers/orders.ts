@@ -54,6 +54,9 @@ export const OrdersSlice = createSlice({
         updateCurrentOrderType: (state, action: PayloadAction<TOrdersType>) => {
             state.currentOrder.orderType = action.payload;
         },
+        updateCurrentOrderMachineryId: (state, action: PayloadAction<string>) => {
+            state.currentOrder.machineryId = action.payload;
+        },
         updateItemsValues: (state, action: PayloadAction<IUpdateOrderItems>) => {
             const {id, name, newValue} = action.payload;
             state.currentOrder = {
@@ -106,6 +109,7 @@ export const {
     updateCurrentOrderTitle,
     updateCurrentOrderShipmentType,
     updateCurrentOrderType,
+    updateCurrentOrderMachineryId,
 } = OrdersSlice.actions;
 
 export default OrdersSlice.reducer;
