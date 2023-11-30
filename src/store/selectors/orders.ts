@@ -65,6 +65,16 @@ export const getRelatedOrdersByInvoiceId = (state: RootState, invoiceId: string)
     return orders;
 };
 
+export const getRelatedOrdersByMachineryId = (state: RootState, machineryId: string): IOrder [] => {
+    const orders: IOrder[] = [];
+    state.orders.list.forEach(order => {
+        if (order.machineryId && order.machineryId === machineryId) {
+            orders.push(order)
+        }
+    });
+    return orders;
+};
+
 export const getNumberAnnualOrders = (state: RootState) => {
     return state.orders.list.filter(order => order.orderType === "annual").length;
 };

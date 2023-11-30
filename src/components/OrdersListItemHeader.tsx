@@ -6,6 +6,7 @@ import {convertMillisecondsToDate, deleteYearFromString} from "../utils/services
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
 import {IOrder} from "../models/iOrders";
+import {CENTER} from "../styles/const";
 
 interface IProps {
     order: IOrder
@@ -13,39 +14,37 @@ interface IProps {
 
 const OrdersListItemHeader: FC<IProps> = ({order}) => {
     const matches_870 = useMediaQuery("(min-width:870px)");
+    const matches_430 = useMediaQuery("(min-width:420px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
-   // const authorFullName = useAppSelector(state => getUserFullNameById(state, order.author.userId)) || "";
+    const matches_600 = useMediaQuery("(min-width:600px)");
+    // const authorFullName = useAppSelector(state => getUserFullNameById(state, order.author.userId)) || "";
     const dateCreating = convertMillisecondsToDate(order.author.dateCreating);
     return (
-        <Grid sx={{width: "100%"}} container alignItems={"center"} spacing={1}>
-            {matches_700 && (
-                <Grid xs={"auto"}>
-                    <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                        <ApprovedOrderCheckbox order={order}/>
-                        {matches_700 && (
-                            <Typography>
-                                Одобрена
-                            </Typography>
-                        )}
-                    </Stack>
+        <Grid sx={{width: "100%"}}
+              alignItems={CENTER}
+              container
+              spacing={matches_600 ? 1 : 0}
+              columns={18}
+              pr={1}
+        >
+            {matches_430 && (
+                <Grid xs={2}>
+                    <Typography sx={{flexShrink: 0}} fontWeight={600}>
+                        {matches_870 ? dateCreating : deleteYearFromString(dateCreating)}
+                    </Typography>
                 </Grid>
             )}
-            <Grid xs={7}>
+            <Grid xs={matches_430 ? 15 : 17}>
                 <Typography sx={{flexShrink: 0}} fontWeight={600}>
                     {order.title}
                 </Typography>
             </Grid>
-            <Grid xs>
-                <Typography sx={{flexShrink: 0}} fontWeight={600}>
-                    {matches_870 ? dateCreating : deleteYearFromString(dateCreating)}
-                </Typography>
-            </Grid>
-            <Grid xs>
-                <Grid container direction="row-reverse" sx={{padding: "6px"}}>
+            <Grid xs={1} sx={{margin: 0, padding: 0}}>
+                <Stack alignItems={CENTER} justifyContent={CENTER}>
                     {order.shipmentType === "air"
                         ? (<AirplanemodeActiveIcon/>)
                         : (<DirectionsSubwayIcon/>)}
-                </Grid>
+                </Stack>
             </Grid>
         </Grid>
     );

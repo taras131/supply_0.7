@@ -49,9 +49,11 @@ const ShipmentHeader: FC<IProps> = ({shipment}) => {
                 </Typography>
             </Grid>
             <Grid xs={1} sx={{margin: 0, padding: 0}}>
-                {shipment.type === "air"
-                    ? (<AirplanemodeActiveIcon/>)
-                    : (<DirectionsSubwayIcon/>)}
+                <Stack alignItems={CENTER} justifyContent={CENTER}>
+                    {shipment.type === "air"
+                        ? (<AirplanemodeActiveIcon/>)
+                        : (<DirectionsSubwayIcon/>)}
+                </Stack>
             </Grid>
         </Grid>
     );

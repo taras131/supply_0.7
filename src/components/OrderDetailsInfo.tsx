@@ -9,7 +9,7 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import {ordersTypes, shipmentTypes} from "../utils/const";
-import NameWithValue from "./NameWithValue";
+import TitleWithValue from "./TitleWithValue";
 import {IOrder, TOrdersType} from "../models/iOrders";
 import {
     updateCurrentOrderMachineryId,
@@ -101,12 +101,12 @@ const OrderDetailsInfo: FC<IProps> = ({isEdit, currentOrder, isNewOrder}) => {
                     </FormControl>
                 </>)
                 : (<>
-                    <NameWithValue width={"130px"} title={"Срочность:"}>
+                    <TitleWithValue width={"130px"} title={"Срочность:"}>
                         {currentOrder.shipmentType === "railway" ? "ЖД" : "Авиа"}
-                    </NameWithValue>
-                    <NameWithValue width={"170px"} title={"Тип заявки:"}>
+                    </TitleWithValue>
+                    <TitleWithValue width={"170px"} title={"Тип заявки:"}>
                         {currentOrder.orderType === "current" ? "Текущая" : "Годовая"}
-                    </NameWithValue>
+                    </TitleWithValue>
                 </>)}
         </Stack>
     );

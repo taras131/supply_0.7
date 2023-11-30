@@ -10,7 +10,6 @@ const MachineryListTableHeader = () => {
     const matches_500 = useMediaQuery("(min-width:500px)");
     const matches_450 = useMediaQuery("(min-width:450px)");
     const matches_400 = useMediaQuery("(min-width:400px)");
-
     return (
         <TableHead>
             <TableRow sx={{padding: matches_700 ? "10px" : "2px"}}>

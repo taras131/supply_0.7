@@ -5,7 +5,7 @@ import {
     AccordionDetails,
     AccordionSummary,
     Stack,
-    Typography,
+    Typography, useMediaQuery,
 } from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
@@ -15,8 +15,17 @@ import OrderPositionsList from "./OrderPositionsList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {getCurrentOrderIsEdit} from "../store/selectors/orders";
 import OrdersListItemHeader from "./OrdersListItemHeader";
-import {APPROVED_GRADIENT, SUCCESS_GRADIENT, WHITE_COLOR} from "../styles/const";
+import {
+    APPROVED_GRADIENT,
+    CENTER,
+    CURSOR_POINTER,
+    ROW,
+    SPACE_BETWEEN,
+    SUCCESS_GRADIENT,
+    WHITE_COLOR,
+} from "../styles/const";
 import {getIsCompleteOrder} from "../utils/services";
+import ApprovedOrderCheckbox from "./ApprovedOrderCheckbox";
 
 interface IProps {
     order: IOrder
@@ -32,6 +41,7 @@ const OrdersListItem: FC<IProps> = ({
                                         , isSelectPositionMode,
                                     }) => {
     const isEdit = useAppSelector(state => getCurrentOrderIsEdit(state));
+    const matches_600 = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate();
     const {pathname} = useLocation();
     const [background, setBackground] = useState(WHITE_COLOR);
@@ -53,7 +63,8 @@ const OrdersListItem: FC<IProps> = ({
                 expandIcon={<ExpandMoreIcon/>}
                 aria-controls="panel1bh-content"
                 id={order.id}
-                sx={{background: background}}
+                sx={{background: background, paddingLeft: matches_600 ? "16px" : "4px",
+                    paddingRight: matches_600 ? "16px" : "4px", margin: 0}}
             >
                 <OrdersListItemHeader order={order}/>
             </AccordionSummary>
@@ -64,17 +75,25 @@ const OrdersListItem: FC<IProps> = ({
                                     isSelectPositionMode={isSelectPositionMode}
                                     isLimitedOverview/>
                 {!isSelectPositionMode && (
-                    <Stack direction={"row"}
-                           alignItems={"center"}
+                    <Stack direction={ROW}
+                           alignItems={CENTER}
                            spacing={2}
-                           justifyContent={"end"}
-                           sx={{width: "100%", cursor: "pointer"}}
+                           justifyContent={SPACE_BETWEEN}
+                           sx={{width: "100%", cursor: CURSOR_POINTER}}
                            onClick={handleMoreClick}
                            mt={2} pr={2}>
-                        <Typography color={"primary"}>
-                            Подробнее
-                        </Typography>
-                        <MoreHorizIcon color={"primary"}/>
+                        <Stack direction={ROW} spacing={1} alignItems={CENTER}>
+                            <ApprovedOrderCheckbox order={order}/>
+                            <Typography>
+                                одобрена
+                            </Typography>
+                        </Stack>
+                        <Stack direction={ROW} spacing={1} alignItems={CENTER}>
+                            <Typography color={"primary"}>
+                                Подробнее
+                            </Typography>
+                            <MoreHorizIcon color={"primary"}/>
+                        </Stack>
                     </Stack>
                 )}
             </AccordionDetails>

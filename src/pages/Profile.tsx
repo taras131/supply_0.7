@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import {fetchOut} from "../store/actionsCreators/auth";
 import {Container} from "@mui/material";
-import NameWithValue from "../components/NameWithValue";
+import TitleWithValue from "../components/TitleWithValue";
 import Grid from "@mui/material/Unstable_Grid2";
 import {CENTER, START} from "../styles/const";
 
@@ -46,18 +46,18 @@ const Profile = () => {
                     </Grid>
                     <Grid xs={4}>
                         <Stack spacing={2}>
-                            <NameWithValue width={"220px"} title={"Имя:"}>
+                            <TitleWithValue width={"220px"} title={"Имя:"}>
                                 {user.firstName}
-                            </NameWithValue>
-                            <NameWithValue width={"220px"} title={"Отчество:"}>
+                            </TitleWithValue>
+                            <TitleWithValue width={"220px"} title={"Отчество:"}>
                                 {user.middleName}
-                            </NameWithValue>
-                            <NameWithValue width={"220px"} title={"id:"}>
+                            </TitleWithValue>
+                            <TitleWithValue width={"220px"} title={"id:"}>
                                 {user.id}
-                            </NameWithValue>
-                            <NameWithValue width={"220px"} title={"email:"}>
+                            </TitleWithValue>
+                            <TitleWithValue width={"220px"} title={"email:"}>
                                 {user.email}
-                            </NameWithValue>
+                            </TitleWithValue>
                         </Stack>
                     </Grid>
                 </Grid>

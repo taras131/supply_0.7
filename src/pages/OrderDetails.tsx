@@ -25,7 +25,7 @@ import OrderDetailsEditTitle from "../components/OrderDetailsEditTitle";
 import OrderDetailsEditHelper from "../components/OrderDetailsEditHelper";
 import MachineryList from "../components/MachineryList";
 import {getMachineryById} from "../store/selectors/machinery";
-import NameWithValue from "../components/NameWithValue";
+import TitleWithValue from "../components/TitleWithValue";
 import {getUser, getUserFullNameById} from "../store/selectors/auth";
 import Grid from "@mui/material/Unstable_Grid2";
 import {CENTER, LEFT, ROW, SPACE_AROUND, SPACE_BETWEEN} from "../styles/const";
@@ -166,9 +166,9 @@ const OrderDetails = () => {
             <Stack direction={ROW} alignItems={CENTER}
                    justifyContent={SPACE_BETWEEN} sx={{width: "100%"}}>
                 {authorFullName && (
-                    <NameWithValue width={"200px"} title={"Автор:"}>
+                    <TitleWithValue width={"200px"} title={"Автор:"}>
                         {authorFullName ? authorFullName : "неизвестен"}
-                    </NameWithValue>
+                    </TitleWithValue>
                 )}
                 <Stack direction={ROW} alignItems={CENTER} spacing={1}>
                     <Typography fontWeight={600}>

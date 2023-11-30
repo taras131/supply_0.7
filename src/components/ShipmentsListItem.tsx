@@ -23,7 +23,7 @@ import {getUser, getUserFullNameById} from "../store/selectors/auth";
 import ShipmentHeader from "./ShipmentHeader";
 import {getInvoicesByIds} from "../store/selectors/invoices";
 import InvoicesList from "./InvoicesList";
-import {CENTER, ROW, SPACE_BETWEEN, START, SUCCESS_GRADIENT} from "../styles/const";
+import {CENTER, END, ROW, SPACE_BETWEEN, START, SUCCESS_GRADIENT} from "../styles/const";
 
 interface IProps {
     shipment: IShipments
@@ -90,14 +90,14 @@ const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
                     </Stack>
                     <InvoicesList invoices={invoices} forShipmentMode={true}/>
                     <Stack
-                        direction={"row"}
+                        direction={ROW}
                         alignItems={CENTER}
-                        justifyContent={"space-between"}>
+                        justifyContent={SPACE_BETWEEN}>
                         <Stack direction={ROW} alignItems={CENTER}>
                             <FormControlLabel
                                 sx={{padding: 0, margin: 0}}
                                 label={"получен"}
-                                labelPlacement={"end"}
+                                labelPlacement={END}
                                 control={<Checkbox checked={shipment.receiving && shipment.receiving.isReceived}
                                                    onChange={handleReceivingChange}
                                                    color={"primary"}

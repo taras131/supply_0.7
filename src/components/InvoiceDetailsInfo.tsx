@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Stack} from "@mui/material";
-import NameWithValue from "./NameWithValue";
+import TitleWithValue from "./TitleWithValue";
 import Divider from "@mui/material/Divider";
 import ApprovedInvoiceCheckbox from "./ApprovedInvoiceCheckbox";
 import {useAppSelector} from "../hooks/redux";
@@ -23,19 +23,19 @@ const InvoiceDetailsInfo:FC<IProps> = ({invoice}) => {
     });
     return (
         <Stack spacing={2}>
-            <NameWithValue title={"№ :"} value={invoice.number}/>
+            <TitleWithValue title={"№ :"} value={invoice.number}/>
             <Divider/>
-            <NameWithValue title={"Поставщик :"} value={supplierName}/>
+            <TitleWithValue title={"Поставщик :"} value={supplierName}/>
             <Divider/>
-            <NameWithValue title={"ИНН :"} value={supplierINN}/>
+            <TitleWithValue title={"ИНН :"} value={supplierINN}/>
             <Divider/>
-            <NameWithValue title={"Сумма :"} value={invoice.amount + " руб."}/>
+            <TitleWithValue title={"Сумма :"} value={invoice.amount + " руб."}/>
             <Divider/>
-            <NameWithValue title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
+            <TitleWithValue title={"НДС :"} value={invoice.isWithVAT ? "Да" : "Нет"}/>
             <Divider/>
-            <NameWithValue title={"Одобрен :"}>
+            <TitleWithValue title={"Одобрен :"}>
                 <ApprovedInvoiceCheckbox invoice={invoice}/>
-            </NameWithValue>
+            </TitleWithValue>
         </Stack>
     );
 };

@@ -9,7 +9,7 @@ interface IProps {
     width?: string
 }
 
-const NameWithValue: FC<IProps> = ({title, value, width = "100%", children}) => {
+const TitleWithValue: FC<IProps> = ({title, value, width = "100%", children}) => {
     return (
         <Stack sx={{width: width}} direction={ROW} alignItems="center" justifyContent={SPACE_BETWEEN}>
             <Typography color="gray" fontWeight={600}>
@@ -24,4 +24,4 @@ const NameWithValue: FC<IProps> = ({title, value, width = "100%", children}) => 
     );
 };
 
-export default NameWithValue;
+export default TitleWithValue;

@@ -11,7 +11,7 @@ interface IProps {
 const MachineryList: FC<IProps> = ({machinery}) => {
     const machineryList = machinery.map(machinery => (<MachineryListItem key={machinery.id} machinery={machinery}/>))
     return (
-        <TableContainer component={Paper} sx={{maxWidth: 1350}}>
+        <TableContainer component={Paper} sx={{maxWidth: 1350, marginTop: "4px"}}>
             <Table aria-label="simple table">
                 <MachineryListTableHeader/>
                 <TableBody>

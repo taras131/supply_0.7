@@ -22,20 +22,24 @@ import PageHeaderWithTitleAndButton from "../components/PageHeaderWithTitleAndBu
 import PageLayout from "../components/PageLayout";
 import InvoiceDetailsInfo from "../components/InvoiceDetailsInfo";
 import ShipmentsList from "../components/ShipmentsList";
-import {START} from "../styles/const";
+import {IMachinery} from "../models/iMachinery";
+import {getMachineryById, getRelatedMachineryByInvoiceId} from "../store/selectors/machinery";
+import MachineryList from "../components/MachineryList";
 
 const InvoiceDetails = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");
     const invoiceId = useParams().invoiceId || "0";
     const location = useLocation() as TLocation;
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
-    const shipments = useAppSelector(state => getShipmentsByInvoiceId(state, invoiceId));
+    const relatedShipments = useAppSelector(state => getShipmentsByInvoiceId(state, invoiceId));
     const relatedOrders = useAppSelector(state => getRelatedOrdersByInvoiceId(state, invoiceId));
+    const relatedMachinery = useAppSelector(state => getRelatedMachineryByInvoiceId(state, invoiceId));
     const [expanded, setExpanded] = useState<string | false>(false);
     useEffect(() => {
         if (location.state && location.state.isCommentClick) setExpanded(commentPanelId);
         if (location.state && location.state.isShipmentClick) setExpanded(shipmentPanelId);
     }, [location]);
+
     const handleExpandedChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -55,7 +59,7 @@ const InvoiceDetails = () => {
                 </Grid>
                 <Grid xs={matches_700 ? 5 : 12}>
                     <InvoiceDetailsStepper invoice={invoice}
-                                           shipment={shipments[0] ? shipments[0] : false}/>
+                                           shipment={relatedShipments[0] ? relatedShipments[0] : false}/>
                 </Grid>
             </Grid>
             <Stack sx={{width: "100%"}} spacing={3}>
@@ -63,22 +67,28 @@ const InvoiceDetails = () => {
             </Stack>
             {relatedOrders && relatedOrders.length > 0 && (
                 <Stack sx={{width: "100%"}} spacing={1}>
-                    <Typography fontSize={"20px"} fontWeight={600}>
+                    <Typography fontSize={"16px"} fontWeight={600}>
                         Связанные заявки:
                     </Typography>
                     <OrdersList orders={relatedOrders}/>
                 </Stack>
             )}
-            {shipments.length > 0 && (
-                <>
-                    <Stack sx={{width: "100%"}} alignItems={START}>
-                        <Typography fontSize={"16px"} fontWeight={600}>
-                            Связанные отгрузки:
-                        </Typography>
-                    </Stack>
-                    <ShipmentsList shipments={shipments}
-                                   extendShipmentId={shipments.length && location.state && location.state.isShipmentClick ? shipments[0].id : false}/>
-                </>
+            {relatedShipments.length > 0 && (
+                <Stack sx={{width: "100%"}} spacing={1}>
+                    <Typography fontSize={"16px"} fontWeight={600}>
+                        Связанные отгрузки:
+                    </Typography>
+                    <ShipmentsList shipments={relatedShipments}
+                                   extendShipmentId={relatedShipments.length && location.state && location.state.isShipmentClick ? relatedShipments[0].id : false}/>
+                </Stack>
+            )}
+            {relatedMachinery.length > 0 && (
+                <Stack sx={{width: "100%"}} spacing={1}>
+                    <Typography fontSize={"16px"} fontWeight={600}>
+                        Связанная техника:
+                    </Typography>
+                    <MachineryList machinery={relatedMachinery}/>
+                </Stack>
             )}
             <InvoiceDetailsComments expanded={expanded}
                                     handleExpandedChange={handleExpandedChange(commentPanelId)}
