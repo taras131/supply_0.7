@@ -24,7 +24,7 @@ const SuppliersAddNew: FC<IProps> = ({isOpenModal, handleToggleOpen}) => {
         if (inputValue.name.length > 3) {
             setInputValueError({...inputValueError, name: ""});
         }
-        if (("" + inputValue.INN).length >= 10) {
+        if (("" + inputValue.INN).length <= 10) {
             setInputValueError({...inputValueError, INN: "ИНН должен быть не меннее 10 символов"});
         } else {
             setInputValueError({...inputValueError, INN: ""});
