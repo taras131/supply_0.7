@@ -10,7 +10,7 @@ const InvoicesInfo = () => {
     const countUnpaidInvoices = useAppSelector(state => getCountUnpaidInvoices(state));
     const amountUnpaidInvoices = useAppSelector(state => getAmountUnpaidInvoices(state));
     return (
-        <Stack sx={{width: "100%", maxWidth: 1350}}
+        <Stack sx={{maxWidth: 1350}}
                direction={matches_400 ? ROW : COLUMN}
                alignItems={matches_400 ? CENTER : START}
                justifyContent={START}

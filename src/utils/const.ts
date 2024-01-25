@@ -15,6 +15,7 @@ export const shipmentPanelId = "shipment";
 export const STRING_EMPTY = "";
 export const STRING_WITH_SPACE = " ";
 export const ADD_BUTTON_TEXT = "Добавить";
+export const ALL = "all"
 
 export const drawerWidth = 240;
 

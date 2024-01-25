@@ -8,7 +8,7 @@ interface IProps {
     handlePaidInvoiceChange: () => void
 }
 
-const InvoicesHeaderCheckBoxes: FC<IProps> = ({
+const InvoicesFilterCheckBoxes: FC<IProps> = ({
                                                   isShowCanceledInvoice,
                                                   handleCanceledInvoiceChange,
                                                   isShowPaidInvoice,
@@ -30,4 +30,4 @@ const InvoicesHeaderCheckBoxes: FC<IProps> = ({
     );
 };
 
-export default InvoicesHeaderCheckBoxes;
+export default InvoicesFilterCheckBoxes;

@@ -19,22 +19,11 @@ import AddIcon from "@mui/icons-material/Add";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {CENTER, SPACE_BETWEEN} from "../styles/const";
-import InvoicesHeaderCheckBoxes from "./InvoicesHeaderCheckBoxes";
+import InvoicesFilterCheckBoxes from "./InvoicesFilterCheckBoxes";
 import {useUploadFile} from "../hooks/useUploadFile";
+import InvoicesInfo from "./InvoicesInfo";
 
-interface IProps {
-    isShowCanceledInvoice: boolean
-    isShowPaidInvoice: boolean
-    handleCanceledInvoiceChange: () => void
-    handlePaidInvoiceChange: () => void
-}
-
-const InvoicesHeader: FC<IProps> = ({
-                                        isShowCanceledInvoice,
-                                        isShowPaidInvoice,
-                                        handleCanceledInvoiceChange,
-                                        handlePaidInvoiceChange,
-                                    }) => {
+const InvoicesHeader: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
@@ -42,7 +31,7 @@ const InvoicesHeader: FC<IProps> = ({
     const matches_700 = useMediaQuery("(min-width:700px)");
     const {file, onFileChange, paymentErrorMessage, amount, isLoading} = useUploadFile();
     const user = useAppSelector(state => getUser(state));
-    const invoices = useAppSelector(state => getInvoices(state, false, false));
+    const invoices = useAppSelector(state => getInvoices(state));
     const handleAddInvoiceClick = () => {
         navigate(routes.invoices + "/add_new");
     };
@@ -83,15 +72,13 @@ const InvoicesHeader: FC<IProps> = ({
     return (
         <Stack sx={{maxWidth: 1350, width: "100%"}} spacing={matches_700 ? 3 : 1}>
             <Stack sx={{width: "100%"}}
-                   direction="row" alignItems={CENTER}
+                   direction="row"
+                   alignItems={CENTER}
                    justifyContent={SPACE_BETWEEN}>
                 <Typography variant="h2" fontSize="24px" fontWeight={700}>
                     Счета
                 </Typography>
-                {matches_1050 && (<InvoicesHeaderCheckBoxes isShowCanceledInvoice={isShowCanceledInvoice}
-                                                            handleCanceledInvoiceChange={handleCanceledInvoiceChange}
-                                                            isShowPaidInvoice={isShowPaidInvoice}
-                                                            handlePaidInvoiceChange={handlePaidInvoiceChange}/>)}
+                {matches_1050 && (<InvoicesInfo/>)}
                 <ButtonGroup aria-label="outlined primary button group" size={matches_700 ? "medium" : "small"}>
                     <LoadingButton
                         size={matches_700 ? "medium" : "small"}
@@ -117,10 +104,7 @@ const InvoicesHeader: FC<IProps> = ({
                     </Button>
                 </ButtonGroup>
             </Stack>
-            {!matches_1050 && (<InvoicesHeaderCheckBoxes isShowCanceledInvoice={isShowCanceledInvoice}
-                                                         handleCanceledInvoiceChange={handleCanceledInvoiceChange}
-                                                         isShowPaidInvoice={isShowPaidInvoice}
-                                                         handlePaidInvoiceChange={handlePaidInvoiceChange}/>)}
+            {!matches_1050 && (<InvoicesInfo/>)}
         </Stack>
 
     );
