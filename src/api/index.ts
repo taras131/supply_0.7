@@ -27,7 +27,7 @@ import {INewShipments} from "../models/iShipments";
 import {IReceivingData} from "../store/actionsCreators/shipments";
 import {INewOrder, IOrder} from "../models/iOrders";
 import {IUpdateApprovedOrderData} from "../store/actionsCreators/orders";
-import {INewMachinery} from "../models/iMachinery";
+import {IMachinery, INewMachinery} from "../models/iMachinery";
 
 class Api {
     auth = getAuth();
@@ -66,9 +66,16 @@ class Api {
         return res;
     };
     addMachinery = async (machinery: INewMachinery) => {
-        console.log(machinery)
         const res = await addDoc(collection(db, "machinery"),
             machinery
+        );
+        return res;
+    };
+    updateMachinery = async (machinery: IMachinery) => {
+        const res = await updateDoc(doc(db, "machinery", machinery.id),
+            {
+                notices: machinery.notices,
+            }
         );
         return res;
     };

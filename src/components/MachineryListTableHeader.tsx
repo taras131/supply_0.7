@@ -37,6 +37,11 @@ const MachineryListTableHeader = () => {
                             Категория
                     </StyledTableCell>
                 )}
+                {matches_700 && (
+                    <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}} align={CENTER}>
+                        Заметки
+                    </StyledTableCell>
+                )}
                     <StyledTableCell sx={{padding: matches_700 ? "8px" : "2px"}} align={CENTER}>
                             {matches_500 && "Ещё"}
                     </StyledTableCell>

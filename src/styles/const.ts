@@ -1,5 +1,5 @@
 import {styled} from "@mui/material/styles";
-import {TableCell, tableCellClasses, TableRow, TextField} from "@mui/material";
+import {Badge, BadgeProps, TableCell, tableCellClasses, TableRow, TextField} from "@mui/material";
 
 export const  APPROVED_GRADIENT = "linear-gradient(90deg, rgba(141,176,227,1) 0%, rgba(121,151,193,1) 48%)";
 export const  SUCCESS_GRADIENT = "linear-gradient(90deg, rgba(139,196,143,1) 0%, rgba(107,164,114,1) 48%)";
@@ -67,5 +67,14 @@ export const StyledTableRow = styled(TableRow)(({theme}) => ({
     // hide last border
     "&:last-child td, &:last-child th": {
         border: 0,
+    },
+}));
+export const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+    "& .MuiBadge-badge": {
+        right: -20,
+        top: 13,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: "0 4px",
+        marginLeft: "15px",
     },
 }));

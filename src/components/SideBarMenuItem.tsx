@@ -3,23 +3,13 @@ import {Badge, BadgeProps, ListItem, ListItemButton, ListItemIcon, Typography} f
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import {Link} from "react-router-dom";
 import {useLocation} from "react-router-dom";
-import {styled} from "@mui/material/styles";
+import {StyledBadge} from "../styles/const";
 
 interface IProps {
     title: string,
     route: string,
     count?: number
 }
-
-const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-    "& .MuiBadge-badge": {
-        right: -20,
-        top: 13,
-        border: `2px solid ${theme.palette.background.paper}`,
-        padding: "0 4px",
-        marginLeft: "15px",
-    },
-}));
 
 const SideBarMenuItem: FC<IProps> = ({title, route, count = 0}) => {
     const patch: any = useLocation().pathname;
