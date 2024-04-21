@@ -9,7 +9,7 @@ import {ALL} from "../utils/const";
 
 interface IProps {
     filter: string,
-    setFilter: (value: string) => void,
+    setSupplierFilter: (value: string) => void,
     isShowCanceledInvoice: boolean
     isShowPaidInvoice: boolean
     handleCanceledInvoiceChange: () => void
@@ -18,7 +18,7 @@ interface IProps {
 
 const InvoicesFilter: FC<IProps> = ({
                                         filter,
-                                        setFilter,
+                                        setSupplierFilter,
                                         isShowCanceledInvoice,
                                         isShowPaidInvoice,
                                         handleCanceledInvoiceChange,
@@ -28,7 +28,7 @@ const InvoicesFilter: FC<IProps> = ({
     const selectId = useId();
     const labelId = useId();
     const handleChange = (event: SelectChangeEvent) => {
-        setFilter(event.target.value as string);
+        setSupplierFilter(event.target.value as string)
     };
     const suppliers = useAppSelector(state => getSuppliers(state))
     const menuItems = suppliers.map(supplier => (<MenuItem key={supplier.id} value={supplier.id}>
