@@ -2,12 +2,12 @@ import React, {FC} from "react";
 import {Paper, Table, TableBody, TableContainer} from "@mui/material";
 import InvoicesListTableHeader from "./InvoicesListTableHeader";
 import InvoicesListItem from "./InvoicesListItem";
-import {IInvoice} from "../models/iInvoices";
+import {IInvoice, IInvoiceForShipments} from "../models/iInvoices";
 import Typography from "@mui/material/Typography";
 import {CENTER} from "../styles/const";
 
 interface IProps {
-    invoices: IInvoice []
+    invoices: IInvoice [] | IInvoiceForShipments []
     forShipmentMode?: boolean
 }
 

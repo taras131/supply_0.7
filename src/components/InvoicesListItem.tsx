@@ -172,15 +172,21 @@ const InvoicesListItem: FC<IProps> = ({invoice, forShipmentMode}) => {
                 <TableCell
                     sx={{color: INHERIT, padding: matches_1050 ? "8px" : "4px"}}
                     align={CENTER}>
-                    {invoice.paid.isPaid
-                        ? convertMillisecondsToDate(invoice.paid.date)
-                        : (
-                            <Typography color={INHERIT}>
-                                {invoice.cancel && invoice.cancel.isCancel
-                                    ? CANCEL_TEXT
-                                    : NO_TEXT}
-                            </Typography>
-                        )}
+                    {forShipmentMode
+                        ? invoice.volume && invoice.volume === "completely"
+                            ? "Полностью"
+                            : "Частично"
+                        : invoice.paid.isPaid
+                            ? convertMillisecondsToDate(invoice.paid.date)
+                            : (
+                                <Typography color={INHERIT}>
+                                    {invoice.cancel && invoice.cancel.isCancel
+                                        ? CANCEL_TEXT
+                                        : NO_TEXT}
+                                </Typography>
+                            )
+                    }
+
                 </TableCell>
             )}
             <TableCell sx={{color: INHERIT, padding: matches_1050 ? "8px" : "2px"}}

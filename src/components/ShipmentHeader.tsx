@@ -18,6 +18,9 @@ const ShipmentHeader: FC<IProps> = ({shipment}) => {
     const matches_700 = useMediaQuery("(min-width:700px)");
     const matches_730 = useMediaQuery("(min-width:730px)");
     const createdDate = convertMillisecondsToDate(shipment.author.dateCreating);
+    const handleDownloadClick = (e: any) => {
+        e.stopPropagation()
+    }
     return (
         <Grid sx={{width: "100%"}} alignItems={CENTER} container spacing={matches_600 ? 1 : 0} columns={18} pr={1}>
             {matches_430 && (
@@ -35,9 +38,11 @@ const ShipmentHeader: FC<IProps> = ({shipment}) => {
                     {shipment.ladingNumberFilePath && (
                         <IconButton sx={{padding: 0}}
                                     color="primary"
-                                    aria-label="download invoice"
+                                    aria-label="download lading number"
                                     component={COMPONENT_A}
-                                    href={shipment.ladingNumberFilePath}>
+                                    onClick={handleDownloadClick}
+                                    href={shipment.ladingNumberFilePath}
+                                    target="_blank">
                             <DownloadIcon/>
                         </IconButton>
                     )}

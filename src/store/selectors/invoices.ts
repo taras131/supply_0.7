@@ -38,7 +38,7 @@ export const getInvoiceById = (state: RootState, invoiceId: string): IInvoice =>
 export const getInvoicesByIds = (state: RootState, invoiceShipments: IShipmentsInvoice[]): IInvoice [] => {
     const arr: IInvoice[] = [];
     invoiceShipments.forEach(invoiceShipment => {
-        arr.push(getInvoiceById(state, invoiceShipment.invoiceId));
+        arr.push({...getInvoiceById(state, invoiceShipment.invoiceId), volume: invoiceShipment.volume});
     });
     return arr;
 };

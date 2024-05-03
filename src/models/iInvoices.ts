@@ -1,3 +1,5 @@
+import {TShipmentInvoiceValue} from "./iShipments";
+
 export interface IPaid {
     isPaid: boolean
     userId: string
@@ -36,8 +38,8 @@ export interface INewInvoice {
 
 export interface IInvoice extends INewInvoice {
     id: string
+    value?: TShipmentInvoiceValue
 }
-
 
 export const emptyInvoice: INewInvoice = {
     author: {
