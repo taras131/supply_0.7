@@ -1,35 +1,37 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ISupplier} from "../../models/iSuppliers";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ISupplier } from "models/iSuppliers";
+import { RootState } from "store/index";
 
 interface ISuppliersState {
-    list: ISupplier []
-    isLoading: boolean
-    errorMessage: string
+  list: ISupplier[];
+  isLoading: boolean;
+  errorMessage: string;
 }
 
 const initialState: ISuppliersState = {
-    list: [],
-    isLoading: true,
-    errorMessage: "",
+  list: [],
+  isLoading: true,
+  errorMessage: "",
 };
 
 export const SuppliersSlice = createSlice({
-    name: "suppliers",
-    initialState,
-    reducers: {
-        setSuppliers: (state, action: PayloadAction<ISupplier []>) => {
-            state.list = action.payload;
-            state.isLoading = false;
-        },
-        setSuppliersLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
+  name: "suppliers",
+  initialState,
+  reducers: {
+    setSuppliers: (state, action: PayloadAction<ISupplier[]>) => {
+      state.list = action.payload;
+      state.isLoading = false;
     },
-    extraReducers: {},
+    setSuppliersLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
+  },
+  extraReducers: {},
 });
 
-export const {
-    setSuppliers, setSuppliersLoading,
-} = SuppliersSlice.actions;
+const selectSuppliersState = (state: RootState) => state.suppliers;
+export const selectSuppliers = createSelector([selectSuppliersState], (suppliersState) => suppliersState.list);
+
+export const { setSuppliers, setSuppliersLoading } = SuppliersSlice.actions;
 
 export default SuppliersSlice.reducer;

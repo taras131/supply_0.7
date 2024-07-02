@@ -1,9 +1,8 @@
 export interface INewSupplier {
-    name: string,
-    INN: string
+  name: string;
+  INN: string;
 }
 
-
 export interface ISupplier extends INewSupplier {
-    id: string,
+  id: string;
 }
