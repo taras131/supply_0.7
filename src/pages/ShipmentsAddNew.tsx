@@ -14,18 +14,18 @@ import Grid from "@mui/material/Unstable_Grid2";
 import LoadingButton from "@mui/lab/LoadingButton";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { fetchRemoveFile, fetchUploadFile } from "../store/actionsCreators/invoices";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import ShipmentsAddNewInvoiceList from "../components/ShipmentsAddNewInvoiceList";
-import { IShipmentsInvoice, Transporter, TShipmentInvoiceValue, TShipmentsType } from "../models/iShipments";
-import { fetchAddShipment } from "features/shipments/model/shipments";
-import { getUser } from "../store/selectors/auth";
-import { getDateInMilliseconds } from "../utils/services";
+import { fetchRemoveFile, fetchUploadFile } from "store/actionsCreators/invoices";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import ShipmentsAddNewInvoiceList from "features/shipments/ui/ShipmentsAddNewInvoiceList";
+import { IShipmentsInvoice, Transporter, TShipmentInvoiceValue, TShipmentsType } from "models/iShipments";
+import { getUser } from "store/selectors/auth";
+import { getDateInMilliseconds } from "utils/services";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../utils/routes";
+import { routes } from "utils/routes";
 import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
-import { shipmentTypes, transporters } from "../utils/const";
+import { shipmentTypes, transporters } from "utils/const";
 import PageLayout from "../components/PageLayout";
+import {fetchAddShipment} from "features/shipments/model/shipmentsSlice";
 
 export interface IInvoiceValue {
   value: TShipmentInvoiceValue;

@@ -1,11 +1,9 @@
 import React, { FC } from "react";
-import ShipmentsListItem from "./ShipmentsListItem";
-import { useAppSelector } from "../hooks/redux";
-import { getShipments } from "features/shipments/model/shipmentsSelectors";
-import { IShipments } from "../models/iShipments";
+import ShipmentsListItem from "features/shipments/ui/ShipmentsListItem";
+import {Shipments} from "models/iShipments";
 
 interface IProps {
-  shipments: IShipments[];
+  shipments: Shipments[];
   extendShipmentId?: string | false;
 }
 

@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
-import { convertMillisecondsToDate, deleteYearFromString } from "../utils/services";
+import { convertMillisecondsToDate, deleteYearFromString } from "utils/services";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
-import { IShipments } from "../models/iShipments";
-import { CENTER, COMPONENT_A, END, ROW, SPACE_BETWEEN, START } from "../styles/const";
+import { IShipments } from "models/iShipments";
+import { CENTER, COMPONENT_A, END, ROW, SPACE_BETWEEN, START } from "styles/const";
 import DownloadIcon from "@mui/icons-material/Download";
 
 interface IProps {

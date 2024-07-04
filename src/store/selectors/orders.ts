@@ -1,7 +1,7 @@
 import { RootState } from "../index";
 import { IOrder } from "models/iOrders";
 import { IInvoice } from "models/iInvoices";
-import { selectInvoiceById } from "store/reducers/invoices";
+import {getInvoiceById} from "store/selectors/invoices";
 
 export const getOrders = (state: RootState, isSelectPositionMode = false): IOrder[] => {
   let arr: IOrder[] = [];
@@ -50,7 +50,7 @@ export const getRelatedInvoicesByOrderID = (state: RootState, orderId: string): 
     }
   });
   invoiceIds.forEach((id) => {
-    invoices.push(selectInvoiceById(id));
+    invoices.push(getInvoiceById(state, id));
   });
   return invoices;
 };

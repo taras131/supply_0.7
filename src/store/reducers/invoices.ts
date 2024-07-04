@@ -64,7 +64,7 @@ export const selectInvoices = createSelector([selectInvoicesList], (invoicesList
         return b.author.date - a.author.date;
     });
 });
-export const selectInvoiceById = (invoiceId: string) =>
+/*export const selectInvoiceById = (invoiceId: string) =>
     createSelector([selectInvoicesList], (invoicesList) => {
         return invoicesList.filter((invoice) => invoice.id === invoiceId)[0];
     });
@@ -75,7 +75,7 @@ export const selectInvoicesByIds = (invoiceShipments: IShipmentsInvoice[]) =>
             arr.push({...selectInvoiceById(invoiceShipment.invoiceId), volume: invoiceShipment.volume});
         });
         return arr;
-    });
+    });*/
 
 export const {setInvoices, setSelectedOrderPosition, resetSelectedOrderPosition} = InvoicesSlice.actions;
 

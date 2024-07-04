@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import ShipmentsAddNewInvoiceItem from "./ShipmentsAddNewInvoiceItem";
+import ShipmentsAddNewInvoiceItem from "features/shipments/ui/ShipmentsAddNewInvoiceItem";
 import {
   Table,
   TableBody,

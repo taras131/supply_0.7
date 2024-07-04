@@ -1,5 +1,5 @@
 import React, { FC, useId } from "react";
-import { IInvoice } from "../models/iInvoices";
+import { IInvoice } from "models/iInvoices";
 import {
   Checkbox,
   Chip,
@@ -13,15 +13,15 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { convertMillisecondsToDate, deleteYearFromString, extractAllText } from "../utils/services";
+import { convertMillisecondsToDate, deleteYearFromString, extractAllText } from "utils/services";
 import DownloadIcon from "@mui/icons-material/Download";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useAppSelector } from "../hooks/redux";
-import { getSupplierNameById } from "../store/selectors/suppliers";
-import { IShipmentsInvoice, TShipmentInvoiceValue } from "../models/iShipments";
-import { invoiceValues } from "../pages/ShipmentsAddNew";
-import { DOWNLOAD_TEXT } from "../utils/const";
-import { COMPONENT_A, PRIMARY, SUCCESS } from "../styles/const";
+import { useAppSelector } from "hooks/redux";
+import { getSupplierNameById } from "store/selectors/suppliers";
+import { IShipmentsInvoice, TShipmentInvoiceValue } from "models/iShipments";
+import { invoiceValues } from "pages/ShipmentsAddNew";
+import { DOWNLOAD_TEXT } from "utils/const";
+import { COMPONENT_A, PRIMARY, SUCCESS } from "styles/const";
 
 interface IProps {
   invoice: IInvoice;

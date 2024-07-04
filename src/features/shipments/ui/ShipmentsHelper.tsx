@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Stack, Typography, useMediaQuery } from "@mui/material";
-import { SUCCESS_GRADIENT } from "../styles/const";
+import { SUCCESS_GRADIENT } from "styles/const";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
 import DownloadIcon from "@mui/icons-material/Download";

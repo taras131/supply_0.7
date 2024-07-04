@@ -4,7 +4,7 @@ import { Stack, Typography, useMediaQuery } from "@mui/material";
 import MainMenuListItem from "./MainMenuListItem";
 import { routes } from "../utils/routes";
 import InvoicesInfo from "./InvoicesInfo";
-import ShipmentsInfo from "./ShipmentsInfo";
+import ShipmentsInfo from "features/shipments/ui/ShipmentsInfo";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import { CENTER, PRIMARY } from "../styles/const";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
