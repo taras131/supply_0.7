@@ -63,8 +63,8 @@ export const machineryTypes = ["Легковые а/м", "Грузовые а/м
 
 export enum MachineryStatus {
     active = "Работает",
-    disActive = "Списана"
-};
+    disActive = "Списана",
+}
 export const yearsManufacture = [
     "1990",
     "1991",
