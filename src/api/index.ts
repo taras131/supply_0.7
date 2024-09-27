@@ -53,7 +53,7 @@ class Api {
   };
   updateMachinery = async (machinery: IMachinery) => {
     const res = await updateDoc(doc(db, "machinery", machinery.id), {
-      notices: machinery.notices,
+      ...machinery,
     });
     return res;
   };

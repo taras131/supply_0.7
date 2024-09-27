@@ -1,14 +1,14 @@
-import { TShipmentsType } from "../models/iShipments";
-import { TOrdersType } from "../models/iOrders";
+import {TShipmentsType} from "../models/iShipments";
+import {TOrdersType} from "../models/iOrders";
 
 export enum MESSAGE_SEVERITY {
-  error = "error",
-  warning = "warning",
-  info = "info",
-  success = "success",
+    error = "error",
+    warning = "warning",
+    info = "info",
+    success = "success",
 }
 
-export const userRoles = { boss: "Директор", supplier: "Снабженец", accountant: "Бухгалтер" };
+export const userRoles = {boss: "Директор", supplier: "Снабженец", accountant: "Бухгалтер"};
 
 export const commentPanelId = "commentPanel";
 export const shipmentPanelId = "shipment";
@@ -20,32 +20,32 @@ export const ALL = "all" as const;
 export const drawerWidth = 240;
 
 interface IShipmentType {
-  name: TShipmentsType;
-  value: string;
+    name: TShipmentsType;
+    value: string;
 }
 
 interface IOrderType {
-  name: TOrdersType;
-  value: string;
+    name: TOrdersType;
+    value: string;
 }
 
 export const shipmentTypes: IShipmentType[] = [
-  { name: "air", value: "Авиа" },
-  { name: "railway", value: "ЖД" },
+    {name: "air", value: "Авиа"},
+    {name: "railway", value: "ЖД"},
 ];
 export const transporters = [
-  "Адамант",
-  "Байкал",
-  "Деловые Линии",
-  "Почта",
-  "ПЭК",
-  "СДЭК",
-  "Энергия",
-  "Дмитрий Павлович",
+    "Адамант",
+    "Байкал",
+    "Деловые Линии",
+    "Почта",
+    "ПЭК",
+    "СДЭК",
+    "Энергия",
+    "Дмитрий Павлович",
 ] as const;
 export const ordersTypes: IOrderType[] = [
-  { name: "current", value: "Текущая" },
-  { name: "annual", value: "Годовая" },
+    {name: "current", value: "Текущая"},
+    {name: "annual", value: "Годовая"},
 ];
 
 export const CANCEL_TEXT = "Отменён";
@@ -58,3 +58,47 @@ export const INN_COPY_TEXT = "ИНН скопирован";
 export const VIN_COPY_TEXT = "VIN скопирован";
 export const AMOUNT_COPY_TEXT = "Сумма скопирована";
 export const FILE_TYPE = "file";
+
+export const machineryTypes = ["Легковые а/м", "Грузовые а/м", "Спецтехника", "Другое"];
+
+export enum MachineryStatus {
+    active = "Работает",
+    disActive = "Списана"
+};
+export const yearsManufacture = [
+    "1990",
+    "1991",
+    "1992",
+    "1993",
+    "1994",
+    "1995",
+    "1996",
+    "1997",
+    "1998",
+    "1999",
+    "2000",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "2005",
+    "2006",
+    "2007",
+    "2008",
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+];

@@ -16,45 +16,7 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import { fetchAddMachinery } from "../store/actionsCreators/machinery";
 import { useAppDispatch } from "../hooks/redux";
-
-export const machineryTypes = ["Легковые а/м", "Грузовые а/м", "Спецтехника", "Другое"];
-export const yearsManufacture = [
-  "1990",
-  "1991",
-  "1992",
-  "1993",
-  "1994",
-  "1995",
-  "1996",
-  "1997",
-  "1998",
-  "1999",
-  "2000",
-  "2001",
-  "2002",
-  "2003",
-  "2004",
-  "2005",
-  "2006",
-  "2007",
-  "2008",
-  "2009",
-  "2010",
-  "2011",
-  "2012",
-  "2013",
-  "2014",
-  "2015",
-  "2016",
-  "2017",
-  "2018",
-  "2019",
-  "2020",
-  "2021",
-  "2022",
-  "2023",
-  "2024",
-];
+import {machineryTypes, yearsManufacture} from "utils/const";
 
 const MachineryAddNew = () => {
   const dispatch = useAppDispatch();
