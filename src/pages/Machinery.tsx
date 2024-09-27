@@ -20,7 +20,7 @@ const Machinery = () => {
             type: item,
             list: useAppSelector((state) => getMachineryByType(state, item, isVisibleDisActiveMachinery)),
         }
-    })
+    }).filter(item => item.list.length)
     const machineryList = machinery.map(item => {
         return (
             <MachineryList title={item.type} machinery={item.list}/>
