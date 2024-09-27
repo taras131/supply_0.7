@@ -30,7 +30,11 @@ export const SuppliersSlice = createSlice({
 });
 
 const selectSuppliersState = (state: RootState) => state.suppliers;
-export const selectSuppliers = createSelector([selectSuppliersState], (suppliersState) => suppliersState.list);
+export const selectSuppliers = createSelector([selectSuppliersState], (suppliersState) => {
+  return suppliersState.list.slice().sort((a,b) => {
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase(), 'ru');
+  })
+});
 
 export const { setSuppliers, setSuppliersLoading } = SuppliersSlice.actions;
 
