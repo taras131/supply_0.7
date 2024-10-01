@@ -23,6 +23,7 @@ const OrderPositionsList: FC<IProps> = ({
   isLimitedOverview = false,
   isSelectPositionMode,
 }) => {
+  console.log("render")
   const dispatch = useAppDispatch();
   const handleAddClick = () => {
     dispatch(addEmptyOrderItem(getDateInMilliseconds()));

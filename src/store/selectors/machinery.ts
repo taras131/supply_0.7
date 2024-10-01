@@ -8,7 +8,7 @@ import {createSelector} from "@reduxjs/toolkit";
 const collator = new Intl.Collator("ru");
 
 export const getMachinery = (state: RootState): IMachinery[] => {
-    const arr = [...state.machinery.list];
+    const arr = state.machinery.list.filter(machinery => !machinery.status || machinery.status === MachineryStatus.active);
     return arr.sort((a, b) => {
         const nameA = a.brand.toLowerCase();
         const nameB = b.brand.toLowerCase();
