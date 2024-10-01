@@ -3,6 +3,7 @@ import {IMachinery} from "../../models/iMachinery";
 import {useAppSelector} from "../../hooks/redux";
 import {IOrder} from "../../models/iOrders";
 import {MachineryStatus} from "utils/const";
+import {createSelector} from "@reduxjs/toolkit";
 
 const collator = new Intl.Collator("ru");
 
@@ -17,15 +18,26 @@ export const getMachinery = (state: RootState): IMachinery[] => {
 export const getMachineryById = (state: RootState, machineryId: string): IMachinery[] => {
     return state.machinery.list.filter((machinery) => machinery.id === machineryId);
 };
-export const getMachineryByType = (state: RootState,
-                                   machineryType: string,
-                                   isGetDisActive: boolean): IMachinery[] => {
-    const list = state.machinery.list.filter((machinery) => machinery.type === machineryType).sort((a, b) => {
-        return a.brand.toLowerCase().localeCompare(b.brand.toLowerCase(), 'ru');
-    });
-    if (isGetDisActive) return list;
-    return list.filter(machinery => !machinery.status || machinery.status !== MachineryStatus.disActive)
-};
+
+const selectMachineryList = (state: RootState) => state.machinery.list;
+
+
+export const getMachineryByType = createSelector(
+    [selectMachineryList, (state: RootState, machineryType: string) => machineryType,
+        (state: RootState, machineryType: string, isGetDisActive: boolean) => isGetDisActive],
+    (machineryList, machineryType, isGetDisActive) => {
+        let list = machineryList
+            .filter(machinery => machinery.type === machineryType)
+            .sort((a, b) => a.brand.toLowerCase().localeCompare(b.brand.toLowerCase(), 'ru'));
+
+        if (!isGetDisActive) {
+            list = list.filter(machinery => !machinery.status || machinery.status !== MachineryStatus.disActive);
+        }
+
+        return list;
+    }
+);
+
 export const getRelatedMachineryByInvoiceId = (state: RootState, invoiceId: string): IMachinery[] => {
     const relatedMachinery: IMachinery[] = [];
     const relatedOrders: IOrder[] = [];

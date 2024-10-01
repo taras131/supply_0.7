@@ -8,7 +8,7 @@ import OrdersHelper from "components/OrdersHelper";
 import PageLayout from "components/PageLayout";
 
 const Orders = () => {
-  const orders = useAppSelector((state) => getOrders(state, false));
+  const orders = useAppSelector(getOrders);
   return (
     <PageLayout>
       <PageHeaderWithTitleAndButton title={"Заявки:"} route={`${routes.orders}/new_order`} buttonText={"Заявка"} />

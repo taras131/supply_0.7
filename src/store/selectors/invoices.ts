@@ -2,7 +2,8 @@ import {IInvoice} from "models/iInvoices";
 import {RootState} from "../index";
 import {ISelectedOrderPosition} from "models/iOrders";
 import {getSupplierNameById} from "./suppliers";
-import {IShipmentsInvoice} from "models/iShipments";
+import {IShipmentsInvoice, TShipmentInvoiceValue} from "models/iShipments";
+import {createSelector} from "@reduxjs/toolkit";
 
 /*export const getInvoices = (state: RootState,): IInvoice[] => {
     const arr = [...state.invoices.list];
@@ -32,16 +33,27 @@ export const getAmountBySupplierId = (state: RootState, supplierId: string): num
     });
     return amount;
 };
-export const getInvoiceById = (state: RootState, invoiceId: string): IInvoice => {
-    return state.invoices.list.filter(invoice => invoice.id === invoiceId)[0];
+export const getInvoiceById = (state: RootState, invoiceId: string): IInvoice | undefined => {
+    return state.invoices.list.find(invoice => invoice.id === invoiceId);
 };
-export const getInvoicesByIds = (state: RootState, invoiceShipments: IShipmentsInvoice[]): IInvoice [] => {
-    const arr: IInvoice[] = [];
-    invoiceShipments.forEach(invoiceShipment => {
-        arr.push({...getInvoiceById(state, invoiceShipment.invoiceId), volume: invoiceShipment.volume});
-    });
-    return arr;
-};
+
+export const getInvoicesByIds = createSelector(
+    [
+        (state: RootState) => state, // мы добавляем весь state
+        (state: RootState, invoiceShipments: IShipmentsInvoice[]) => invoiceShipments,
+    ],
+    (state, invoiceShipments) => {
+        const arr: IInvoice[] = [];
+        invoiceShipments.forEach(invoiceShipment => {
+            const invoice = getInvoiceById(state, invoiceShipment.invoiceId);
+            if (invoice) {
+                arr.push({ ...invoice, volume: invoiceShipment.volume});
+            }
+        });
+        return arr;
+    }
+);
+
 export const getSelectedOrderPosition = (state: RootState): ISelectedOrderPosition => {
     return state.invoices.selectedPosition;
 };

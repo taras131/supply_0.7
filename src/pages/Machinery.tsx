@@ -23,7 +23,7 @@ const Machinery = () => {
     }).filter(item => item.list.length)
     const machineryList = machinery.map(item => {
         return (
-            <MachineryList title={item.type} machinery={item.list}/>
+            <MachineryList title={item.type} machinery={item.list} key={item.type}/>
         )
     })
     return (
