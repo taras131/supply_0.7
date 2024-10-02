@@ -3,6 +3,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { Stack, Typography, useMediaQuery } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const OrderDetailsEditHelper = () => {
   const matches_700 = useMediaQuery("(min-width:700px)");
@@ -22,6 +23,18 @@ const OrderDetailsEditHelper = () => {
           <DeleteIcon />
           <Typography>- удаляет позицию (первую позицию удалить нельзя).</Typography>
         </Stack>
+          <Stack direction={"row"} spacing={3} alignItems={"center"}>
+              <FileUploadIcon/>
+              <Typography>- позволяет загрузить заявку из excel файла.</Typography>
+          </Stack>
+          <Stack direction={"row"} spacing={3} alignItems={"center"}>
+              <Typography>  -  </Typography>
+              <Typography>Пункты заявки должны быть пронумерованы.</Typography>
+          </Stack>
+          <Stack direction={"row"} spacing={3} alignItems={"center"}>
+              <Typography>  -  </Typography>
+              <Typography>Нумерация должна начинаться с цифры 1.</Typography>
+          </Stack>
       </Grid>
     </Grid>
   );

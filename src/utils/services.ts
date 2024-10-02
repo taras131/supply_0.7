@@ -155,3 +155,9 @@ export const getIsCompleteOrder = (orderItems: IOrderItem[]): boolean => {
   });
   return isComplete;
 };
+
+export const getWordAfter = (text: string, targetWord:string) => {
+  const regex = new RegExp(`\\b${targetWord}\\b\\s+(\\w+)`, 'i');
+  const match = text.match(regex);
+  return match ? match[1] : null;
+}
