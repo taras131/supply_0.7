@@ -18,14 +18,14 @@ const OrderPositionsListTableHeader: FC<IProps> = ({ isLimitedOverview }) => {
         <StyledTableCell sx={{ padding: matches_700 ? "8px" : "2px" }} align={LEFT}>
           Наименование
         </StyledTableCell>
-        <StyledTableCell sx={{ padding: matches_700 ? "8px" : "2px" }}>
+        <StyledTableCell sx={{maxWidth: "150px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", padding: matches_700 ? "8px" : "2px" }}>
           {matches_700 ? "Каталожный номер" : "Номер"}
         </StyledTableCell>
         <StyledTableCell align={CENTER} sx={{ padding: matches_700 ? "8px" : "2px" }}>
           {matches_1000 ? "Количество" : "К_во"}
         </StyledTableCell>
         {!isLimitedOverview && matches_700 && (
-          <StyledTableCell align={CENTER} sx={{ padding: matches_700 ? "8px" : "2px" }}>
+          <StyledTableCell align={CENTER} sx={{maxWidth: "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" , padding: matches_700 ? "8px" : "2px" }}>
             Комментарий
           </StyledTableCell>
         )}

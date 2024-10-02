@@ -107,7 +107,7 @@ const OrderPositionsListItem: FC<IProps> = ({
       </StyledTableCell>
       <StyledTableCell sx={{ padding: matches_700 ? "8px" : "2px" }}>
         {isEdit ? (
-          <TextField name={"name"} value={orderItem.name} variant="standard" onChange={handleInputChange} />
+          <TextField fullWidth name={"name"} value={orderItem.name} variant="standard" onChange={handleInputChange} />
         ) : (
           <Stack
             sx={{ width: "100%", cursor: CURSOR_POINTER }}
@@ -122,13 +122,14 @@ const OrderPositionsListItem: FC<IProps> = ({
           </Stack>
         )}
       </StyledTableCell>
-      <StyledTableCell sx={{ padding: matches_700 ? "8px" : "2px" }}>
+      <StyledTableCell sx={{maxWidth: "150px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", padding: matches_700 ? "8px" : "2px" }}>
         {isEdit ? (
           <TextField
             name={"catalogNumber"}
             value={orderItem.catalogNumber}
             variant="standard"
             onChange={handleInputChange}
+            fullWidth
           />
         ) : (
           <Stack
@@ -172,9 +173,9 @@ const OrderPositionsListItem: FC<IProps> = ({
         )}
       </StyledTableCell>
       {!isLimitedOverview && matches_700 && (
-        <StyledTableCell sx={{ padding: matches_700 ? "8px" : "2px" }}>
+        <StyledTableCell sx={{maxWidth: "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" , padding: matches_700 ? "8px" : "2px" }}>
           {isEdit ? (
-            <TextField name={"comment"} value={orderItem.comment} variant="standard" onChange={handleInputChange} />
+            <TextField fullWidth name={"comment"} value={orderItem.comment} variant="standard" onChange={handleInputChange} />
           ) : (
             orderItem.comment
           )}

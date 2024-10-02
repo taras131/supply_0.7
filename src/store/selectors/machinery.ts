@@ -19,6 +19,11 @@ export const getMachineryById = (state: RootState, machineryId: string): IMachin
     return state.machinery.list.filter((machinery) => machinery.id === machineryId);
 };
 
+export const getMachineryIdByVIN = (state: RootState, vin: string): string => {
+    const machinery = state.machinery.list.filter((machinery) => machinery.vin && machinery.vin === vin)[0]
+    return machinery && machinery.vin ? machinery.vin : "";
+};
+
 const selectMachineryList = (state: RootState) => state.machinery.list;
 
 

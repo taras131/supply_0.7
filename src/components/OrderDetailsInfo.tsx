@@ -7,7 +7,7 @@ import {
   MenuItem,
   Radio,
   RadioGroup,
-  Select,
+  Select, SelectChangeEvent,
   Stack,
   useMediaQuery,
 } from "@mui/material";
@@ -49,7 +49,7 @@ const OrderDetailsInfo: FC<IProps> = ({ isEdit, currentOrder, isNewOrder }) => {
   const handleOrdersTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateCurrentOrderType(e.target.value as TOrdersType));
   };
-  const handleMachineryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMachineryChange = (e: SelectChangeEvent<string>) => {
     dispatch(updateCurrentOrderMachineryId(e.target.value as string));
   };
   return (

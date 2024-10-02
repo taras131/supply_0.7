@@ -36,9 +36,9 @@ const OrderDetails = () => {
     const location = useLocation();
     const orderId = useParams().orderId || "0";
     const isNewOrder = orderId === "new_order";
-    const currentOrder = useAppSelector((state) => getCurrentOrder(state));
+    const currentOrder = useAppSelector(getCurrentOrder);
     const order = useAppSelector((state) => getOrderById(state, orderId));
-    const isEdit = useAppSelector((state) => getCurrentOrderIsEdit(state));
+    const isEdit = useAppSelector(getCurrentOrderIsEdit);
     const authorFullName = useAppSelector((state) => getUserFullNameById(state, currentOrder.author.userId));
     const user = useAppSelector((state) => getUser(state));
     const matches_700 = useMediaQuery("(min-width:700px)");
@@ -146,7 +146,6 @@ const OrderDetails = () => {
                 orderId={orderId}
                 isSelectPositionMode={false}
             />
-            {isEdit && <OrderDetailsEditHelper/>}
             {machinery && !isEdit && (
                 <>
                     <Box sx={{width: "100%"}}>
@@ -179,6 +178,7 @@ const OrderDetails = () => {
                 </Stack>
                 {isNewOrder && (<ExcelReader/>)}
             </Stack>
+            {isEdit && <OrderDetailsEditHelper/>}
         </PageLayout>
     );
 };
