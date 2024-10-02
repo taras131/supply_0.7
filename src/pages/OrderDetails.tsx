@@ -178,7 +178,7 @@ const OrderDetails = () => {
                 </Stack>
                 {isNewOrder && (<ExcelReader/>)}
             </Stack>
-            {isEdit && <OrderDetailsEditHelper/>}
+            {isEdit && <OrderDetailsEditHelper isNewOrder={isNewOrder}/>}
         </PageLayout>
     );
 };
