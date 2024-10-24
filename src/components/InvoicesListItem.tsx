@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 import { Chip, IconButton, Stack, TableCell, TableRow, Tooltip, Typography, useMediaQuery } from "@mui/material";
-import { IInvoice } from "../models/iInvoices";
-import { convertMillisecondsToDate, deleteYearFromString, extractAllText } from "../utils/services";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { getSupplierINNById, getSupplierNameById } from "../store/selectors/suppliers";
+import { IInvoice } from "models/iInvoices";
+import { convertMillisecondsToDate, deleteYearFromString, extractAllText } from "utils/services";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { getSupplierINNById, getSupplierNameById } from "store/selectors/suppliers";
 import DownloadIcon from "@mui/icons-material/Download";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { setMessage } from "../store/reducers/message";
+import { setMessage } from "store/reducers/message";
 import {
   AMOUNT_COPY_TEXT,
   CANCEL_TEXT,
@@ -17,8 +17,8 @@ import {
   MESSAGE_SEVERITY,
   NO_TEXT,
   YES_TEXT,
-} from "../utils/const";
-import { routes } from "../utils/routes";
+} from "utils/const";
+import { routes } from "utils/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ApprovedInvoiceCheckbox from "./ApprovedInvoiceCheckbox";
@@ -36,11 +36,11 @@ import {
   SUCCESS,
   SUCCESS_GRADIENT,
   WHITE_COLOR,
-} from "../styles/const";
+} from "styles/const";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import UploadPayment from "./UploadPayment";
-import { selectIsShipmentByInvoiceId } from "features/shipments/model/shipmentsSlice";
 import { selectCommentsByInvoiceId } from "store/reducers/coments";
+import {selectIsShipmentByInvoiceId} from "features/shipments/model/selectors";
 
 interface IProps {
   invoice: IInvoice;

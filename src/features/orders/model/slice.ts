@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {emptyOrder, emptyOrderItem, IOrder, IOrderItem, TOrdersType} from "../../models/iOrders";
-import {TShipmentsType} from "../../models/iShipments";
+import {emptyOrder, emptyOrderItem, IOrder, IOrderItem, TOrdersType} from "models/iOrders";
+import {TShipmentsType} from "models/iShipments";
 
 interface IUpdateOrderItems {
     id: number;
@@ -19,6 +19,8 @@ interface IOrdersState {
     errorMessage: string;
     currentOrder: IOrder;
     isEdit: boolean;
+    search: string;
+    machineryIdFilter: string;
 }
 
 const initialState: IOrdersState = {
@@ -27,6 +29,8 @@ const initialState: IOrdersState = {
     errorMessage: "",
     currentOrder: emptyOrder,
     isEdit: false,
+    search: "",
+    machineryIdFilter: "empty",
 };
 
 export const OrdersSlice = createSlice({
@@ -111,9 +115,17 @@ export const OrdersSlice = createSlice({
                 orderItems: [{...emptyOrderItem, id: 0}],
             };
         },
+        setOrdersSearch: (state, action: PayloadAction<string>) => {
+            state.search = action.payload;
+        },
+        setMachineryIdFilter: (state, action: PayloadAction<string>) => {
+            state.machineryIdFilter = action.payload;
+        },
     },
     extraReducers: {},
 });
+
+
 
 export const {
     setOrders,
@@ -130,6 +142,8 @@ export const {
     updateCurrentOrderShipmentType,
     updateCurrentOrderType,
     updateCurrentOrderMachineryId,
+    setOrdersSearch,
+    setMachineryIdFilter,
 } = OrdersSlice.actions;
 
 export default OrdersSlice.reducer;

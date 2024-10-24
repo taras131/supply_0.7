@@ -1,16 +1,16 @@
 import React, { FC, useId } from "react";
-import { IOrderItem } from "../models/iOrders";
+import { IOrderItem } from "models/iOrders";
 import { Checkbox, Chip, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { removeOrderItem, updateItemsCount, updateItemsValues } from "../store/reducers/orders";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { removeOrderItem, updateItemsCount, updateItemsValues } from "features/orders/model/slice";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { setSelectedOrderPosition } from "../store/reducers/invoices";
-import { getIsPositionSelected, getSupplierNameByInvoiceId } from "../store/selectors/invoices";
+import { setSelectedOrderPosition } from "store/reducers/invoices";
+import { getIsPositionSelected, getSupplierNameByInvoiceId } from "store/selectors/invoices";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../utils/routes";
+import { routes } from "utils/routes";
 import {
   CENTER,
   CURSOR_POINTER,
@@ -21,12 +21,12 @@ import {
   StyledTableRow,
   StyledTextField,
   SUCCESS,
-} from "../styles/const";
-import { extractAllText } from "../utils/services";
+} from "styles/const";
+import { extractAllText } from "utils/services";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { setMessage } from "../store/reducers/message";
-import { MESSAGE_SEVERITY } from "../utils/const";
+import { setMessage } from "store/reducers/message";
+import { MESSAGE_SEVERITY } from "utils/const";
 
 interface IProps {
   index: number;

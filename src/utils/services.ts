@@ -138,7 +138,7 @@ export const getProjectedArrivalDate = (dispatchDate: number, shipmentsType: TSh
 };
 
 export const extractAllText = (str: string): string => {
-  const matches = str.split('"');
+  const matches = str.split("\"");
   return matches[1] ? matches[1] : str;
 };
 
@@ -157,7 +157,7 @@ export const getIsCompleteOrder = (orderItems: IOrderItem[]): boolean => {
 };
 
 export const getWordAfter = (text: string, targetWord:string) => {
-  const regex = new RegExp(`\\b${targetWord}\\b\\s+(\\w+)`, 'i');
+  const regex = new RegExp(`\\b${targetWord}\\b\\s+(\\w+)`, "i");
   const match = text.match(regex);
   return match ? match[1] : null;
-}
+};

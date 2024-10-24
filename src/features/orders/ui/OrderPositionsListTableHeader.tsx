@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { TableHead, TableRow, useMediaQuery } from "@mui/material";
-import { CENTER, LEFT, StyledTableCell } from "../styles/const";
+import { CENTER, LEFT, StyledTableCell } from "styles/const";
 
 interface IProps {
   isLimitedOverview: boolean;

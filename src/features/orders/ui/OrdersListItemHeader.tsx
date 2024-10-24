@@ -1,12 +1,11 @@
 import React, { FC } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Stack, Typography, useMediaQuery } from "@mui/material";
-import ApprovedOrderCheckbox from "./ApprovedOrderCheckbox";
-import { convertMillisecondsToDate, deleteYearFromString } from "../utils/services";
+import { convertMillisecondsToDate, deleteYearFromString } from "utils/services";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import DirectionsSubwayIcon from "@mui/icons-material/DirectionsSubway";
-import { IOrder } from "../models/iOrders";
-import { CENTER } from "../styles/const";
+import { IOrder } from "models/iOrders";
+import { CENTER } from "styles/const";
 
 interface IProps {
   order: IOrder;
@@ -15,7 +14,6 @@ interface IProps {
 const OrdersListItemHeader: FC<IProps> = ({ order }) => {
   const matches_870 = useMediaQuery("(min-width:870px)");
   const matches_430 = useMediaQuery("(min-width:420px)");
-  const matches_700 = useMediaQuery("(min-width:700px)");
   const matches_600 = useMediaQuery("(min-width:600px)");
   // const authorFullName = useAppSelector(state => getUserFullNameById(state, order.author.userId)) || "";
   const dateCreating = convertMillisecondsToDate(order.author.dateCreating);

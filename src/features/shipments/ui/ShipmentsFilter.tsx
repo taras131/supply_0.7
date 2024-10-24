@@ -1,18 +1,20 @@
-import React, { ChangeEventHandler } from "react";
+import React from "react";
 import Stack from "@mui/material/Stack";
 import { CENTER, COLUMN, ROW, SPACE_BETWEEN } from "styles/const";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, useMediaQuery } from "@mui/material";
 import { ALL, shipmentTypes, transporters } from "utils/const";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import {
-  selectShipmentSearch,
-  selectShipmentTypeFilter,
-  selectTransporterFilter,
   setShipmentSearch,
   setShipmentTypeFilter,
   setTransporterFilter,
-} from "features/shipments/model/shipmentsSlice";
+} from "features/shipments/model/slice";
 import { Transporter, TShipmentsType } from "models/iShipments";
+import {
+  selectShipmentSearch,
+  selectShipmentTypeFilter,
+  selectTransporterFilter,
+} from "features/shipments/model/selectors";
 
 const ShipmentsFilter = () => {
   const dispatch = useAppDispatch();

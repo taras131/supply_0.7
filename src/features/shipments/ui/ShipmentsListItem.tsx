@@ -23,7 +23,7 @@ import {CENTER, END, ROW, SPACE_BETWEEN, START, SUCCESS_GRADIENT} from "styles/c
 import {useAppDispatch, useAppSelector} from "hooks/redux";
 import {Shipments} from "models/iShipments";
 import {getInvoicesByIds} from "store/selectors/invoices";
-import {fetchUpdateShipmentReceiving} from "features/shipments/model/shipmentsSlice";
+import {fetchUpdateShipmentReceiving} from "features/shipments/model/actions";
 
 interface IProps {
     shipment: Shipments;

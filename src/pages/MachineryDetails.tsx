@@ -6,8 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {routes} from "../utils/routes";
 import {ListSubheader, Stack, Typography} from "@mui/material";
 import TitleWithValue from "../components/TitleWithValue";
-import OrdersList from "../components/OrdersList";
-import {getRelatedOrdersByMachineryId} from "../store/selectors/orders";
+import OrdersList from "features/orders/ui/OrdersList";
 import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
 import MachineryAddNotice from "../components/MachineryAddNotice";
 import MachineryNoticeItem from "../components/MachineryNoticeItem";
@@ -18,6 +17,7 @@ import MessageWindow from "../components/MessageWindow";
 import Button from "@mui/material/Button";
 import {MachineryStatus} from "utils/const";
 import {MachineryStatusType} from "models/iMachinery";
+import {getRelatedOrdersByMachineryId} from "features/orders/model/selectors";
 
 const errorDeleteNoticeMessage = "Авторизируйтесь для удаления заметки.";
 
@@ -29,7 +29,7 @@ const MachineryDetails = () => {
     const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
     const user = useAppSelector((state) => getUser(state));
     const isAuth = useAppSelector(getIsAuth
-    )
+    );
     const toggleIsOpenAddNoticeModal = () => {
         setIsOpenNoticeNewModal((prev) => !prev);
     };
@@ -66,9 +66,9 @@ const MachineryDetails = () => {
     };
     const handleChangeStatus = () => {
         if (isAuth) {
-            let newStatus: MachineryStatusType = MachineryStatus.disActive
+            let newStatus: MachineryStatusType = MachineryStatus.disActive;
             if (machinery.status && machinery.status === MachineryStatus.disActive) {
-                newStatus = MachineryStatus.active
+                newStatus = MachineryStatus.active;
             }
             dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
         }

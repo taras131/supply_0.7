@@ -22,10 +22,10 @@ import { getUser } from "store/selectors/auth";
 import { getDateInMilliseconds } from "utils/services";
 import { useNavigate } from "react-router-dom";
 import { routes } from "utils/routes";
-import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
+import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndTwoButtons";
 import { shipmentTypes, transporters } from "utils/const";
-import PageLayout from "../components/PageLayout";
-import {fetchAddShipment} from "features/shipments/model/shipmentsSlice";
+import PageLayout from "components/PageLayout";
+import {fetchAddShipment} from "features/shipments/model/actions";
 
 export interface IInvoiceValue {
   value: TShipmentInvoiceValue;
@@ -110,7 +110,7 @@ const ShipmentsAddNew: FC = () => {
     );
     setFilePatch("");
     setFileName("");
-    setTransporter("");
+    setTransporter(transporters[0]);
     setType(shipmentTypes[0].name);
     setIsValidate(false);
     setSelectedInvoices([]);
@@ -118,10 +118,10 @@ const ShipmentsAddNew: FC = () => {
     navigate(routes.shipments);
   };
   const handleTransporterChange = (e: SelectChangeEvent) => {
-    setTransporter(e.target.value as string);
+    setTransporter(e.target.value as Transporter);
   };
   const handleTypeChange = (e: SelectChangeEvent) => {
-    setType(e.target.value as string);
+    setType(e.target.value as TShipmentsType);
   };
   const updateFile = (name: string, filePatch: string) => {
     setFileName(name);

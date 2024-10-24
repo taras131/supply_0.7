@@ -2,22 +2,19 @@ import { db, storage } from "../firebase";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { ref, deleteObject, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { INewSupplier } from "../models/iSuppliers";
+import { INewSupplier } from "models/iSuppliers";
 import {
   IAddInvoiceData,
   IFileData,
   IUpdateApprovedData,
   IUpdateCancelData,
   IUpdatePaidData,
-} from "../store/actionsCreators/invoices";
-import { getDateInMilliseconds, transliterate } from "../utils/services";
-import { IAuthData, IRegisterData } from "../models/iAuth";
-import { INewComment } from "../models/iComents";
-import { INewShipments } from "../models/iShipments";
-import { IReceivingData } from "features/shipments/model/shipments";
-import { INewOrder, IOrder } from "../models/iOrders";
-import { IUpdateApprovedOrderData } from "../store/actionsCreators/orders";
-import { IMachinery, INewMachinery } from "../models/iMachinery";
+} from "store/actionsCreators/invoices";
+import { getDateInMilliseconds, transliterate } from "utils/services";
+import { IAuthData, IRegisterData } from "models/iAuth";
+import { INewComment } from "models/iComents";
+import { IMachinery, INewMachinery } from "models/iMachinery";
+import {ordersAPI} from "features/orders/api";
 
 class Api {
   auth = getAuth();
@@ -29,24 +26,7 @@ class Api {
     const res = await addDoc(collection(db, "comments"), comment);
     return res;
   };
-  addShipment = async (shipment: INewShipments) => {
-    const res = await addDoc(collection(db, "shipments"), shipment);
-    return res;
-  };
-  addOrder = async (order: INewOrder) => {
-    const res = await addDoc(collection(db, "orders"), order);
-    return res;
-  };
-  updateOrder = async (order: IOrder) => {
-    const res = await updateDoc(doc(db, "orders", order.id), {
-      title: order.title,
-      shipmentType: order.shipmentType,
-      orderType: order.orderType,
-      orderItems: order.orderItems,
-      comment: order.comment,
-    });
-    return res;
-  };
+
   addMachinery = async (machinery: INewMachinery) => {
     const res = await addDoc(collection(db, "machinery"), machinery);
     return res;
@@ -75,7 +55,7 @@ class Api {
             }),
           ],
         };
-        await this.updateOrder(order);
+        await ordersAPI.updateOrder(order);
       }
     }
     return res;
@@ -91,16 +71,7 @@ class Api {
     });
     return res;
   };
-  updateReceiving = async (updateReceivingData: IReceivingData) => {
-    const res = await updateDoc(doc(db, "shipments", updateReceivingData.shipmentId), {
-      receiving: {
-        userId: updateReceivingData.newReceiving.userId,
-        dateCreating: updateReceivingData.newReceiving.dateCreating,
-        isReceived: updateReceivingData.newReceiving.isReceived,
-      },
-    });
-    return res;
-  };
+
   updateCancelInvoice = async (updateCancelData: IUpdateCancelData) => {
     const res = await updateDoc(doc(db, "invoices", updateCancelData.invoiceId), {
       cancel: {
@@ -121,16 +92,7 @@ class Api {
     });
     return res;
   };
-  updateOrderApproved = async (updateApprovedOrderData: IUpdateApprovedOrderData) => {
-    const res = await updateDoc(doc(db, "orders", updateApprovedOrderData.orderId), {
-      approved: {
-        isApproved: updateApprovedOrderData.newApproved.isApproved,
-        userId: updateApprovedOrderData.newApproved.userId,
-        date: updateApprovedOrderData.newApproved.date,
-      },
-    });
-    return res;
-  };
+
   uploadFile = async (fileData: IFileData) => {
     const name = `${getDateInMilliseconds()}-${transliterate(fileData.file.name.replace(" ", "_"))}`;
     const storageRef = ref(storage, name);

@@ -3,8 +3,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 import {Stack, Typography, useMediaQuery} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import InfoIcon from '@mui/icons-material/Info';
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import InfoIcon from "@mui/icons-material/Info";
 
 interface IProps {
     isNewOrder: boolean

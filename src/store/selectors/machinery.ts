@@ -20,7 +20,7 @@ export const getMachineryById = (state: RootState, machineryId: string): IMachin
 };
 
 export const getMachineryIdByVIN = (state: RootState, vin: string): string => {
-    const machinery = state.machinery.list.filter((machinery) => machinery.vin && machinery.vin === vin)[0]
+    const machinery = state.machinery.list.filter((machinery) => machinery.vin && machinery.vin === vin)[0];
     return machinery && machinery.vin ? machinery.vin : "";
 };
 
@@ -33,7 +33,7 @@ export const getMachineryByType = createSelector(
     (machineryList, machineryType, isGetDisActive) => {
         let list = machineryList
             .filter(machinery => machinery.type === machineryType)
-            .sort((a, b) => a.brand.toLowerCase().localeCompare(b.brand.toLowerCase(), 'ru'));
+            .sort((a, b) => a.brand.toLowerCase().localeCompare(b.brand.toLowerCase(), "ru"));
 
         if (!isGetDisActive) {
             list = list.filter(machinery => !machinery.status || machinery.status !== MachineryStatus.disActive);

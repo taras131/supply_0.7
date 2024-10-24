@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Stack, Typography, useMediaQuery } from "@mui/material";
+import { Stack, useMediaQuery } from "@mui/material";
 import MainMenuListItem from "./MainMenuListItem";
 import { routes } from "../utils/routes";
 import InvoicesInfo from "./InvoicesInfo";
@@ -9,7 +9,7 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import { CENTER, PRIMARY } from "../styles/const";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import OrdersInfo from "./OrdersInfo";
+import OrdersInfo from "features/orders/ui/OrdersInfo";
 import AccessibleForwardIcon from "@mui/icons-material/AccessibleForward";
 import SuppliersInfo from "./SuppliersInfo";
 

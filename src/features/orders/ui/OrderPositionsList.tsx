@@ -1,12 +1,12 @@
 import React, {FC} from "react";
-import {IOrderItem} from "../models/iOrders";
+import {IOrderItem} from "models/iOrders";
 import {IconButton, Table, TableBody, TableContainer} from "@mui/material";
-import OrderPositionsListItem from "./OrderPositionsListItem";
+import OrderPositionsListItem from "features/orders/ui/OrderPositionsListItem";
 import AddIcon from "@mui/icons-material/Add";
-import {useAppDispatch} from "../hooks/redux";
-import {addEmptyOrderItem} from "../store/reducers/orders";
-import {getDateInMilliseconds} from "../utils/services";
-import OrderPositionsListTableHeader from "./OrderPositionsListTableHeader";
+import {useAppDispatch} from "hooks/redux";
+import {addEmptyOrderItem} from "features/orders/model/slice";
+import {getDateInMilliseconds} from "utils/services";
+import OrderPositionsListTableHeader from "features/orders/ui/OrderPositionsListTableHeader";
 
 interface IProps {
     orderItems: IOrderItem[];

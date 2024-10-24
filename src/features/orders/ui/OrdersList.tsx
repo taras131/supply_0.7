@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import OrdersListItem from "./OrdersListItem";
-import { IOrder } from "../models/iOrders";
+import OrdersListItem from "features/orders/ui/OrdersListItem";
+import { IOrder } from "models/iOrders";
 import { Stack } from "@mui/material";
 
 interface IProps {

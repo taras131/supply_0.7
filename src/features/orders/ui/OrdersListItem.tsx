@@ -1,14 +1,13 @@
 import React, {FC, useEffect, useState} from "react";
-import {IOrder} from "../models/iOrders";
+import {IOrder} from "models/iOrders";
 import {Accordion, AccordionDetails, AccordionSummary, Stack, Typography, useMediaQuery} from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom";
-import {routes} from "../utils/routes";
-import {useAppSelector} from "../hooks/redux";
+import {routes} from "utils/routes";
+import {useAppSelector} from "hooks/redux";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import OrderPositionsList from "./OrderPositionsList";
+import OrderPositionsList from "features/orders/ui/OrderPositionsList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import {getCurrentOrderIsEdit} from "../store/selectors/orders";
-import OrdersListItemHeader from "./OrdersListItemHeader";
+import OrdersListItemHeader from "features/orders/ui/OrdersListItemHeader";
 import {
     APPROVED_GRADIENT,
     CENTER,
@@ -17,9 +16,10 @@ import {
     SPACE_BETWEEN,
     SUCCESS_GRADIENT,
     WHITE_COLOR,
-} from "../styles/const";
-import {getIsCompleteOrder} from "../utils/services";
-import ApprovedOrderCheckbox from "./ApprovedOrderCheckbox";
+} from "styles/const";
+import {getIsCompleteOrder} from "utils/services";
+import OrderApprovedCheckbox from "features/orders/ui/OrderApprovedCheckbox";
+import {getCurrentOrderIsEdit} from "features/orders/model/selectors";
 
 interface IProps {
     order: IOrder;
@@ -83,7 +83,7 @@ const OrdersListItem: FC<IProps> = ({order, handleChange, expanded, isSelectPosi
                                 pr={2}
                             >
                                 <Stack direction={ROW} spacing={1} alignItems={CENTER}>
-                                    <ApprovedOrderCheckbox order={order}/>
+                                    <OrderApprovedCheckbox order={order}/>
                                     <Typography>одобрена</Typography>
                                 </Stack>
                                 <Stack direction={ROW} spacing={1} alignItems={CENTER}>

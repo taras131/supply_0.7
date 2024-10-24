@@ -5,8 +5,8 @@ import SuppliersReducer from "./reducers/suppliers";
 import MessageReducer from "./reducers/message";
 import authReducer from "./reducers/auth";
 import commentsReducer from "./reducers/coments";
-import shipmentsReducer from "features/shipments/model/shipmentsSlice";
-import ordersReducer from "./reducers/orders";
+import shipmentsReducer from "features/shipments/model/slice";
+import ordersReducer from "features/orders/model/slice";
 import machineryReducer from "./reducers/machinery";
 
 const rootReducer = combineReducers({

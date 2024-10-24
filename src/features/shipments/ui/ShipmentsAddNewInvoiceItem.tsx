@@ -19,7 +19,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useAppSelector } from "hooks/redux";
 import { getSupplierNameById } from "store/selectors/suppliers";
 import { IShipmentsInvoice, TShipmentInvoiceValue } from "models/iShipments";
-import { invoiceValues } from "pages/ShipmentsAddNew";
+import { invoiceValues } from "features/shipments/ui/ShipmentsAddNew";
 import { DOWNLOAD_TEXT } from "utils/const";
 import { COMPONENT_A, PRIMARY, SUCCESS } from "styles/const";
 

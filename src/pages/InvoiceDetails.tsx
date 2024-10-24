@@ -10,17 +10,17 @@ import {TLocation} from "../../models/i-location";
 import {commentPanelId} from "utils/const";
 import {shipmentPanelId} from "utils/const";
 import Grid from "@mui/material/Unstable_Grid2";
-import OrdersList from "../components/OrdersList";
-import {getRelatedOrdersByInvoiceId} from "store/selectors/orders";
+import OrdersList from "features/orders/ui/OrdersList";
 import PageHeaderWithTitleAndButton from "../components/PageHeaderWithTitleAndButton";
 import PageLayout from "../components/PageLayout";
 import InvoiceDetailsInfo from "../components/InvoiceDetailsInfo";
 import ShipmentsList from "features/shipments/ui/ShipmentsList";
 import {getRelatedMachineryByInvoiceId} from "store/selectors/machinery";
 import MachineryList from "../components/MachineryList";
-import {selectShipmentsByInvoiceId} from "features/shipments/model/shipmentsSlice";
 import {useAppSelector} from "hooks/redux";
 import {getInvoiceById} from "store/selectors/invoices";
+import {getRelatedOrdersByInvoiceId} from "features/orders/model/selectors";
+import {selectShipmentsByInvoiceId} from "features/shipments/model/selectors";
 
 const InvoiceDetails = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");

@@ -1,74 +1,7 @@
-import {createAsyncThunk, createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {INewShipments, IReceiving, Shipments, Transporter, TShipmentsType} from "models/iShipments";
-import {ALL, shipmentTypes} from "utils/const";
 import {RootState} from "store";
-import {shipmentsAPI} from "features/shipments/api";
-import {handlerError} from "store/actionsCreators/handleError";
-
-interface IShipmentsState {
-    list: Shipments[];
-    isLoading: boolean;
-    errorMessage: string;
-    transporterFilter: Transporter | typeof ALL;
-    shipmentTypeFilter: TShipmentsType | typeof ALL;
-    search: string;
-}
-
-const initialState: IShipmentsState = {
-    list: [],
-    isLoading: false,
-    errorMessage: "",
-    transporterFilter: ALL,
-    shipmentTypeFilter: ALL,
-    search: "",
-};
-
-export const fetchAddShipment = createAsyncThunk("fetch_add_shipment", async (shipment: INewShipments, ThunkAPI) => {
-    try {
-        return await shipmentsAPI.addShipment(shipment);
-    } catch (e) {
-        return ThunkAPI.rejectWithValue(handlerError(e));
-    }
-});
-
-export interface ReceivingData {
-    shipmentId: string;
-    newReceiving: IReceiving;
-}
-
-export const fetchUpdateShipmentReceiving = createAsyncThunk(
-    "update_shipment_receiving",
-    async (updateReceivingData: IReceivingData, ThunkAPI) => {
-        try {
-            return  await shipmentsAPI.updateReceiving(updateReceivingData);
-        } catch (e) {
-            return ThunkAPI.rejectWithValue(handlerError(e));
-        }
-    },
-);
-
-export const ShipmentSlice = createSlice({
-    name: "shipments",
-    initialState,
-    reducers: {
-        setShipments: (state, action: PayloadAction<Shipments[]>) => {
-            state.list = action.payload;
-        },
-        setShipmentsLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
-        setTransporterFilter: (state, action: PayloadAction<Transporter | typeof ALL>) => {
-            state.transporterFilter = action.payload;
-        },
-        setShipmentTypeFilter: (state, action: PayloadAction<TShipmentsType | typeof ALL>) => {
-            state.shipmentTypeFilter = action.payload;
-        },
-        setShipmentSearch: (state, action: PayloadAction<string>) => {
-            state.search = action.payload;
-        },
-    },
-    extraReducers: {},
-});
+import {createSelector} from "@reduxjs/toolkit";
+import {ALL, shipmentTypes} from "utils/const";
+import {Shipments} from "models/iShipments";
 
 const selectShipmentsState = (state: RootState) => state.shipments;
 const selectShipmentsList = (state: RootState) => state.shipments.list;
@@ -115,8 +48,9 @@ export const selectIsShipmentByInvoiceId = (invoiceId: string) =>
         return isShipment;
     });
 export const selectNumberAirShipmentsRoute = createSelector(
-    [selectShipmentsState],
-    (shipmentsState) => shipmentsState.isLoading);
+    [selectShipmentsList],
+    (shipmentsList) => shipmentsList.filter((shipment) => !shipment.receiving.isReceived && shipment.type === shipmentTypes[0].name)
+        .length,);
 export const selectNumberRailShipmentsRoute = createSelector(
     [selectShipmentsList],
     (shipmentsList) =>
@@ -129,8 +63,3 @@ export const selectShipmentsIsLoading = createSelector(
         shipmentsList.filter((shipment) => !shipment.receiving.isReceived && shipment.type === shipmentTypes[1].name)
             .length,
 );
-
-export const {setShipments, setShipmentsLoading, setTransporterFilter, setShipmentTypeFilter, setShipmentSearch} =
-    ShipmentSlice.actions;
-
-export default ShipmentSlice.reducer;

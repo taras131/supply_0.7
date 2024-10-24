@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { TextField } from "@mui/material";
-import { NONE } from "../styles/const";
-import { updateCurrentOrderTitle } from "../store/reducers/orders";
-import { useAppDispatch } from "../hooks/redux";
+import { NONE } from "styles/const";
+import { updateCurrentOrderTitle } from "features/orders/model/slice";
+import { useAppDispatch } from "hooks/redux";
 import Box from "@mui/material/Box";
 
 interface IProps {

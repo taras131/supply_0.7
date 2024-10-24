@@ -9,12 +9,12 @@ import { getUser } from "../store/selectors/auth";
 import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
 import { routes } from "../utils/routes";
 import { useNavigate } from "react-router-dom";
-import OrdersList from "../components/OrdersList";
+import OrdersList from "features/orders/ui/OrdersList";
 import { resetSelectedOrderPosition } from "../store/reducers/invoices";
 import { getSelectedOrderPosition } from "../store/selectors/invoices";
-import { getOrders } from "../store/selectors/orders";
 import PageLayout from "../components/PageLayout";
 import InvoicesAddNewInputFields from "../components/InvoicesAddNewInputFields";
+import {getOrders} from "features/orders/model/selectors";
 
 const InvoicesAddNew: FC = () => {
   const dispatch = useAppDispatch();

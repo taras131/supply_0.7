@@ -1,33 +1,33 @@
 import React, {useEffect, useState} from "react";
 import {Stack, Typography, useMediaQuery} from "@mui/material";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {addOrderItems, removeOrderItems, setCurrenOrderIsEdit, setCurrentOrder} from "../store/reducers/orders";
-import {emptyOrder, IOrderItem} from "../models/iOrders";
+import {useAppDispatch, useAppSelector} from "hooks/redux";
+import {setCurrenOrderIsEdit, setCurrentOrder} from "features/orders/model/slice";
+import {emptyOrder} from "models/iOrders";
+import OrderPositionsList from "features/orders/ui/OrderPositionsList";
+import {getDateInMilliseconds} from "utils/services";
+import OrderDetailsInfo from "features/orders/ui/OrderDetailsInfo";
+import InvoicesList from "components/InvoicesList";
+import {routes} from "utils/routes";
+import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndTwoButtons";
+import PageLayout from "components/PageLayout";
+import OrderDetailsEditTitle from "features/orders/ui/OrderDetailsEditTitle";
+import OrderDetailsEditHelper from "components/OrderDetailsEditHelper";
+import MachineryList from "components/MachineryList";
+import {getMachineryById} from "store/selectors/machinery";
+import TitleWithValue from "components/TitleWithValue";
+import {getUser, getUserFullNameById} from "store/selectors/auth";
+import {CENTER, ROW, SPACE_BETWEEN} from "styles/const";
+import OrderApprovedCheckbox from "features/orders/ui/OrderApprovedCheckbox";
+import Box from "@mui/material/Box";
+import ExcelReader from "components/ExcelReader";
 import {
     getCurrentOrder,
     getCurrentOrderIsEdit,
     getOrderById,
     getRelatedInvoicesByOrderID,
-} from "../store/selectors/orders";
-import OrderPositionsList from "../components/OrderPositionsList";
-import {fetchAddOrder, fetchUpdateOrder} from "../store/actionsCreators/orders";
-import {getDateInMilliseconds} from "../utils/services";
-import OrderDetailsInfo from "../components/OrderDetailsInfo";
-import InvoicesList from "../components/InvoicesList";
-import {routes} from "../utils/routes";
-import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
-import PageLayout from "../components/PageLayout";
-import OrderDetailsEditTitle from "../components/OrderDetailsEditTitle";
-import OrderDetailsEditHelper from "../components/OrderDetailsEditHelper";
-import MachineryList from "../components/MachineryList";
-import {getMachineryById} from "../store/selectors/machinery";
-import TitleWithValue from "../components/TitleWithValue";
-import {getUser, getUserFullNameById} from "../store/selectors/auth";
-import {CENTER, LEFT, ROW, SPACE_AROUND, SPACE_BETWEEN} from "../styles/const";
-import ApprovedOrderCheckbox from "../components/ApprovedOrderCheckbox";
-import Box from "@mui/material/Box";
-import ExcelReader from "components/ExcelReader";
+} from "features/orders/model/selectors";
+import {fetchAddOrder, fetchUpdateOrder} from "features/orders/model/actions";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -98,6 +98,7 @@ const OrderDetails = () => {
                     ...newOrder,
                     orderItems: filteredOrderItems,
                     author: {userId: user.id, dateCreating: getDateInMilliseconds()},
+                    machineryId: newOrder.machineryId !== "empty" ? newOrder.machineryId : "",
                 }),
             );
             dispatch(setCurrentOrder(emptyOrder));
@@ -139,7 +140,7 @@ const OrderDetails = () => {
                 isRightButtonDisabled={!isValidate}
             />
             {isEdit && <OrderDetailsEditTitle title={currentOrder.title}/>}
-            <OrderDetailsInfo isEdit={isEdit} currentOrder={currentOrder} isNewOrder={isNewOrder}/>
+            <OrderDetailsInfo isEdit={isEdit} currentOrder={currentOrder}/>
             <OrderPositionsList
                 orderItems={currentOrder.orderItems}
                 isEdit={isEdit}
@@ -174,7 +175,7 @@ const OrderDetails = () => {
                 )}
                 <Stack direction={ROW} alignItems={CENTER} spacing={1}>
                     <Typography fontWeight={600}>Одобрена</Typography>
-                    <ApprovedOrderCheckbox order={currentOrder}/>
+                    <OrderApprovedCheckbox order={currentOrder}/>
                 </Stack>
                 {isNewOrder && (<ExcelReader/>)}
             </Stack>

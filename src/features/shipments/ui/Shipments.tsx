@@ -7,8 +7,8 @@ import ShipmentsFilter from "features/shipments/ui/ShipmentsFilter";
 import ShipmentsInfo from "features/shipments/ui/ShipmentsInfo";
 import ShipmentsList from "features/shipments/ui/ShipmentsList";
 import ShipmentsHelper from "features/shipments/ui/ShipmentsHelper";
-import {selectShipments} from "features/shipments/model/shipmentsSlice";
 import {Typography} from "@mui/material";
+import {selectShipments} from "features/shipments/model/selectors";
 
 const Shipments = () => {
     const shipments = useAppSelector(selectShipments);
