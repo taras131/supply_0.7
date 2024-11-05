@@ -18,7 +18,11 @@ const OrdersListItemHeader: FC<IProps> = ({ order }) => {
   // const authorFullName = useAppSelector(state => getUserFullNameById(state, order.author.userId)) || "";
   const dateCreating = convertMillisecondsToDate(order.author.dateCreating);
   return (
-    <Grid sx={{ width: "100%" }} alignItems={CENTER} container spacing={matches_600 ? 1 : 0} columns={18} pr={1}>
+    <Grid sx={{ width: "100%" }}
+          alignItems={CENTER}
+          container
+          spacing={matches_600 ? 1 : 0}
+          columns={18} pr={1}>
       {matches_430 && (
         <Grid xs={2}>
           <Typography sx={{ flexShrink: 0 }} fontWeight={600}>

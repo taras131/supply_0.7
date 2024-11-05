@@ -9,7 +9,7 @@ import OrderPositionsList from "features/orders/ui/OrderPositionsList";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import OrdersListItemHeader from "features/orders/ui/OrdersListItemHeader";
 import {
-    APPROVED_GRADIENT,
+    APPROVED_GRADIENT, CANCEL_GRADIENT,
     CENTER,
     CURSOR_POINTER,
     ROW,
@@ -44,6 +44,9 @@ const OrdersListItem: FC<IProps> = ({order, handleChange, expanded, isSelectPosi
         }
         if (getIsCompleteOrder(order.orderItems)) {
             setBackground(SUCCESS_GRADIENT);
+        }
+        if (order.isCancelled) {
+            setBackground(CANCEL_GRADIENT);
         }
     }, [order.approved.isApproved, order.orderItems]);
     return (

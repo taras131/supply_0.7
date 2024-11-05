@@ -22,7 +22,7 @@ const InvoicesAddNew: FC = () => {
     amount: 0,
     number: "",
   });
-  const forSelectPositionsOrders = useAppSelector((state) => getOrders(state, true));
+  const forSelectPositionsOrders = useAppSelector((state) => getOrders(state, true, false));
   const allOrders = useAppSelector((state) => getOrders(state, false));
   const navigate = useNavigate();
   const [isWithVAT, setIsWithVAT] = useState(true);

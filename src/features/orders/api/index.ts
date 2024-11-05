@@ -15,6 +15,7 @@ export const ordersAPI = {
             orderType: order.orderType,
             orderItems: order.orderItems,
             comment: order.comment,
+            isCancelled: order.isCancelled ? order.isCancelled : false,
         });
         return res;
     },

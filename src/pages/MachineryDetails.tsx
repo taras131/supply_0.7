@@ -28,8 +28,7 @@ const MachineryDetails = () => {
     const [isOpenAddNoticeModal, setIsOpenNoticeNewModal] = useState(false);
     const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
     const user = useAppSelector((state) => getUser(state));
-    const isAuth = useAppSelector(getIsAuth
-    );
+    const isAuth = useAppSelector(getIsAuth);
     const toggleIsOpenAddNoticeModal = () => {
         setIsOpenNoticeNewModal((prev) => !prev);
     };

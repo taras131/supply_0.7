@@ -6,7 +6,7 @@ import {createSelector} from "@reduxjs/toolkit";
 
 const selectOrdersState = (state: RootState) => state.orders;
 
-export const getOrders = (state: RootState, isSelectPositionMode = false): IOrder[] => {
+export const getOrders = (state: RootState, isSelectPositionMode = false, isShowCancelled = false): IOrder[] => {
     let arr: IOrder[] = [];
     if (isSelectPositionMode) {
         const tempArr = [...state.orders.list];
@@ -30,6 +30,9 @@ export const getOrders = (state: RootState, isSelectPositionMode = false): IOrde
         if (state.orders.search !== "") {
             arr = [...arr.filter(order => order.title.toLowerCase().includes(state.orders.search.toLowerCase()))]
         }
+    }
+    if (!isShowCancelled) {
+        arr = [...arr.filter(order => !order.isCancelled)]
     }
     return arr.sort((a, b) => {
         return b.author.dateCreating - a.author.dateCreating;

@@ -28,6 +28,7 @@ import {
     getRelatedInvoicesByOrderID,
 } from "features/orders/model/selectors";
 import {fetchAddOrder, fetchUpdateOrder} from "features/orders/model/actions";
+import OrderChangeCancelledButton from "features/orders/ui/OrderChangeCancelledButton";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -177,7 +178,9 @@ const OrderDetails = () => {
                     <Typography fontWeight={600}>Одобрена</Typography>
                     <OrderApprovedCheckbox order={currentOrder}/>
                 </Stack>
-                {isNewOrder && (<ExcelReader/>)}
+                {isNewOrder
+                    ? (<ExcelReader/>)
+                    : (<OrderChangeCancelledButton currentOrder={currentOrder}/>)}
             </Stack>
             {isEdit && <OrderDetailsEditHelper isNewOrder={isNewOrder}/>}
         </PageLayout>

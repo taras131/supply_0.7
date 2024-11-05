@@ -42,6 +42,7 @@ export const transporters = [
     "СДЭК",
     "Энергия",
     "Дмитрий Павлович",
+    "Евгений Владимирович",
 ] as const;
 export const ordersTypes: IOrderType[] = [
     {name: "current", value: "Текущая"},
