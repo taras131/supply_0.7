@@ -1,9 +1,9 @@
 import {IInvoice} from "models/iInvoices";
-import {RootState} from "../index";
 import {ISelectedOrderPosition} from "models/iOrders";
-import {getSupplierNameById} from "./suppliers";
-import {IShipmentsInvoice, TShipmentInvoiceValue} from "models/iShipments";
+import {IShipmentsInvoice} from "models/iShipments";
 import {createSelector} from "@reduxjs/toolkit";
+import {RootState} from "store";
+import {getSupplierNameById} from "store/selectors/suppliers";
 
 /*export const getInvoices = (state: RootState,): IInvoice[] => {
     const arr = [...state.invoices.list];

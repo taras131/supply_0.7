@@ -4,13 +4,13 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import SideBarMenuItem from "./SideBarMenuItem";
-import { routes } from "../utils/routes";
+import { routes } from "utils/routes";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useAppSelector } from "../hooks/redux";
-import { getCountUnpaidInvoices } from "../store/selectors/invoices";
-import { getIsAuth } from "../store/selectors/auth";
-import { drawerWidth } from "../utils/const";
+import { useAppSelector } from "hooks/redux";
+import { getIsAuth } from "store/selectors/auth";
+import { drawerWidth } from "utils/const";
 import { useLocation } from "react-router-dom";
+import {getCountUnpaidInvoices} from "features/invoices/model/selectors";
 
 interface IProps {
   open: boolean;

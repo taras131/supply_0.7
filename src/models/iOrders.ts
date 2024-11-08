@@ -2,6 +2,12 @@ import {TShipmentsType} from "./iShipments";
 import {ordersTypes, shipmentTypes} from "../utils/const";
 import {IApproved} from "./iInvoices";
 
+export enum CompletionType {
+    Invoice = "INVOICE",
+    Cash = "CASH",           // Куплена за наличные
+    Balance = "BALANCE",     // Забрана за счёт остатка средств
+}
+
 export type TOrdersType = "current" | "annual";
 
 export interface ISelectedOrderPosition {
@@ -16,6 +22,7 @@ export interface IOrderItem {
     comment: string;
     isOrdered: boolean;
     invoiceId?: string;
+    completionType?: CompletionType;
 }
 
 export interface INewOrder {

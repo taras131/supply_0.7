@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { ICancel, IPaid } from "../models/iInvoices";
+import { ICancel, IPaid } from "models/iInvoices";
 import { Button } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { getUser } from "../store/selectors/auth";
-import { fetchUpdateInvoiceApproved, fetchUpdateInvoiceCancel } from "../store/actionsCreators/invoices";
-import { getDateInMilliseconds } from "../utils/services";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { getUser } from "store/selectors/auth";
+import { getDateInMilliseconds } from "utils/services";
+import {fetchUpdateInvoiceApproved, fetchUpdateInvoiceCancel} from "features/invoices/model/actions";
 
 interface IProps {
   id: string;
@@ -54,7 +54,7 @@ const InvoiceDetailsCancel: FC<IProps> = ({ id, cancel, paid }) => {
     <>
       {cancel && cancel.isCancel ? (
         <Button sx={{ width: "200px" }} variant={"outlined"} color={"secondary"} onClick={handleCancelClick}>
-          Возобновить счёт
+          Возобновить
         </Button>
       ) : (
         <Button
@@ -64,7 +64,7 @@ const InvoiceDetailsCancel: FC<IProps> = ({ id, cancel, paid }) => {
           onClick={handleCancelClick}
           disabled={paid.isPaid}
         >
-          Отменить счёт
+          Отменить
         </Button>
       )}
     </>

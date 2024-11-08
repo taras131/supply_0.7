@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { LABEL, LOADING_BUTTON_BORDER_RADIUS, SIZE_SMALL } from "../styles/const";
+import { LABEL, LOADING_BUTTON_BORDER_RADIUS, SIZE_SMALL } from "styles/const";
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { CANCEL_TEXT, FILE_TYPE, UPLOAD_TEXT } from "../utils/const";
-import MessageWindowWithChoiceOption from "./MessageWindowWithChoiceOption";
-import { useUploadFile } from "../hooks/useUploadFile";
-import { getDateInMilliseconds } from "../utils/services";
-import { fetchUpdateInvoice, fetchUploadFile } from "../store/actionsCreators/invoices";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { IInvoice } from "../models/iInvoices";
-import { getUser } from "../store/selectors/auth";
+import { CANCEL_TEXT, FILE_TYPE, UPLOAD_TEXT } from "utils/const";
+import MessageWindowWithChoiceOption from "components/MessageWindowWithChoiceOption";
+import { useUploadFile } from "hooks/useUploadFile";
+import { getDateInMilliseconds } from "utils/services";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
+import { IInvoice } from "models/iInvoices";
+import { getUser } from "store/selectors/auth";
+import {fetchUpdateInvoice, fetchUploadFile} from "features/invoices/model/actions";
 
 interface IProps {
   invoice: IInvoice;

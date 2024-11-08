@@ -1,8 +1,7 @@
 import {createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IInvoice} from "models/iInvoices";
 import {ISelectedOrderPosition} from "models/iOrders";
-import {RootState} from "store/index";
-import {IShipmentsInvoice} from "models/iShipments";
+import {RootState} from "store";
 
 interface ISelectedOrderPositionData {
     orderId: string;
@@ -56,7 +55,7 @@ export const InvoicesSlice = createSlice({
     extraReducers: {},
 });
 
-const selectInvoicesState = (state: RootState) => state.invoices;
+// const selectInvoicesState = (state: RootState) => state.invoices;
 const selectInvoicesList = (state: RootState) => state.invoices.list;
 export const selectInvoices = createSelector([selectInvoicesList], (invoicesList) => {
     const arr = [...invoicesList];

@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import { Stack } from "@mui/material";
-import TitleWithValue from "./TitleWithValue";
+import TitleWithValue from "components/TitleWithValue";
 import Divider from "@mui/material/Divider";
-import ApprovedInvoiceCheckbox from "./ApprovedInvoiceCheckbox";
-import { useAppSelector } from "../hooks/redux";
-import { getSupplierINNById, getSupplierNameById } from "../store/selectors/suppliers";
-import { STRING_EMPTY } from "../utils/const";
-import { IInvoice } from "../models/iInvoices";
+import ApprovedInvoiceCheckbox from "features/invoices/ui/ApprovedInvoiceCheckbox";
+import { useAppSelector } from "hooks/redux";
+import { getSupplierINNById, getSupplierNameById } from "store/selectors/suppliers";
+import { STRING_EMPTY } from "utils/const";
+import { IInvoice } from "models/iInvoices";
 
 interface IProps {
   invoice: IInvoice;

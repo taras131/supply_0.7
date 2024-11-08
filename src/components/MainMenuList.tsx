@@ -3,7 +3,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { Stack, useMediaQuery } from "@mui/material";
 import MainMenuListItem from "./MainMenuListItem";
 import { routes } from "../utils/routes";
-import InvoicesInfo from "./InvoicesInfo";
+import InvoicesInfo from "features/invoices/ui/InvoicesInfo";
 import ShipmentsInfo from "features/shipments/ui/ShipmentsInfo";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import { CENTER, PRIMARY } from "../styles/const";

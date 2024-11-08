@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 import { Step, StepLabel, Stepper, Typography } from "@mui/material";
-import { convertMillisecondsToDate } from "../utils/services";
-import { IInvoice } from "../models/iInvoices";
-import { useAppSelector } from "../hooks/redux";
-import { getUserFullNameById } from "../store/selectors/auth";
-import { IShipments } from "../models/iShipments";
+import { convertMillisecondsToDate } from "utils/services";
+import { IInvoice } from "models/iInvoices";
+import { useAppSelector } from "hooks/redux";
+import { getUserFullNameById } from "store/selectors/auth";
+import { IShipments } from "models/iShipments";
 import Box from "@mui/material/Box";
 
 interface IProps {

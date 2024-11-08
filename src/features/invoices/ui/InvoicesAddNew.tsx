@@ -1,20 +1,20 @@
 import React, { FC, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "hooks/redux";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/material";
-import { emptyInvoice } from "../models/iInvoices";
-import { getDateInMilliseconds } from "../utils/services";
-import { fetchAddInvoice, fetchRemoveFile, fetchUploadFile } from "../store/actionsCreators/invoices";
-import { getUser } from "../store/selectors/auth";
-import PageHeaderWithTitleAndTwoButtons from "../components/PageHeaderWithTitleAndTwoButtons";
-import { routes } from "../utils/routes";
+import { emptyInvoice } from "models/iInvoices";
+import { getDateInMilliseconds } from "utils/services";
+import { getUser } from "store/selectors/auth";
+import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndTwoButtons";
+import { routes } from "utils/routes";
 import { useNavigate } from "react-router-dom";
 import OrdersList from "features/orders/ui/OrdersList";
-import { resetSelectedOrderPosition } from "../store/reducers/invoices";
-import { getSelectedOrderPosition } from "../store/selectors/invoices";
-import PageLayout from "../components/PageLayout";
-import InvoicesAddNewInputFields from "../components/InvoicesAddNewInputFields";
+import PageLayout from "components/PageLayout";
+import InvoicesAddNewInputFields from "features/invoices/ui/InvoicesAddNewInputFields";
 import {getOrders} from "features/orders/model/selectors";
+import {getSelectedOrderPosition} from "features/invoices/model/selectors";
+import {resetSelectedOrderPosition} from "features/invoices/model/slice";
+import {fetchAddInvoice, fetchRemoveFile, fetchUploadFile} from "features/invoices/model/actions";
 
 const InvoicesAddNew: FC = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ const InvoicesAddNew: FC = () => {
   const user = useAppSelector((state) => getUser(state));
   const [selectedSupplierId, setSelectedSupplierId] = useState("");
   const [isUploadFileLoading, setIsUploadFileLoading] = useState(false);
-  const selectedPosition = useAppSelector((state) => getSelectedOrderPosition(state));
+  const selectedPosition = useAppSelector(getSelectedOrderPosition);
   const [fileName, setFileName] = useState("");
   const [filePatch, setFilePatch] = useState("");
   const [disabled, setDisabled] = useState(true);

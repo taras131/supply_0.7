@@ -1,6 +1,6 @@
 import React, { FC, useId } from "react";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery } from "@mui/material";
-import InvoicesFilterCheckBoxes from "./InvoicesFilterCheckBoxes";
+import InvoicesFilterCheckBoxes from "features/invoices/ui/InvoicesFilterCheckBoxes";
 import { CENTER, COLUMN, ROW, SPACE_BETWEEN } from "styles/const";
 import Stack from "@mui/material/Stack";
 import { ALL } from "utils/const";

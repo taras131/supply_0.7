@@ -1,8 +1,8 @@
 import React from "react";
 import { Stack, Typography, useMediaQuery } from "@mui/material";
-import { useAppSelector } from "../hooks/redux";
-import { getAmountUnpaidInvoices, getCountUnpaidInvoices } from "../store/selectors/invoices";
-import { CENTER, COLUMN, ROW, START } from "../styles/const";
+import { useAppSelector } from "hooks/redux";
+import { CENTER, COLUMN, ROW, START } from "styles/const";
+import {getAmountUnpaidInvoices, getCountUnpaidInvoices} from "features/invoices/model/selectors";
 
 const InvoicesInfo = () => {
   const matches_500 = useMediaQuery("(min-width:500px)");

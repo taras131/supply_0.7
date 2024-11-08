@@ -1,8 +1,8 @@
 import {RootState} from "store";
 import {IOrder} from "models/iOrders";
 import {IInvoice} from "models/iInvoices";
-import {getInvoiceById} from "store/selectors/invoices";
 import {createSelector} from "@reduxjs/toolkit";
+import {getInvoiceById} from "features/invoices/model/selectors";
 
 const selectOrdersState = (state: RootState) => state.orders;
 
@@ -28,11 +28,11 @@ export const getOrders = (state: RootState, isSelectPositionMode = false, isShow
             arr = [...state.orders.list];
         }
         if (state.orders.search !== "") {
-            arr = [...arr.filter(order => order.title.toLowerCase().includes(state.orders.search.toLowerCase()))]
+            arr = [...arr.filter(order => order.title.toLowerCase().includes(state.orders.search.toLowerCase()))];
         }
     }
     if (!isShowCancelled) {
-        arr = [...arr.filter(order => !order.isCancelled)]
+        arr = [...arr.filter(order => !order.isCancelled)];
     }
     return arr.sort((a, b) => {
         return b.author.dateCreating - a.author.dateCreating;

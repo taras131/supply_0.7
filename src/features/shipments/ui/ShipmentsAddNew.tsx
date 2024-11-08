@@ -14,7 +14,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import LoadingButton from "@mui/lab/LoadingButton";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { fetchRemoveFile, fetchUploadFile } from "store/actionsCreators/invoices";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import ShipmentsAddNewInvoiceList from "features/shipments/ui/ShipmentsAddNewInvoiceList";
 import { IShipmentsInvoice, Transporter, TShipmentInvoiceValue, TShipmentsType } from "models/iShipments";
@@ -26,6 +25,7 @@ import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndT
 import { shipmentTypes, transporters } from "utils/const";
 import PageLayout from "components/PageLayout";
 import {fetchAddShipment} from "features/shipments/model/actions";
+import {fetchRemoveFile, fetchUploadFile} from "features/invoices/model/actions";
 
 export interface IInvoiceValue {
   value: TShipmentInvoiceValue;

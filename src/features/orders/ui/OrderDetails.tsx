@@ -7,7 +7,7 @@ import {emptyOrder} from "models/iOrders";
 import OrderPositionsList from "features/orders/ui/OrderPositionsList";
 import {getDateInMilliseconds} from "utils/services";
 import OrderDetailsInfo from "features/orders/ui/OrderDetailsInfo";
-import InvoicesList from "components/InvoicesList";
+import InvoicesList from "features/invoices/ui/InvoicesList";
 import {routes} from "utils/routes";
 import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndTwoButtons";
 import PageLayout from "components/PageLayout";

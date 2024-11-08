@@ -3,7 +3,6 @@ import { Button, ButtonGroup, Stack, Typography, useMediaQuery } from "@mui/mate
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getDateInMilliseconds } from "utils/services";
-import { fetchUpdateInvoice, fetchUploadFile } from "store/actionsCreators/invoices";
 import { getUser } from "store/selectors/auth";
 import { setMessage } from "store/reducers/message";
 import { MESSAGE_SEVERITY } from "utils/const";
@@ -11,10 +10,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { routes } from "utils/routes";
 import { CENTER, SPACE_BETWEEN } from "styles/const";
-import InvoicesInfo from "./InvoicesInfo";
-import { selectInvoices } from "store/reducers/invoices";
+import InvoicesInfo from "features/invoices/ui/InvoicesInfo";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { useUploadFile } from "hooks/useUploadFile";
+import {selectInvoices} from "features/invoices/model/slice";
+import {fetchUpdateInvoice, fetchUploadFile} from "features/invoices/model/actions";
 
 const InvoicesHeader: FC = () => {
   const dispatch = useAppDispatch();

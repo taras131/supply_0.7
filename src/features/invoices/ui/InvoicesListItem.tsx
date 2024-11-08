@@ -21,7 +21,7 @@ import {
 import { routes } from "utils/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import ApprovedInvoiceCheckbox from "./ApprovedInvoiceCheckbox";
+import ApprovedInvoiceCheckbox from "features/invoices/ui/ApprovedInvoiceCheckbox";
 import {
   APPROVED_GRADIENT,
   BLACK_COLOR,
@@ -38,7 +38,7 @@ import {
   WHITE_COLOR,
 } from "styles/const";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import UploadPayment from "./UploadPayment";
+import UploadPayment from "features/invoices/ui/UploadPayment";
 import { selectCommentsByInvoiceId } from "store/reducers/coments";
 import {selectIsShipmentByInvoiceId} from "features/shipments/model/selectors";
 

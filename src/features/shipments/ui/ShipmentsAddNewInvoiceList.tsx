@@ -11,8 +11,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { IShipmentsInvoice, TShipmentInvoiceValue } from "models/iShipments";
-import { selectInvoices } from "store/reducers/invoices";
 import { useAppSelector } from "hooks/redux";
+import {selectInvoices} from "features/invoices/model/slice";
 
 interface IProps {
   selectedInvoices: IShipmentsInvoice[];

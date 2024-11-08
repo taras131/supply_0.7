@@ -5,7 +5,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Grid from "@mui/material/Unstable_Grid2";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { APPROVED_GRADIENT, CANCEL_GRADIENT, SUCCESS_GRADIENT } from "../styles/const";
+import { APPROVED_GRADIENT, CANCEL_GRADIENT, SUCCESS_GRADIENT } from "styles/const";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 const InvoicesHelper = () => {

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Stack, useMediaQuery } from "@mui/material";
-import InvoicesHeader from "../components/InvoicesHeader";
-import InvoicesHelper from "../components/InvoicesHelper";
-import InvoicesList from "../components/InvoicesList";
-import InvoicesFilter from "../components/InvoicesFilter";
+import InvoicesHeader from "features/invoices/ui/InvoicesHeader";
+import InvoicesHelper from "features/invoices/ui/InvoicesHelper";
+import InvoicesList from "features/invoices/ui/InvoicesList";
+import InvoicesFilter from "features/invoices/ui/InvoicesFilter";
 import { IInvoice } from "models/iInvoices";
 import { ALL } from "utils/const";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector } from "hooks/redux";
-import { selectInvoices } from "store/reducers/invoices";
+import {selectInvoices} from "features/invoices/model/slice";
 
 const Invoices = () => {
   const [isShowCanceledInvoice, setIsShowCanceledInvoice] = useState(false);

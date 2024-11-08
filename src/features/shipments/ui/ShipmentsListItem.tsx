@@ -18,12 +18,12 @@ import {
 } from "utils/services";
 import {getUser, getUserFullNameById} from "store/selectors/auth";
 import ShipmentHeader from "features/shipments/ui/ShipmentHeader";
-import InvoicesList from "components/InvoicesList";
+import InvoicesList from "features/invoices/ui/InvoicesList";
 import {CENTER, END, ROW, SPACE_BETWEEN, START, SUCCESS_GRADIENT} from "styles/const";
 import {useAppDispatch, useAppSelector} from "hooks/redux";
 import {Shipments} from "models/iShipments";
-import {getInvoicesByIds} from "store/selectors/invoices";
 import {fetchUpdateShipmentReceiving} from "features/shipments/model/actions";
+import {getInvoicesByIds} from "features/invoices/model/selectors";
 
 interface IProps {
     shipment: Shipments;
