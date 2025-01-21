@@ -13,10 +13,10 @@ import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndT
 import PageLayout from "components/PageLayout";
 import OrderDetailsEditTitle from "features/orders/ui/OrderDetailsEditTitle";
 import OrderDetailsEditHelper from "components/OrderDetailsEditHelper";
-import MachineryList from "components/MachineryList";
-import {getMachineryById} from "store/selectors/machinery";
+import MachineryList from "features/machinery/ui/MachineryList";
+import {getMachineryById} from "features/machinery/model/selectors";
 import TitleWithValue from "components/TitleWithValue";
-import {getUser, getUserFullNameById} from "store/selectors/auth";
+import {getUser} from "features/auth/model/selectors";
 import {CENTER, ROW, SPACE_BETWEEN} from "styles/const";
 import OrderApprovedCheckbox from "features/orders/ui/OrderApprovedCheckbox";
 import Box from "@mui/material/Box";
@@ -29,6 +29,7 @@ import {
 } from "features/orders/model/selectors";
 import {fetchAddOrder, fetchUpdateOrder} from "features/orders/model/actions";
 import OrderChangeCancelledButton from "features/orders/ui/OrderChangeCancelledButton";
+import {getUserFullNameById} from "../../users/model/selectors";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -40,7 +41,7 @@ const OrderDetails = () => {
     const currentOrder = useAppSelector(getCurrentOrder);
     const order = useAppSelector((state) => getOrderById(state, orderId));
     const isEdit = useAppSelector(getCurrentOrderIsEdit);
-    const authorFullName = useAppSelector((state) => getUserFullNameById(state, currentOrder.author.userId));
+    const authorFullName = useAppSelector((state) => getUserFullNameById(state, +currentOrder.author.userId));
     const user = useAppSelector((state) => getUser(state));
     const matches_700 = useMediaQuery("(min-width:700px)");
     const machinery = useAppSelector((state) => {

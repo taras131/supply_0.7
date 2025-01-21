@@ -11,12 +11,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
 const Orders = () => {
-    const [isShowCancelled, setIsShowCancelled] = useState(false)
+    const [isShowCancelled, setIsShowCancelled] = useState(false);
     const orders = useAppSelector(state => getOrders(state,false, isShowCancelled));
 
     const handleIsShowCancelledChange = () => {
-        setIsShowCancelled(prev => !prev)
-    }
+        setIsShowCancelled(prev => !prev);
+    };
     return (
         <PageLayout>
             <PageHeaderWithTitleAndButton title={"Заявки:"} route={`${routes.orders}/new_order`} buttonText={"Заявка"}/>

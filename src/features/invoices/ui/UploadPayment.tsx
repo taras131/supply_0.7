@@ -9,7 +9,7 @@ import { useUploadFile } from "hooks/useUploadFile";
 import { getDateInMilliseconds } from "utils/services";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { IInvoice } from "models/iInvoices";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import {fetchUpdateInvoice, fetchUploadFile} from "features/invoices/model/actions";
 
 interface IProps {

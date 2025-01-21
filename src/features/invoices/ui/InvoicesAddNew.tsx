@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/material";
 import { emptyInvoice } from "models/iInvoices";
 import { getDateInMilliseconds } from "utils/services";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndTwoButtons";
 import { routes } from "utils/routes";
 import { useNavigate } from "react-router-dom";

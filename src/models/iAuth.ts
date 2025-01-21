@@ -1,19 +1,14 @@
 export interface IAuthData {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
 export interface IRegisterData extends IAuthData {
-  firstName: string;
-  middleName: string;
-  role: string;
+    email: string
+    first_name: string
+    middle_name: string
+    role_id: number
+    password: string
 }
 
-export interface IUser {
-  id: string;
-  uid: string;
-  firstName: string;
-  middleName: string;
-  role: string;
-  email: string;
-}
+

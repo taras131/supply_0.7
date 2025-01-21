@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../hooks/redux";
-import { getIsAuth, getUser } from "../store/selectors/auth";
+import { getIsAuth, getUser } from "../features/auth/model/selectors";
 import { routes } from "../utils/routes";
 import { drawerWidth } from "../utils/const";
 
@@ -54,7 +54,7 @@ const Header: FC<IProps> = ({ open, handleDrawerOpen }) => {
           {isAuth ? (
             <Link to={routes.profile}>
               <Typography color="black">
-                {user.firstName} {user.middleName}
+                {user.first_name} {user.middle_name}
               </Typography>
             </Link>
           ) : (

@@ -3,7 +3,7 @@ import { Checkbox, useMediaQuery } from "@mui/material";
 import { IInvoice } from "models/iInvoices";
 import { getDateInMilliseconds } from "utils/services";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import MessageWindow from "components/MessageWindow";
 import { userRoles } from "utils/const";
 import {fetchUpdateInvoiceApproved} from "features/invoices/model/actions";

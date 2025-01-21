@@ -1,6 +1,6 @@
 import React, { FC, useId } from "react";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import { getDateInMilliseconds } from "utils/services";
 import { Checkbox, useMediaQuery } from "@mui/material";
 import { IOrder } from "models/iOrders";

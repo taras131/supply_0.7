@@ -14,7 +14,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import {setMessage} from "store/reducers/message";
 import {MESSAGE_SEVERITY} from "utils/const";
 import {getWordAfter} from "utils/services";
-import {getMachinery} from "store/selectors/machinery";
+import {getMachinery} from "features/machinery/model/selectors";
 import {ROW} from "styles/const";
 
 const ExcelReader: FC = () => {

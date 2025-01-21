@@ -14,8 +14,8 @@ import PageHeaderWithTitleAndButton from "components/PageHeaderWithTitleAndButto
 import PageLayout from "components/PageLayout";
 import InvoiceDetailsInfo from "features/invoices/ui/InvoiceDetailsInfo";
 import ShipmentsList from "features/shipments/ui/ShipmentsList";
-import {getRelatedMachineryByInvoiceId} from "store/selectors/machinery";
-import MachineryList from "components/MachineryList";
+import {getRelatedMachineryByInvoiceId} from "features/machinery/model/selectors";
+import MachineryList from "features/machinery/ui/MachineryList";
 import {useAppSelector} from "hooks/redux";
 import {getOrders, getRelatedOrdersByInvoiceId} from "features/orders/model/selectors";
 import {selectShipmentsByInvoiceId} from "features/shipments/model/selectors";
@@ -24,7 +24,7 @@ import {getInvoiceById} from "features/invoices/model/selectors";
 const InvoiceDetails = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");
     const invoiceId = useParams().invoiceId || "0";
-    const [isShowOrdersPosition, setIsShowOrdersPosition] = useState(false)
+    const [isShowOrdersPosition, setIsShowOrdersPosition] = useState(false);
     const location = useLocation() as TLocation;
     const invoice = useAppSelector(state => getInvoiceById(state, invoiceId));
     const forSelectPositionsOrders = useAppSelector((state) => getOrders(state, true, false));
@@ -33,8 +33,8 @@ const InvoiceDetails = () => {
     const relatedMachinery = useAppSelector((state) => getRelatedMachineryByInvoiceId(state, invoiceId));
     const [expanded, setExpanded] = useState<string | false>(false);
     const handleIsShowOrdersPositionChange = () => {
-        setIsShowOrdersPosition(prev => !prev)
-    }
+        setIsShowOrdersPosition(prev => !prev);
+    };
     useEffect(() => {
         if (location.state && location.state.isCommentClick) setExpanded(commentPanelId);
         if (location.state && location.state.isShipmentClick) setExpanded(shipmentPanelId);

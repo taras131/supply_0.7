@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import {Button, Menu, MenuItem} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "hooks/redux";
 import {fetchUpdateOrder} from "features/orders/model/actions";
@@ -12,7 +12,7 @@ interface IProps {
 
 const OrderPositionsListItemMenu: FC<IProps> = ({orderId, orderItemId}) => {
     const dispatch = useAppDispatch();
-    const order = useAppSelector(state => getOrderById(state, orderId))
+    const order = useAppSelector(state => getOrderById(state, orderId));
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -24,18 +24,18 @@ const OrderPositionsListItemMenu: FC<IProps> = ({orderId, orderItemId}) => {
     const handleMenuItemClick = (completionType: CompletionType) => {
         dispatch(fetchUpdateOrder({
             ...order, orderItems: [...order.orderItems.map(orderItem => {
-                return orderItem.id === orderItemId ? {...orderItem, completionType} : orderItem
+                return orderItem.id === orderItemId ? {...orderItem, completionType} : orderItem;
             })],
         }));
         handleClose();
-    }
+    };
     return (
         <div>
             <Button
                 id="order-item-positioned-button"
-                aria-controls={open ? 'order-item-positioned-menu' : undefined}
+                aria-controls={open ? "order-item-positioned-menu" : undefined}
                 aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
+                aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
             >
                 +
@@ -47,12 +47,12 @@ const OrderPositionsListItemMenu: FC<IProps> = ({orderId, orderItemId}) => {
                 open={open}
                 onClose={handleClose}
                 anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: "top",
+                    horizontal: "left",
                 }}
                 transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: "top",
+                    horizontal: "left",
                 }}
             >
                 <MenuItem onClick={() => handleMenuItemClick(CompletionType.Cash)}>За наличные</MenuItem>

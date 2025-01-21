@@ -1,25 +1,38 @@
 import {MachineryStatus} from "utils/const";
-
-export interface INotice {
-  createdDate: number;
-  text: string;
-  isActive: boolean;
-  authorId?: string;
-}
+import {IComment} from "./iComents";
 
 export type MachineryStatusType = typeof MachineryStatus[keyof typeof MachineryStatus];
 
+export interface INewMachineryDoc {
+    title: string
+    machinery_id: number
+}
+
+export interface IMachineryDoc extends INewMachineryDoc {
+    id: number
+    created_date: int
+    updated_date: int
+    file_name: string
+}
+
 export interface INewMachinery {
-  brand: string;
-  model: string;
-  yearManufacture: string;
-  type: string;
-  vin: string;
-  stateNumber: string;
-  status?: MachineryStatusType
+    brand: string;
+    model: string;
+    year_manufacture: number;
+    type_id: number;
+    vin: string;
+    state_number: string;
+    status: MachineryStatusType
 }
 
 export interface IMachinery extends INewMachinery {
-  id: string;
-  notices?: INotice[];
+    id: number;
+    comments?: IComment[];
+    photos: string[];
+    created_date: number;
+    updated_date: number;
+}
+
+export interface ICurrentMachinery extends IMachinery {
+    docs: IMachineryDoc[]
 }

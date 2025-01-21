@@ -1,10 +1,13 @@
 export interface INewComment {
-  authorId: string;
-  invoiceId: string;
-  text: string;
-  dateCreation: number;
+  text: string
+  is_active: boolean
+  author_id: number
+  machinery_id: number
 }
 
 export interface IComment extends INewComment {
-  id: string;
+  id: number;
+  created_date: number;
+  updated_date: number;
+  rating: number [];
 }

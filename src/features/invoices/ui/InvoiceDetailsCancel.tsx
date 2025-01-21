@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { ICancel, IPaid } from "models/iInvoices";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import { getDateInMilliseconds } from "utils/services";
 import {fetchUpdateInvoiceApproved, fetchUpdateInvoiceCancel} from "features/invoices/model/actions";
 

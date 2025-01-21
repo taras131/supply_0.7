@@ -10,7 +10,7 @@ import {
 
 export const invoicesAPI = {
     linkPosition: async (linkPositionsDate: ILinkPositions) => {
-        const {orders, selectedPosition, invoiceId} =linkPositionsDate
+        const {orders, selectedPosition, invoiceId} =linkPositionsDate;
         for (const key in selectedPosition) {
             let order = orders.find((order) => order.id === key);
             if (order) {
@@ -33,7 +33,7 @@ export const invoicesAPI = {
     addInvoice: async (addInvoiceData: IAddInvoiceData) => {
         const {invoice, orders, selectedPosition} = addInvoiceData;
         const res = await addDoc(collection(db, "invoices"), invoice);
-        await invoicesAPI.linkPosition({orders, selectedPosition, invoiceId: res.id})
+        await invoicesAPI.linkPosition({orders, selectedPosition, invoiceId: res.id});
         return res;
     },
 

@@ -17,7 +17,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 import ShipmentsAddNewInvoiceList from "features/shipments/ui/ShipmentsAddNewInvoiceList";
 import { IShipmentsInvoice, Transporter, TShipmentInvoiceValue, TShipmentsType } from "models/iShipments";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import { getDateInMilliseconds } from "utils/services";
 import { useNavigate } from "react-router-dom";
 import { routes } from "utils/routes";

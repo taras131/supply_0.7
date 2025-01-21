@@ -1,16 +1,16 @@
 import { db, storage } from "../firebase";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { addDoc, collection} from "firebase/firestore";
 import { ref, deleteObject, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { INewSupplier } from "models/iSuppliers";
 import { getDateInMilliseconds, transliterate } from "utils/services";
-import { IAuthData, IRegisterData } from "models/iAuth";
 import { INewComment } from "models/iComents";
-import { IMachinery, INewMachinery } from "models/iMachinery";
 import {IFileData} from "features/invoices/model/actions";
+import axios from "axios";
+
+export const basePath ="http://127.0.0.1:8000/api/v1";
 
 class Api {
-  auth = getAuth();
+
   addSupplier = async (supplier: INewSupplier) => {
     const res = await addDoc(collection(db, "suppliers"), supplier);
     return res;
@@ -19,18 +19,6 @@ class Api {
     const res = await addDoc(collection(db, "comments"), comment);
     return res;
   };
-
-  addMachinery = async (machinery: INewMachinery) => {
-    const res = await addDoc(collection(db, "machinery"), machinery);
-    return res;
-  };
-  updateMachinery = async (machinery: IMachinery) => {
-    const res = await updateDoc(doc(db, "machinery", machinery.id), {
-      ...machinery,
-    });
-    return res;
-  };
-
 
   uploadFile = async (fileData: IFileData) => {
     const name = `${getDateInMilliseconds()}-${transliterate(fileData.file.name.replace(" ", "_"))}`;
@@ -79,27 +67,24 @@ class Api {
         alert(e);
       });
   };
-  login = async (authData: IAuthData) => {
-    const res = await signInWithEmailAndPassword(this.auth, authData.email, authData.password);
-    return res.user.uid;
-  };
-  register = async (registerData: IRegisterData) => {
-    const res = await createUserWithEmailAndPassword(this.auth, registerData.email, registerData.password);
-    const user = await addDoc(collection(db, "users"), {
-      uid: res.user.uid,
-      email: res.user.email,
-      role: registerData.role,
-      firstName: registerData.firstName,
-      middleName: registerData.middleName,
-    });
-    return user;
-  };
-  out = async () => {
-    const res = await signOut(this.auth);
-    return res;
-  };
+
 }
 
 const api = new Api();
 
 export default api;
+
+
+
+export  const appAPI = axios.create({
+  baseURL: basePath,
+});
+
+appAPI.interceptors.request.use(config => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+

@@ -30,6 +30,6 @@ export interface INewShipments {
   invoicesList: IShipmentsInvoice[];
 }
 
-export interface Shipments extends INewShipments {
+export interface IShipments extends INewShipments {
   id: string;
 }

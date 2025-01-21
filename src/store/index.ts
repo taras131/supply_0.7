@@ -3,11 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import SuppliersReducer from "./reducers/suppliers";
 import MessageReducer from "./reducers/message";
 import InvoicesReducer from "features/invoices/model/slice";
-import authReducer from "./reducers/auth";
+import authReducer from "../features/auth/model/slice";
 import commentsReducer from "./reducers/coments";
 import shipmentsReducer from "features/shipments/model/slice";
 import ordersReducer from "features/orders/model/slice";
-import machineryReducer from "./reducers/machinery";
+import machineryReducer from "../features/machinery/model/slice";
+import usersReducer from "../features/users/model/slice";
+import {machineryWebsocketMiddleware} from "../features/machinery/model/websocketMiddleware";
+import {usersWebsocketMiddleware} from "../features/users/model/websocketMiddleware";
 
 const rootReducer = combineReducers({
   invoices: InvoicesReducer,
@@ -18,10 +21,13 @@ const rootReducer = combineReducers({
   shipments: shipmentsReducer,
   orders: ordersReducer,
   machinery: machineryReducer,
+  users: usersReducer,
 });
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(machineryWebsocketMiddleware, usersWebsocketMiddleware),
   });
 };
 export type RootState = ReturnType<typeof rootReducer>;

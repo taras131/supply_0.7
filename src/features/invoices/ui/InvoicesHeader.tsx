@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Stack, Typography, useMediaQuery } from "@mui/mate
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { getDateInMilliseconds } from "utils/services";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import { setMessage } from "store/reducers/message";
 import { MESSAGE_SEVERITY } from "utils/const";
 import AddIcon from "@mui/icons-material/Add";

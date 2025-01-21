@@ -16,7 +16,7 @@ import {
     getDateInMilliseconds,
     getProjectedArrivalDate,
 } from "utils/services";
-import {getUser, getUserFullNameById} from "store/selectors/auth";
+import {getUser} from "features/auth/model/selectors";
 import ShipmentHeader from "features/shipments/ui/ShipmentHeader";
 import InvoicesList from "features/invoices/ui/InvoicesList";
 import {CENTER, END, ROW, SPACE_BETWEEN, START, SUCCESS_GRADIENT} from "styles/const";
@@ -24,6 +24,7 @@ import {useAppDispatch, useAppSelector} from "hooks/redux";
 import {Shipments} from "models/iShipments";
 import {fetchUpdateShipmentReceiving} from "features/shipments/model/actions";
 import {getInvoicesByIds} from "features/invoices/model/selectors";
+import {getUserFullNameById} from "../../users/model/selectors";
 
 interface IProps {
     shipment: Shipments;
@@ -37,7 +38,7 @@ const ShipmentsListItem: FC<IProps> = ({shipment, handleChange, expanded}) => {
     const createdDate = convertMillisecondsToDate(shipment.author.dateCreating);
     const checkboxId = useId();
     const user = useAppSelector((state) => getUser(state));
-    const receivingUserFullName = useAppSelector((state) => getUserFullNameById(state, shipment.receiving.userId));
+    const receivingUserFullName = useAppSelector((state) => getUserFullNameById(state, +shipment.receiving.userId));
     const projectedArrivalDate = getProjectedArrivalDate(shipment.author.dateCreating, shipment.type);
     const invoices = useAppSelector(state => getInvoicesByIds(state, shipment.invoicesList));
     const handleReceivingChange = () => {

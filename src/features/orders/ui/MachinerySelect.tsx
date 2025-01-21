@@ -1,7 +1,7 @@
 import React, {FC, useId} from "react";
 import {FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {useAppSelector} from "hooks/redux";
-import {getMachinery} from "store/selectors/machinery";
+import {getMachinery} from "features/machinery/model/selectors";
 
 interface IProps {
     machineryId: string

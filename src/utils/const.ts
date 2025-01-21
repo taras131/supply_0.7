@@ -60,8 +60,6 @@ export const VIN_COPY_TEXT = "VIN скопирован";
 export const AMOUNT_COPY_TEXT = "Сумма скопирована";
 export const FILE_TYPE = "file";
 
-export const machineryTypes = ["Легковые а/м", "Грузовые а/м", "Спецтехника", "Другое"];
-
 export enum MachineryStatus {
     active = "Работает",
     disActive = "Списана",

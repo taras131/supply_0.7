@@ -7,7 +7,7 @@ import SideBarMenuItem from "./SideBarMenuItem";
 import { routes } from "utils/routes";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAppSelector } from "hooks/redux";
-import { getIsAuth } from "store/selectors/auth";
+import { getIsAuth } from "features/auth/model/selectors";
 import { drawerWidth } from "utils/const";
 import { useLocation } from "react-router-dom";
 import {getCountUnpaidInvoices} from "features/invoices/model/selectors";

@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { routes } from "utils/routes";
 import AccordionWithTitleCounterIcon from "components/AccordionWithTitleCounterIcon";
 import { getCommentsIsLoading } from "store/selectors/coments";
-import { getUser } from "store/selectors/auth";
+import { getUser } from "features/auth/model/selectors";
 import InvoiceDetailsCommentsItem from "features/invoices/ui/InvoiceDetailsCommentsItem";
 import { fetchAddComment } from "store/actionsCreators/comments";
 import Divider from "@mui/material/Divider";

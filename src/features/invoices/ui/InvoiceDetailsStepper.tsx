@@ -3,9 +3,9 @@ import { Step, StepLabel, Stepper, Typography } from "@mui/material";
 import { convertMillisecondsToDate } from "utils/services";
 import { IInvoice } from "models/iInvoices";
 import { useAppSelector } from "hooks/redux";
-import { getUserFullNameById } from "store/selectors/auth";
-import { IShipments } from "models/iShipments";
 import Box from "@mui/material/Box";
+import {getUserFullNameById} from "../../users/model/selectors";
+import {IShipments} from "../../../models/iShipments";
 
 interface IProps {
   invoice: IInvoice;
@@ -48,14 +48,14 @@ const InvoiceDetailsStepper: FC<IProps> = ({ invoice, shipment }) => {
 
   const authorInvoiceFullName = useAppSelector((state) => {
     if (author && author.userId) {
-      return getUserFullNameById(state, author.userId);
+      return getUserFullNameById(state, +author.userId);
     } else {
       return "";
     }
   });
   const approvedAuthorFullName = useAppSelector((state) => {
     if (approved && approved.userId) {
-      return getUserFullNameById(state, approved.userId);
+      return getUserFullNameById(state, +approved.userId);
     } else {
       return "";
     }
