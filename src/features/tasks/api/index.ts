@@ -1,12 +1,13 @@
 import {INewTask} from "../../../models/ITasks";
-import {basePath} from "../../machinery/api";
+import {basePath} from "../../../api";
 
-const tasksPath = `${basePath}/tasks`;
+const tasksPath = `${basePath}/tasks/`;
 
 export const tasksAPI = {
     addNew: async (newTask: INewTask) => {
         const res = await fetch(tasksPath, {
             method: "POST",
+            mode: "cors",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -18,4 +19,4 @@ export const tasksAPI = {
         }
         return  await res.json();
     },
-}
+};

@@ -1,5 +1,5 @@
-import React, {ChangeEvent, FC, useId, useMemo} from 'react';
-import {FormControl, MenuItem, Select, SelectChangeEvent, Stack} from "@mui/material";
+import React, {ChangeEvent, FC, useId, useMemo} from "react";
+import {FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {INewTask, ITask, taskPriority} from "../../../models/ITasks";
 import TextField from "@mui/material/TextField";
 import {getAllUsers} from "../../users/model/selectors";
@@ -33,34 +33,9 @@ const TasksEdit:FC<IProps> = ({editedTask, taskFieldChangeHandler}) => {
             )),
         []
     );
-
     if(!editedTask) return null;
     return (
         <Stack spacing={2} mt={4}>
-            <FormControl fullWidth>
-                <Select
-                    id={priorityId}
-                    value={`${editedTask.priority_id}`}
-                    onChange={taskFieldChangeHandler}
-                    sx={{overflow: "hidden"}}
-                    fullWidth
-                    name={"priority_id"}
-                >
-                    {taskPriorityList}
-                </Select>
-            </FormControl>
-            <FormControl fullWidth>
-                <Select
-                    id={priorityId}
-                    value={`${editedTask.assigned_to}`}
-                    onChange={taskFieldChangeHandler}
-                    sx={{overflow: "hidden"}}
-                    fullWidth
-                    name={"assigned_to"}
-                >
-                    {assignedList}
-                </Select>
-            </FormControl>
             <TextField id="outlined-basic"
                        label="Заголовок"
                        variant="outlined"
@@ -77,6 +52,32 @@ const TasksEdit:FC<IProps> = ({editedTask, taskFieldChangeHandler}) => {
                 multiline
                 rows={5}
             />
+            <FormControl fullWidth>
+                <Select
+                    id={priorityId}
+                    value={`${editedTask.priority_id}`}
+                    onChange={taskFieldChangeHandler}
+                    sx={{overflow: "hidden"}}
+                    fullWidth
+                    name={"priority_id"}
+                >
+                    {taskPriorityList}
+                </Select>
+                <FormHelperText>Приоритет</FormHelperText>
+            </FormControl>
+            <FormControl fullWidth>
+                <Select
+                    id={assignedId}
+                    value={`${editedTask.assigned_to_id}`}
+                    onChange={taskFieldChangeHandler}
+                    sx={{overflow: "hidden"}}
+                    fullWidth
+                    name={"assigned_to_id"}
+                >
+                    {assignedList}
+                </Select>
+                <FormHelperText>Исполнитель</FormHelperText>
+            </FormControl>
         </Stack>
     );
 };

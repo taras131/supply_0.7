@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import placeholderImage from "../../../assets/images/fileUploadPlaceholder.png";
 import {fetchAddMachineryDoc} from "../model/actions";
 
-const AnimatedCard = styled(Card)(({theme}) => ({
+const AnimatedCard = styled(Card)(() => ({
     transition: "all 0.3s ease-in-out",
     cursor: "pointer",
     "&:hover": {
@@ -22,7 +22,7 @@ const AnimatedCard = styled(Card)(({theme}) => ({
 }));
 
 // Стили для модального окна
-const ModalCard = styled(Card)(({theme}) => ({
+const ModalCard = styled(Card)(() => ({
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -63,6 +63,7 @@ const MachineryDetailsDocsAddNew = () => {
         setFile(null);
         setTitle("");
     };
+    if(!machineryId) return null;
     const titleChangeHandler = (e: ChangeEvent<HTMLInputElement
         | HTMLTextAreaElement>) => {
         setTitle(e.target.value);

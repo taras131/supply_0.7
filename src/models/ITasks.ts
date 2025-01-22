@@ -28,16 +28,20 @@ export interface ITaskItem {
 export interface INewTask {
     title: string;
     description: string;
-    status_id: number
-    priority_id: number
-    due_date: number
-    items: ITaskItem[]
-    author_id: number
-    assigned_to: number
+    status_id: number;
+    priority_id: number;
+    due_date: number;
+    author_id: number;
+    assigned_to_id: number;
+    machinery_id?: number;
+    issue_photos: string[];
 }
 
 export interface ITask  extends  INewTask{
     id: number;
     created_date: number;
     updated_date: number;
+    result_photos: string[];
+    result_description: string;
+    spent_resources: string[];
 }

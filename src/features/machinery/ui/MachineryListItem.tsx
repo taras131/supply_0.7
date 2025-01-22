@@ -22,6 +22,7 @@ import {routes} from "../../../utils/routes";
 import {useNavigate} from "react-router-dom";
 import {styled} from "@mui/material/styles";
 import {filesPath} from "../../../api/files";
+import photoPlaceholder from "../../../assets/images/placeholder.png";
 
 interface IProps {
     machinery: IMachinery;
@@ -53,7 +54,7 @@ const MachineryListItem: FC<IProps> = ({machinery}) => {
     const isDisActive = machinery.status && machinery.status === MachineryStatus.disActive;
 
     const activeCommentCount = machinery.comments?.filter((comment) => comment.is_active).length || 0;
-    const photoPath = machinery.photos ? `${filesPath}/${machinery.photos[0]}` : "#";
+    const photoPath = machinery.photos[0] ? `${filesPath}/${machinery.photos[0]}` : photoPlaceholder;
     return (
         <StyledTableRow sx={{width: "100%", opacity: `${isDisActive ? 0.5 : 1}`}}>
             <StyledTableCell sx={{padding: matches_700 ? "8px" : "1px"}} align={CENTER}>

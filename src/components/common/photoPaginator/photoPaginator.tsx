@@ -17,9 +17,9 @@ const PhotoPaginator:FC<IProps> = ({activePhoto, photoCount, onPhotoClick}) => {
                     key={index}
                     onClick={() => onPhotoClick(index)}
                     sx={{
-                        width: 15,
-                        height: 15,
-                        borderRadius: "50%",
+                        width: 20,
+                        height: 20,
+                        borderRadius: "5px",
                         cursor: "pointer",
                         backgroundColor: activePhoto === index ? "primary.main" : "grey.300", // активный кружок
                         display: "flex",

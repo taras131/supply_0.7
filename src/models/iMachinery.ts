@@ -1,18 +1,19 @@
 import {MachineryStatus} from "utils/const";
 import {IComment} from "./iComents";
+import {ITask} from "./ITasks";
 
 export type MachineryStatusType = typeof MachineryStatus[keyof typeof MachineryStatus];
 
 export interface INewMachineryDoc {
-    title: string
-    machinery_id: number
+    title: string;
+    machinery_id: number;
 }
 
 export interface IMachineryDoc extends INewMachineryDoc {
-    id: number
-    created_date: int
-    updated_date: int
-    file_name: string
+    id: number;
+    created_date: int;
+    updated_date: int;
+    file_name: string;
 }
 
 export interface INewMachinery {
@@ -22,7 +23,7 @@ export interface INewMachinery {
     type_id: number;
     vin: string;
     state_number: string;
-    status: MachineryStatusType
+    status: MachineryStatusType;
 }
 
 export interface IMachinery extends INewMachinery {
@@ -34,5 +35,6 @@ export interface IMachinery extends INewMachinery {
 }
 
 export interface ICurrentMachinery extends IMachinery {
-    docs: IMachineryDoc[]
+    docs: IMachineryDoc[];
+    tasks: ITask[];
 }

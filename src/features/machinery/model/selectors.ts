@@ -3,6 +3,7 @@ import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMac
 import {useAppSelector} from "../../../hooks/redux";
 import {IOrder} from "../../../models/iOrders";
 import {MachineryStatus} from "utils/const";
+import {ITask} from "../../../models/ITasks";
 
 const collator = new Intl.Collator("ru");
 
@@ -36,6 +37,10 @@ export const getCurrentMachineryDocs = (state: RootState): IMachineryDoc[] | nul
 
 export const getCurrentMachineryId = (state: RootState): number | null => {
     return state.machinery.currentMachinery?.id || null;
+};
+
+export const getCurrentMachineryTasks = (state: RootState): ITask [] | null => {
+    return state.machinery.currentMachinery?.tasks || null;
 };
 
 export const getRelatedMachineryByInvoiceId = (state: RootState, invoiceId: string): IMachinery[] => {

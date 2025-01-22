@@ -11,6 +11,8 @@ import {
     fetchUploadMachineryPhoto,
 } from "./actions";
 import {IComment} from "../../../models/iComents";
+import {ITask} from "../../../models/ITasks";
+import {fetchAddTask} from "../../tasks/model/actions";
 
 interface IMachineryState {
     list: (IMachinery)[];
@@ -129,6 +131,13 @@ export const MachinerySlice = createSlice({
                 if(state.currentMachinery && state.currentMachinery.docs) {
                     state.currentMachinery = {...state.currentMachinery,
                         docs: [...state.currentMachinery.docs, action.payload]};
+                }
+                state.isLoading = false;
+            })
+            .addCase(fetchAddTask.fulfilled, (state, action: PayloadAction<ITask>) => {
+                if(state.currentMachinery && action.payload.machinery_id) {
+                    state.currentMachinery = {...state.currentMachinery,
+                        tasks: [...state.currentMachinery.tasks, action.payload]};
                 }
                 state.isLoading = false;
             })
