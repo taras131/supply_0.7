@@ -13,7 +13,6 @@ import PageHeaderWithTitleAndTwoButtons from "components/PageHeaderWithTitleAndT
 import PageLayout from "components/PageLayout";
 import OrderDetailsEditTitle from "features/orders/ui/OrderDetailsEditTitle";
 import OrderDetailsEditHelper from "components/OrderDetailsEditHelper";
-import MachineryList from "features/machinery/ui/MachineryList";
 import {getMachineryById} from "features/machinery/model/selectors";
 import TitleWithValue from "components/TitleWithValue";
 import {getUser} from "features/auth/model/selectors";
@@ -30,6 +29,8 @@ import {
 import {fetchAddOrder, fetchUpdateOrder} from "features/orders/model/actions";
 import OrderChangeCancelledButton from "features/orders/ui/OrderChangeCancelledButton";
 import {getUserFullNameById} from "../../users/model/selectors";
+import MachineryTable from "../../machinery/ui/MachineryTable";
+import MachineryTableRow from "../../machinery/ui/MachineryTableRow";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -156,7 +157,7 @@ const OrderDetails = () => {
                             Прикреплённая техника:
                         </Typography>
                     </Box>
-                    <MachineryList machinery={machinery}/>
+                    <MachineryTableRow row={machinery}/>
                 </>
             )}
             {relatedInvoices && relatedInvoices.length > 0 && !isEdit && (

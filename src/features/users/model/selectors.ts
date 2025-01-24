@@ -12,4 +12,4 @@ export const getUserById = (state: RootState, useId: number): IUser => {
 
 export const getUserFullNameById = (state: RootState, userId: number): string => {
     return "";
-}
+};

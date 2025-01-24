@@ -1,5 +1,4 @@
 import React, {useCallback, ChangeEvent} from "react";
-import PageLayout from "../../../components/PageLayout";
 import {useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../../../utils/routes";
 import {
@@ -9,8 +8,6 @@ import {fetchAddMachinery} from "../model/actions";
 import {useAppDispatch} from "../../../hooks/redux";
 import {MachineryStatus} from "utils/const";
 import MachineryEdit from "./MachineryEdit";
-import Grid from "@mui/material/Unstable_Grid2";
-import {CENTER, ROW, SPACE_BETWEEN} from "../../../styles/const";
 import Button from "@mui/material/Button";
 
 const MachineryAddNew = () => {
@@ -41,34 +38,22 @@ const MachineryAddNew = () => {
         navigate(routes.machinery);
     };
     return (
-        <PageLayout>
-            <Grid container sx={{width: "100%"}}
-                  direction={ROW}
-                  alignItems={CENTER}
-                  justifyContent={SPACE_BETWEEN}
-                  spacing={1}>
-                <Grid xs={3}>
-                    <Button onClick={handleBackClick} variant={"outlined"}>
-                        Назад
-                    </Button>
-                </Grid>
-                <Grid xs={6} textAlign={CENTER}>
-                    <Typography variant="h2" fontSize={"24px"}>
-                        Новая Техника:
-                    </Typography>
-                </Grid>
-                <Grid xs={3} sx={{textAlign: "right"}}>
-                    <Button onClick={handleAddClick} variant={"contained"} color={"success"}
-                            sx={{marginLeft: "10px"}}>
-                        Сохранить
-                    </Button>
-                </Grid>
-            </Grid>
-            <Stack spacing={3} pt={15} sx={{maxWidth: "600px",width: "100%"}}>
-                <MachineryEdit editedMachinery={editedMachinery}
-                               machineryFieldChangeHandler={machineryFieldChangeHandler}/>
+        <Stack sx={{padding: "24px", width: "500px"}} spacing={3}>
+            <Typography variant="h2" fontSize={"24px"} textAlign="center">
+                Новая Техника:
+            </Typography>
+            <MachineryEdit editedMachinery={editedMachinery}
+                           machineryFieldChangeHandler={machineryFieldChangeHandler}/>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Button onClick={handleBackClick} variant={"outlined"}>
+                    Назад
+                </Button>
+                <Button onClick={handleAddClick} variant={"contained"} color={"success"}
+                        sx={{marginLeft: "10px"}}>
+                    Сохранить
+                </Button>
             </Stack>
-        </PageLayout>
+        </Stack>
     );
 };
 

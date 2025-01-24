@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, useState} from "react";
 import {Drawer, SelectChangeEvent, Stack, Divider, Paper} from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -9,11 +9,11 @@ import {filesPath} from "../../../api/files";
 import TextField from "@mui/material/TextField";
 import {useAppSelector} from "../../../hooks/redux";
 import {getUserById} from "../../users/model/selectors";
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
-import PersonIcon from '@mui/icons-material/Person';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloseIcon from '@mui/icons-material/Close';
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
+import PersonIcon from "@mui/icons-material/Person";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
 
 const TaskDetails: FC<IProps> = ({isOpen, toggleDrawer, task}) => {
     const author = useAppSelector(state => getUserById(state, task.author_id));
@@ -52,18 +52,18 @@ const TaskDetails: FC<IProps> = ({isOpen, toggleDrawer, task}) => {
                 sx={{
                     width: "600px",
                     height: "100vh",
-                    backgroundColor: '#f5f5f5',
-                    overflowY: 'auto',
+                    backgroundColor: "#f5f5f5",
+                    overflowY: "auto",
                 }}
             >
                 <Paper sx={{
                     p: 3,
                     m: 2,
                     borderRadius: 2,
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 }}>
                     <Stack spacing={3}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                             <AssignmentIcon color="primary" />
                             <Typography variant="h5" fontWeight="bold">
                                 {task.title}
@@ -72,7 +72,7 @@ const TaskDetails: FC<IProps> = ({isOpen, toggleDrawer, task}) => {
 
                         <Divider />
 
-                        <Box sx={{ bgcolor: '#f8f9fa', p: 2, borderRadius: 1 }}>
+                        <Box sx={{ bgcolor: "#f8f9fa", p: 2, borderRadius: 1 }}>
                             <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
                                 Описание задачи:
                             </Typography>
@@ -81,8 +81,8 @@ const TaskDetails: FC<IProps> = ({isOpen, toggleDrawer, task}) => {
                             </Typography>
                         </Box>
 
-                        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-                            <Box sx={{ minWidth: '45%' }}>
+                        <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+                            <Box sx={{ minWidth: "45%" }}>
                                 <Typography variant="subtitle2" color="text.secondary">
                                     Срочность
                                 </Typography>
@@ -112,7 +112,7 @@ const TaskDetails: FC<IProps> = ({isOpen, toggleDrawer, task}) => {
 
                         {photoPaths && (
                             <Box>
-                                <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                <Typography variant="subtitle1" sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
                                     <PhotoLibraryIcon color="primary" />
                                     Прикрепленные фото
                                 </Typography>
@@ -122,8 +122,8 @@ const TaskDetails: FC<IProps> = ({isOpen, toggleDrawer, task}) => {
 
                         <Divider />
 
-                        <Box sx={{ bgcolor: '#fff', p: 2, borderRadius: 2 }}>
-                            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Box sx={{ bgcolor: "#fff", p: 2, borderRadius: 2 }}>
+                            <Typography variant="h6" gutterBottom sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                 <CheckCircleIcon color="success" />
                                 Результат выполнения
                             </Typography>

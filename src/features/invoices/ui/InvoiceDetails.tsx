@@ -15,11 +15,11 @@ import PageLayout from "components/PageLayout";
 import InvoiceDetailsInfo from "features/invoices/ui/InvoiceDetailsInfo";
 import ShipmentsList from "features/shipments/ui/ShipmentsList";
 import {getRelatedMachineryByInvoiceId} from "features/machinery/model/selectors";
-import MachineryList from "features/machinery/ui/MachineryList";
 import {useAppSelector} from "hooks/redux";
 import {getOrders, getRelatedOrdersByInvoiceId} from "features/orders/model/selectors";
 import {selectShipmentsByInvoiceId} from "features/shipments/model/selectors";
 import {getInvoiceById} from "features/invoices/model/selectors";
+import MachineryTable from "../../machinery/ui/MachineryTable";
 
 const InvoiceDetails = () => {
     const matches_700 = useMediaQuery("(min-width:700px)");
@@ -95,7 +95,7 @@ const InvoiceDetails = () => {
                     <Typography fontSize={"16px"} fontWeight={600}>
                         Связанная техника:
                     </Typography>
-                    <MachineryList machinery={relatedMachinery}/>
+                    <MachineryTable rows={relatedMachinery}/>
                 </Stack>
             )}
             {isShowOrdersPosition && (<OrdersList isSelectPositionMode orders={forSelectPositionsOrders}/>)}
