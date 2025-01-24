@@ -7,6 +7,11 @@ import TasksEdit from "./TasksEdit";
 import Photos from "../../../components/common/Photos";
 import {useAppDispatch} from "../../../hooks/redux";
 import {fetchAddTask} from "../model/actions";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
+
 
 interface IProps {
     isOpen: boolean
@@ -21,7 +26,7 @@ const TasksAddNew: FC<IProps> = ({isOpen, toggleDrawer, machineryId}) => {
         description: "",
         status_id: 0,
         priority_id: 0,
-        due_date: 0,
+        due_date: dayjs().valueOf(),
         author_id: 1,
         assigned_to_id: 2,
         issue_photos: [],
@@ -33,6 +38,14 @@ const TasksAddNew: FC<IProps> = ({isOpen, toggleDrawer, machineryId}) => {
             | HTMLTextAreaElement>
         | SelectChangeEvent) => {
         setEditedTask(prev => ({...prev, [e.target.name]: e.target.value}));
+    };
+    const handleDateChange = (date: Date | null) => {
+        if (date) {
+            setEditedTask(prev => ({
+                ...prev,
+                due_date: date.valueOf(), // преобразуем дату в миллисекунды
+            }));
+        }
     };
     const photoUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -72,12 +85,26 @@ const TasksAddNew: FC<IProps> = ({isOpen, toggleDrawer, machineryId}) => {
                 }}
             >
                 <Stack spacing={2}>
-                    <Typography variant="h6" gutterBottom>
-                        Добавить задачу
-                    </Typography>
-                    <Typography variant="body1">
-                        Сюда можно добавить элементы для создания задачи.
-                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Typography variant="h6" gutterBottom>
+                            Добавить задачу
+                        </Typography>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+                            <DatePicker
+                                sx={{width: "150px"}}
+                                label="Срок выполнения"
+                                value={dayjs(editedTask.due_date)} // оборачиваем миллисекунды в dayjs
+                                onChange={handleDateChange}
+                                format="DD.MM.YYYY"
+                                slotProps={{
+                                    textField: {
+                                        fullWidth: true,
+                                        variant: "outlined",
+                                    },
+                                }}
+                            />
+                        </LocalizationProvider>
+                    </Stack>
                     <TasksEdit editedTask={editedTask} taskFieldChangeHandler={taskFieldChangeHandler}/>
                     <Photos
                         photoPaths={photosPreview}

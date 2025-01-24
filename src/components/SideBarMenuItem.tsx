@@ -35,14 +35,15 @@ const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
                     textDecoration: "none",
                     height: "var(--MainNav-height)",
                     whiteSpace: "nowrap",
+
+                    "&:hover": {
+                        backgroundColor: isActive ? "var(--NavItem-active-background)" : "var(--NavItem-hover-background)",
+                        color: isActive ? "var(--NavItem-active-color)" : "var(--NavItem-hover-color)",
+                    },
                     ...(isActive && {
                         backgroundColor: "var(--NavItem-active-background)",
                         color: "var(--NavItem-active-color)",
                     }),
-                    "&:hover": {
-                        backgroundColor: "var(--NavItem-hover-background)", // Цвет фона при наведении
-                        color: "var(--NavItem-hover-color)", // Цвет текста при наведении
-                    },
                 }}
             >
                 <Box sx={{alignItems: "center", display: "flex", justifyContent: "center", flex: "0 0 auto"}}>

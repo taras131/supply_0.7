@@ -3,10 +3,11 @@ import {ITask, taskPriority} from "../../../models/ITasks";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
-import {CardActions, Chip} from "@mui/material";
+import {CardActions, Chip, Stack} from "@mui/material";
 import Button from "@mui/material/Button";
 import {useAppSelector} from "../../../hooks/redux";
 import {getUserById} from "../../users/model/selectors";
+import dayjs from "dayjs";
 
 interface IProps {
     task: ITask;
@@ -30,9 +31,15 @@ const TasksListItem: FC<IProps> = ({task, onDetailsClick}) => {
     return (
         <Card sx={{ minWidth: 275 }}>
             <CardContent>
-                <Typography textAlign="end" gutterBottom sx={{ color: "text.secondary", fontSize: 14 }}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography>
+                        до: {task.due_date ? dayjs(task.due_date).format("DD.MM.YY") : "нет даты"}
+                    </Typography>
                     <Chip color={chipColor} label={taskPriority[task.priority_id].title} size="small" />
-                </Typography>
+                </Stack>
+
+
+
                 <Typography variant="h5" component="div" mt={3}>
                     {task.title}
                 </Typography>
