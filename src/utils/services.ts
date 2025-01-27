@@ -1,5 +1,6 @@
 import {TShipmentsType} from "../models/iShipments";
 import {IOrderItem} from "../models/iOrders";
+import {INewTask, ITask, taskPriority} from "../models/ITasks";
 
 const padTo2Digits = (num: number) => {
     return num.toString().padStart(2, "0");
@@ -160,4 +161,31 @@ export const getWordAfter = (text: string, targetWord: string) => {
     const regex = new RegExp(`\\b${targetWord}\\b\\s+(\\w+)`, "i");
     const match = text.match(regex);
     return match ? match[1] : null;
+};
+
+export const getPriorityColor = (priorityId: number): string => {
+    let color = "success";
+    switch (priorityId) {
+        case 1:
+            color = "primary";
+            break;
+        case 2:
+            color = "secondary";
+            break;
+        case 3:
+            color = "warning";
+            break;
+    }
+    return color;
+};
+
+export const isTask = (task: ITask | INewTask): task is ITask => {
+    return (
+        "id" in task &&
+        "created_date" in task &&
+        "updated_date" in task &&
+        "result_photos" in task &&
+        "result_description" in task &&
+        "spent_resources" in task
+    );
 };

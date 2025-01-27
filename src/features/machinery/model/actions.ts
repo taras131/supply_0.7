@@ -6,6 +6,7 @@ import {MESSAGE_SEVERITY} from "../../../utils/const";
 import {setMessage} from "../../../store/reducers/message";
 import {IComment, INewComment} from "../../../models/iComents";
 import {filesAPI} from "../../../api/files";
+import {INewTask, ITask} from "../../../models/ITasks";
 
 export const fetchAddMachinery = createAsyncThunk("fetch_add_machinery", async (machinery: INewMachinery, {
     rejectWithValue,
@@ -28,7 +29,6 @@ export const fetchAddMachinery = createAsyncThunk("fetch_add_machinery", async (
 export const fetchUpdateMachinery = createAsyncThunk(
     "fetch_update_machinery",
     async (machinery: IMachinery, {rejectWithValue, dispatch}) => {
-        console.log(machinery);
         try {
             return await machineryAPI.updateMachinery(machinery);
         } catch (e) {
@@ -198,13 +198,62 @@ export const fetchAddMachineryDoc = createAsyncThunk(
     async (addDocData: IAddDoc, {rejectWithValue, dispatch}) => {
         try {
             const res = await filesAPI.upload(addDocData.formData);
-            return await machineryAPI.addDoc({doc: addDocData.doc, fileName: res.filename} );
+            return await machineryAPI.addDoc({doc: addDocData.doc, fileName: res.filename});
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
             dispatch(
                 setMessage({
                     severity: MESSAGE_SEVERITY.error,
                     text: errorMessage || "Не удалось добавить документ.",
+                }));
+            return rejectWithValue(handlerError(e));
+        }
+    },
+);
+
+export interface IAddTask {
+    newTask: INewTask;
+    formData: FormData
+}
+
+export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (addTaskData: IAddTask, {
+    rejectWithValue,
+    dispatch,
+}) => {
+    const {newTask, formData} = addTaskData;
+    let task_in = {...newTask};
+    try {
+        for (const [key, value] of formData.entries()) {
+            const singleFileFormData = new FormData();
+            singleFileFormData.append(key, value);
+            const res = await filesAPI.upload(singleFileFormData);
+            task_in = {...task_in, issue_photos: [...task_in.issue_photos, res.filename]};
+            console.log(`Файл с ключом ${key} успешно загружен:`, res);
+        }
+        return await machineryAPI.addNewTask(task_in);
+
+    } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
+        dispatch(
+            setMessage({
+                severity: MESSAGE_SEVERITY.error,
+                text: errorMessage || "Не удалось добавить машину.",
+            }));
+        return rejectWithValue(handlerError(e));
+    }
+});
+
+export const fetchUpdateMachineryTask = createAsyncThunk(
+    "fetch_update_task",
+    async (task: ITask, {rejectWithValue, dispatch}) => {
+        try {
+            return await machineryAPI.updateTask(task);
+        } catch (e) {
+            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
+            dispatch(
+                setMessage({
+                    severity: MESSAGE_SEVERITY.error,
+                    text: errorMessage || "Не удалось добавить машину.",
                 }));
             return rejectWithValue(handlerError(e));
         }

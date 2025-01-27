@@ -15,7 +15,7 @@ import {
 import {IComment, INewComment} from "../../../models/iComents";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachinery, getMachineryIsLoading} from "../model/selectors";
-import MachineryDetailsTasks from "./MachineryDetailsTasks";
+import {TaskList} from "./tasks/TasksList";
 
 interface CustomTabPanelProps {
     children?: React.ReactNode;
@@ -100,7 +100,7 @@ const MachineryDetailsTabs: FC = () => {
                           updateComment={updateComment}/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <MachineryDetailsTasks/>
+                <TaskList/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
                 Заявки

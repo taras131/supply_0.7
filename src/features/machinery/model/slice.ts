@@ -2,17 +2,16 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMachinery";
 import {
     fetchAddMachineryComment,
-    fetchAddMachineryDoc,
+    fetchAddMachineryDoc, fetchAddMachineryTask,
     fetchDeleteMachineryComment,
     fetchDeleteMachineryPhoto,
     fetchGetMachineryById,
     fetchUpdateMachinery,
-    fetchUpdateMachineryComment,
+    fetchUpdateMachineryComment, fetchUpdateMachineryTask,
     fetchUploadMachineryPhoto,
 } from "./actions";
 import {IComment} from "../../../models/iComents";
 import {ITask} from "../../../models/ITasks";
-import {fetchAddTask} from "../../tasks/model/actions";
 
 interface IMachineryState {
     list: (IMachinery)[];
@@ -117,7 +116,6 @@ export const MachinerySlice = createSlice({
                             }
                         })]};
                 }
-
             })
             .addCase(fetchUploadMachineryPhoto.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
@@ -134,10 +132,17 @@ export const MachinerySlice = createSlice({
                 }
                 state.isLoading = false;
             })
-            .addCase(fetchAddTask.fulfilled, (state, action: PayloadAction<ITask>) => {
+            .addCase(fetchAddMachineryTask.fulfilled, (state, action: PayloadAction<ITask>) => {
                 if(state.currentMachinery && action.payload.machinery_id) {
                     state.currentMachinery = {...state.currentMachinery,
                         tasks: [...state.currentMachinery.tasks, action.payload]};
+                }
+                state.isLoading = false;
+            })
+            .addCase(fetchUpdateMachineryTask.fulfilled, (state, action: PayloadAction<ITask>) => {
+                if(state.currentMachinery) {
+                    state.currentMachinery = {...state.currentMachinery,
+                        tasks: [...state.currentMachinery.tasks.map(task => task.id === action.payload.id ? action.payload : task)]};
                 }
                 state.isLoading = false;
             })

@@ -39,8 +39,8 @@ export const getCurrentMachineryId = (state: RootState): number | null => {
     return state.machinery.currentMachinery?.id || null;
 };
 
-export const getCurrentMachineryTasks = (state: RootState): ITask [] | null => {
-    return state.machinery.currentMachinery?.tasks || null;
+export const getCurrentMachineryTasks = (state: RootState): ITask [] | [] => {
+    return state.machinery.currentMachinery?.tasks || [];
 };
 
 export const getRelatedMachineryByInvoiceId = (state: RootState, invoiceId: string): IMachinery[] => {

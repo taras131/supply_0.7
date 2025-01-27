@@ -1,17 +1,22 @@
 import React, {ChangeEvent, FC, useId, useMemo} from "react";
-import {FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent, Stack} from "@mui/material";
-import {INewTask, ITask, taskPriority} from "../../../models/ITasks";
+import {FormControl, FormHelperText, MenuItem, Select, Stack} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
-import {getAllUsers} from "../../users/model/selectors";
-import {useAppSelector} from "../../../hooks/redux";
+import {INewTask, ITask, taskPriority} from "../../../../models/ITasks";
+import {useAppSelector} from "../../../../hooks/redux";
+import {getAllUsers} from "../../../users/model/selectors";
 
 interface IProps {
-    editedTask: ITask | INewTask | null;
-    taskFieldChangeHandler: (e: ChangeEvent<HTMLInputElement
-        | HTMLTextAreaElement> | SelectChangeEvent) => void
+    editedTask: ITask | INewTask;
+    handleDateChange: (date: Date | null) => void;
+    taskFieldChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TasksEdit:FC<IProps> = ({editedTask, taskFieldChangeHandler}) => {
+const TaskIssueEdit:FC<IProps> = ({editedTask,handleDateChange, taskFieldChangeHandler}) => {
     const priorityId = useId();
     const assignedId = useId();
     const users = useAppSelector(getAllUsers);
@@ -33,9 +38,28 @@ const TasksEdit:FC<IProps> = ({editedTask, taskFieldChangeHandler}) => {
             )),
         []
     );
-    if(!editedTask) return null;
     return (
-        <Stack spacing={2} mt={4}>
+        <>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Typography variant="h6" gutterBottom>
+                    Добавить задачу
+                </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+                    <DatePicker
+                        sx={{width: "150px"}}
+                        label="Срок выполнения"
+                        value={dayjs(editedTask.due_date)} // оборачиваем миллисекунды в dayjs
+                        onChange={handleDateChange}
+                        format="DD.MM.YYYY"
+                        slotProps={{
+                            textField: {
+                                fullWidth: true,
+                                variant: "outlined",
+                            },
+                        }}
+                    />
+                </LocalizationProvider>
+            </Stack>
             <TextField id="outlined-basic"
                        label="Заголовок"
                        variant="outlined"
@@ -78,8 +102,8 @@ const TasksEdit:FC<IProps> = ({editedTask, taskFieldChangeHandler}) => {
                 </Select>
                 <FormHelperText>Исполнитель</FormHelperText>
             </FormControl>
-        </Stack>
+        </>
     );
 };
 
-export default TasksEdit;
+export default TaskIssueEdit;

@@ -20,11 +20,6 @@ export const taskPriority: ITaskStatus [] = [
     {id: 3, title: "Срочно и важно"},
 ];
 
-export interface ITaskItem {
-    id: number, title: string, isComplete: boolean,
-}
-
-
 export interface INewTask {
     title: string;
     description: string;
