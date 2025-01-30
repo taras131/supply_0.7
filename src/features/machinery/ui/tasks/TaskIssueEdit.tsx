@@ -1,34 +1,27 @@
 import React, {ChangeEvent, FC, useId, useMemo} from "react";
-import {FormControl, FormHelperText, MenuItem, Select, Stack} from "@mui/material";
+import {FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
-import {INewTask, ITask, taskPriority} from "../../../../models/ITasks";
+import {INewTask, ITask} from "../../../../models/ITasks";
 import {useAppSelector} from "../../../../hooks/redux";
 import {getAllUsers} from "../../../users/model/selectors";
+import PrioritiesSelect from "../common/PrioritiesSelect";
 
 interface IProps {
     editedTask: ITask | INewTask;
     handleDateChange: (date: Date | null) => void;
-    taskFieldChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+    taskFieldChangeHandler: (e: ChangeEvent<HTMLInputElement
+            | HTMLTextAreaElement>
+        | SelectChangeEvent) => void;
 }
 
-const TaskIssueEdit:FC<IProps> = ({editedTask,handleDateChange, taskFieldChangeHandler}) => {
-    const priorityId = useId();
+const TaskIssueEdit: FC<IProps> = ({editedTask, handleDateChange, taskFieldChangeHandler}) => {
     const assignedId = useId();
     const users = useAppSelector(getAllUsers);
-    const taskPriorityList = useMemo(
-        () =>
-            taskPriority.map(priority => (
-                <MenuItem key={priority.id} value={priority.id}>
-                    {priority.title}
-                </MenuItem>
-            )),
-        []
-    );
     const assignedList = useMemo(
         () =>
             users.map(user => (
@@ -76,22 +69,12 @@ const TaskIssueEdit:FC<IProps> = ({editedTask,handleDateChange, taskFieldChangeH
                 multiline
                 rows={5}
             />
-            <FormControl fullWidth>
-                <Select
-                    id={priorityId}
-                    value={`${editedTask.priority_id}`}
-                    onChange={taskFieldChangeHandler}
-                    sx={{overflow: "hidden"}}
-                    fullWidth
-                    name={"priority_id"}
-                >
-                    {taskPriorityList}
-                </Select>
-                <FormHelperText>Приоритет</FormHelperText>
-            </FormControl>
+            <PrioritiesSelect currentPriorityId={editedTask.priority_id}
+                              changeHandler={taskFieldChangeHandler}/>
             <FormControl fullWidth>
                 <Select
                     id={assignedId}
+                    variant="outlined"
                     value={`${editedTask.assigned_to_id}`}
                     onChange={taskFieldChangeHandler}
                     sx={{overflow: "hidden"}}

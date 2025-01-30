@@ -1,18 +1,20 @@
 import React, {ChangeEvent, FC} from "react";
 import CommentsItem from "./CommentsItem";
-import {IComment} from "../../../models/iComents";
+import {IComment, INewComment} from "../../../models/iComents";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 import {CENTER} from "../../../styles/const";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
+import {
+    fetchAddMachineryComment,
+    fetchDeleteMachineryComment,
+    fetchUpdateMachineryComment,
+} from "../../../features/machinery/model/actions";
 
 interface IProps {
     comments: IComment[] | null;
-    addComment: (text: string) => void;
-    deleteComment: (comment_id: number) => void;
-    updateComment: (comment: IComment) => void;
 }
 
 const CommentsContainer = styled("div")(({ theme }) => ({
@@ -29,7 +31,7 @@ const CommentFormPaper = styled(Paper)(({ theme }) => ({
     boxShadow: theme.shadows[2],
 }));
 
-const Comments: FC<IProps> = ({comments, addComment, deleteComment, updateComment}) => {
+const Comments: FC<IProps> = ({comments}) => {
     const [text, setText] = React.useState("");
     const sortedComments = comments?.slice().sort((a, b) => {
         return new Date(b.created_date).getTime() - new Date(a.created_date).getTime();
@@ -38,6 +40,24 @@ const Comments: FC<IProps> = ({comments, addComment, deleteComment, updateCommen
                                                                        comment={comment}
                                                                        deleteComment={deleteComment}
                                                                        updateComment={updateComment}/>)) || null;
+
+    const addComment = (text: string) => {
+        const newComment: INewComment = {
+            text: text,
+            is_active: true,
+            author_id: 1,
+            machinery_id: +machinery.id,
+        };
+        dispatch(fetchAddMachineryComment(newComment));
+    };
+
+    const deleteComment = (comment_id: number) => {
+        dispatch(fetchDeleteMachineryComment(comment_id));
+    };
+
+    const updateComment = (comment: IComment) => {
+        dispatch(fetchUpdateMachineryComment(comment));
+    };
     const textChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setText(e.target.value);
     };

@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import {useDrag} from "react-dnd";
 import Box from "@mui/material/Box";
 import {getPriorityColor} from "../../../../utils/services";
+import PrioritiesChip from "../common/PrioritiesChip";
 
 interface IProps {
     task: ITask;
@@ -13,7 +14,6 @@ interface IProps {
 }
 
 const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
-    const chipColor = getPriorityColor(task.priority_id);
     const [{isDragging}, drag] = useDrag({
         type: "TASK",
         item: {id: task.id},
@@ -38,7 +38,7 @@ const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
                     <Typography>
                         до: {task.due_date ? dayjs(task.due_date).format("DD.MM.YY") : "нет даты"}
                     </Typography>
-                    <Chip color={chipColor} label={taskPriority[task.priority_id].title} size="small"/>
+                    <PrioritiesChip priorityId={task.priority_id}/>
                 </Stack>
                 <Typography variant="h5" component="div" mt={1}>
                     {task.title}

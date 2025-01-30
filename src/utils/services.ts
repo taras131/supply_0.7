@@ -163,7 +163,7 @@ export const getWordAfter = (text: string, targetWord: string) => {
     return match ? match[1] : null;
 };
 
-export const getPriorityColor = (priorityId: number): string => {
+export const getPriorityColor = (priorityId: number): "success" | "primary" | "secondary" | "warning" => {
     let color = "success";
     switch (priorityId) {
         case 1:

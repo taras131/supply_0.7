@@ -7,15 +7,13 @@ import Button from "@mui/material/Button";
 import {MachineryStatus} from "../../../utils/const";
 import { MachineryStatusType} from "../../../models/iMachinery";
 import {
-    fetchAddMachineryComment,
-    fetchDeleteMachineryComment,
     fetchUpdateMachinery,
-    fetchUpdateMachineryComment,
 } from "../model/actions";
-import {IComment, INewComment} from "../../../models/iComents";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachinery, getMachineryIsLoading} from "../model/selectors";
 import {TaskList} from "./tasks/TasksList";
+import Problems from "./problems/Problems";
+import {current} from "@reduxjs/toolkit";
 
 interface CustomTabPanelProps {
     children?: React.ReactNode;
@@ -60,32 +58,17 @@ const MachineryDetailsTabs: FC = () => {
         }
         dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
     };
-    const addComment = (text: string) => {
-        const newComment: INewComment = {
-            text: text,
-            is_active: true,
-            author_id: 1,
-            machinery_id: +machinery.id,
-        };
-        dispatch(fetchAddMachineryComment(newComment));
-    };
 
-    const deleteComment = (comment_id: number) => {
-        dispatch(fetchDeleteMachineryComment(comment_id));
-    };
-
-    const updateComment = (comment: IComment) => {
-        dispatch(fetchUpdateMachineryComment(comment));
-    };
     return (
         <Box sx={{width: "100%"}}>
             <Box sx={{borderBottom: 1, borderColor: "divider"}}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Документы" {...a11yProps(0)} />
-                    <Tab label="Заметки" {...a11yProps(1)} />
+                    <Tab label="Замечания" {...a11yProps(1)} />
                     <Tab label="Задачи" {...a11yProps(2)} />
                     <Tab label="Заявки" {...a11yProps(3)} />
-                    <Tab label="Действия" {...a11yProps(4)} />
+                    <Tab label="Заметки" {...a11yProps(4)} />
+                    <Tab label="Действия" {...a11yProps(5)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -94,10 +77,7 @@ const MachineryDetailsTabs: FC = () => {
                 )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <Comments comments={machinery?.comments || null}
-                          addComment={addComment}
-                          deleteComment={deleteComment}
-                          updateComment={updateComment}/>
+               <Problems problems={machinery?.problems || null} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 <TaskList/>
@@ -106,6 +86,9 @@ const MachineryDetailsTabs: FC = () => {
                 Заявки
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
+                <Comments comments={machinery?.comments || null}/>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={5}>
                 <Stack>
                     <Button variant="contained"
                             color={machinery && machinery.status && machinery.status === MachineryStatus.disActive

@@ -39,7 +39,6 @@ export const UsersSlice = createSlice({
         },
         wsMessageReceived: (state, action: PayloadAction<any>) => {
             state.wsMessage = action.payload;
-            console.log(action.payload);
         },
         updateUsersList: (state, action: PayloadAction<IUser[]>) => {
             state.list = action.payload;

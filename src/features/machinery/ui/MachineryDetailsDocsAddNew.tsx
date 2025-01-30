@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -12,6 +12,7 @@ import {CENTER, ROW, SPACE_BETWEEN} from "../../../styles/const";
 import Box from "@mui/material/Box";
 import placeholderImage from "../../../assets/images/fileUploadPlaceholder.png";
 import {fetchAddMachineryDoc} from "../model/actions";
+import Photos from "../../../components/common/Photos";
 
 const AnimatedCard = styled(Card)(() => ({
     transition: "all 0.3s ease-in-out",
@@ -54,16 +55,14 @@ const MachineryDetailsDocsAddNew = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [file, setFile] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string>("");
     const isLoading = useAppSelector(getMachineryIsLoading);
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => {
         setIsOpen(false);
-        setPreview("");
         setFile(null);
         setTitle("");
     };
-    if(!machineryId) return null;
+    if (!machineryId) return null;
     const titleChangeHandler = (e: ChangeEvent<HTMLInputElement
         | HTMLTextAreaElement>) => {
         setTitle(e.target.value);
@@ -72,12 +71,10 @@ const MachineryDetailsDocsAddNew = () => {
         const selectedFile = e.target.files?.[0];
         if (selectedFile) {
             setFile(selectedFile);
-            const objectUrl = URL.createObjectURL(selectedFile);
-            setPreview(objectUrl);
         }
     };
     const addDocClickHandler = () => {
-        if(file && title) {
+        if (file && title) {
             const formData = new FormData();
             formData.append("file", file);
             dispatch(fetchAddMachineryDoc({
@@ -85,18 +82,18 @@ const MachineryDetailsDocsAddNew = () => {
                 formData: formData,
             }));
         }
+        handleClose();
     };
-    useEffect(() => {
-        return () => {
-            if (preview) {
-                URL.revokeObjectURL(preview);
-            }
-        };
-    }, [preview]);
+    const addPhotoHandler = (newFile: File) => {
+        setFile(newFile);
+    };
+    const deletePhotoHandler = () => {
+        setFile(null);
+    };
     return (
         <>
             <AnimatedCard sx={{minWidth: 225}} onClick={handleOpen}>
-                <CardContent >
+                <CardContent>
                     <Typography variant="h5" component="div" textAlign={CENTER}>
                         Добавить документ
                     </Typography>
@@ -115,7 +112,6 @@ const MachineryDetailsDocsAddNew = () => {
                     </Typography>
                 </CardContent>
             </AnimatedCard>
-
             <Modal
                 open={isOpen}
                 onClose={handleClose}
@@ -127,47 +123,18 @@ const MachineryDetailsDocsAddNew = () => {
             >
                 <ModalCard sx={{padding: "25px", position: "relative"}}>
                     <CardContent>
-                        <Typography variant="h4" fontWeight={700} fontSize={"26px"}>
-                            Добавление нового документа:
-                        </Typography>
-                        <Typography sx={{color: "text.secondary", mb: 1.5}} variant="body2" mt={1}>
-                            Введите название документа и загрузите его изображение
-                        </Typography>
-                        <Box
-                            sx={{
-                                mt: 4,
-                                width: "100%",
-                                height: "300px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                overflow: "hidden",
-                            }}
-                        >
-                            {preview ? (
-                                <img
-                                    src={preview}
-                                    alt="Preview"
-                                    style={{
-                                        maxWidth: "100%",
-                                        maxHeight: "100%",
-                                        objectFit: "contain",
-                                        borderRadius: "8px",
-                                    }}
-                                />
-                            ) : (
-                                <img
-                                    src={placeholderImage} // Укажите путь к вашей заглушке
-                                    alt="Placeholder"
-                                    style={{
-                                        maxWidth: "100%",
-                                        maxHeight: "100%",
-                                        objectFit: "contain",
-                                        opacity: 0.5, // Прозрачность для заглушки
-                                    }}
-                                />
-                            )}
-                        </Box>
+                        <Stack spacing={4}>
+                            <Typography variant="h4" fontWeight={700} fontSize={"26px"}>
+                                Добавление нового документа:
+                            </Typography>
+                            <Photos
+                                photosPaths={file ? [URL.createObjectURL(file)] : []}
+                                onAddPhoto={addPhotoHandler}
+                                onDeletePhoto={deletePhotoHandler}
+                                isViewingOnly={false}
+                                photosCountLimit={1}
+                            />
+                        </Stack>
                     </CardContent>
                     <CardActions>
                         <Stack spacing={4}
@@ -181,7 +148,8 @@ const MachineryDetailsDocsAddNew = () => {
                                        name="title"
                                        onChange={titleChangeHandler}
                                        value={title}/>
-                            <Stack sx={{width: "100%"}} direction={ROW} alignItems={CENTER} justifyContent={SPACE_BETWEEN}>
+                            <Stack sx={{width: "100%"}} direction={ROW} alignItems={CENTER}
+                                   justifyContent={SPACE_BETWEEN}>
                                 <Button
                                     component="label"
                                     variant="contained"

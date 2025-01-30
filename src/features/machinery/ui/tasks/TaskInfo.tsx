@@ -4,12 +4,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Photos from "../../../../components/common/Photos";
 import {INewTask, ITask, taskPriority} from "../../../../models/ITasks";
-import {filesPath} from "../../../../api/files";
 import {useAppSelector} from "../../../../hooks/redux";
 import {getUserById} from "../../../users/model/selectors";
 import PersonIcon from "@mui/icons-material/Person";
 import dayjs from "dayjs";
 import {getPriorityColor, isTask} from "../../../../utils/services";
+import {filesPath} from "../../../files/api";
 
 interface IProps {
     task: ITask | INewTask;
@@ -18,8 +18,9 @@ interface IProps {
 const TaskInfo: FC<IProps> = ({task}) => {
     const author = useAppSelector(state => getUserById(state, task.author_id));
     const assigned_to = useAppSelector(state => getUserById(state, task.assigned_to_id));
-    const photoPaths = task.issue_photos?.map(photo => `${filesPath}/${photo}`) || null;
+    const issuePhotoPaths = task.issue_photos?.map(photo => `${filesPath}/${photo}`) || null;
     const chipColor = getPriorityColor(task.priority_id);
+    console.log(task.issue_photos);
     return (
         <Stack spacing={3}>
             <Stack spacing={3}>
@@ -41,13 +42,14 @@ const TaskInfo: FC<IProps> = ({task}) => {
                     </Typography>
                 </Box>
             </Stack>
-            {photoPaths && (
+            {issuePhotoPaths && (
                 <Box>
                     <Typography variant="subtitle1"
                                 sx={{display: "flex", alignItems: "center", gap: 1, mb: 1}}>
-                        Прикрепленные фото:
+                        Фотографии задачи:
                     </Typography>
-                    <Photos photoPaths={photoPaths} isViewingOnly={true}/>
+                    <Photos photosPaths={task.issue_photos.map(photo => `${filesPath}/${photo}`)}
+                            isViewingOnly={true}/>
                 </Box>
             )}
             {isTask(task) && task.status_id === 2 && (
@@ -68,6 +70,16 @@ const TaskInfo: FC<IProps> = ({task}) => {
                             {task.spent_resources}
                         </Typography>
                     </Box>
+                    {task.result_photos.length > 0 && (
+                        <>
+                            <Typography variant="subtitle1">
+                                Фотографии результата:
+                            </Typography>
+                            <Photos photosPaths={task.result_photos.map(photo => `${filesPath}/${photo}`)}
+                                    isViewingOnly={true}/>
+                        </>
+
+                    )}
                 </Stack>
             )}
             <Box sx={{display: "flex", gap: 3, flexWrap: "wrap", justifyContent: "space-between"}}>

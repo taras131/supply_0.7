@@ -21,7 +21,7 @@ const handlePending = (state: IAuthState) => {
   state.errorMessage = "";
 };
 
-const handleRejected = (state: any, action: any) => {
+const handleRejected = (state: IAuthState, action: any) => {
   state.isLoading = false;
   state.errorMessage = action.payload as string;
 };

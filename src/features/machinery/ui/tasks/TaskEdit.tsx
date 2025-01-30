@@ -9,10 +9,7 @@ import {getCurrentMachineryId} from "../../model/selectors";
 import TaskIssueEdit from "./TaskIssueEdit";
 import TaskResultEdit from "./TaskResultEdit";
 import {isTask} from "../../../../utils/services";
-import {filesPath} from "../../../../api/files";
-
-
-
+import {filesPath} from "../../../files/api";
 
 interface IProps {
     task: ITask | INewTask;
@@ -32,7 +29,6 @@ const TaskEdit: FC<IProps> = ({task, onClose}) => {
     }, [task]);
     useEffect(() => {
         if (task.issue_photos?.length) {
-            // Установка превью для существующих фотографий
             const existingPhotoPreviews = task.issue_photos.map(photo =>
                 `${filesPath}/${photo}`
             );
@@ -52,12 +48,11 @@ const TaskEdit: FC<IProps> = ({task, onClose}) => {
             }));
         }
     };
-    const photoUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) return;
-        const newPhotos = Array.from(e.target.files); // Получаем файлы из input
-        const newPhotosPreview = newPhotos.map(file => URL.createObjectURL(file)); // Превью для каждого файла
-        setPhotos(prev => [...prev, ...newPhotos]); // Сохраняем файлы в state
-        setPhotosPreview(prev => [...prev, ...newPhotosPreview]); // Сохраняем превью в state
+    const photoUploadHandler = (file: File) => {
+        if (!file) return;
+        const newPhotosPreview = URL.createObjectURL(file); // Превью для каждого файла
+        setPhotos(prev => [...prev, file]); // Сохраняем файлы в state
+        setPhotosPreview(prev => [...prev, newPhotosPreview]); // Сохраняем превью в state
     };
     const onDeletePhoto = (photoIndex: number) => {
         setPhotos(prev => prev.filter((_, index) => index !== photoIndex)); // Удаляем файл из массив `photos`
@@ -80,14 +75,14 @@ const TaskEdit: FC<IProps> = ({task, onClose}) => {
     };
     if (!editedTask) return null;
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{height: "100%", paddingBottom: "16px"}}>
             <TaskIssueEdit editedTask={editedTask}
                            handleDateChange={handleDateChange}
                            taskFieldChangeHandler={taskFieldChangeHandler}/>
             <Photos
-                photoPaths={photosPreview}
+                photosPaths={photosPreview}
+                onAddPhoto={photoUploadHandler}
                 onDeletePhoto={onDeletePhoto}
-                photoUploadHandler={photoUploadHandler}
             />
             {isTask(editedTask) && editedTask.status_id === 2 && (
                 <TaskResultEdit editedTask={editedTask}

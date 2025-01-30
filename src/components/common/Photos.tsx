@@ -4,10 +4,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PhotoPaginator from "./photoPaginator/photoPaginator";
 import {styled} from "@mui/material/styles";
-import LoadingButton from "@mui/lab/LoadingButton";
+import LoadingButton, {LoadingButtonProps} from "@mui/lab/LoadingButton";
 import UploadIcon from "@mui/icons-material/Upload";
 import photoPlaceholder from "../../assets/images/placeholder.png";
-
 
 const ImageContainer = styled(Box)(({theme}) => ({
     position: "relative",
@@ -44,21 +43,24 @@ const StyledDeleteButton = styled(LoadingButton)(({theme}) => ({
         backgroundColor: theme.palette.error.main,
     },
 }));
-const StyledUploadButton = styled(LoadingButton)(({theme}) => ({
-    position: "absolute",
-    bottom: 16,
-    right: 16,
-    padding: 8,
-    minWidth: "auto",
-    backgroundColor: theme.palette.success.main,
-    "&.MuiLoadingButton-loading": {
-        backgroundColor: theme.palette.action.disabledBackground,
-    },
-    "&:hover": {
-        backgroundColor: theme.palette.success.dark,
-        color: theme.palette.error.contrastText,
-    },
-}));
+
+const StyledUploadButton = styled(LoadingButton)<LoadingButtonProps & { component?: React.ElementType }>(
+    ({theme}) => ({
+        position: "absolute",
+        bottom: 16,
+        right: 16,
+        padding: 8,
+        minWidth: "auto",
+        backgroundColor: theme.palette.success.main,
+        "&.MuiLoadingButton-loading": {
+            backgroundColor: theme.palette.action.disabledBackground,
+        },
+        "&:hover": {
+            backgroundColor: theme.palette.success.dark,
+            color: theme.palette.error.contrastText,
+        },
+    })
+);
 
 const VisuallyHiddenInput = styled("input")({
     position: "absolute",
@@ -73,39 +75,36 @@ const VisuallyHiddenInput = styled("input")({
     clipPath: "inset(50%)",
 });
 
-interface IBaseProps {
-    photoPaths: string[];
-    isLoading?: boolean;
+interface IProps {
+    photosPaths: string [];
     isViewingOnly?: boolean;
+    onAddPhoto?: (newFile: File) => void;
+    onDeletePhoto?: (deletedFileIndex: number) => void;
+    photosCountLimit?: number;
 }
-
-interface IEditableProps extends IBaseProps {
-    isViewingOnly?: false;
-    onDeletePhoto: (index: number) => void;
-    photoUploadHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-interface IViewOnlyProps extends IBaseProps {
-    isViewingOnly: true;
-    onDeletePhoto?: never;
-    photoUploadHandler?: never;
-}
-
-type IProps = IEditableProps | IViewOnlyProps;
 
 const Photos: FC<IProps> = ({
-                                photoPaths,
-                                isLoading = false,
+                                photosPaths,
+                                onAddPhoto,
                                 onDeletePhoto,
-                                photoUploadHandler,
-                                isViewingOnly=false,
+                                isViewingOnly = false,
+                                photosCountLimit = 10,
                             }) => {
     const [activePhoto, setActivePhoto] = useState(0);
+    const isLoading = false;
     const photoClickHandler = (photoNumber: number) => {
         setActivePhoto(photoNumber);
     };
+    const addPhotoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!onAddPhoto) return;
+        const selectedFile = e.target.files?.[0];
+        if (selectedFile) {
+            onAddPhoto(selectedFile);
+        }
+    };
     const deletePhotoHandler = () => {
-        if (!isViewingOnly && onDeletePhoto) {
+        if (!onDeletePhoto) return;
+        if (!isViewingOnly) {
             setActivePhoto(0);
             onDeletePhoto(activePhoto);
         }
@@ -113,30 +112,32 @@ const Photos: FC<IProps> = ({
     return (
         <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
             <ImageContainer sx={{aspectRatio: "16/9"}}>
-                <StyledImage src={photoPaths.length > 0
-                    ? photoPaths[activePhoto]
+                <StyledImage src={photosPaths && photosPaths.length > 0
+                    ? photosPaths[activePhoto]
                     : photoPlaceholder}
                              alt="photo"/>
                 {!isViewingOnly && (
                     <>
-                        <StyledDeleteButton
-                            color="error"
-                            onClick={deletePhotoHandler}
-                            loading={isLoading}
-                            loadingIndicator={<CircularProgress size={16} color="inherit"/>}
-                        >
-                            <DeleteIcon fontSize="small"/>
-                        </StyledDeleteButton>
+                        {photosPaths && photosPaths.length > 0 && (
+                            <StyledDeleteButton
+                                color="error"
+                                onClick={deletePhotoHandler}
+                                loading={isLoading}
+                                loadingIndicator={<CircularProgress size={16} color="inherit"/>}
+                            >
+                                <DeleteIcon fontSize="small"/>
+                            </StyledDeleteButton>
+                        )}
                         <StyledUploadButton
                             component="label"
                             variant="contained"
                             tabIndex={-1}
-                            disabled={photoPaths.length > 4 || isLoading}
+                            disabled={isLoading || photosPaths && photosPaths.length >= photosCountLimit}
                         >
                             <UploadIcon fontSize="small"/>
                             <VisuallyHiddenInput
                                 type="file"
-                                onChange={photoUploadHandler}
+                                onChange={addPhotoHandler}
                                 accept="image/jpeg, image/png, image/jpg"
                                 multiple
                             />
@@ -146,7 +147,7 @@ const Photos: FC<IProps> = ({
             </ImageContainer>
             <PhotoPaginator
                 activePhoto={activePhoto}
-                photoCount={photoPaths.length}
+                photoCount={photosPaths?.length || 0}
                 onPhotoClick={photoClickHandler}
             />
         </Box>

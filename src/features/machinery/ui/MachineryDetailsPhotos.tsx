@@ -1,41 +1,30 @@
 import React, {FC} from "react";
 import {fetchDeleteMachineryPhoto, fetchUploadMachineryPhoto} from "../model/actions";
-import {IMachinery} from "../../../models/iMachinery";
-import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
-import {getMachineryIsLoading} from "../model/selectors";
+import {ICurrentMachinery} from "../../../models/iMachinery";
+import {useAppDispatch} from "../../../hooks/redux";
 import Photos from "../../../components/common/Photos";
-import {filesPath} from "../../../api/files";
+import {basePath} from "../../../api";
 
 interface IProps {
-    machinery: IMachinery;
+    machinery: ICurrentMachinery;
+    isEditMode: boolean;
 }
 
-const MachineryDetailsPhotos: FC<IProps> = ({machinery}) => {
-    const isLoading = useAppSelector(getMachineryIsLoading);
+const MachineryDetailsPhotos: FC<IProps> = ({machinery, isEditMode}) => {
     const dispatch = useAppDispatch();
-    const photoUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0];
-        if (selectedFile) {
-            const formData = new FormData();
-            formData.append("file", selectedFile);
-            dispatch(fetchUploadMachineryPhoto({
-                machinery: machinery,
-                formData: formData,
-            }));
-        }
+    const onAddPhoto = (newFile: File) => {
+        console.log(newFile);
+        dispatch(fetchUploadMachineryPhoto({machinery, file: newFile}));
     };
-    const onDeletePhoto = (index: number) => {
-        dispatch(fetchDeleteMachineryPhoto({
-            machinery: machinery,
-            deletePhoto: machinery.photos[index],
-        }));
+    const onDeletePhoto = (deletedFileIndex: number) => {
+        dispatch(fetchDeleteMachineryPhoto({machinery, deletePhotoName: machinery.photos[deletedFileIndex]}));
     };
-    const photoPaths = machinery.photos.map(photo => `${filesPath}/${photo}`);
+    const photosPaths = machinery.photos.map(photo => `${basePath}/files/${photo}`);
     return (
-       <Photos photoPaths={photoPaths}
-               isLoading={isLoading}
-               photoUploadHandler={photoUploadHandler}
-               onDeletePhoto={onDeletePhoto}/>
+        <Photos photosPaths={photosPaths}
+                onAddPhoto={onAddPhoto}
+                onDeletePhoto={onDeletePhoto}
+                isViewingOnly={!isEditMode}/>
     );
 };
 

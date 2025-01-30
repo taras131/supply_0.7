@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, Stack, useMediaQuery } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useNavigate } from "react-router-dom";
-import { CENTER, PRIMARY } from "../styles/const";
 
 interface IProps {
   title: string;
@@ -25,7 +24,7 @@ const MainMenuListItem: FC<IProps> = ({ title, children, route }) => {
         <CardActionArea sx={{ height: "100%" }}>
           <CardContent>
             <Stack spacing={1} justifyContent={"space-between"} sx={{ height: "100%" }}>
-              <Typography gutterBottom variant="h5" fontWeight={600} color={PRIMARY}>
+              <Typography gutterBottom variant="h5" fontWeight={600} color="primary">
                 {title}
               </Typography>
               {children}

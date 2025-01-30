@@ -3,12 +3,14 @@ import axios from "axios";
 import {IComment, INewComment} from "../../../models/iComents";
 import {basePath} from "../../../api";
 import {INewTask, ITask} from "../../../models/ITasks";
+import {INewProblem} from "../../../models/IProblems";
 
 
 const machineryPath = `${basePath}/machinery`;
 const noticePath = "comment";
 const docPath = "docs";
 const tasksPath = "tasks";
+const problemsPath = "problems";
 
 interface IAddDocParams {
     doc: INewMachineryDoc;
@@ -32,7 +34,7 @@ export const machineryAPI = {
         return  await res.json();
     },
     updateMachinery: async (machinery: IMachinery) => {
-        const res = await fetch(`${machineryPath}/${machinery.id}`, {
+        const res = await fetch(`${machineryPath}/${machinery.id}/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -44,6 +46,7 @@ export const machineryAPI = {
 
             throw new Error(errorDetails.detail || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
+
         return await res.json();
     },
     getAll: async () => {
@@ -139,6 +142,22 @@ export const machineryAPI = {
             throw new Error(errorDetails.detail || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
         return await res.json();
+    },
+    addNewProblem: async (newProblem: INewProblem) => {
+        console.log(newProblem);
+        const res = await fetch(`${machineryPath}/${problemsPath}/`, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newProblem),
+        });
+        if (!res.ok) {
+            const errorDetails = await res.json();
+            throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
+        }
+        return  await res.json();
     },
 };
 

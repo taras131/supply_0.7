@@ -67,7 +67,7 @@ const MachineryDetails = () => {
                                     updateMachineryHandler={updateMachineryHandler}/>
             <Grid container spacing={4}>
                 <Grid xs={6} sx={{display: "flex", flexDirection: "column"}}>
-                    <MachineryDetailsPhotos machinery={machinery}/>
+                    <MachineryDetailsPhotos machinery={machinery} isEditMode={isEditMode}/>
                 </Grid>
                 <Grid xs={6} sx={{height: "100%"}}>
                     <MachineryDetailsInfo editedMachinery={editedMachinery}
@@ -76,15 +76,6 @@ const MachineryDetails = () => {
                 </Grid>
             </Grid>
            <MachineryDetailsTabs/>
-            {/*{relatedOrders && relatedOrders.length > 0 && (
-                <Stack sx={{width: "100%"}} spacing={1}>
-                    <Typography fontSize={"16px"} fontWeight={600}>
-                        Заявки на запчасти:
-                    </Typography>
-                    <OrdersList orders={relatedOrders}/>
-                </Stack>
-            )}*/}
-
             <MessageWindow
                 isOpenModal={isOpenErrorMessageWindow}
                 handleToggleOpen={toggleIsOpenErrorMessageWindow}

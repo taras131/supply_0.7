@@ -7,9 +7,9 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { IMachineryDoc } from "../../../models/iMachinery";
 import { CENTER } from "../../../styles/const";
-import { filesPath } from "../../../api/files";
+import {filesPath} from "../../files/api";
+import {printImage} from "../../../utils/printUtils";
 
-// Стилизованная карточка с анимацией
 const AnimatedCard = styled(Card)<{ expanded?: boolean }>(({ theme, expanded }) => ({
     minWidth: 225,
     transition: "transform 0.3s ease, opacity 0.3s ease",
@@ -25,7 +25,6 @@ const AnimatedCard = styled(Card)<{ expanded?: boolean }>(({ theme, expanded }) 
     opacity: expanded ? 1 : 1,
 }));
 
-// Затемняющий фон
 const Backdrop = styled(Box)(({ theme }) => ({
     position: "fixed",
     top: 0,
@@ -56,12 +55,17 @@ const MachineryDetailsDocsItem: FC<IProps> = ({ doc }) => {
     const dowloadHandler = async (e: any) => {
         e.stopPropagation(); // Остановить всплытие клика
     };
+    const printHandler = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        printImage(photoPath, doc.title); // Использование новой функции
+    };
     return (
         <>
             {isExpanded && <Backdrop onClick={handleBackdropClick} />}
             <AnimatedCard
                 expanded={isExpanded}
                 onClick={handleClick}
+                sx={{zIndex: isExpanded ? 2000 : 100}}
             >
                 <CardContent>
                     <Typography
@@ -94,6 +98,9 @@ const MachineryDetailsDocsItem: FC<IProps> = ({ doc }) => {
                             Скачать файл
                         </Button>
                     )}
+                    <Button size="small" onClick={printHandler}>
+                        Печать
+                    </Button>
                 </CardActions>
             </AnimatedCard>
         </>

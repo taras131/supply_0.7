@@ -14,7 +14,10 @@ interface IProps {
 
 const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
     const patch: any = useLocation().pathname;
-    const isActive = patch === route;
+    const isActive =
+        route === "/"
+            ? patch === route
+            : patch.startsWith(route);
     const Icon = icon ? navIcons[icon] : null;
     return (
         <Link style={{textDecoration: "none", color: "white"}} to={route}>

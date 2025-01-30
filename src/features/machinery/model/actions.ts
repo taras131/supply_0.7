@@ -1,34 +1,50 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {handlerError} from "../../../store/actionsCreators/handleError";
-import {IMachinery, INewMachinery, INewMachineryDoc} from "../../../models/iMachinery";
+import {ICurrentMachinery, IMachinery, INewMachinery, INewMachineryDoc} from "../../../models/iMachinery";
 import {machineryAPI} from "../api";
 import {MESSAGE_SEVERITY} from "../../../utils/const";
 import {setMessage} from "../../../store/reducers/message";
 import {IComment, INewComment} from "../../../models/iComents";
-import {filesAPI} from "../../../api/files";
 import {INewTask, ITask} from "../../../models/ITasks";
+import {filesAPI} from "../../files/api";
+import {INewProblem} from "../../../models/IProblems";
 
-export const fetchAddMachinery = createAsyncThunk("fetch_add_machinery", async (machinery: INewMachinery, {
-    rejectWithValue,
-    dispatch,
-}) => {
-    try {
-        const newMachinery = await machineryAPI.addMachinery(machinery);
-        return {...newMachinery};
-    } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
-        dispatch(
-            setMessage({
-                severity: MESSAGE_SEVERITY.error,
-                text: errorMessage || "Не удалось добавить машину.",
-            }));
-        return rejectWithValue(handlerError(e));
-    }
-});
+interface IAddMachinery {
+    newMachinery: INewMachinery;
+    files: File [];
+}
+
+export const fetchAddMachinery = createAsyncThunk("fetch_add_machinery"
+    , async (addMachineryData: IAddMachinery, {
+        rejectWithValue,
+        dispatch,
+    }) => {
+        const {newMachinery, files} = addMachineryData;
+        try {
+            if (files.length > 0) {
+                for (const file of files) {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    const uploadedFile = await filesAPI.upload(formData);
+                    newMachinery.photos.push(uploadedFile.filename);
+                }
+            }
+            const res = await machineryAPI.addMachinery(newMachinery);
+            return res;
+        } catch (e) {
+            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
+            dispatch(
+                setMessage({
+                    severity: MESSAGE_SEVERITY.error,
+                    text: errorMessage || "Не удалось добавить машину.",
+                }));
+            return rejectWithValue(handlerError(e));
+        }
+    });
 
 export const fetchUpdateMachinery = createAsyncThunk(
     "fetch_update_machinery",
-    async (machinery: IMachinery, {rejectWithValue, dispatch}) => {
+    async (machinery: ICurrentMachinery, {rejectWithValue, dispatch}) => {
         try {
             return await machineryAPI.updateMachinery(machinery);
         } catch (e) {
@@ -66,7 +82,6 @@ export const fetchGetMachineryById = createAsyncThunk(
     async (machinery_id: number, {rejectWithValue, dispatch}) => {
         try {
             const res = await machineryAPI.getOne(machinery_id);
-            console.log(res);
             return res;
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
@@ -136,14 +151,16 @@ export const fetchUpdateMachineryComment = createAsyncThunk(
 
 interface IUploadPhoto {
     machinery: IMachinery;
-    formData: FormData;
+    file: File;
 }
 
 export const fetchUploadMachineryPhoto = createAsyncThunk(
     "fetch_update_machinery_photo",
     async (uploadData: IUploadPhoto, {rejectWithValue, dispatch}) => {
         try {
-            const res = await filesAPI.upload(uploadData.formData);
+            const formData = new FormData();
+            formData.append("file", uploadData.file);
+            const res = await filesAPI.upload(formData);
             const updatedMachinery = {
                 ...uploadData.machinery
                 , photos: [...uploadData.machinery.photos, res.filename],
@@ -163,15 +180,15 @@ export const fetchUploadMachineryPhoto = createAsyncThunk(
 
 interface IDeletePhoto {
     machinery: IMachinery;
-    deletePhoto: string;
+    deletePhotoName: string;
 }
 
 export const fetchDeleteMachineryPhoto = createAsyncThunk(
     "fetch_delete_machinery_photo",
     async (deleteDate: IDeletePhoto, {rejectWithValue, dispatch}) => {
         try {
-            const {deletePhoto, machinery} = deleteDate;
-            const res = await filesAPI.delete(deletePhoto);
+            const {deletePhotoName, machinery} = deleteDate;
+            const res = await filesAPI.delete(deletePhotoName);
             const updatedMachinery = {
                 ...machinery, photos: [...machinery.photos.filter(photo => photo !== res.filename)],
             };
@@ -259,4 +276,42 @@ export const fetchUpdateMachineryTask = createAsyncThunk(
         }
     },
 );
+
+export interface IAddProblem {
+    newProblem: INewProblem;
+    files: File []
+}
+
+export const fetchAddMachineryProblem = createAsyncThunk("fetch_add_problem"
+    , async (addProblemData: IAddProblem, {
+        rejectWithValue,
+        dispatch,
+    }) => {
+        const {newProblem, files} = addProblemData;
+        const problem_in = {...newProblem};
+        try {
+            if (files.length > 0) {
+                for (const file of files) {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    const uploadedFile = await filesAPI.upload(formData);
+                    problem_in.photos.push(uploadedFile.filename);
+                }
+            }
+            const res = await machineryAPI.addNewProblem(problem_in);
+            console.log(res);
+            return res;
+
+        } catch (e) {
+            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
+            dispatch(
+                setMessage({
+                    severity: MESSAGE_SEVERITY.error,
+                    text: errorMessage || "Не удалось добавить машину.",
+                }));
+            return rejectWithValue(handlerError(e));
+        }
+    });
+
+
 

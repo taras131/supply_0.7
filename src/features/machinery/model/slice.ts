@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMachinery";
 import {
     fetchAddMachineryComment,
-    fetchAddMachineryDoc, fetchAddMachineryTask,
+    fetchAddMachineryDoc, fetchAddMachineryProblem, fetchAddMachineryTask,
     fetchDeleteMachineryComment,
     fetchDeleteMachineryPhoto,
     fetchGetMachineryById,
@@ -12,6 +12,7 @@ import {
 } from "./actions";
 import {IComment} from "../../../models/iComents";
 import {ITask} from "../../../models/ITasks";
+import {IProblem} from "../../../models/IProblems";
 
 interface IMachineryState {
     list: (IMachinery)[];
@@ -79,6 +80,7 @@ export const MachinerySlice = createSlice({
             })
             .addCase(fetchUpdateMachinery.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
+                console.log(action.payload);
                 state.currentMachinery = action.payload;
             })
             .addCase(fetchAddMachineryComment.fulfilled, (state, action: PayloadAction<IComment>) => {
@@ -143,6 +145,13 @@ export const MachinerySlice = createSlice({
                 if(state.currentMachinery) {
                     state.currentMachinery = {...state.currentMachinery,
                         tasks: [...state.currentMachinery.tasks.map(task => task.id === action.payload.id ? action.payload : task)]};
+                }
+                state.isLoading = false;
+            })
+            .addCase(fetchAddMachineryProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
+                if(state.currentMachinery && action.payload.machinery_id) {
+                    state.currentMachinery = {...state.currentMachinery,
+                        problems: [...state.currentMachinery.problems, action.payload]};
                 }
                 state.isLoading = false;
             })

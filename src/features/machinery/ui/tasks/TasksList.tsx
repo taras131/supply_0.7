@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useCallback, useState} from "react";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import TasksColumn from "./TaskListColumn";
@@ -32,56 +32,55 @@ export const TaskList: FC = () => {
             dispatch(fetchUpdateMachineryTask({...updatedTasks, status_id: newStatusId}));
         }
     };
-    const handleDrawerToggle = (isOpen: boolean) =>
-        (event: React.KeyboardEvent | React.MouseEvent) => {
-            if (
-                event.type === "keydown" &&
-                ((event as React.KeyboardEvent).key === "Tab" ||
-                    (event as React.KeyboardEvent).key === "Shift")
-            ) {
-                return;
-            }
-            setIsOpen(isOpen);
-            if (!isOpen) {
-                setIsEdit(false);
-                setCurrentTask(null);
-            }
-        };
+    const handleDrawerToggle = useCallback((event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+            event.type === "keydown" &&
+            ((event as React.KeyboardEvent).key === "Tab" ||
+                (event as React.KeyboardEvent).key === "Shift")
+        ) {
+            return;
+        }
+        setIsOpen(false);
+        setIsEdit(false);
+    }, []);
     const handleViewTask = (task: ITask) => () => {
-            setCurrentTask(task);
-            setIsEdit(false);
-            setIsOpen(true);
-        };
+        setCurrentTask(task);
+        setIsEdit(false);
+        setIsOpen(true);
+    };
     const handleEditTask = (task: ITask) => () => {
-            setCurrentTask(task);
-            setIsEdit(true);
-            setIsOpen(true);
-        };
+        setCurrentTask(task);
+        setIsEdit(true);
+        setIsOpen(true);
+    };
     const handleAddNewTask = () => {
         setCurrentTask(newTask);
         setIsEdit(true);
         setIsOpen(true);
     };
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div style={{display: "flex", gap: "16px", padding: "16px"}}>
-                {taskStatus.map((status) => (
-                    <TasksColumn
-                        key={status.id}
-                        status={status}
-                        tasks={tasks.filter((task) => task.status_id === status.id)}
-                        moveTask={moveTask}
-                        onViewTask={handleViewTask}
-                        onEditTask={handleEditTask}
-                        handleAddNewTask={handleAddNewTask}
-                    />
-                ))}
-            </div>
+        <>
+            <DndProvider backend={HTML5Backend}>
+                <div style={{display: "flex", gap: "16px", padding: "16px"}}>
+                    {taskStatus.map((status) => (
+                        <TasksColumn
+                            key={status.id}
+                            status={status}
+                            tasks={tasks.filter((task) => task.status_id === status.id)}
+                            moveTask={moveTask}
+                            onViewTask={handleViewTask}
+                            onEditTask={handleEditTask}
+                            handleAddNewTask={handleAddNewTask}
+                        />
+                    ))}
+                </div>
+
+            </DndProvider>
             <TaskDetails isOpen={isOpen}
                          isEdit={isEdit}
-                         onClose={handleDrawerToggle(false)}
+                         onClose={handleDrawerToggle}
                          currentTask={currentTask}/>
-        </DndProvider>
+        </>
     );
 };
 

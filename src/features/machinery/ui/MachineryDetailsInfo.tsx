@@ -22,7 +22,6 @@ const MachineryDetailsInfo: FC<IProps> = ({
                                               isEditMode,
                                           }) => {
     const machinery = useAppSelector(getCurrentMachinery);
-
     if(!machinery) return null;
     return (
         <Stack spacing={2} sx={{width: "100%"}}>

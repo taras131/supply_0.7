@@ -2,7 +2,6 @@ import React, {FC} from "react";
 import {IMachinery} from "../../../models/iMachinery";
 import {IconButton, Stack, TableCell, TableRow} from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {filesPath} from "../../../api/files";
 import photoPlaceholder from "../../../assets/images/placeholder.png";
 import {machineryTypes} from "../model/slice";
 import Typography from "@mui/material/Typography";
@@ -14,6 +13,7 @@ import {setMessage} from "../../../store/reducers/message";
 import {MESSAGE_SEVERITY, VIN_COPY_TEXT} from "../../../utils/const";
 import {useAppDispatch} from "../../../hooks/redux";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {filesPath} from "../../files/api";
 
 const StyledImage = styled("img")({
     width: "100%",
