@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 import Box from "@mui/material/Box";
 import {Stack, Tab, Tabs} from "@mui/material";
-import MachineryDetailsDocs from "./MachineryDetailsDocs";
+import MachineryDetailsDocs from "./docs/MachineryDetailsDocs";
 import Comments from "../../../components/common/comments/Comments";
 import Button from "@mui/material/Button";
 import {MachineryStatus} from "../../../utils/const";

@@ -61,7 +61,10 @@ export const TaskList: FC = () => {
     return (
         <>
             <DndProvider backend={HTML5Backend}>
-                <div style={{display: "flex", gap: "16px", padding: "16px"}}>
+                <div style={{display: "flex",
+                    minHeight: "690px",
+                    gap: "16px",
+                    padding: "16px"}}>
                     {taskStatus.map((status) => (
                         <TasksColumn
                             key={status.id}

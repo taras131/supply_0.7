@@ -4,7 +4,6 @@ import {ITask, taskPriority} from "../../../../models/ITasks";
 import dayjs from "dayjs";
 import {useDrag} from "react-dnd";
 import Box from "@mui/material/Box";
-import {getPriorityColor} from "../../../../utils/services";
 import PrioritiesChip from "../common/PrioritiesChip";
 
 interface IProps {
@@ -26,11 +25,12 @@ const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
             ref={drag}
             style={{
                 borderRadius: "4px",
-                /* backgroundColor: isDragging ? "#d3d3d3" : "white",*/
-                opacity: isDragging ? 0 : 1, // Пропадаем при перетаскивании
+                backgroundColor: isDragging ? "#d3d3d3" : "white",
+
                 height: isDragging ? 0 : "auto",
                 cursor: "pointer",
                 boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
+
             }}
         >
             <CardContent sx={{p: 2}}>

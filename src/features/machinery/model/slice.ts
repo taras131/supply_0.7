@@ -121,6 +121,7 @@ export const MachinerySlice = createSlice({
             })
             .addCase(fetchUploadMachineryPhoto.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
+                console.log(action.payload);
                 state.currentMachinery = action.payload;
             })
             .addCase(fetchDeleteMachineryPhoto.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {

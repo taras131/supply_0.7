@@ -31,9 +31,10 @@ export const machineryAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        return  await res.json();
+        return await res.json();
     },
     updateMachinery: async (machinery: IMachinery) => {
+        console.log(machinery);
         const res = await fetch(`${machineryPath}/${machinery.id}/`, {
             method: "PUT",
             headers: {
@@ -43,17 +44,15 @@ export const machineryAPI = {
         });
         if (!res.ok) {
             const errorDetails = await res.json();
-
             throw new Error(errorDetails.detail || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-
         return await res.json();
     },
     getAll: async () => {
         return await axios.get(machineryPath);
     },
     getOne: async (machinery_id: number) => {
-        const res =  await axios.get(`${machineryPath}/${machinery_id}`, {});
+        const res = await axios.get(`${machineryPath}/${machinery_id}`, {});
         return res.data;
     },
     addComment: async (comment: INewComment) => {
@@ -68,7 +67,7 @@ export const machineryAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        return  await res.json();
+        return await res.json();
     },
     deleteComment: async (comment_id: number) => {
         const res = await fetch(`${machineryPath}/${noticePath}/${comment_id}`, {
@@ -81,7 +80,7 @@ export const machineryAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        return  true;
+        return true;
     },
     updateComment: async (comment: IComment) => {
         const res = await fetch(`${machineryPath}/${noticePath}/${comment.id}`, {
@@ -97,7 +96,7 @@ export const machineryAPI = {
         }
         return await res.json();
     },
-    addDoc: async({doc, fileName}: IAddDocParams) => {
+    addDoc: async ({doc, fileName}: IAddDocParams) => {
         const res = await fetch(`${machineryPath}/${docPath}`, {
             method: "POST",
             headers: {
@@ -109,9 +108,9 @@ export const machineryAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        const { machinery, ...filteredResult } = await res.json();
+        const {machinery, ...filteredResult} = await res.json();
         void machinery;
-        return  filteredResult;
+        return filteredResult;
     },
     addNewTask: async (newTask: INewTask) => {
         console.log(newTask);
@@ -127,7 +126,7 @@ export const machineryAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        return  await res.json();
+        return await res.json();
     },
     updateTask: async (task: ITask) => {
         const res = await fetch(`${machineryPath}/${tasksPath}/${task.id}`, {
@@ -157,7 +156,7 @@ export const machineryAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        return  await res.json();
+        return await res.json();
     },
 };
 

@@ -2,8 +2,8 @@ import React, {FC} from "react";
 import MachineryDetailsDocsItem from "./MachineryDetailsDocsItem";
 import Box from "@mui/material/Box";
 import MachineryDetailsDocsAddNew from "./MachineryDetailsDocsAddNew";
-import {useAppSelector} from "../../../hooks/redux";
-import {getCurrentMachineryDocs} from "../model/selectors";
+import {useAppSelector} from "../../../../hooks/redux";
+import {getCurrentMachineryDocs} from "../../model/selectors";
 
 const MachineryDetailsDocs: FC = () => {
     const docs = useAppSelector(getCurrentMachineryDocs);

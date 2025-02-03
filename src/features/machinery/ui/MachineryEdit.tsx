@@ -37,6 +37,7 @@ const MachineryEdit: FC<IProps> = ({editedMachinery, machineryFieldChangeHandler
         <>
             <FormControl fullWidth>
                 <Select
+                    variant="outlined"
                     id={selectTypeId}
                     value={`${editedMachinery.type_id}`}
                     onChange={machineryFieldChangeHandler}
@@ -74,6 +75,7 @@ const MachineryEdit: FC<IProps> = ({editedMachinery, machineryFieldChangeHandler
                        value={editedMachinery.state_number}/>
             <FormControl fullWidth>
                 <Select
+                    variant="outlined"
                     id={selectYearId}
                     value={`${editedMachinery.year_manufacture}`}
                     onChange={machineryFieldChangeHandler}

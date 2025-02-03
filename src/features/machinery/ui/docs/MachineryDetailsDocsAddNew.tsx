@@ -4,15 +4,15 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import {Backdrop, CardActions, CardMedia, Modal, Stack} from "@mui/material";
 import Button from "@mui/material/Button";
-import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
-import {getCurrentMachineryId, getMachineryIsLoading} from "../model/selectors";
+import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
+import {getCurrentMachineryId, getMachineryIsLoading} from "../../model/selectors";
 import {styled} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import {CENTER, ROW, SPACE_BETWEEN} from "../../../styles/const";
+import {CENTER, ROW, SPACE_BETWEEN} from "../../../../styles/const";
 import Box from "@mui/material/Box";
-import placeholderImage from "../../../assets/images/fileUploadPlaceholder.png";
-import {fetchAddMachineryDoc} from "../model/actions";
-import Photos from "../../../components/common/Photos";
+import placeholderImage from "../../../../assets/images/fileUploadPlaceholder.png";
+import {fetchAddMachineryDoc} from "../../model/actions";
+import Photos from "../../../../components/common/Photos";
 
 const AnimatedCard = styled(Card)(() => ({
     transition: "all 0.3s ease-in-out",

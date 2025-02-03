@@ -46,7 +46,7 @@ const Layout: FC<IProps> = ({children}) => {
                     sx={{display: "flex", flex: "1 1 auto", flexDirection: "column", pl: {lg: "var(--SideNav-width)"}}}>
                     <Header open={open} handleDrawerOpen={handleDrawerOpen}/>
                     <main>
-                        <Container maxWidth="xl" sx={{py: "84px"}}>
+                        <Container maxWidth="xl" sx={{py: "84px", minHeight: "100vh"}}>
                             {children}
                         </Container>
                     </main>

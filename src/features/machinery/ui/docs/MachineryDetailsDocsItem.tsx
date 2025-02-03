@@ -5,10 +5,10 @@ import Typography from "@mui/material/Typography";
 import { CardActions, CardMedia, Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { IMachineryDoc } from "../../../models/iMachinery";
-import { CENTER } from "../../../styles/const";
-import {filesPath} from "../../files/api";
-import {printImage} from "../../../utils/printUtils";
+import { IMachineryDoc } from "../../../../models/iMachinery";
+import { CENTER } from "../../../../styles/const";
+import {filesPath} from "../../../files/api";
+import {printImage} from "../../../../utils/printUtils";
 
 const AnimatedCard = styled(Card)<{ expanded?: boolean }>(({ theme, expanded }) => ({
     minWidth: 225,

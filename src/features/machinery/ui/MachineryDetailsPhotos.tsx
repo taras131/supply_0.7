@@ -13,11 +13,15 @@ interface IProps {
 const MachineryDetailsPhotos: FC<IProps> = ({machinery, isEditMode}) => {
     const dispatch = useAppDispatch();
     const onAddPhoto = (newFile: File) => {
-        console.log(newFile);
         dispatch(fetchUploadMachineryPhoto({machinery, file: newFile}));
     };
     const onDeletePhoto = (deletedFileIndex: number) => {
-        dispatch(fetchDeleteMachineryPhoto({machinery, deletePhotoName: machinery.photos[deletedFileIndex]}));
+        console.log(deletedFileIndex);
+        console.log(machinery.photos[deletedFileIndex]);
+        dispatch(fetchDeleteMachineryPhoto({
+            machinery
+            , deletePhotoName: machinery.photos[deletedFileIndex],
+        }));
     };
     const photosPaths = machinery.photos.map(photo => `${basePath}/files/${photo}`);
     return (

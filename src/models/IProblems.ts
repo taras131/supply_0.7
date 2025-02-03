@@ -8,7 +8,7 @@ export interface INewProblem {
 }
 export interface IProblem extends INewProblem {
     id: number;
-    created_date: int;
-    updated_date: int;
+    created_date: number;
+    updated_date: number;
     task_id?: number;
 }
