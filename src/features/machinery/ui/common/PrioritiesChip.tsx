@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import {Chip} from "@mui/material";
 import {getPriorityColor} from "../../../../utils/services";
 import {PRIORITIES} from "../../utils/const";

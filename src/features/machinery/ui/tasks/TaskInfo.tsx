@@ -2,14 +2,15 @@ import React, {FC} from "react";
 import {Stack, Chip} from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Photos from "../../../../components/common/Photos";
-import {INewTask, ITask, taskPriority} from "../../../../models/ITasks";
+import PhotosManager from "../../../../components/common/PhotosManager";
+import {INewTask, ITask} from "../../../../models/ITasks";
 import {useAppSelector} from "../../../../hooks/redux";
 import {getUserById} from "../../../users/model/selectors";
 import PersonIcon from "@mui/icons-material/Person";
 import dayjs from "dayjs";
 import {getPriorityColor, isTask} from "../../../../utils/services";
 import {filesPath} from "../../../files/api";
+import {taskPriority} from "../../utils/const";
 
 interface IProps {
     task: ITask | INewTask;
@@ -48,8 +49,8 @@ const TaskInfo: FC<IProps> = ({task}) => {
                                 sx={{display: "flex", alignItems: "center", gap: 1, mb: 1}}>
                         Фотографии задачи:
                     </Typography>
-                    <Photos photosPaths={task.issue_photos.map(photo => `${filesPath}/${photo}`)}
-                            isViewingOnly={true}/>
+                    <PhotosManager photosPaths={task.issue_photos.map(photo => `${filesPath}/${photo}`)}
+                                   isViewingOnly={true}/>
                 </Box>
             )}
             {isTask(task) && task.status_id === 2 && (
@@ -75,8 +76,8 @@ const TaskInfo: FC<IProps> = ({task}) => {
                             <Typography variant="subtitle1">
                                 Фотографии результата:
                             </Typography>
-                            <Photos photosPaths={task.result_photos.map(photo => `${filesPath}/${photo}`)}
-                                    isViewingOnly={true}/>
+                            <PhotosManager photosPaths={task.result_photos.map(photo => `${filesPath}/${photo}`)}
+                                           isViewingOnly={true}/>
                         </>
 
                     )}

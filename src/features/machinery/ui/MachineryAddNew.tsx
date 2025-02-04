@@ -8,7 +8,7 @@ import {useAppDispatch} from "../../../hooks/redux";
 import {MachineryStatus} from "utils/const";
 import MachineryEdit from "./MachineryEdit";
 import Button from "@mui/material/Button";
-import Photos from "../../../components/common/Photos";
+import PhotosManager from "../../../components/common/PhotosManager";
 import {INewMachinery} from "../../../models/iMachinery";
 
 interface IProps {
@@ -91,9 +91,9 @@ const MachineryAddNew: FC<IProps> = ({isOpen, onClose}) => {
                 <Typography variant="h2" fontSize={"24px"} textAlign="center">
                     Новая Техника:
                 </Typography>
-                <Photos onAddPhoto={onAddPhoto}
-                        onDeletePhoto={onDeletePhoto}
-                        photosPaths={tempFiles.map(fileData => fileData.preview)}/>
+                <PhotosManager onAddPhoto={onAddPhoto}
+                               onDeletePhoto={onDeletePhoto}
+                               photosPaths={tempFiles.map(fileData => fileData.preview)}/>
                 <MachineryEdit editedMachinery={editedMachinery}
                                machineryFieldChangeHandler={machineryFieldChangeHandler}/>
                 <Stack direction="row"

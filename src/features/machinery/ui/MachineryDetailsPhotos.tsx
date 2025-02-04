@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {fetchDeleteMachineryPhoto, fetchUploadMachineryPhoto} from "../model/actions";
 import {ICurrentMachinery} from "../../../models/iMachinery";
 import {useAppDispatch} from "../../../hooks/redux";
-import Photos from "../../../components/common/Photos";
+import PhotosManager from "../../../components/common/PhotosManager";
 import {basePath} from "../../../api";
 
 interface IProps {
@@ -25,10 +25,10 @@ const MachineryDetailsPhotos: FC<IProps> = ({machinery, isEditMode}) => {
     };
     const photosPaths = machinery.photos.map(photo => `${basePath}/files/${photo}`);
     return (
-        <Photos photosPaths={photosPaths}
-                onAddPhoto={onAddPhoto}
-                onDeletePhoto={onDeletePhoto}
-                isViewingOnly={!isEditMode}/>
+        <PhotosManager photosPaths={photosPaths}
+                       onAddPhoto={onAddPhoto}
+                       onDeletePhoto={onDeletePhoto}
+                       isViewingOnly={!isEditMode}/>
     );
 };
 

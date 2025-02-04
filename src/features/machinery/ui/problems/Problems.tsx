@@ -1,41 +1,73 @@
-import React, {FC, useCallback, useState} from "react";
+import React, {FC, useState} from "react";
 import {IProblem} from "../../../../models/IProblems";
 import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import UploadIcon from "@mui/icons-material/Upload";
-import DownloadIcon from "@mui/icons-material/Download";
 import AddIcon from "@mui/icons-material/Add";
-import AddNew from "./AddNew";
-import ProblemsList from "./ProblemsList";
+import ProblemsTable from "./ProblemsTable";
+import ProblemDrawer, {DrawerMode} from "./ProblemDrawer";
 
 interface IProps {
     problems: IProblem[];
 }
 
+interface IDrawerState {
+    isOpen: boolean;
+    mode: DrawerMode;
+    problem: IProblem | null
+}
+
 const Problems: FC<IProps> = ({problems}) => {
-    const [isOpen, setIsOpen] = React.useState(false);
-    const toggleDrawer = (isOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (event && event.type === "keydown" && ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")) {
-            return;
-        }
-        setIsOpen(isOpen);
+    const [drawerState, setDrawerState] = useState<IDrawerState>({
+        isOpen: false,
+        mode: "create",
+        problem: null,
+    });
+
+    const handleDrawerClose = () => {
+        setDrawerState(prev => ({ ...prev, isOpen: false , problem: null }));
     };
+
+    const handleAddClick = () => {
+        setDrawerState({
+            isOpen: true,
+            mode: "create",
+            problem: null,
+        });
+    };
+
+    const handleProblemClick = (problem: IProblem) => {
+        setDrawerState({
+            isOpen: true,
+            mode: "view",
+            problem,
+        });
+    };
+
     return (
         <Stack spacing={4}>
-            <Stack  direction="row" spacing={3} justifyContent="space-between" alignItems="center">
+            <Stack direction="row" spacing={3} justifyContent="space-between" alignItems="center">
                 <Typography variant="h4">Замечания</Typography>
-                <div>
-                    <Button
-                        onClick={toggleDrawer(true)}
-                        startIcon={<AddIcon sx={{fontSize: "var(--icon-fontSize-md)"}}/>}
-                        variant="contained">
-                        Добавить
-                    </Button>
-                </div>
+                <Button
+                    onClick={handleAddClick}
+                    startIcon={<AddIcon />}
+                    variant="contained"
+                >
+                    Добавить
+                </Button>
             </Stack>
-            <ProblemsList problems={problems}/>
-            <AddNew isOpen={isOpen} onClose={toggleDrawer(false)}/>
+
+            <ProblemsTable
+                rows={problems}
+                onProblemClick={handleProblemClick}
+            />
+
+            <ProblemDrawer
+                isOpen={drawerState.isOpen}
+                onClose={handleDrawerClose}
+                mode={drawerState.mode}
+                problem={drawerState.problem}
+            />
         </Stack>
     );
 };

@@ -2,7 +2,7 @@ import React, {ChangeEvent, FC, useEffect, useState} from "react";
 import {SelectChangeEvent, Stack} from "@mui/material";
 import {INewTask, ITask} from "../../../../models/ITasks";
 import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
-import Photos from "../../../../components/common/Photos";
+import PhotosManager from "../../../../components/common/PhotosManager";
 import Button from "@mui/material/Button";
 import {fetchAddMachineryTask, fetchUpdateMachineryTask} from "../../model/actions";
 import {getCurrentMachineryId} from "../../model/selectors";
@@ -79,7 +79,7 @@ const TaskEdit: FC<IProps> = ({task, onClose}) => {
             <TaskIssueEdit editedTask={editedTask}
                            handleDateChange={handleDateChange}
                            taskFieldChangeHandler={taskFieldChangeHandler}/>
-            <Photos
+            <PhotosManager
                 photosPaths={photosPreview}
                 onAddPhoto={photoUploadHandler}
                 onDeletePhoto={onDeletePhoto}

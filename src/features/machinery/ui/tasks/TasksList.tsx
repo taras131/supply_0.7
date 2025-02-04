@@ -2,12 +2,13 @@ import React, {FC, useCallback, useState} from "react";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import TasksColumn from "./TaskListColumn";
-import {INewTask, ITask, taskStatus} from "../../../../models/ITasks";
+import {INewTask, ITask} from "../../../../models/ITasks";
 import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
 import {fetchUpdateMachineryTask} from "../../model/actions";
 import {getCurrentMachineryTasks} from "../../model/selectors";
 import TaskDetails from "./TaskDetails";
 import dayjs from "dayjs";
+import {taskStatus} from "../../utils/const";
 
 const newTask: INewTask = {
     title: "",
@@ -18,6 +19,7 @@ const newTask: INewTask = {
     author_id: 1,
     assigned_to_id: 2,
     issue_photos: [],
+    category_id: 0,
 };
 
 export const TaskList: FC = () => {

@@ -12,7 +12,7 @@ import {CENTER, ROW, SPACE_BETWEEN} from "../../../../styles/const";
 import Box from "@mui/material/Box";
 import placeholderImage from "../../../../assets/images/fileUploadPlaceholder.png";
 import {fetchAddMachineryDoc} from "../../model/actions";
-import Photos from "../../../../components/common/Photos";
+import PhotosManager from "../../../../components/common/PhotosManager";
 
 const AnimatedCard = styled(Card)(() => ({
     transition: "all 0.3s ease-in-out",
@@ -127,7 +127,7 @@ const MachineryDetailsDocsAddNew = () => {
                             <Typography variant="h4" fontWeight={700} fontSize={"26px"}>
                                 Добавление нового документа:
                             </Typography>
-                            <Photos
+                            <PhotosManager
                                 photosPaths={file ? [URL.createObjectURL(file)] : []}
                                 onAddPhoto={addPhotoHandler}
                                 onDeletePhoto={deletePhotoHandler}

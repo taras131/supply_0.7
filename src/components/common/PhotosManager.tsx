@@ -83,7 +83,7 @@ interface IProps {
     photosCountLimit?: number;
 }
 
-const Photos: FC<IProps> = ({
+const PhotosManager: FC<IProps> = ({
                                 photosPaths,
                                 onAddPhoto,
                                 onDeletePhoto,
@@ -154,4 +154,4 @@ const Photos: FC<IProps> = ({
     );
 };
 
-export default Photos;
+export default PhotosManager;
