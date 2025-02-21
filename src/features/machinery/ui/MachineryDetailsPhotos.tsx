@@ -16,8 +16,6 @@ const MachineryDetailsPhotos: FC<IProps> = ({machinery, isEditMode}) => {
         dispatch(fetchUploadMachineryPhoto({machinery, file: newFile}));
     };
     const onDeletePhoto = (deletedFileIndex: number) => {
-        console.log(deletedFileIndex);
-        console.log(machinery.photos[deletedFileIndex]);
         dispatch(fetchDeleteMachineryPhoto({
             machinery
             , deletePhotoName: machinery.photos[deletedFileIndex],

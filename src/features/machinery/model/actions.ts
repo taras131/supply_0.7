@@ -8,19 +8,28 @@ import {IComment, INewComment} from "../../../models/iComents";
 import {INewTask, ITask} from "../../../models/ITasks";
 import {filesAPI} from "../../files/api";
 import {INewProblem} from "../../../models/IProblems";
+import {thunkHandlers} from "../../../store/thunkHandlers";
+import {AppDispatch} from "../../../store";
+
+const messages = {
+    addMachinery: {error: "Не удалось добавить машину.", success: "Машина добавлена"},
+};
+
+type ThunkConfig = {
+    dispatch: AppDispatch;
+    rejectValue: string;
+}
 
 interface IAddMachinery {
     newMachinery: INewMachinery;
     files: File [];
 }
 
-export const fetchAddMachinery = createAsyncThunk("fetch_add_machinery"
-    , async (addMachineryData: IAddMachinery, {
-        rejectWithValue,
-        dispatch,
-    }) => {
-        const {newMachinery, files} = addMachineryData;
+export const fetchAddMachinery = createAsyncThunk<IMachinery, IAddMachinery, ThunkConfig>(
+    "machinery/fetchAddMachinery",
+    async (addMachineryData, {dispatch, rejectWithValue}) => {
         try {
+            const {newMachinery, files} = addMachineryData;
             if (files.length > 0) {
                 for (const file of files) {
                     const formData = new FormData();
@@ -30,17 +39,13 @@ export const fetchAddMachinery = createAsyncThunk("fetch_add_machinery"
                 }
             }
             const res = await machineryAPI.addMachinery(newMachinery);
+            thunkHandlers.success(messages.addMachinery.success, dispatch);
             return res;
         } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
-            dispatch(
-                setMessage({
-                    severity: MESSAGE_SEVERITY.error,
-                    text: errorMessage || "Не удалось добавить машину.",
-                }));
-            return rejectWithValue(handlerError(e));
+            return rejectWithValue(thunkHandlers.error(e, messages.addMachinery.error, dispatch));
         }
-    });
+    }
+);
 
 export const fetchUpdateMachinery = createAsyncThunk(
     "fetch_update_machinery",
@@ -245,7 +250,6 @@ export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (a
             singleFileFormData.append(key, value);
             const res = await filesAPI.upload(singleFileFormData);
             task_in = {...task_in, issue_photos: [...task_in.issue_photos, res.filename]};
-            console.log(`Файл с ключом ${key} успешно загружен:`, res);
         }
         return await machineryAPI.addNewTask(task_in);
 
@@ -299,7 +303,6 @@ export const fetchAddMachineryProblem = createAsyncThunk("fetch_add_problem"
                 }
             }
             const res = await machineryAPI.addNewProblem(problem_in);
-            console.log(res);
             return res;
 
         } catch (e) {

@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMachinery";
 import {
+    fetchAddMachinery,
     fetchAddMachineryComment,
     fetchAddMachineryDoc, fetchAddMachineryProblem, fetchAddMachineryTask,
     fetchDeleteMachineryComment,
@@ -22,13 +23,6 @@ interface IMachineryState {
     wsConnected: boolean,
     wsMessage: string | null,
 }
-
-export const machineryTypes = [
-    {id: 0, title: "Легковые а/м"},
-    {id: 1, title: "Грузовые а/м"},
-    {id: 2, title: "Спецтехника"},
-    {id: 3, title: "Другое"},
-];
 
 const initialState: IMachineryState = {
     list: [],
@@ -74,27 +68,33 @@ export const MachinerySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchAddMachinery.fulfilled, (state, action: PayloadAction<IMachinery>) => {
+                state.isLoading = false;
+            })
             .addCase(fetchGetMachineryById.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
                 state.currentMachinery = action.payload;
             })
             .addCase(fetchUpdateMachinery.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
-                console.log(action.payload);
                 state.currentMachinery = action.payload;
             })
             .addCase(fetchAddMachineryComment.fulfilled, (state, action: PayloadAction<IComment>) => {
                 state.isLoading = false;
-                if(state.currentMachinery && state.currentMachinery.comments) {
-                    state.currentMachinery = {...state.currentMachinery,
-                        comments: [...state.currentMachinery.comments, action.payload]};
+                if (state.currentMachinery && state.currentMachinery.comments) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery,
+                        comments: [...state.currentMachinery.comments, action.payload],
+                    };
                 }
             })
             .addCase(fetchDeleteMachineryComment.fulfilled, (state, action: PayloadAction<number>) => {
                 state.isLoading = false;
-                if(state.currentMachinery && state.currentMachinery.comments) {
-                    state.currentMachinery = {...state.currentMachinery, comments: [...state.currentMachinery.comments
-                            .filter(comment => comment.id !== action.payload)]};
+                if (state.currentMachinery && state.currentMachinery.comments) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery, comments: [...state.currentMachinery.comments
+                            .filter(comment => comment.id !== action.payload)],
+                    };
                 }
                 state.list = [...state.list.map(machinery => {
                     if (machinery.comments && machinery.comments.length > 0) {
@@ -109,19 +109,20 @@ export const MachinerySlice = createSlice({
             })
             .addCase(fetchUpdateMachineryComment.fulfilled, (state, action: PayloadAction<IComment>) => {
                 state.isLoading = false;
-                if(state.currentMachinery && state.currentMachinery.comments) {
-                    state.currentMachinery = {...state.currentMachinery, comments: [...state.currentMachinery.comments.map(comment => {
-                            if(action.payload.id === comment.id) {
+                if (state.currentMachinery && state.currentMachinery.comments) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery, comments: [...state.currentMachinery.comments.map(comment => {
+                            if (action.payload.id === comment.id) {
                                 return action.payload;
                             } else {
                                 return comment;
                             }
-                        })]};
+                        })],
+                    };
                 }
             })
             .addCase(fetchUploadMachineryPhoto.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
-                console.log(action.payload);
                 state.currentMachinery = action.payload;
             })
             .addCase(fetchDeleteMachineryPhoto.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
@@ -129,30 +130,38 @@ export const MachinerySlice = createSlice({
                 state.currentMachinery = action.payload;
             })
             .addCase(fetchAddMachineryDoc.fulfilled, (state, action: PayloadAction<IMachineryDoc>) => {
-                if(state.currentMachinery && state.currentMachinery.docs) {
-                    state.currentMachinery = {...state.currentMachinery,
-                        docs: [...state.currentMachinery.docs, action.payload]};
+                if (state.currentMachinery && state.currentMachinery.docs) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery,
+                        docs: [...state.currentMachinery.docs, action.payload],
+                    };
                 }
                 state.isLoading = false;
             })
             .addCase(fetchAddMachineryTask.fulfilled, (state, action: PayloadAction<ITask>) => {
-                if(state.currentMachinery && action.payload.machinery_id) {
-                    state.currentMachinery = {...state.currentMachinery,
-                        tasks: [...state.currentMachinery.tasks, action.payload]};
+                if (state.currentMachinery && action.payload.machinery_id) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery,
+                        tasks: [...state.currentMachinery.tasks, action.payload],
+                    };
                 }
                 state.isLoading = false;
             })
             .addCase(fetchUpdateMachineryTask.fulfilled, (state, action: PayloadAction<ITask>) => {
-                if(state.currentMachinery) {
-                    state.currentMachinery = {...state.currentMachinery,
-                        tasks: [...state.currentMachinery.tasks.map(task => task.id === action.payload.id ? action.payload : task)]};
+                if (state.currentMachinery) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery,
+                        tasks: [...state.currentMachinery.tasks.map(task => task.id === action.payload.id ? action.payload : task)],
+                    };
                 }
                 state.isLoading = false;
             })
             .addCase(fetchAddMachineryProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
-                if(state.currentMachinery && action.payload.machinery_id) {
-                    state.currentMachinery = {...state.currentMachinery,
-                        problems: [...state.currentMachinery.problems, action.payload]};
+                if (state.currentMachinery && action.payload.machinery_id) {
+                    state.currentMachinery = {
+                        ...state.currentMachinery,
+                        problems: [...state.currentMachinery.problems, action.payload],
+                    };
                 }
                 state.isLoading = false;
             })

@@ -12,6 +12,7 @@ import {Link, useLocation} from "react-router-dom";
 import {getCountUnpaidInvoices} from "features/invoices/model/selectors";
 import Box from "@mui/material/Box";
 import {Logo} from "./Logo";
+import {routesConfig} from "../config/routes";
 
 interface IProps {
     open: boolean;
@@ -99,13 +100,9 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
             <Divider sx={{borderColor: "var(--mui-palette-neutral-700)"}}/>
             <Box component="nav"
                  sx={{flex: "1 1 auto", p: "12px"}}>
-                <SideBarMenuItem title={"Главная"} route={routes.main}/>
-                <SideBarMenuItem title={"Счета"} route={routes.invoices} count={countUnpaidInvoices}/>
-                <SideBarMenuItem title={"Поставщики"} route={routes.suppliers}/>
-                <SideBarMenuItem title={"Отгрузки"} route={routes.shipments}/>
-                <SideBarMenuItem title={"Заявки"} route={routes.orders}/>
-                <SideBarMenuItem title={"Техника"} route={routes.machinery}/>
-                <SideBarMenuItem title={"Сотрудники"} route={routes.users}/>
+                {routesConfig.filter(route => route.showInMenu).map(menuItem => (
+                    <SideBarMenuItem key={menuItem.path} title={menuItem.label} route={menuItem.path}/>
+                ))}
                 {isAuth ? (
                     <SideBarMenuItem title={"Профиль"} route={routes.profile}/>
                 ) : (

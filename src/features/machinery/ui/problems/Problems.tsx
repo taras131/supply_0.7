@@ -61,7 +61,6 @@ const Problems: FC<IProps> = ({problems}) => {
                 rows={problems}
                 onProblemClick={handleProblemClick}
             />
-
             <ProblemDrawer
                 isOpen={drawerState.isOpen}
                 onClose={handleDrawerClose}

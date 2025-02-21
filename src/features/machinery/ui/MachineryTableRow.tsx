@@ -3,7 +3,6 @@ import {IMachinery} from "../../../models/iMachinery";
 import {IconButton, Stack, TableCell, TableRow} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import photoPlaceholder from "../../../assets/images/placeholder.png";
-import {machineryTypes} from "../model/slice";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {CENTER, ROW, SUCCESS} from "../../../styles/const";
@@ -14,6 +13,7 @@ import {MESSAGE_SEVERITY, VIN_COPY_TEXT} from "../../../utils/const";
 import {useAppDispatch} from "../../../hooks/redux";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {filesPath} from "../../files/api";
+import {machineryTypes} from "../utils/const";
 
 const StyledImage = styled("img")({
     width: "100%",
@@ -27,7 +27,7 @@ interface IProps {
     row: IMachinery;
 }
 
-const MachineryTableRow:FC<IProps> = ({row}) => {
+const MachineryTableRow: FC<IProps> = ({row}) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const handleMoreClick = () => {
@@ -61,7 +61,7 @@ const MachineryTableRow:FC<IProps> = ({row}) => {
                     {row.vin}
                 </Stack>
             </TableCell>
-            <TableCell>{machineryTypes[row.type_id].title}</TableCell>
+            <TableCell>{machineryTypes.find(type => type.id === row.type_id)?.title || ""}</TableCell>
             <TableCell>
                 <IconButton aria-label="show more" onClick={handleMoreClick} sx={{padding: 0}}>
                     <MoreVertIcon color={SUCCESS}/>

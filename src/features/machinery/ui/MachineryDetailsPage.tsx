@@ -4,7 +4,7 @@ import {getCurrentMachinery} from "../model/selectors";
 import {useParams} from "react-router-dom";
 import {SelectChangeEvent, Stack} from "@mui/material";
 import {
-     fetchGetMachineryById,
+    fetchGetMachineryById,
     fetchUpdateMachinery,
 } from "../model/actions";
 import MessageWindow from "../../../components/MessageWindow";
@@ -15,14 +15,15 @@ import MachineryDetailsInfo from "./MachineryDetailsInfo";
 import MachineryDetailsHeader from "./MachineryDetailsHeader";
 import Preloader from "../../../components/Preloader";
 import MachineryDetailsTabs from "./MachineryDetailsTabs";
+import MachineryView from "./MachineryView";
+import Box from "@mui/material/Box";
 
 const errorDeleteNoticeMessage = "Авторизируйтесь для удаления заметки.";
 
-const MachineryDetails = () => {
+const MachineryDetailsPage = () => {
     const dispatch = useAppDispatch();
     const machineryId = useParams().machineryId || "0";
     const machinery = useAppSelector(getCurrentMachinery);
-    const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [editedMachinery, setEditedMachinery] = useState<ICurrentMachinery | null>(null);
     useEffect(() => {
@@ -34,16 +35,15 @@ const MachineryDetails = () => {
         }
     }, [machinery]);
     if (!machinery) {
-        return <Preloader />;
+        return <Preloader/>;
     }
     const toggleIsEditMode = () => {
         setIsEditMode(prev => !prev);
     };
-    const toggleIsOpenErrorMessageWindow = () => {
-        setIsOpenErrorMessageWindow((prev) => !prev);
-    };
 
-    const machineryFieldChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent) => {
+    const machineryFieldChangeHandler = (e: ChangeEvent<HTMLInputElement
+            | HTMLTextAreaElement>
+        | SelectChangeEvent<string | unknown>) => {
         setEditedMachinery(prev => prev ? {...prev, [e.target.name]: e.target.value} : null);
     };
 
@@ -65,24 +65,22 @@ const MachineryDetails = () => {
                                     title={`${machinery.brand} ${machinery.model}`}
                                     cancelUpdateMachineryHandler={cancelUpdateMachineryHandler}
                                     updateMachineryHandler={updateMachineryHandler}/>
-            <Grid container spacing={4}>
-                <Grid xs={6} sx={{display: "flex", flexDirection: "column"}}>
+            <Stack
+                spacing={{xs: 1, sm: 2}}
+                direction="row"
+                useFlexGap
+                sx={{flexWrap: "wrap"}}
+            >
+                <MachineryView editedMachinery={editedMachinery}
+                               isEditMode={isEditMode}
+                               machineryFieldChangeHandler={machineryFieldChangeHandler}/>
+                <Box sx={{flexGrow: 1}}>
                     <MachineryDetailsPhotos machinery={machinery} isEditMode={isEditMode}/>
-                </Grid>
-                <Grid xs={6} sx={{height: "100%"}}>
-                    <MachineryDetailsInfo editedMachinery={editedMachinery}
-                                          isEditMode={isEditMode}
-                                          machineryFieldChangeHandler={machineryFieldChangeHandler}/>
-                </Grid>
-            </Grid>
-           <MachineryDetailsTabs/>
-            <MessageWindow
-                isOpenModal={isOpenErrorMessageWindow}
-                handleToggleOpen={toggleIsOpenErrorMessageWindow}
-                message={errorDeleteNoticeMessage}
-            />
+                </Box>
+            </Stack>
+            <MachineryDetailsTabs/>
         </Stack>
     );
 };
 
-export default MachineryDetails;
+export default MachineryDetailsPage;

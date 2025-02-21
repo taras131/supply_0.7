@@ -1,6 +1,5 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import {IProblem} from "../../../../models/IProblems";
-import TitleWithValue from "../../../../components/TitleWithValue";
 import {getCategoryNameById} from "../../utils/services";
 import {convertMillisecondsToDate} from "../../../../utils/services";
 import InformationDrawer, {IInformationItem} from "../../../../components/common/InformationDrawer";

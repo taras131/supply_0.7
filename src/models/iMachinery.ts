@@ -22,10 +22,18 @@ export interface INewMachinery {
     model: string;
     year_manufacture: number;
     type_id: number;
+    engine_type_id: number;
     vin: string;
     state_number: string;
     status: MachineryStatusType;
     photos: string[];
+    traction_type_id: number;
+    transmission_type_id: number;
+    working_equipment: string;
+    engine_brand: string;
+    engine_model: string;
+    transmission_brand: string;
+    transmission_model: string;
 }
 
 export interface IMachinery extends INewMachinery {

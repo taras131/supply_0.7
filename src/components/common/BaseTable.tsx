@@ -47,7 +47,7 @@ const BaseTable = <T extends { id: number | string }>({
                 key={row.id}
                 hover={!!onRowClick}
                 onClick={() => onRowClick?.(row)}
-                sx={{ cursor: onRowClick ? 'pointer' : 'default' }}
+                sx={{ cursor: onRowClick ? "pointer" : "default" }}
             >
                 {columns.map((column) => (
                     <TableCell

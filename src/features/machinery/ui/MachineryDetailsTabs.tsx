@@ -5,7 +5,7 @@ import MachineryDetailsDocs from "./docs/MachineryDetailsDocs";
 import Comments from "../../../components/common/comments/Comments";
 import Button from "@mui/material/Button";
 import {MachineryStatus} from "../../../utils/const";
-import { MachineryStatusType} from "../../../models/iMachinery";
+import {MachineryStatusType} from "../../../models/iMachinery";
 import {
     fetchUpdateMachinery,
 } from "../model/actions";
@@ -13,7 +13,6 @@ import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachinery, getMachineryIsLoading} from "../model/selectors";
 import {TaskList} from "./tasks/TasksList";
 import Problems from "./problems/Problems";
-import {current} from "@reduxjs/toolkit";
 
 interface CustomTabPanelProps {
     children?: React.ReactNode;
@@ -53,12 +52,11 @@ const MachineryDetailsTabs: FC = () => {
     };
     const changeMachineryStatusHandler = () => {
         let newStatus: MachineryStatusType = MachineryStatus.disActive;
-        if (machinery.status && machinery.status === MachineryStatus.disActive) {
+        if (machinery?.status && machinery.status === MachineryStatus.disActive) {
             newStatus = MachineryStatus.active;
+            dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
         }
-        dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
     };
-
     return (
         <Box sx={{width: "100%"}}>
             <Box sx={{borderBottom: 1, borderColor: "divider"}}>
@@ -72,12 +70,12 @@ const MachineryDetailsTabs: FC = () => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                {machinery  && (
+                {machinery && (
                     <MachineryDetailsDocs/>
                 )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-               <Problems problems={machinery?.problems || null} />
+                <Problems problems={machinery?.problems || null}/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 <TaskList/>
