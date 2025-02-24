@@ -3,16 +3,16 @@ import {styled} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import {FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent, Typography} from "@mui/material";
 
-const StyledInput = styled(TextField)(({theme}) => ({
+const StyledInput = styled(TextField)<{ isError?: boolean }>(({theme, isError}) => ({
     "label + &": {
         marginTop: theme.spacing(2),
     },
     "& .MuiInputBase-input": {
         borderRadius: 4,
         position: "relative",
-        backgroundColor: "#F3F6F9",
+        backgroundColor: isError ? "#FFFBE6" : "#E8F5E9", // Желтый для ошибки и зеленый для нормального
         border: "1px solid",
-        borderColor: "#E0E3E7",
+        borderColor: isError ? "#FFC107" : "#4CAF50", // Желтая граница для ошибки и зеленая граница для нормального
         fontSize: 16,
         padding: "10px 12px",
         transition: theme.transitions.create([
@@ -21,22 +21,22 @@ const StyledInput = styled(TextField)(({theme}) => ({
             "box-shadow",
         ]),
         ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-            borderColor: "#2D3843",
+            backgroundColor: isError ? "#423A00" : "#1B5E20",
+            borderColor: isError ? "#FFD54F" : "#66BB6A",
         }),
     },
 }));
 
-const StyledSelect = styled(Select)(({theme}) => ({
+const StyledSelect = styled(Select)<{ isError?: boolean }>(({theme, isError}) => ({
     "label + &": {
         marginTop: theme.spacing(2),
     },
     "& .MuiInputBase-input": {
         borderRadius: 4,
         position: "relative",
-        backgroundColor: "#F3F6F9",
+        backgroundColor: isError ? "#FFFBE6" : "#E8F5E9", // Желтый для ошибки и зеленый для нормального
         border: "1px solid",
-        borderColor: "#E0E3E7",
+        borderColor: isError ? "#FFC107" : "#4CAF50", // Желтые границы для ошибки и зеленые для нормального
         fontSize: 16,
         padding: "10px 12px",
         transition: theme.transitions.create([
@@ -45,8 +45,8 @@ const StyledSelect = styled(Select)(({theme}) => ({
             "box-shadow",
         ]),
         ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-            borderColor: "#2D3843",
+            backgroundColor: isError ? "#423A00" : "#1B5E20",
+            borderColor: isError ? "#FFD54F" : "#66BB6A",
         }),
     },
 }));
@@ -58,7 +58,8 @@ const StyledTypography = styled(Typography)(({theme}) => ({
 }));
 
 const StyledLabel = styled(InputLabel)(() => ({
-    fontSize: "16px",
+    fontSize: "18px",
+    fontWeight: 500,
 }));
 
 interface IProps {
@@ -66,6 +67,7 @@ interface IProps {
     name: string;
     id: string;
     value: string | number;
+    error?: string | null | undefined;
     isEditMode: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string | unknown>) => void;
     options?: Array<{ id: number | string; title: string | number }>;
@@ -73,8 +75,16 @@ interface IProps {
 }
 
 const FieldControl: FC<IProps> = ({
-                                                 label, name, id, value, isEditMode, onChange, options, isRequired = false,
-                                             }) => (
+                                      label,
+                                      name,
+                                      id,
+                                      value,
+                                      error = null,
+                                      isEditMode,
+                                      onChange,
+                                      options,
+                                      isRequired = false,
+                                  }) => (
     <FormControl fullWidth>
         <StyledLabel required={isRequired} shrink htmlFor={id}>
             {label}
@@ -85,9 +95,10 @@ const FieldControl: FC<IProps> = ({
                     variant="outlined"
                     value={value}
                     onChange={onChange}
-                    sx={{ overflow: "hidden" }}
+                    sx={{overflow: "hidden"}}
                     name={name}
                     id={id}
+                    isError={!!error}
                 >
                     <MenuItem value={-1}>Не выбрано</MenuItem>
                     {options.map(option => (
@@ -103,6 +114,7 @@ const FieldControl: FC<IProps> = ({
                     onChange={onChange}
                     name={name}
                     id={id}
+                    isError={!!error}
                 />
             )
         ) : (
@@ -112,7 +124,7 @@ const FieldControl: FC<IProps> = ({
                     : value || "-------"}
             </StyledTypography>
         )}
-        <FormHelperText />
+        {isEditMode && (<FormHelperText sx={{minHeight: "20px"}}>{error}</FormHelperText>)}
     </FormControl>
 );
 

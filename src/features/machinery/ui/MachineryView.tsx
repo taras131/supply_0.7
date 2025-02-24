@@ -9,32 +9,34 @@ import {yearsManufacture} from "../../../utils/const";
 import {engineTypes, machineryTypes, tractionTypes, transmissionTypes} from "../utils/const";
 import Card from "@mui/material/Card";
 import FieldControl from "../../../components/common/FieldControl";
+import {ValidationErrors} from "../../../utils/validators";
 
 const STYLES = {
-    stack: {
+    stack: (isEditMode: boolean) => ({
         width: "100%",
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gridTemplateColumns: `repeat(auto-fit, minmax(${isEditMode ? 280 : 180}px, 1fr))`,
         gap: "24px",
         justifyItems: "center",
         marginTop: "24px",
         "& > *": {
-            minWidth: "280px",
+            minWidth: isEditMode ? "280px" : "180px",
             width: "100%",
             maxWidth: "420px",
         },
-    },
+    }),
 };
 
 interface IProps {
     editedMachinery: IMachinery | INewMachinery | null;
+    errors?: ValidationErrors;
     isEditMode?: boolean;
     machineryFieldChangeHandler: (e: ChangeEvent<HTMLInputElement
         | HTMLTextAreaElement> | SelectChangeEvent<string | unknown>) => void
 }
 
-const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machineryFieldChangeHandler}) => {
-    const yearOptions = useMemo(() => yearsManufacture.map(year => ({ id: year, title: year })), []);
+const MachineryView: FC<IProps> = ({editedMachinery, errors, isEditMode = false, machineryFieldChangeHandler}) => {
+    const yearOptions = useMemo(() => yearsManufacture.map(year => ({id: year, title: year})), []);
     if (!editedMachinery) return null;
     return (
         <>
@@ -42,12 +44,13 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                 <Typography variant="h5" color="primary">
                     Основные сведения:
                 </Typography>
-                <Stack spacing={3} sx={STYLES.stack}>
+                <Stack spacing={2} sx={STYLES.stack(isEditMode)}>
                     <FieldControl
                         label="Тип техники"
                         name="type_id"
                         id="type_id"
                         value={editedMachinery.type_id}
+                        error={errors?.type_id}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         options={machineryTypes}
@@ -58,6 +61,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="engine_type_id"
                         id="engine_type_id"
                         value={editedMachinery.engine_type_id}
+                        error={errors?.engine_type_id}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         options={engineTypes}
@@ -68,6 +72,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="year_manufacture"
                         id="year_manufacture"
                         value={`${editedMachinery.year_manufacture}`}
+                        error={errors?.year_manufacture}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         options={yearOptions}
@@ -78,6 +83,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="brand"
                         id="brand"
                         value={editedMachinery.brand}
+                        error={errors?.brand}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         isRequired
@@ -87,6 +93,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="model"
                         id="model"
                         value={editedMachinery.model}
+                        error={errors?.model}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         isRequired
@@ -96,6 +103,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="vin"
                         id="vin"
                         value={editedMachinery.vin}
+                        error={errors?.vin}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
@@ -104,6 +112,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="state_number"
                         id="state_number"
                         value={editedMachinery.state_number}
+                        error={errors?.state_number}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
@@ -113,12 +122,13 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                 <Typography variant="h5" color="primary">
                     Дополнительные сведения:
                 </Typography>
-                <Stack spacing={3} sx={STYLES.stack}>
+                <Stack spacing={2} sx={STYLES.stack(isEditMode)}>
                     <FieldControl
                         label="Тип движетеля"
                         name="traction_type_id"
                         id="traction_type_id"
                         value={editedMachinery.traction_type_id}
+                        error={errors?.traction_type_id}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         options={tractionTypes}
@@ -128,6 +138,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="transmission_type_id"
                         id="transmission_type_id"
                         value={editedMachinery.transmission_type_id}
+                        error={errors?.transmission_type_id}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                         options={transmissionTypes}
@@ -137,6 +148,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="engine_brand"
                         id="engine_brand"
                         value={editedMachinery.engine_brand}
+                        error={errors?.engine_brand}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
@@ -145,6 +157,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="engine_model"
                         id="engine_model"
                         value={editedMachinery.engine_model}
+                        error={errors?.engine_model}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
@@ -153,6 +166,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="transmission_brand"
                         id="transmission_brand"
                         value={editedMachinery.transmission_brand}
+                        error={errors?.transmission_brand}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
@@ -161,6 +175,7 @@ const MachineryView: FC<IProps> = ({editedMachinery, isEditMode = false, machine
                         name="transmission_model"
                         id="transmission_model"
                         value={editedMachinery.transmission_model}
+                        error={errors?.transmission_model}
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />

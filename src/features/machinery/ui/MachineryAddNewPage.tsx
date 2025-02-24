@@ -1,57 +1,40 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
-import {SelectChangeEvent, Stack, Typography} from "@mui/material";
+import React, {useEffect} from "react";
+import {Stack, Typography} from "@mui/material";
 import PhotosManager from "../../../components/common/PhotosManager";
 import MachineryView from "./MachineryView";
 import Button from "@mui/material/Button";
 import {useAppDispatch} from "../../../hooks/redux";
-import {MachineryStatus} from "../../../utils/const";
 import {INewMachinery} from "../../../models/iMachinery";
 import usePhotoManager from "../../../hooks/usePhotoManager";
 import {fetchAddMachinery} from "../model/actions";
 import {Link, useNavigate} from "react-router-dom";
 import {routes} from "../../../utils/routes";
-
-const emptyMachinery = {
-    brand: "",
-    model: "",
-    year_manufacture: -1,
-    type_id: -1,
-    engine_type_id: -1,
-    vin: "",
-    state_number: "",
-    status: MachineryStatus.active,
-    photos: [],
-    traction_type_id: -1,
-    transmission_type_id: -1,
-    working_equipment: "",
-    engine_brand: "",
-    engine_model: "",
-    transmission_brand: "",
-    transmission_model: "",
-};
+import {useEditor} from "../../../hooks/useEditor";
+import {machineryValidate} from "../../../utils/validators";
+import {emptyMachinery} from "../utils/const";
 
 const MachineryAddNewPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [editedMachinery, setEditedMachinery] = useState<INewMachinery>(emptyMachinery);
     const {tempFiles, onAddPhoto, onDeletePhoto, clearPhotos} = usePhotoManager();
+    const {
+        editedValue,
+        errors,
+        handleFieldChange,
+        resetValue,
+    } = useEditor<INewMachinery>({initialValue: emptyMachinery, validate: machineryValidate});
     useEffect(() => {
         return () => {
             clearPhotos();
         };
     }, []);
-    const machineryFieldChangeHandler = (e: ChangeEvent<HTMLInputElement
-            | HTMLTextAreaElement>
-        | SelectChangeEvent<string | unknown>) => {
-        setEditedMachinery(prev => ({...prev, [e.target.name]: e.target.value}));
-    };
     const handleAddClick = async () => {
         dispatch(fetchAddMachinery({
-            newMachinery: editedMachinery,
+            newMachinery: editedValue,
             files: tempFiles.map(fileData => fileData.file),
         }));
         clearPhotos();
-        setEditedMachinery(emptyMachinery);
+        resetValue();
         navigate(routes.machinery);
     };
     return (
@@ -67,12 +50,14 @@ const MachineryAddNewPage = () => {
                 </Typography>
                 <Button onClick={handleAddClick}
                         variant={"contained"}
-                        color={"success"}>
+                        color={"success"}
+                        disabled={!!Object.keys(errors).length}>
                     Сохранить
                 </Button>
             </Stack>
-            <MachineryView editedMachinery={editedMachinery}
-                           machineryFieldChangeHandler={machineryFieldChangeHandler}
+            <MachineryView editedMachinery={editedValue}
+                           errors={errors}
+                           machineryFieldChangeHandler={handleFieldChange}
                            isEditMode={true}/>
             <PhotosManager onAddPhoto={onAddPhoto}
                            onDeletePhoto={onDeletePhoto}

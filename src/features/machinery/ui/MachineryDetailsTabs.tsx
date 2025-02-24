@@ -1,18 +1,13 @@
 import React, {FC, useState} from "react";
 import Box from "@mui/material/Box";
-import {Stack, Tab, Tabs} from "@mui/material";
+import {Tab, Tabs} from "@mui/material";
 import MachineryDetailsDocs from "./docs/MachineryDetailsDocs";
 import Comments from "../../../components/common/comments/Comments";
-import Button from "@mui/material/Button";
-import {MachineryStatus} from "../../../utils/const";
-import {MachineryStatusType} from "../../../models/iMachinery";
-import {
-    fetchUpdateMachinery,
-} from "../model/actions";
-import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
-import {getCurrentMachinery, getMachineryIsLoading} from "../model/selectors";
+import {useAppSelector} from "../../../hooks/redux";
+import {getCurrentMachinery} from "../model/selectors";
 import {TaskList} from "./tasks/TasksList";
 import Problems from "./problems/Problems";
+import MachineryDetailsTabsReport from "./MachineryDetailsTabsReport";
 
 interface CustomTabPanelProps {
     children?: React.ReactNode;
@@ -43,64 +38,40 @@ function a11yProps(index: number) {
 }
 
 const MachineryDetailsTabs: FC = () => {
-    const isLoading = useAppSelector(getMachineryIsLoading);
     const machinery = useAppSelector(getCurrentMachinery);
-    const dispatch = useAppDispatch();
     const [value, setValue] = useState<number>(0);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
-    };
-    const changeMachineryStatusHandler = () => {
-        let newStatus: MachineryStatusType = MachineryStatus.disActive;
-        if (machinery?.status && machinery.status === MachineryStatus.disActive) {
-            newStatus = MachineryStatus.active;
-            dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
-        }
     };
     return (
         <Box sx={{width: "100%"}}>
             <Box sx={{borderBottom: 1, borderColor: "divider"}}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Документы" {...a11yProps(0)} />
-                    <Tab label="Замечания" {...a11yProps(1)} />
-                    <Tab label="Задачи" {...a11yProps(2)} />
-                    <Tab label="Заявки" {...a11yProps(3)} />
-                    <Tab label="Заметки" {...a11yProps(4)} />
-                    <Tab label="Действия" {...a11yProps(5)} />
+                    <Tab label="Обзор" {...a11yProps(0)} />
+                    <Tab label="Документы" {...a11yProps(1)} />
+                    <Tab label="Проблемы" {...a11yProps(2)} />
+                    <Tab label="Задачи" {...a11yProps(3)} />
+                    <Tab label="Заявки" {...a11yProps(4)} />
+                    <Tab label="Заметки" {...a11yProps(5)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                {machinery && (
-                    <MachineryDetailsDocs/>
-                )}
+                <MachineryDetailsTabsReport/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <Problems problems={machinery?.problems || null}/>
+                <MachineryDetailsDocs/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <TaskList/>
+                <Problems problems={machinery?.problems || null}/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-                Заявки
+                <TaskList/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
-                <Comments comments={machinery?.comments || null}/>
+                Заявки
             </CustomTabPanel>
             <CustomTabPanel value={value} index={5}>
-                <Stack>
-                    <Button variant="contained"
-                            color={machinery && machinery.status && machinery.status === MachineryStatus.disActive
-                                ? "success"
-                                : "error"}
-                            disabled={isLoading}
-                            onClick={changeMachineryStatusHandler}
-                            sx={{width: "150px"}}>
-                        {machinery && machinery.status && machinery.status === MachineryStatus.disActive
-                            ? "Востановить"
-                            : "Списать"
-                        }
-                    </Button>
-                </Stack>
+                <Comments comments={machinery?.comments || null}/>
             </CustomTabPanel>
         </Box>
     );

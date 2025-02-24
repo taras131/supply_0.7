@@ -1,5 +1,7 @@
 import {ICategory, INewProblem} from "../../../models/IProblems";
 import {ITaskPriority, ITaskStatus} from "../../../models/ITasks";
+import {INewMachinery} from "../../../models/iMachinery";
+import {MachineryStatus} from "../../../utils/const";
 
 export const engineTypes = [
     {id: 0, title: "Дизельный"},
@@ -209,4 +211,23 @@ export const emptyProblem: INewProblem = {
     priority_id: 0,
     category_id: 0,
     subcategory_id: 0,
+};
+
+export const emptyMachinery: INewMachinery = {
+    brand: "",
+    model: "",
+    year_manufacture: -1,
+    type_id: -1,
+    engine_type_id: -1,
+    vin: "",
+    state_number: "",
+    status: MachineryStatus.active,
+    photos: [],
+    traction_type_id: -1,
+    transmission_type_id: -1,
+    working_equipment: "",
+    engine_brand: "",
+    engine_model: "",
+    transmission_brand: "",
+    transmission_model: "",
 };

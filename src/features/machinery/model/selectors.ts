@@ -23,6 +23,7 @@ export const getMachineryById = (state: RootState, machineryId: number): IMachin
     return state.machinery.list.filter(machinery => machinery.id !== machineryId)[0];
 };
 
+
 export const getMachineryByTypeId = (state: RootState, typeId: number) => {
     return state.machinery.list.filter((machinery) => machinery.type_id === typeId);
 };
@@ -34,6 +35,16 @@ export const getCurrentMachinery = (state: RootState): ICurrentMachinery | null 
 export const getCurrentMachineryDocs = (state: RootState): IMachineryDoc[] | null => {
     return state.machinery.currentMachinery?.docs || null;
 };
+
+export const getCurrentMachineryTitle = (state: RootState): string => {
+    const currentMachinery = getCurrentMachinery(state);
+    if (currentMachinery) {
+        return `${currentMachinery.brand} ${currentMachinery.model}`;
+    } else {
+        return "";
+    }
+};
+
 
 export const getCurrentMachineryId = (state: RootState): number | null => {
     return state.machinery.currentMachinery?.id || null;
