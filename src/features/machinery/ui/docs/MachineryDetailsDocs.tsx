@@ -19,7 +19,7 @@ const MachineryDetailsDocs: FC = () => {
                 }}
             >
                 <MachineryDetailsDocsAddNew/>
-                {docList && docList}
+                {docList}
             </Box>)}
         </div>
     );

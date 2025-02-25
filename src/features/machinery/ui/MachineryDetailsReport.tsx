@@ -3,7 +3,7 @@ import {Stack, Typography} from "@mui/material";
 import MachineryView from "./MachineryView";
 import Box from "@mui/material/Box";
 import MachineryDetailsPhotos from "./MachineryDetailsPhotos";
-import {ICurrentMachinery, MachineryStatusType} from "../../../models/iMachinery";
+import {ICurrentMachinery, INewMachinery, MachineryStatusType} from "../../../models/iMachinery";
 import {useEditor} from "../../../hooks/useEditor";
 import {machineryValidate} from "../../../utils/validators";
 import {fetchUpdateMachinery} from "../model/actions";
@@ -13,8 +13,9 @@ import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {getCurrentMachinery, getMachineryIsLoading} from "../model/selectors";
 import {MachineryStatus} from "../../../utils/const";
+import {defaultMachinery} from "../utils/const";
 
-const MachineryDetailsTabsReport: FC = () => {
+const MachineryDetailsReport: FC = () => {
     const dispatch = useAppDispatch();
     const machinery = useAppSelector(getCurrentMachinery);
     const isLoading = useAppSelector(getMachineryIsLoading);
@@ -30,7 +31,7 @@ const MachineryDetailsTabsReport: FC = () => {
         setEditedValue,
         handleFieldChange,
     } = useEditor<ICurrentMachinery>({
-        initialValue: machinery,
+        initialValue: machinery ?? defaultMachinery,
         validate: machineryValidate,
     });
     if (!machinery) return null;
@@ -51,8 +52,8 @@ const MachineryDetailsTabsReport: FC = () => {
         let newStatus: MachineryStatusType = MachineryStatus.disActive;
         if (machinery?.status && machinery.status === MachineryStatus.disActive) {
             newStatus = MachineryStatus.active;
-            dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
         }
+        dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
     };
     return (
         <Box
@@ -73,12 +74,23 @@ const MachineryDetailsTabsReport: FC = () => {
             <Box sx={{flexGrow: 1}}>
                 <MachineryDetailsPhotos machinery={machinery} isEditMode={isEditMode}/>
             </Box>
-            <Stack direction="row">
-                {isEditMode && (
-                    <>
-                        <Button onClick={cancelUpdateMachineryHandler} variant={"contained"} color="error">
+            <Box></Box>
+            <Stack direction="row" sx={{width: "100%"}} alignItems="center" justifyContent="end" spacing={2}>
+                {isEditMode
+                    ? (<>
+                        <Button onClick={cancelUpdateMachineryHandler}
+                                variant={"outlined"} >
                             Отменить
                         </Button>
+                        <LoadingButton onClick={updateMachineryHandler}
+                                       variant={"contained"}
+                                       loading={isLoading}
+                                       disabled={!!Object.keys(errors).length}
+                                       color={"success"}>
+                            Сохранить
+                        </LoadingButton>
+                    </>)
+                    : (<>
                         <Button variant="contained"
                                 color={machinery && machinery.status && machinery.status === MachineryStatus.disActive
                                     ? "success"
@@ -91,18 +103,16 @@ const MachineryDetailsTabsReport: FC = () => {
                                 : "Списать"
                             }
                         </Button>
-                    </>
-                )}
-                <LoadingButton onClick={isEditMode ? updateMachineryHandler : toggleIsEditMode}
-                               variant={"contained"}
-                               loading={isLoading}
-                               disabled={isEditMode && !!Object.keys(errors).length}
-                               color={isEditMode ? "success" : "primary"}>
-                    {isEditMode ? "Сохранить" : "Редактировать"}
-                </LoadingButton>
+                        <LoadingButton onClick={toggleIsEditMode}
+                                       variant={"contained"}
+                                       loading={isLoading}
+                                       color="primary">
+                            Редактировать
+                        </LoadingButton>
+                    </>)}
             </Stack>
         </Box>
     );
 };
 
-export default MachineryDetailsTabsReport;
+export default MachineryDetailsReport;

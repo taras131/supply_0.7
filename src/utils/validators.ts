@@ -1,4 +1,4 @@
-import {ICurrentMachinery, INewMachinery} from "../models/iMachinery";
+import {ICurrentMachinery, IDoc, INewMachinery} from "../models/iMachinery";
 
 export type ValidationErrors = { [key: string]: string | null };
 
@@ -14,13 +14,22 @@ export const machineryValidate = (machinery: ICurrentMachinery | INewMachinery) 
         if (machinery.type_id < 0) errors.type_id = "Выберите тип техники";
         if (machinery.engine_type_id < 0) errors.engine_type_id = "Выберите тип двигателя";
         if (machinery.year_manufacture < 0) errors.year_manufacture = "Выберите год производства";
+        if (machinery.operating_type_id < 0) errors.operating_type_id = "Выберите еденицы измерения";
         if (machinery.vin.trim().length > 32) errors.vin = "VIN должен быть не длиннее 32 символов";
         if (machinery.state_number.trim().length > 32) errors.state_number = "Гос. номер должен быть не длиннее 32 символов";
         if (machinery.working_equipment.trim().length > 32) errors.working_equipment = "Поле должно быть не длиннее 32 символов";
+        if (machinery.frame_number?.trim().length > 32) errors.frame_number = "Поле должно быть не длиннее 32 символов";
         if (machinery.engine_brand.trim().length > 32) errors.engine_brand = "Марка двигателя должна быть не длиннее 32 символов";
         if (machinery.engine_model.trim().length > 32) errors.engine_model = "Модель двигателя должна быть не длиннее 32 символов";
         if (machinery.transmission_brand.trim().length > 32) errors.transmission_brand = "Марка трансмиссии должна быть не длиннее 32 символов";
         if (machinery.transmission_model.trim().length > 32) errors.transmission_model = "Модель трансмиссии должна быть не длиннее 32 символов";
     }
+    return errors;
+};
+
+export const docValidate = (doc: IDoc) => {
+    const errors: ValidationErrors = {};
+    if(doc.docTitle.length < 3) errors.docTitle = "Название должно быть не менее 2 символов";
+    if(doc.docTitle.length > 32) errors.docTitle = "Название должно быть не длиннее 32 символов";
     return errors;
 };

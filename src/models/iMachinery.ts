@@ -29,11 +29,13 @@ export interface INewMachinery {
     photos: string[];
     traction_type_id: number;
     transmission_type_id: number;
+    operating_type_id: number;
     working_equipment: string;
     engine_brand: string;
     engine_model: string;
     transmission_brand: string;
     transmission_model: string;
+    frame_number: string;
 }
 
 export interface IMachinery extends INewMachinery {
@@ -47,4 +49,8 @@ export interface ICurrentMachinery extends IMachinery {
     docs: IMachineryDoc[];
     tasks: ITask[];
     problems: IProblem[];
+}
+
+export interface IDoc {
+    docTitle: string
 }

@@ -2,9 +2,6 @@ import {useState, useCallback} from "react";
 import {ChangeEvent} from "react";
 import {SelectChangeEvent} from "@mui/material";
 
-/**
- * Типы для объектов Machinery
- */
 interface IBase {
     [key: string]: any;
 }
@@ -28,7 +25,6 @@ export function useEditor<T extends IBase>({
             const {name, value} = e.target;
             setEditedValue((prev) => {
                 const newValue = {...prev, [name]: value};
-                // Прямая валидация нового значения
                 if (validate) {
                     const newErrors = validate(newValue);
                     setErrors(newErrors);

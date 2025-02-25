@@ -1,18 +1,20 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import {Backdrop, CardActions, CardMedia, Modal, Stack} from "@mui/material";
 import Button from "@mui/material/Button";
 import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
-import {getCurrentMachineryId, getMachineryIsLoading} from "../../model/selectors";
+import {getCurrentMachineryId} from "../../model/selectors";
 import {styled} from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
-import {CENTER, ROW, SPACE_BETWEEN} from "../../../../styles/const";
-import Box from "@mui/material/Box";
 import placeholderImage from "../../../../assets/images/fileUploadPlaceholder.png";
 import {fetchAddMachineryDoc} from "../../model/actions";
 import PhotosManager from "../../../../components/common/PhotosManager";
+import FieldControl from "../../../../components/common/FieldControl";
+import {useEditor} from "../../../../hooks/useEditor";
+import {IDoc} from "../../../../models/iMachinery";
+import {docValidate} from "../../../../utils/validators";
+import usePhotoManager from "../../../../hooks/usePhotoManager";
 
 const AnimatedCard = styled(Card)(() => ({
     transition: "all 0.3s ease-in-out",
@@ -22,7 +24,6 @@ const AnimatedCard = styled(Card)(() => ({
     },
 }));
 
-// Стили для модального окна
 const ModalCard = styled(Card)(() => ({
     position: "absolute",
     top: "50%",
@@ -34,67 +35,48 @@ const ModalCard = styled(Card)(() => ({
     transition: "all 0.3s ease-in-out",
 }));
 
-
-const VisuallyHiddenInput = styled("input")({
-    position: "absolute",
-    width: 1,
-    height: 1,
-    padding: 0,
-    margin: -1,
-    overflow: "hidden",
-    border: "none",
-    clip: "rect(0 0 0 0)",
-    whiteSpace: "nowrap",
-    clipPath: "inset(50%)",
-});
-
+const initialDoc: IDoc = {docTitle: ""};
 
 const MachineryDetailsDocsAddNew = () => {
     const dispatch = useAppDispatch();
     const machineryId = useAppSelector(getCurrentMachineryId);
     const [isOpen, setIsOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [file, setFile] = useState<File | null>(null);
-    const isLoading = useAppSelector(getMachineryIsLoading);
+    const {tempFiles, onAddPhoto, onDeletePhoto, clearPhotos} = usePhotoManager();
+    const {
+        editedValue,
+        errors,
+        resetValue,
+        handleFieldChange,
+    } = useEditor<IDoc>({
+        initialValue: initialDoc,
+        validate: docValidate,
+    });
+    useEffect(() => {
+        return () => clearPhotos();
+    }, []);
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => {
         setIsOpen(false);
-        setFile(null);
-        setTitle("");
+        clearPhotos();
+        resetValue();
     };
     if (!machineryId) return null;
-    const titleChangeHandler = (e: ChangeEvent<HTMLInputElement
-        | HTMLTextAreaElement>) => {
-        setTitle(e.target.value);
-    };
-    const photoUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-        }
-    };
     const addDocClickHandler = () => {
-        if (file && title) {
+        if (tempFiles[0] && Object.keys(errors).length === 0) {
             const formData = new FormData();
-            formData.append("file", file);
+            formData.append("file", tempFiles[0].file);
             dispatch(fetchAddMachineryDoc({
-                doc: {title: title, machinery_id: machineryId},
+                doc: {title: editedValue.docTitle, machinery_id: machineryId},
                 formData: formData,
             }));
         }
         handleClose();
     };
-    const addPhotoHandler = (newFile: File) => {
-        setFile(newFile);
-    };
-    const deletePhotoHandler = () => {
-        setFile(null);
-    };
     return (
         <>
             <AnimatedCard sx={{minWidth: 225}} onClick={handleOpen}>
                 <CardContent>
-                    <Typography variant="h5" component="div" textAlign={CENTER}>
+                    <Typography color="primary" variant="h5" component="div" textAlign="center">
                         Добавить документ
                     </Typography>
                     <CardMedia
@@ -107,7 +89,7 @@ const MachineryDetailsDocsAddNew = () => {
                             maxHeight: 200,
                         }}
                     />
-                    <Typography sx={{color: "text.secondary", mb: 1.5}} textAlign={CENTER}>
+                    <Typography sx={{color: "text.secondary", mb: 1.5}} textAlign="center">
                         Кликните на карточку , чтобы добавить новый документ
                     </Typography>
                 </CardContent>
@@ -116,61 +98,52 @@ const MachineryDetailsDocsAddNew = () => {
                 open={isOpen}
                 onClose={handleClose}
                 closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
+                slots={{
+                    backdrop: Backdrop,
+                }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
                 }}
             >
-                <ModalCard sx={{padding: "25px", position: "relative"}}>
+                <ModalCard sx={{padding: "24px", position: "relative"}}>
                     <CardContent>
                         <Stack spacing={4}>
-                            <Typography variant="h4" fontWeight={700} fontSize={"26px"}>
+                            <Typography color="primary" variant="h5" fontWeight={700} fontSize={"26px"}>
                                 Добавление нового документа:
                             </Typography>
                             <PhotosManager
-                                photosPaths={file ? [URL.createObjectURL(file)] : []}
-                                onAddPhoto={addPhotoHandler}
-                                onDeletePhoto={deletePhotoHandler}
+                                photosPaths={tempFiles.map(file => file.preview)}
+                                onAddPhoto={onAddPhoto}
+                                onDeletePhoto={onDeletePhoto}
                                 isViewingOnly={false}
                                 photosCountLimit={1}
                             />
                         </Stack>
                     </CardContent>
                     <CardActions>
-                        <Stack spacing={4}
-                               alignItems={CENTER}
-                               justifyContent={CENTER}
+                        <Stack spacing={2}
+                               direction="row"
+                               alignItems="center"
+                               justifyContent="space-between"
                                sx={{width: "100%"}}>
-                            <TextField id="outlined-basic"
-                                       fullWidth
-                                       label="Наименование"
-                                       variant="outlined"
-                                       name="title"
-                                       onChange={titleChangeHandler}
-                                       value={title}/>
-                            <Stack sx={{width: "100%"}} direction={ROW} alignItems={CENTER}
-                                   justifyContent={SPACE_BETWEEN}>
-                                <Button
-                                    component="label"
-                                    variant="contained"
-                                    tabIndex={-1}
-                                    disabled={isLoading}
-                                >
-                                    {file ? "Изменить файл" : "Загрузить файл"}
-                                    <VisuallyHiddenInput
-                                        type="file"
-                                        onChange={photoUploadHandler}
-                                        accept="image/jpeg, image/png, image/jpg"
-                                        multiple
-                                    />
-                                </Button>
-                                <Button variant={"contained"}
-                                        onClick={addDocClickHandler}
-                                        color={"success"}
-                                        disabled={title.length === 0 || !file}>
-                                    Добавить
-                                </Button>
-                            </Stack>
+                            <FieldControl
+                                label="Название документа"
+                                name="docTitle"
+                                id="docTitle"
+                                value={editedValue.docTitle}
+                                error={errors?.docTitle}
+                                isEditMode={true}
+                                isRequired
+                                onChange={handleFieldChange}
+                            />
+                            <Button variant={"contained"}
+                                    onClick={addDocClickHandler}
+                                    color={"success"}
+                                    disabled={Object.keys(errors).length > 0 || tempFiles.length === 0}>
+                                Добавить
+                            </Button>
                         </Stack>
                     </CardActions>
                     <Button sx={{position: "absolute", top: "6px", right: "6px"}}

@@ -1,6 +1,6 @@
 import {ICategory, INewProblem} from "../../../models/IProblems";
-import {ITaskPriority, ITaskStatus} from "../../../models/ITasks";
-import {INewMachinery} from "../../../models/iMachinery";
+import { ITaskPriority, ITaskStatus} from "../../../models/ITasks";
+import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
 import {MachineryStatus} from "../../../utils/const";
 
 export const engineTypes = [
@@ -20,6 +20,11 @@ export const tractionTypes = [
 export const transmissionTypes = [
     {id: 0, title: "Механическая"},
     {id: 1, title: "Гидростатическая"},
+];
+
+export const operatingTypes = [
+    {id: 0, title: "Час"},
+    {id: 1, title: "Километр"},
 ];
 
 export const machineryTypes = [
@@ -219,6 +224,7 @@ export const emptyMachinery: INewMachinery = {
     year_manufacture: -1,
     type_id: -1,
     engine_type_id: -1,
+    operating_type_id: -1,
     vin: "",
     state_number: "",
     status: MachineryStatus.active,
@@ -230,4 +236,15 @@ export const emptyMachinery: INewMachinery = {
     engine_model: "",
     transmission_brand: "",
     transmission_model: "",
+    frame_number: "",
+};
+
+export const defaultMachinery: ICurrentMachinery = {
+    ...emptyMachinery,
+    id: 0,
+    created_date: Date.now(),
+    updated_date: Date.now(),
+    docs: [],
+    tasks: [],
+    problems: [],
 };

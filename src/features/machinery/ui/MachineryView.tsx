@@ -6,10 +6,11 @@ import {
     Typography,
 } from "@mui/material";
 import {yearsManufacture} from "../../../utils/const";
-import {engineTypes, machineryTypes, tractionTypes, transmissionTypes} from "../utils/const";
+import {engineTypes, machineryTypes, operatingTypes, tractionTypes, transmissionTypes} from "../utils/const";
 import Card from "@mui/material/Card";
 import FieldControl from "../../../components/common/FieldControl";
 import {ValidationErrors} from "../../../utils/validators";
+import {convertMillisecondsToDate} from "../../../utils/services";
 
 const STYLES = {
     stack: (isEditMode: boolean) => ({
@@ -79,6 +80,17 @@ const MachineryView: FC<IProps> = ({editedMachinery, errors, isEditMode = false,
                         isRequired
                     />
                     <FieldControl
+                        label="Ед. измерения наработки"
+                        name="operating_type_id"
+                        id="operating_type_id"
+                        value={editedMachinery.operating_type_id}
+                        error={errors?.operating_type_id}
+                        isEditMode={isEditMode}
+                        onChange={machineryFieldChangeHandler}
+                        options={operatingTypes}
+                        isRequired
+                    />
+                    <FieldControl
                         label="Марка"
                         name="brand"
                         id="brand"
@@ -134,6 +146,15 @@ const MachineryView: FC<IProps> = ({editedMachinery, errors, isEditMode = false,
                         options={tractionTypes}
                     />
                     <FieldControl
+                        label="Номер шасси / рамы"
+                        name="frame_number"
+                        id="frame_number"
+                        value={editedMachinery.frame_number}
+                        error={errors?.frame_number}
+                        isEditMode={isEditMode}
+                        onChange={machineryFieldChangeHandler}
+                    />
+                    <FieldControl
                         label="Тип трансмисии"
                         name="transmission_type_id"
                         id="transmission_type_id"
@@ -179,6 +200,30 @@ const MachineryView: FC<IProps> = ({editedMachinery, errors, isEditMode = false,
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
+                    {"created_date" in editedMachinery && "updated_date" in editedMachinery && !isEditMode && (<>
+                        <FieldControl
+                            label="Статус"
+                            name="status"
+                            id="status"
+                            value={editedMachinery.status}
+                            isEditMode={isEditMode}
+                            onChange={machineryFieldChangeHandler}/>
+                        <FieldControl
+                            label="Добавлена"
+                            name="created_date"
+                            id="created_date"
+                            value={convertMillisecondsToDate(editedMachinery.created_date)}
+                            isEditMode={isEditMode}
+                            onChange={machineryFieldChangeHandler}/>
+                        <FieldControl
+                            label="Обновлена"
+                            name="updated_date"
+                            id="updated_date"
+                            value={convertMillisecondsToDate(editedMachinery.updated_date)}
+                            isEditMode={isEditMode}
+                            onChange={machineryFieldChangeHandler}/>
+
+                    </>)}
                 </Stack>
             </Card>
         </>

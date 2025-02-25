@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import SideBar from "./SideBar";
 import Header from "./Header";
+import backgroundImage from "../assets/images/background.jpg";
 
 interface IProps {
     children: React.ReactNode;
@@ -29,16 +30,24 @@ const Layout: FC<IProps> = ({children}) => {
                         "--SideNav-zIndex": 1100,
                         "--MobileNav-width": "320px",
                         "--MobileNav-zIndex": 1100,
+
                     },
                 }}
             />
             <Box
                 sx={{
-                    bgcolor: "var(--mui-palette-background-default)",
                     display: "flex",
                     flexDirection: "column",
                     position: "relative",
                     minHeight: "100%",
+             /*       backgroundImage: `linear-gradient(
+                    rgba(0, 0, 0, 0.7),
+                    rgba(0, 0, 0, 0.7)
+                    ), url(${backgroundImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "repeat",*/
+
                 }}
             >
                 <SideBar open={open} handleDrawerClose={handleDrawerClose}/>

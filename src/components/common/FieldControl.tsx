@@ -3,23 +3,21 @@ import {styled} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import {FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent, Typography} from "@mui/material";
 
-const StyledInput = styled(TextField)<{ isError?: boolean }>(({theme, isError}) => ({
+const StyledInput = styled(TextField, {
+    shouldForwardProp: (prop) => prop !== "isError",
+})<{ isError?: boolean }>(({ theme, isError }) => ({
     "label + &": {
         marginTop: theme.spacing(2),
     },
     "& .MuiInputBase-input": {
         borderRadius: 4,
         position: "relative",
-        backgroundColor: isError ? "#FFFBE6" : "#E8F5E9", // Желтый для ошибки и зеленый для нормального
+        backgroundColor: isError ? "#FFFBE6" : "#E8F5E9",
         border: "1px solid",
-        borderColor: isError ? "#FFC107" : "#4CAF50", // Желтая граница для ошибки и зеленая граница для нормального
+        borderColor: isError ? "#FFC107" : "#4CAF50",
         fontSize: 16,
         padding: "10px 12px",
-        transition: theme.transitions.create([
-            "border-color",
-            "background-color",
-            "box-shadow",
-        ]),
+        transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
         ...theme.applyStyles("dark", {
             backgroundColor: isError ? "#423A00" : "#1B5E20",
             borderColor: isError ? "#FFD54F" : "#66BB6A",
@@ -27,23 +25,21 @@ const StyledInput = styled(TextField)<{ isError?: boolean }>(({theme, isError}) 
     },
 }));
 
-const StyledSelect = styled(Select)<{ isError?: boolean }>(({theme, isError}) => ({
+const StyledSelect = styled(Select, {
+    shouldForwardProp: (prop) => prop !== "isError",
+})<{ isError?: boolean }>(({ theme, isError }) => ({
     "label + &": {
         marginTop: theme.spacing(2),
     },
     "& .MuiInputBase-input": {
         borderRadius: 4,
         position: "relative",
-        backgroundColor: isError ? "#FFFBE6" : "#E8F5E9", // Желтый для ошибки и зеленый для нормального
+        backgroundColor: isError ? "#FFFBE6" : "#E8F5E9",
         border: "1px solid",
-        borderColor: isError ? "#FFC107" : "#4CAF50", // Желтые границы для ошибки и зеленые для нормального
+        borderColor: isError ? "#FFC107" : "#4CAF50",
         fontSize: 16,
         padding: "10px 12px",
-        transition: theme.transitions.create([
-            "border-color",
-            "background-color",
-            "box-shadow",
-        ]),
+        transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
         ...theme.applyStyles("dark", {
             backgroundColor: isError ? "#423A00" : "#1B5E20",
             borderColor: isError ? "#FFD54F" : "#66BB6A",

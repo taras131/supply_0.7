@@ -7,7 +7,7 @@ import {useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachinery} from "../model/selectors";
 import {TaskList} from "./tasks/TasksList";
 import Problems from "./problems/Problems";
-import MachineryDetailsTabsReport from "./MachineryDetailsTabsReport";
+import MachineryDetailsReport from "./MachineryDetailsReport";
 
 interface CustomTabPanelProps {
     children?: React.ReactNode;
@@ -56,7 +56,7 @@ const MachineryDetailsTabs: FC = () => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <MachineryDetailsTabsReport/>
+                <MachineryDetailsReport/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <MachineryDetailsDocs/>
