@@ -1,5 +1,5 @@
-import {ICategory, INewProblem} from "../../../models/IProblems";
-import { ITaskPriority, ITaskStatus} from "../../../models/ITasks";
+import {INewProblem, IProblem} from "../../../models/IProblems";
+import {INewTask, ITaskPriority, ITaskStatus} from "../../../models/ITasks";
 import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
 import {MachineryStatus} from "../../../utils/const";
 
@@ -78,133 +78,47 @@ export const PRIORITIES = [
     {id: 3, title: "Срочно и важно"},
 ];
 
-export const problemCategories: ICategory[] = [
-    {
-        id: 1,
-        name: "Силовая установка", // Power Unit
-        subcategories: [
-            {id: 101, name: "Двигатель внутреннего сгорания (или электродвигатель)"},
-            {id: 102, name: "Топливная система (бак, насос, форсунки, система впрыска или карбюратор)"},
-            {id: 103, name: "Система выпуска отработавших газов (глушитель, катализатор, резонатор)"},
-            {id: 104, name: "Система охлаждения двигателя (радиатор, термостат, насос, вентилятор)"},
-            {id: 105, name: "Система смазки (масляный насос, фильтр, линии подачи масла)"},
-        ],
-    },
-    {
-        id: 2,
-        name: "Система трансмиссии", // Transmission System
-        subcategories: [
-            {id: 201, name: "Коробка передач (механическая, автоматическая, вариатор, роботизированная)"},
-            {id: 202, name: "Сцепление (или гидротрансформатор в автоматической трансмиссии)"},
-            {id: 203, name: "Карданный вал (при наличии)"},
-            {id: 204, name: "Главная передача (дифференциал, редуктор)"},
-            {id: 205, name: "Приводные валы (шрусы)"},
-        ],
-    },
-    {
-        id: 3,
-        name: "Подвеска и ходовая часть", // Suspension and Chassis
-        subcategories: [
-            {id: 301, name: "Подвеска (амортизаторы, пружины, рычаги, стабилизаторы поперечной устойчивости)"},
-            {id: 302, name: "Шасси и рама (или несущий кузов)"},
-            {id: 303, name: "Колеса и шины"},
-        ],
-    },
-    {
-        id: 4,
-        name: "Тормозная система", // Braking System
-        subcategories: [
-            {id: 401, name: "Дисковые и/или барабанные тормоза (передние/задние)"},
-            {id: 402, name: "Гидравлическая система привода тормозов (тормозная жидкость, трубки, цилиндры)"},
-            {id: 403, name: "ABS (антиблокировочная система)"},
-            {id: 404, name: "Электронные вспомогательные системы (ESP, EBD и т.д.)"},
-        ],
-    },
-    {
-        id: 5,
-        name: "Рулевое управление", // Steering System
-        subcategories: [
-            {id: 501, name: "Механизм рулевого управления (реечный, червячный и т.д.)"},
-            {id: 502, name: "Гидроусилитель (или электроусилитель) руля"},
-            {id: 503, name: "Рулевой привод (тяги, наконечники)"},
-        ],
-    },
-    {
-        id: 6,
-        name: "Электрооборудование", // Electrical Equipment
-        subcategories: [
-            {id: 601, name: "Аккумуляторная батарея"},
-            {id: 602, name: "Генератор и стартёр"},
-            {id: 603, name: "Система зажигания (свечи, катушки зажигания)"},
-            {id: 604, name: "Электропроводка и предохранители"},
-            {id: 605, name: "Фары и освещение (передние, задние, боковые, сигнализация)"},
-            {id: 606, name: "Датчики и электронные блоки управления (ЭБУ)"},
-        ],
-    },
-    {
-        id: 7,
-        name: "Климатическая система", // Climate System
-        subcategories: [
-            {id: 701, name: "Отопитель (печка)"},
-            {id: 702, name: "Кондиционер или система климат-контроля"},
-            {id: 703, name: "Активная вентиляция"},
-        ],
-    },
-    {
-        id: 8,
-        name: "Система безопасности", // Safety System
-        subcategories: [
-            {id: 801, name: "Подушки безопасности (Airbags)"},
-            {id: 802, name: "Ремни безопасности"},
-            {id: 803, name: "Система пассивной безопасности (каркас кузова, зоны деформации)"},
-            {
-                id: 804,
-                name: "Электронные системы помощи водителю (ADAS, системы удержания полосы, контроль слепых зон)",
-            },
-        ],
-    },
-    {
-        id: 9,
-        name: "Кузов и внешний вид", // Body and Exterior
-        subcategories: [
-            {id: 901, name: "Кузовные панели (крыша, капот, двери, крылья)"},
-            {id: 902, name: "Стекла (лобовое, боковые, заднее)"},
-            {id: 903, name: "Зеркала"},
-            {id: 904, name: "Световые приборы (фары, габариты, стоп-сигналы)"},
-        ],
-    },
-    {
-        id: 10,
-        name: "Вспомогательные и дополнительные системы", // Auxiliary and Additional Systems
-        subcategories: [
-            {id: 1001, name: "Система очистки стекол (дворники, омыватели)"},
-            {id: 1002, name: "Система привода стеклоподъемников (механические или электрические)"},
-            {id: 1003, name: "Мультимедиа и развлекательная система"},
-            {id: 1004, name: "Связь (Bluetooth, интернет, экран дисплея, навигация)"},
-            {id: 1005, name: "Багажная система (подъемники, рейлинги)"},
-        ],
-    },
-    {
-        id: 11,
-        name: "Вспомогательные и электрические системы управления двигателем", // Engine Auxiliary and Emission Systems
-        subcategories: [
-            {id: 1101, name: "Турбокомпрессор/Нагнетатель (при наличии)"},
-            {id: 1102, name: "Системы нейтрализации выбросов (AdBlue, EGR, сажевые фильтры)"},
-        ],
-    },
+export const problemCategories = [
+    {id: 1, title: "Силовая установка"},
+    {id: 2, title: "Система трансмиссии"},
+    {id: 3, title: "Подвеска и ходовая часть"},
+    {id: 4, title: "Тормозная система"},
+    {id: 5, title: "Рулевое управление"},
+    {id: 6, title: "Электрооборудование"},
+    {id: 7, title: "Климатическая система"},
+    {id: 8, title: "Система безопасности"},
+    {id: 9, title: "Кузов и внешний вид"},
+    {id: 10, title: "Вспомогательные и дополнительные системы"},
+    {id: 11, title: "Системы управления двигателем"},
+];
+
+export const problemStatus = [
+    {id: 1, title: "Ожидает"},
+    {id: 2, title: "Решается"},
+    {id: 3, title: "Решена"},
+];
+
+export const problemPriority = [
+    {id: 1, title: "Ждёт"},
+    {id: 2, title: "Важно"},
+    {id: 3, title: "Критично"},
 ];
 
 export const taskPriority: ITaskPriority [] = [
-    {id: 0, title: "Не срочно и не важно"},
-    {id: 1, title: "Срочно, но не важно"},
-    {id: 2, title: "Не срочно, но важно"},
-    {id: 3, title: "Срочно и важно"},
+    {id: 1, title: "Не срочно и не важно"},
+    {id: 2, title: "Срочно, но не важно"},
+    {id: 3, title: "Не срочно, но важно"},
+    {id: 4, title: "Срочно и важно"},
 ];
 
 export const taskStatus: ITaskStatus [] = [
     {id: 0, title: "Новая"},
     {id: 1, title: "В работе"},
     {id: 2, title: "Завершена"},
+];
+export const taskTypes: ITaskStatus [] = [
+    {id: 1, title: "Тех обслуживание"},
+    {id: 2, title: "Ремонт"},
 ];
 
 export const emptyProblem: INewProblem = {
@@ -213,9 +127,42 @@ export const emptyProblem: INewProblem = {
     photos: [],
     author_id: 0,
     machinery_id: 0,
-    priority_id: 0,
-    category_id: 0,
-    subcategory_id: 0,
+    priority_id: 2,
+    category_id: -1,
+    operating: 0,
+    odometer: 0,
+    status_id: 1,
+};
+
+export const defaultProblem: IProblem = {
+    title: "",
+    description: "",
+    photos: [],
+    author_id: 0,
+    machinery_id: 0,
+    priority_id: 2,
+    category_id: -1,
+    operating: 0,
+    odometer: 0,
+    status_id: 1,
+    id: 0,
+    created_date: 0,
+    updated_date: 0,
+};
+
+export const emptyTask: INewTask = {
+    title: "",
+    description: "",
+    status_id: 0,
+    priority_id: -1,
+    due_date: 0,
+    author_id: -1,
+    assigned_to_id: -1,
+    machinery_id: -1,
+    issue_photos: [],
+    category_id: -1,
+    problem_id: -1,
+    type_id: -1,
 };
 
 export const emptyMachinery: INewMachinery = {

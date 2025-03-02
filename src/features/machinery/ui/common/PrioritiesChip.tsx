@@ -11,7 +11,7 @@ interface IProps {
 const PrioritiesChip: FC<IProps> = ({priorityId, size = "small"}) => {
     const chipColor = getPriorityColor(priorityId);
     return (
-        <Chip color={chipColor} label={PRIORITIES[priorityId].title} size={size}/>
+        <Chip color={chipColor} label={PRIORITIES[priorityId]?.title} size={size}/>
     );
 };
 

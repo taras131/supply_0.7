@@ -76,7 +76,7 @@ const TaskEdit: FC<IProps> = ({task, onClose}) => {
     if (!editedTask) return null;
     return (
         <Stack spacing={2} sx={{height: "100%", paddingBottom: "16px"}}>
-            <TaskIssueEdit editedTask={editedTask}
+            <v editedTask={editedTask}
                            handleDateChange={handleDateChange}
                            taskFieldChangeHandler={taskFieldChangeHandler}/>
             <PhotosManager

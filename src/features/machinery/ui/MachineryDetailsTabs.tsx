@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import {Tab, Tabs} from "@mui/material";
 import MachineryDetailsDocs from "./docs/MachineryDetailsDocs";
@@ -8,6 +8,7 @@ import {getCurrentMachinery} from "../model/selectors";
 import {TaskList} from "./tasks/TasksList";
 import Problems from "./problems/Problems";
 import MachineryDetailsReport from "./MachineryDetailsReport";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface CustomTabPanelProps {
     children?: React.ReactNode;
@@ -39,10 +40,18 @@ function a11yProps(index: number) {
 
 const MachineryDetailsTabs: FC = () => {
     const machinery = useAppSelector(getCurrentMachinery);
-    const [value, setValue] = useState<number>(0);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const initialTab = parseInt(queryParams.get("tab") || "0", 10);
+    const [value, setValue] = useState<number>(initialTab);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        navigate(`?tab=${newValue}`, {replace: true});
     };
+    useEffect(() => {
+        setValue(initialTab);
+    }, [initialTab]);
     return (
         <Box sx={{width: "100%"}}>
             <Box sx={{borderBottom: 1, borderColor: "divider"}}>

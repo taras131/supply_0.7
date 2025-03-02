@@ -44,7 +44,17 @@ export const getCurrentMachineryTitle = (state: RootState): string => {
         return "";
     }
 };
+export const getCurrentMachineryOperatingTypeId = (state: RootState): number | null => {
+    return state.machinery.currentMachinery?.operating_type_id || null;
+};
 
+export const getProblemById = (state: RootState, problemId: number) =>{
+    return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId);
+};
+
+export const getActiveProblems = (state: RootState) =>{
+    return state.machinery.currentMachinery?.problems.filter(problem => problem.status_id === 1) || [];
+};
 
 export const getCurrentMachineryId = (state: RootState): number | null => {
     return state.machinery.currentMachinery?.id || null;

@@ -1,5 +1,5 @@
-import React, {useMemo, useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TablePagination, TableRow } from "@mui/material";
+import React, {useMemo, useState} from "react";
+import {Table, TableBody, TableCell, TableHead, TablePagination, TableRow, useTheme} from "@mui/material";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -11,6 +11,7 @@ interface BaseTableProps<T> {
     renderCustomRow?: (row: T) => React.ReactNode;
     minWidth?: string;
     onRowClick?: (row: T) => void;
+    activeRowId?: number | null
 }
 
 const BaseTable = <T extends { id: number | string }>({
@@ -19,7 +20,9 @@ const BaseTable = <T extends { id: number | string }>({
                                                           renderCustomRow,
                                                           minWidth = "800px",
                                                           onRowClick,
+                                                          activeRowId,
                                                       }: BaseTableProps<T>) => {
+    const theme = useTheme();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -41,40 +44,51 @@ const BaseTable = <T extends { id: number | string }>({
         if (renderCustomRow) {
             return renderCustomRow(row);
         }
-
         return (
             <TableRow
                 key={row.id}
-                hover={!!onRowClick}
+                hover={!!onRowClick && row.id !== activeRowId}
                 onClick={() => onRowClick?.(row)}
-                sx={{ cursor: onRowClick ? "pointer" : "default" }}
+                sx={{
+                    cursor: onRowClick ? "pointer" : "default",
+                    backgroundColor: row.id === activeRowId
+                        ? theme.palette.info.main
+                        : "transparent",
+                    "& .MuiTableCell-root": {
+                        color: row.id === activeRowId
+                            ? "white" // Белый текст, если строка активная
+                            : "inherit", // Наследование, если строка не активна
+                    },
+                }}
             >
-                {columns.map((column) => (
-                    <TableCell
-                        key={`${row.id}-${column.key}`}
-                        style={{ width: column.width }}
-                    >
-                        {column.formatter
-                            ? column.formatter(column.getValue ? column.getValue(row) : row[column.key as keyof T])
-                            : column.getValue
-                                ? column.getValue(row)
-                                : row[column.key as keyof T]}
-                    </TableCell>
-                ))}
+                {
+                    columns.map((column) => (
+                        <TableCell
+                            key={`${row.id}-${column.key}`}
+                            style={{width: column.width}}
+                        >
+                            {column.formatter
+                                ? column.formatter(column.getValue ? column.getValue(row) : row[column.key as keyof T])
+                                : column.getValue
+                                    ? column.getValue(row)
+                                    : row[column.key as keyof T]}
+                        </TableCell>
+                    ))
+                }
             </TableRow>
         );
     };
 
     return (
         <Card>
-            <Box sx={{ overflowX: "auto" }}>
-                <Table sx={{ minWidth }}>
+            <Box sx={{overflowX: "auto"}}>
+                <Table sx={{minWidth}}>
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
                                 <TableCell
                                     key={column.key}
-                                    style={{ width: column.width }}
+                                    style={{width: column.width}}
                                 >
                                     {column.label}
                                 </TableCell>
@@ -86,7 +100,7 @@ const BaseTable = <T extends { id: number | string }>({
                     </TableBody>
                 </Table>
             </Box>
-            <Divider />
+            <Divider/>
             <TablePagination
                 component="div"
                 count={rows.length}
@@ -97,7 +111,8 @@ const BaseTable = <T extends { id: number | string }>({
                 rowsPerPageOptions={[5, 10, 25]}
             />
         </Card>
-    );
+    )
+        ;
 };
 
 export default BaseTable;

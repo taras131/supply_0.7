@@ -3,7 +3,7 @@ import {Stack, Typography} from "@mui/material";
 import MachineryView from "./MachineryView";
 import Box from "@mui/material/Box";
 import MachineryDetailsPhotos from "./MachineryDetailsPhotos";
-import {ICurrentMachinery, INewMachinery, MachineryStatusType} from "../../../models/iMachinery";
+import {ICurrentMachinery, MachineryStatusType} from "../../../models/iMachinery";
 import {useEditor} from "../../../hooks/useEditor";
 import {machineryValidate} from "../../../utils/validators";
 import {fetchUpdateMachinery} from "../model/actions";
@@ -14,6 +14,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import {getCurrentMachinery, getMachineryIsLoading} from "../model/selectors";
 import {MachineryStatus} from "../../../utils/const";
 import {defaultMachinery} from "../utils/const";
+import ProblemReportItem from "./problems/ProblemReportItem";
 
 const MachineryDetailsReport: FC = () => {
     const dispatch = useAppDispatch();
@@ -55,6 +56,8 @@ const MachineryDetailsReport: FC = () => {
         }
         dispatch(fetchUpdateMachinery({...machinery, status: newStatus}));
     };
+    const lastProblemList = machinery.problems.slice(0,3).map(problem => (<ProblemReportItem key={problem.id}
+                                                                                             problem={problem} />));
     return (
         <Box
             sx={{
@@ -69,7 +72,10 @@ const MachineryDetailsReport: FC = () => {
                            errors={errors}
                            machineryFieldChangeHandler={handleFieldChange}/>
             <Card sx={{padding: "24px"}}>
-                <Typography variant="h5" color="primary">Report</Typography>
+                <Typography variant="h5" color="primary">Последние проблемы:</Typography>
+                <Stack  sx={{marginTop: "12px"}}>
+                    {lastProblemList}
+                </Stack>
             </Card>
             <Box sx={{flexGrow: 1}}>
                 <MachineryDetailsPhotos machinery={machinery} isEditMode={isEditMode}/>

@@ -68,6 +68,8 @@ interface IProps {
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string | unknown>) => void;
     options?: Array<{ id: number | string; title: string | number }>;
     isRequired?: boolean;
+    isMultiline?: boolean; // Новый пропс для многострочного режима
+    rows?: number;
 }
 
 const FieldControl: FC<IProps> = ({
@@ -80,6 +82,8 @@ const FieldControl: FC<IProps> = ({
                                       onChange,
                                       options,
                                       isRequired = false,
+                                      isMultiline = false,
+                                      rows = 3,
                                   }) => (
     <FormControl fullWidth>
         <StyledLabel required={isRequired} shrink htmlFor={id}>
@@ -111,6 +115,8 @@ const FieldControl: FC<IProps> = ({
                     name={name}
                     id={id}
                     isError={!!error}
+                    multiline={isMultiline}
+                    rows={isMultiline ? rows : undefined}
                 />
             )
         ) : (

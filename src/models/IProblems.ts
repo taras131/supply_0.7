@@ -17,7 +17,9 @@ export interface INewProblem {
     machinery_id: number;
     priority_id: number;
     category_id: number;
-    subcategory_id?: number;
+    status_id: number;
+    operating: number;
+    odometer: number;
 }
 
 export interface IProblem extends INewProblem {

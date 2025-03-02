@@ -1,4 +1,6 @@
 import {ICurrentMachinery, IDoc, INewMachinery} from "../models/iMachinery";
+import {INewProblem, IProblem} from "../models/IProblems";
+import {INewTask} from "../models/ITasks";
 
 export type ValidationErrors = { [key: string]: string | null };
 
@@ -31,5 +33,34 @@ export const docValidate = (doc: IDoc) => {
     const errors: ValidationErrors = {};
     if(doc.docTitle.length < 3) errors.docTitle = "Название должно быть не менее 2 символов";
     if(doc.docTitle.length > 32) errors.docTitle = "Название должно быть не длиннее 32 символов";
+    return errors;
+};
+
+export const problemValidate = (problem: IProblem | INewProblem) => {
+    const errors: ValidationErrors = {};
+    if (problem.category_id < 0) errors.category_id = "Выберите категорию";
+    if(+problem.operating === 0 && +problem.odometer === 0 ) {
+        errors.operating = "Заполните км или часы";
+        errors.odometer = "Заполните км или часы";
+    }
+    if(problem.operating > 1000000000) errors.operating = "Слишком большое значение";
+    if(problem.odometer > 1000000000) errors.odometer = "Слишком большое значение";
+    if(problem.title.length < 3) errors.title = "Не менее 3 символов";
+    if(problem.title.length === 0) errors.title = "Заголовок должен быть";
+    if(problem.title.length > 32) errors.title = "Не более 32 символов";
+    if(problem.description.length === 0) errors.description = "Описание должно быть";
+    if(problem.description.length < 3) errors.description = "Описание должно быть не менее 2 символов";
+    if(problem.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
+    return errors;
+};
+
+export const newTaskValidate = (task: INewTask) => {
+    const errors: ValidationErrors = {};
+    if(task.title.length < 3) errors.title = "Не менее 3 символов";
+    if(task.title.length === 0) errors.title = "Заголовок должен быть";
+    if(task.title.length > 32) errors.title = "Не более 32 символов";
+    if(task.description.length === 0) errors.description = "Описание должно быть";
+    if(task.description.length < 3) errors.description = "Описание должно быть не менее 2 символов";
+    if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
     return errors;
 };

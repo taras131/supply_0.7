@@ -17,7 +17,7 @@ export function useEditor<T extends IBase>({
                                                initialValue,
                                                validate,
                                            }: UseEditorOptions<T>) {
-    const [editedValue, setEditedValue] = useState<T>(initialValue);
+    const [editedValue, setEditedValue] = useState<T>({...initialValue});
     const [errors, setErrors] = useState<ValidationErrors>(validate ? validate(initialValue) : {});
 
     const handleFieldChange = useCallback(
@@ -38,7 +38,7 @@ export function useEditor<T extends IBase>({
     // Сброс изменений
     const resetValue = useCallback(() => {
         setEditedValue(initialValue);
-        setErrors({});
+        validateValue();
     }, [initialValue]);
 
     // Проверка данных

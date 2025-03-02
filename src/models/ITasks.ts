@@ -18,7 +18,8 @@ export interface INewTask {
     machinery_id?: number;
     issue_photos: string[];
     category_id: number;
-    subcategory_id?: number;
+    problem_id: number;
+    type_id: number;
 }
 
 export interface ITask  extends  INewTask{

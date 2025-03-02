@@ -5,42 +5,45 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import ProblemsTable from "./ProblemsTable";
-import ProblemDrawer, {DrawerMode} from "./ProblemDrawer";
+import ProblemAddNew from "./ProblemAddNew";
+import ProblemCard from "./ProblemCard";
+
+export type DrawerMode = "create" | "edit" | "view";
 
 interface IProps {
-    problems: IProblem[];
+    problems: IProblem[] | null;
 }
 
 interface IDrawerState {
     isOpen: boolean;
     mode: DrawerMode;
-    problem: IProblem | null
+    problemId: number | null;
 }
 
 const Problems: FC<IProps> = ({problems}) => {
     const [drawerState, setDrawerState] = useState<IDrawerState>({
         isOpen: false,
         mode: "create",
-        problem: null,
+        problemId: null,
     });
 
     const handleDrawerClose = () => {
-        setDrawerState(prev => ({ ...prev, isOpen: false , problem: null }));
+        setDrawerState(prev => ({...prev, isOpen: false}));
     };
 
     const handleAddClick = () => {
         setDrawerState({
             isOpen: true,
             mode: "create",
-            problem: null,
+            problemId: null,
         });
     };
 
-    const handleProblemClick = (problem: IProblem) => {
+    const handleProblemClick = (problemId: number) => {
         setDrawerState({
             isOpen: true,
             mode: "view",
-            problem,
+            problemId: problemId,
         });
     };
 
@@ -50,23 +53,30 @@ const Problems: FC<IProps> = ({problems}) => {
                 <Typography variant="h4">Замечания</Typography>
                 <Button
                     onClick={handleAddClick}
-                    startIcon={<AddIcon />}
+                    startIcon={<AddIcon/>}
                     variant="contained"
                 >
                     Добавить
                 </Button>
             </Stack>
-
             <ProblemsTable
                 rows={problems}
                 onProblemClick={handleProblemClick}
+                activeRowId = {drawerState.problemId}
             />
-            <ProblemDrawer
-                isOpen={drawerState.isOpen}
-                onClose={handleDrawerClose}
-                mode={drawerState.mode}
-                problem={drawerState.problem}
-            />
+            {drawerState.isOpen && drawerState.mode === "create" && (
+                <ProblemAddNew
+                    isOpen={drawerState.isOpen}
+                    onClose={handleDrawerClose}
+                />
+            )}
+            {drawerState.isOpen && drawerState.problemId && drawerState.mode === "view" && (
+                <ProblemCard
+                    isOpen={drawerState.isOpen}
+                    onClose={handleDrawerClose}
+                    currentProblemId={drawerState.problemId}
+                />
+            )}
         </Stack>
     );
 };

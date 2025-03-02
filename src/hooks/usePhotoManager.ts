@@ -24,8 +24,8 @@ const usePhotoManager = () => {
     };
 
     const clearPhotos = () => {
-        setTempFiles((prev) => {
-            prev.forEach((fileData) => {
+        setTempFiles(prev => {
+            prev.forEach(fileData => {
                 URL.revokeObjectURL(fileData.preview);
             });
             return [];

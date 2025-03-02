@@ -8,7 +8,7 @@ import {
     fetchDeleteMachineryPhoto,
     fetchGetMachineryById,
     fetchUpdateMachinery,
-    fetchUpdateMachineryComment, fetchUpdateMachineryTask,
+    fetchUpdateMachineryComment, fetchUpdateMachineryProblem, fetchUpdateMachineryTask,
     fetchUploadMachineryPhoto,
 } from "./actions";
 import {IComment} from "../../../models/iComents";
@@ -161,6 +161,18 @@ export const MachinerySlice = createSlice({
                     state.currentMachinery = {
                         ...state.currentMachinery,
                         problems: [...state.currentMachinery.problems, action.payload],
+                    };
+                }
+                state.isLoading = false;
+            })
+            .addCase(fetchUpdateMachineryProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
+                if (state.currentMachinery && state.currentMachinery.problems) {
+                    console.log("fetchUpdateMachineryProblem "+action.payload.photos.length);
+                    state.currentMachinery = {
+                        ...state.currentMachinery,
+                        problems: [...state.currentMachinery.problems.map(problem => problem.id === action.payload.id
+                            ? action.payload
+                            : problem)],
                     };
                 }
                 state.isLoading = false;

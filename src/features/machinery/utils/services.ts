@@ -1,21 +1,26 @@
-import {problemCategories} from "./const";
+import {problemCategories, problemPriority, problemStatus} from "./const";
 
-const categoryMap: Record<number, { id: number; name: string }>
-    = problemCategories.reduce<Record<number, { id: number; name: string }>>(
-    (acc, category) => {
-        // Включаем саму категорию
-        acc[category.id] = {id: category.id, name: category.name};
+export const getCategoryTitleById = (id: number): string | undefined => {
+    return problemCategories.find(category => category.id === id)?.title;
+};
 
-        // Включаем подкатегории
-        category.subcategories.forEach((sub) => {
-            acc[sub.id] = {id: sub.id, name: sub.name};
-        });
+export const getStatusTitleById = (id: number): string | undefined => {
+    return problemStatus.find(status => status.id === id)?.title;
+};
 
-        return acc;
-    },
-    {}
-);
+export const getPriorityTitleById = (id: number): string | undefined => {
+    return problemPriority.find(status => status.id === id)?.title;
+};
 
-export const getCategoryNameById = (id: number): string | undefined => {
-    return categoryMap[id]?.name;
+export const getPriorityChipColor = (priorityId: number): "primary" | "error" | "warning" => {
+    switch (priorityId) {
+        case 1: // Критично
+            return "primary";
+        case 2: // Важно
+            return "warning";
+        case 3: // Ждёт
+            return "error";
+        default: // Подстраховка от некорректных данных
+            return "warning";
+    }
 };

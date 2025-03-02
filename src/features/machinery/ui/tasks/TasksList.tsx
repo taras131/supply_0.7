@@ -7,20 +7,7 @@ import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
 import {fetchUpdateMachineryTask} from "../../model/actions";
 import {getCurrentMachineryTasks} from "../../model/selectors";
 import TaskDetails from "./TaskDetails";
-import dayjs from "dayjs";
 import {taskStatus} from "../../utils/const";
-
-const newTask: INewTask = {
-    title: "",
-    description: "",
-    status_id: 0,
-    priority_id: 0,
-    due_date: dayjs().valueOf(),
-    author_id: 1,
-    assigned_to_id: 2,
-    issue_photos: [],
-    category_id: 0,
-};
 
 export const TaskList: FC = () => {
     const dispatch = useAppDispatch();
@@ -55,37 +42,26 @@ export const TaskList: FC = () => {
         setIsEdit(true);
         setIsOpen(true);
     };
-    const handleAddNewTask = () => {
-        setCurrentTask(newTask);
-        setIsEdit(true);
-        setIsOpen(true);
-    };
     return (
-        <>
-            <DndProvider backend={HTML5Backend}>
-                <div style={{display: "flex",
-                    minHeight: "690px",
-                    gap: "16px",
-                    padding: "16px"}}>
-                    {taskStatus.map((status) => (
-                        <TasksColumn
-                            key={status.id}
-                            status={status}
-                            tasks={tasks.filter((task) => task.status_id === status.id)}
-                            moveTask={moveTask}
-                            onViewTask={handleViewTask}
-                            onEditTask={handleEditTask}
-                            handleAddNewTask={handleAddNewTask}
-                        />
-                    ))}
-                </div>
-
-            </DndProvider>
-            <TaskDetails isOpen={isOpen}
-                         isEdit={isEdit}
-                         onClose={handleDrawerToggle}
-                         currentTask={currentTask}/>
-        </>
+        <DndProvider backend={HTML5Backend}>
+            <div style={{
+                display: "flex",
+                minHeight: "690px",
+                gap: "16px",
+                padding: "16px",
+            }}>
+                {taskStatus.map((status) => (
+                    <TasksColumn
+                        key={status.id}
+                        status={status}
+                        tasks={tasks.filter((task) => task.status_id === status.id)}
+                        moveTask={moveTask}
+                        onViewTask={handleViewTask}
+                        onEditTask={handleEditTask}
+                    />
+                ))}
+            </div>
+        </DndProvider>
     );
 };
 

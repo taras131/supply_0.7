@@ -3,7 +3,7 @@ import axios from "axios";
 import {IComment, INewComment} from "../../../models/iComents";
 import {basePath} from "../../../api";
 import {INewTask, ITask} from "../../../models/ITasks";
-import {INewProblem} from "../../../models/IProblems";
+import {INewProblem, IProblem} from "../../../models/IProblems";
 
 
 const machineryPath = `${basePath}/machinery`;
@@ -143,7 +143,7 @@ export const machineryAPI = {
         return await res.json();
     },
     addNewProblem: async (newProblem: INewProblem) => {
-        console.log(newProblem);
+        console.log("Data sent to API:", newProblem);
         const res = await fetch(`${machineryPath}/${problemsPath}/`, {
             method: "POST",
             mode: "cors",
@@ -155,6 +155,20 @@ export const machineryAPI = {
         if (!res.ok) {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
+        }
+        return await res.json();
+    },
+    updateProblem: async (problem: IProblem) => {
+        const res = await fetch(`${machineryPath}/${problemsPath}/${problem.id}/`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(problem),
+        });
+        if (!res.ok) {
+            const errorDetails = await res.json();
+            throw new Error(errorDetails.detail || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
         return await res.json();
     },

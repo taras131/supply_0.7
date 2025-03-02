@@ -1,10 +1,11 @@
 import React from "react";
 import {useDrop} from "react-dnd";
-import {INewTask, ITask} from "../../../../models/ITasks";
+import {ITask} from "../../../../models/ITasks";
 import TaskCard from "./TaskCard";
 import {Stack} from "@mui/material";
 import Button from "@mui/material/Button";
-import dayjs from "dayjs";
+import {Link, useParams} from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
 
 
 interface TasksColumnProps {
@@ -12,7 +13,6 @@ interface TasksColumnProps {
     tasks: ITask[];
     onViewTask: (task: ITask) => () => void;
     onEditTask: (task: ITask) => () => void;
-    handleAddNewTask: () => void;
     moveTask: (taskId: number, newStatusId: number) => void;
 }
 
@@ -21,9 +21,9 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
                                                      tasks,
                                                      onViewTask,
                                                      onEditTask,
-                                                     handleAddNewTask,
                                                      moveTask,
                                                  }) => {
+    const machineryId = useParams().machineryId || "0";
     const [, drop] = useDrop({
         accept: "TASK",
         drop: (item: { id: number }) => moveTask(item.id, status.id),
@@ -44,10 +44,11 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <h3>{status.title}</h3>
                 {status.id === 0 && (
-                    <Button size="small"
-                            variant="contained"
-                            color="primary"
-                            onClick={handleAddNewTask}
+                    <Button
+                        component={Link}
+                        to={`/machinery/add_problem/${machineryId}`}
+                        startIcon={<AddIcon sx={{fontSize: "var(--icon-fontSize-md)"}}/>}
+                        variant="contained"
                     >
                         Добавить
                     </Button>

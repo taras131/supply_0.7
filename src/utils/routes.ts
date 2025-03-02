@@ -15,5 +15,6 @@ export const routes = {
   profile: "/profile",
   machinery: "/machinery",
   machineryDetails: "/machinery/:machineryId/",
+  machineryAddProblem: "/machinery/add_problem/:machineryId/",
   addNewMachinery: "/machinery/add_new",
 };
