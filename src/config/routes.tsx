@@ -17,6 +17,7 @@ import MachineryPage from "../features/machinery/ui/MachineryPage";
 import MachineryDetailsPage from "../features/machinery/ui/MachineryDetailsPage";
 import MachineryAddNewPage from "../features/machinery/ui/MachineryAddNewPage";
 import TaskAddNewPage from "../features/machinery/ui/tasks/TaskAddNewPage";
+import TaskDetailsPage from "../features/machinery/ui/tasks/TaskDetailsPage";
 
 
 export interface IRouteConfig {
@@ -44,5 +45,6 @@ export const routesConfig: IRouteConfig[] = [
     {path: routes.machineryDetails, element: <MachineryDetailsPage/>, label: "Подробности", showInMenu: false},
     {path: routes.addNewMachinery, element: <MachineryAddNewPage/>, label: "Новая техника", showInMenu: false},
     {path: routes.machineryAddProblem, element: <TaskAddNewPage/>, label: "Новая проблема", showInMenu: false},
+    {path: routes.machineryTaskDetails, element: <TaskDetailsPage/>, label: "Подробности задачи", showInMenu: false},
     {path: "*", element: <Navigate to={routes.main}/>, label: "Not found", showInMenu: false},
 ];

@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {Link} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../../../../utils/routes";
 import TaskIssueView from "./TaskIssueView";
 import {useEditor} from "../../../../hooks/useEditor";
@@ -20,9 +20,12 @@ import Card from "@mui/material/Card";
 
 const TaskAddNewPage = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const currentMachineryId = useAppSelector(getCurrentMachineryId);
     const currentUserId = useAppSelector(getCurrentUserId);
     const {tempFiles, onAddPhoto, onDeletePhoto, clearPhotos} = usePhotoManager();
+    const location = useLocation();
+    const problemId = location.state?.problemId;
     const {
         editedValue,
         errors,
@@ -30,6 +33,11 @@ const TaskAddNewPage = () => {
         setEditedValue,
         resetValue,
     } = useEditor<INewTask>({initialValue: JSON.parse(JSON.stringify(emptyTask)), validate: newTaskValidate});
+    useEffect(() => {
+        if (problemId) {
+            setEditedValue(prev => ({...prev, problem_id: problemId, type_id: 2}));
+        }
+    }, [problemId]);
     useEffect(() => {
         const today = new Date();
         setEditedValue(prev => ({
@@ -39,10 +47,10 @@ const TaskAddNewPage = () => {
         return () => clearPhotos();
     }, []);
     const handleDateChange = (date: any) => {
-        if (date && date.isValid && date.isValid()) { // Проверяем, что дата существует и валидна
+        if (date && date.isValid && date.isValid()) {
             setEditedValue(prev => ({
                 ...prev,
-                due_date: date.toDate().getTime(), // Преобразовать Dayjs в Date и получить миллисекунды
+                due_date: date.toDate().getTime(),
             }));
         }
     };
@@ -60,8 +68,7 @@ const TaskAddNewPage = () => {
         <div>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Button variant="outlined"
-                        component={Link}
-                        to={`${routes.machinery}/${currentMachineryId}/?tab=3/`}>
+                        onClick={() => navigate(-1)}>
                     Назад
                 </Button>
                 <Typography variant="h2" fontSize={"24px"} textAlign="center">

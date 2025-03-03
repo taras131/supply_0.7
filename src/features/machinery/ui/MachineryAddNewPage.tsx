@@ -22,7 +22,10 @@ const MachineryAddNewPage = () => {
         errors,
         handleFieldChange,
         resetValue,
-    } = useEditor<INewMachinery>({initialValue: emptyMachinery, validate: machineryValidate});
+    } = useEditor<INewMachinery>({
+        initialValue: JSON.parse(JSON.stringify(emptyMachinery)),
+        validate: machineryValidate,
+    });
     useEffect(() => {
         return () => {
             clearPhotos();

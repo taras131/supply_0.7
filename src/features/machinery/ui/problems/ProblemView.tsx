@@ -2,7 +2,7 @@ import React, {ChangeEvent, FC} from "react";
 import {INewProblem, IProblem} from "../../../../models/IProblems";
 import {convertMillisecondsToDate} from "../../../../utils/services";
 import {ValidationErrors} from "../../../../utils/validators";
-import {Chip, SelectChangeEvent, Stack, Typography} from "@mui/material";
+import {Button, Chip, SelectChangeEvent, Stack, Typography} from "@mui/material";
 import FieldControl from "../../../../components/common/FieldControl";
 import {problemCategories, problemPriority, problemStatus} from "../../utils/const";
 import {getPriorityChipColor, getPriorityTitleById} from "../../utils/services";
@@ -10,6 +10,9 @@ import Box from "@mui/material/Box";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import BuildIcon from "@mui/icons-material/Build";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import {useAppSelector} from "../../../../hooks/redux";
+import {getUserFullNameById} from "../../../users/model/selectors";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
     problem: INewProblem | IProblem | null;
@@ -20,11 +23,21 @@ interface IProps {
 }
 
 const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = false, errors}) => {
+    const navigate = useNavigate();
+    const priorityColor = getPriorityChipColor(problem?.priority_id || 0);
+    const authorFullName = useAppSelector(state => getUserFullNameById(state, problem?.author_id || 0));
+    let problemId = 0;
     if (!problem) {
         return null;
     }
-    const priorityColor = getPriorityChipColor(problem.priority_id);
-
+    if ("id" in problem) {
+        problemId = problem.id;
+    }
+    const createTaskClickHandler = () => {
+        navigate(`/machinery/add_problem/${problem.machinery_id}`, {
+            state: {problemId: problemId},
+        });
+    };
     return (
         <Stack spacing={isEditMode ? 2 : 4} sx={{flexGrow: 1}}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
@@ -65,6 +78,35 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                         />
                     </>)}
             </Stack>
+            {!isEditMode && (
+                <Box sx={{
+                    width: "100%",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    alignItems: "center",
+                    gap: "8px",
+                }}
+                >
+                    {problem.task_id
+                        ? (<Typography>
+                            Создана Задача
+                        </Typography>)
+                        : (<Button variant="outlined"
+                                   color="success"
+                                   onClick={createTaskClickHandler}
+                        >
+                            Создать задачу
+                        </Button>)}
+                    <FieldControl
+                        label="Автор"
+                        name="author"
+                        id="author"
+                        value={authorFullName ? authorFullName : "неизвестен"}
+                        isEditMode={isEditMode}
+                        onChange={fieldChangeHandler}
+                    />
+                </Box>
+            )}
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
                 <FieldControl
                     label="Наработка (часы)"

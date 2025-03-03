@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import {useDrag} from "react-dnd";
 import Box from "@mui/material/Box";
 import PrioritiesChip from "../common/PrioritiesChip";
+import {routes} from "../../../../utils/routes";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
     task: ITask;
@@ -13,6 +15,7 @@ interface IProps {
 }
 
 const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
+    const navigate = useNavigate();
     const [{isDragging}, drag] = useDrag({
         type: "TASK",
         item: {id: task.id},
@@ -20,6 +23,9 @@ const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
             isDragging: monitor.isDragging(),
         }),
     });
+    const handleNavigateToDetails = () => {
+        navigate(routes.machineryTaskDetails.replace(":machineryId", task.machinery_id?.toString() || "").replace(":taskId", task.id.toString()));
+    };
     return (
         <Card
             ref={drag}
@@ -51,7 +57,7 @@ const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
             </CardContent>
             <CardActions sx={{p: 2}}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <Button size="small" onClick={openDetailsHandler}>Подробнее</Button>
+                    <Button size="small" onClick={handleNavigateToDetails}>Подробнее</Button>
                     <Button size="small" onClick={openEditHandler}>Редактировать</Button>
                 </Stack>
             </CardActions>

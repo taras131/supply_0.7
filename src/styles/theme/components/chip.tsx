@@ -5,8 +5,8 @@ import type { Theme } from "../types";
 export const MuiChip = {
     styleOverrides: {
         root: {
-            fontWeight: 500,
-            borderRadius: "5px",
+            fontWeight: 400,
+            borderRadius: "15px",
         },
     },
 } satisfies Components<Theme>["MuiChip"];

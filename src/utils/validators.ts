@@ -64,3 +64,14 @@ export const newTaskValidate = (task: INewTask) => {
     if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
     return errors;
 };
+
+export const taskValidate = (task: INewTask) => {
+    const errors: ValidationErrors = {};
+    if(task.title.length < 3) errors.title = "Не менее 3 символов";
+    if(task.title.length === 0) errors.title = "Заголовок должен быть";
+    if(task.title.length > 32) errors.title = "Не более 32 символов";
+    if(task.description.length === 0) errors.description = "Описание должно быть";
+    if(task.description.length < 3) errors.description = "Описание должно быть не менее 2 символов";
+    if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
+    return errors;
+};

@@ -1,5 +1,5 @@
 import {INewProblem, IProblem} from "../../../models/IProblems";
-import {INewTask, ITaskPriority, ITaskStatus} from "../../../models/ITasks";
+import {INewTask, ITask, ITaskPriority, ITaskStatus} from "../../../models/ITasks";
 import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
 import {MachineryStatus} from "../../../utils/const";
 
@@ -163,6 +163,24 @@ export const emptyTask: INewTask = {
     category_id: -1,
     problem_id: -1,
     type_id: -1,
+};
+
+export const defaultTask: ITask = {
+    title: "",
+    description: "",
+    status_id: 0,
+    priority_id: -1,
+    due_date: 0,
+    author_id: -1,
+    assigned_to_id: -1,
+    machinery_id: -1,
+    issue_photos: [],
+    category_id: -1,
+    problem_id: -1,
+    type_id: -1,
+    id: 0,
+    created_date: 0,
+    updated_date: 0,
 };
 
 export const emptyMachinery: INewMachinery = {

@@ -9,7 +9,8 @@ import {INewTask, ITask} from "../../../models/ITasks";
 import {filesAPI} from "../../files/api";
 import {INewProblem, IProblem} from "../../../models/IProblems";
 import {thunkHandlers} from "../../../store/thunkHandlers";
-import {AppDispatch} from "../../../store";
+import {AppDispatch, RootState} from "../../../store";
+import {getProblemById} from "./selectors";
 
 const messages = {
     addMachinery: {error: "Не удалось добавить машину.", success: "Машина добавлена"},
@@ -241,6 +242,7 @@ export interface IAddTask {
 export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (addTaskData: IAddTask, {
     rejectWithValue,
     dispatch,
+    getState,
 }) => {
     const {newTask, files} = addTaskData;
     const task_in = {...newTask};
@@ -253,14 +255,22 @@ export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (a
                 task_in.issue_photos.push(uploadedFile.filename);
             }
         }
-        return await machineryAPI.addNewTask(task_in);
-
+        const res = await machineryAPI.addNewTask(task_in);
+        if (res.problem_id) {
+            const state = getState() as RootState;
+            const problem = getProblemById(state, res.problem_id);
+            if (problem) {
+                const updatedProblem = {...problem, task_id: res.id, status_id: 2};
+                dispatch(fetchUpdateMachineryProblem(updatedProblem));
+            }
+        }
+        return res;
     } catch (e) {
         const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
         dispatch(
             setMessage({
                 severity: MESSAGE_SEVERITY.error,
-                text: errorMessage || "Не удалось добавить машину.",
+                text: errorMessage || "Не удалось добавить задачу.",
             }));
         return rejectWithValue(handlerError(e));
     }

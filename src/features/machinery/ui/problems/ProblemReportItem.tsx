@@ -22,13 +22,14 @@ const ProblemReportItem: FC<IProps> = ({problem}) => {
             justifyContent: "space-between",
             width: "100%",
             padding: "8px",
-            borderBottom: "1px solid gray",
+            gap: "8px",
+            borderBottom: "1px solid lightGray",
         }}>
             {problem.status_id === 1 && <HourglassBottomIcon color="warning"/>}
             {problem.status_id === 2 && <BuildIcon color="primary"/>}
             {problem.status_id === 3 && <CheckCircleIcon color="success"/>}
-            <Typography>{convertMillisecondsToDate(problem.created_date)}</Typography>
-            <Typography>{problem.title}</Typography>
+            <Typography variant="subtitle2">{convertMillisecondsToDate(problem.created_date)}</Typography>
+            <Typography sx={{flexGrow: 1}}>{problem.title}</Typography>
             <Chip
                 label={getPriorityTitleById(problem.priority_id)}
                 color={priorityColor}

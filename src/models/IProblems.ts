@@ -20,12 +20,13 @@ export interface INewProblem {
     status_id: number;
     operating: number;
     odometer: number;
+    task_id?: number;
 }
 
 export interface IProblem extends INewProblem {
     id: number;
     created_date: number;
     updated_date: number;
-    task_id?: number;
+
 }
 

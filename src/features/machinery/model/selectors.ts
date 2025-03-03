@@ -48,11 +48,11 @@ export const getCurrentMachineryOperatingTypeId = (state: RootState): number | n
     return state.machinery.currentMachinery?.operating_type_id || null;
 };
 
-export const getProblemById = (state: RootState, problemId: number) =>{
+export const getProblemById = (state: RootState, problemId: number) => {
     return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId);
 };
 
-export const getActiveProblems = (state: RootState) =>{
+export const getActiveProblems = (state: RootState) => {
     return state.machinery.currentMachinery?.problems.filter(problem => problem.status_id === 1) || [];
 };
 
@@ -63,6 +63,10 @@ export const getCurrentMachineryId = (state: RootState): number | null => {
 export const getCurrentMachineryTasks = (state: RootState): ITask [] | [] => {
     return state.machinery.currentMachinery?.tasks || [];
 };
+
+export const getTaskById = (state: RootState, taskId: number): ITask | null => {
+    return state.machinery.currentMachinery?.tasks.find(task => task.id === taskId) || null;
+}
 
 export const getRelatedMachineryByInvoiceId = (state: RootState, invoiceId: string): IMachinery[] => {
     const relatedMachinery: IMachinery[] = [];

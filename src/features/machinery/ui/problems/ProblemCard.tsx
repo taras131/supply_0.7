@@ -34,7 +34,7 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
     const toggleIsEditMode = () => {
         setIsEditMode(prev => !prev);
     };
-    if(!currentProblem) return null;
+    if (!currentProblem) return null;
     const onAddPhoto = (newFile: File) => {
         dispatch(fetchUploadProblemPhoto({problem: currentProblem, file: newFile}));
         toggleIsEditMode();
@@ -50,6 +50,7 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
         dispatch(fetchUpdateMachineryProblem(editedValue));
         toggleIsEditMode();
     };
+
     const photosPaths = currentProblem.photos.map(photo => `${basePath}/files/${photo}`);
     return (
         <Drawer anchor="right" open={isOpen} onClose={onClose}>
@@ -59,8 +60,12 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                gap: "8px",
+                gap: "12px",
             }}>
+                <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+
+
+                </Stack>
                 <ProblemView problem={editedValue}
                              errors={errors}
                              fieldChangeHandler={handleFieldChange}
@@ -69,7 +74,7 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
                                onAddPhoto={onAddPhoto}
                                onDeletePhoto={onDeletePhoto}
                                isViewingOnly={!isEditMode}/>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" mt={1}>
                     {isEditMode
                         ? (<>
                             <Button onClick={toggleIsEditMode} variant="outlined">
@@ -83,10 +88,10 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
                             </Button>
                         </>)
                         : (<>
-                            <Button onClick={onClose} variant="outlined">
-                                Назад
+                            <Button variant="outlined" onClick={onClose}>
+                                Закрыть
                             </Button>
-                            <Button onClick={toggleIsEditMode} variant="contained" color="success">
+                            <Button variant="contained" onClick={toggleIsEditMode}>
                                 Редактировать
                             </Button>
                         </>)}
