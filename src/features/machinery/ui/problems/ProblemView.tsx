@@ -38,6 +38,11 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
             state: {problemId: problemId},
         });
     };
+    const viewTaskClickHandler = () => {
+        navigate(`/machinery/${problem.machinery_id}/task/${problem.task_id}/`, {
+            state: {problemId: problemId},
+        });
+    };
     return (
         <Stack spacing={isEditMode ? 2 : 4} sx={{flexGrow: 1}}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
@@ -63,12 +68,24 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                         />
                     </>)
                     : (<>
-                        <Box sx={{display: "flex", gap: "10px"}}>
+                        <Box sx={{display: "flex", gap: "10px", alignItems: "center"}}>
                             {problem.status_id === 1 && <HourglassBottomIcon color="warning"/>}
                             {problem.status_id === 2 && <BuildIcon color="primary"/>}
                             {problem.status_id === 3 && <CheckCircleIcon color="success"/>}
                             <Typography fontWeight={700}>
-                                {problemStatus.find(status => status.id === problem.status_id)?.title || ""}
+                                {problem.task_id
+                                    ? (<Button variant="text"
+                                               color="primary"
+                                               onClick={viewTaskClickHandler}
+                                    >
+                                        Создана Задача
+                                    </Button>)
+                                    : (<Button variant="text"
+                                               color="primary"
+                                               onClick={createTaskClickHandler}
+                                    >
+                                        Создать задачу
+                                    </Button>)}
                             </Typography>
                         </Box>
                         <Chip
@@ -78,25 +95,19 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                         />
                     </>)}
             </Stack>
-            {!isEditMode && (
-                <Box sx={{
-                    width: "100%",
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    alignItems: "center",
-                    gap: "8px",
-                }}
-                >
-                    {problem.task_id
-                        ? (<Typography>
-                            Создана Задача
-                        </Typography>)
-                        : (<Button variant="outlined"
-                                   color="success"
-                                   onClick={createTaskClickHandler}
-                        >
-                            Создать задачу
-                        </Button>)}
+            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
+                <FieldControl
+                    label="Категория"
+                    name="category_id"
+                    id="category_id"
+                    value={problem.category_id}
+                    error={errors?.category_id}
+                    isEditMode={isEditMode}
+                    onChange={fieldChangeHandler}
+                    options={problemCategories}
+                    isRequired
+                />
+                {!isEditMode && (
                     <FieldControl
                         label="Автор"
                         name="author"
@@ -105,8 +116,33 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                         isEditMode={isEditMode}
                         onChange={fieldChangeHandler}
                     />
-                </Box>
-            )}
+                )}
+            </Stack>
+            <FieldControl
+                label="Заголовок"
+                name="title"
+                id="title"
+                value={problem.title}
+                error={errors?.title}
+                isEditMode={isEditMode}
+                onChange={fieldChangeHandler}
+                isRequired
+            />
+            <FieldControl
+                label="Описание"
+                name="description"
+                id="description"
+                value={problem.description}
+                error={errors?.description}
+                isEditMode={isEditMode}
+                onChange={fieldChangeHandler}
+                isMultiline
+                isRequired
+                sx={{
+                    flexGrow: 1,
+                    height: "100%",
+                }}
+            />
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
                 <FieldControl
                     label="Наработка (часы)"
@@ -147,40 +183,6 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                     />
                 </Stack>
             )}
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
-                <FieldControl
-                    label="Заголовок"
-                    name="title"
-                    id="title"
-                    value={problem.title}
-                    error={errors?.title}
-                    isEditMode={isEditMode}
-                    onChange={fieldChangeHandler}
-                    isRequired
-                />
-                <FieldControl
-                    label="Категория"
-                    name="category_id"
-                    id="category_id"
-                    value={problem.category_id}
-                    error={errors?.category_id}
-                    isEditMode={isEditMode}
-                    onChange={fieldChangeHandler}
-                    options={problemCategories}
-                    isRequired
-                />
-            </Stack>
-            <FieldControl
-                label="Описание"
-                name="description"
-                id="description"
-                value={problem.description}
-                error={errors?.description}
-                isEditMode={isEditMode}
-                onChange={fieldChangeHandler}
-                isMultiline
-                isRequired
-            />
         </Stack>
     );
 };

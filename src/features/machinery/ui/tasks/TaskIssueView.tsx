@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC} from "react";
 import Card from "@mui/material/Card";
 import {ValidationErrors} from "../../../../utils/validators";
-import {SelectChangeEvent, Stack} from "@mui/material";
+import {SelectChangeEvent, Stack, Typography} from "@mui/material";
 import {INewTask, ITask} from "../../../../models/ITasks";
 import FieldControl from "../../../../components/common/FieldControl";
 import {taskPriority, taskTypes} from "../../utils/const";
@@ -33,44 +33,26 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
     }));
     if (!task) return null;
     return (
-        <Card sx={{padding: "24px"}}>
-            <Stack spacing={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
-                    <DatePicker
-                        label="Срок выполнения"
-                        value={dayjs(task.due_date)}
-                        onChange={handleDateChange}
-                        format="DD.MM.YYYY"
-                        slotProps={{
-                            textField: {
-                                fullWidth: true,
-                                variant: "outlined",
-                            },
-                        }}
-                    />
-                </LocalizationProvider>
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-                    <FieldControl
-                        label="Тип работ"
-                        name="type_id"
-                        id="type_id"
-                        value={task.type_id}
-                        error={errors?.type_id}
-                        isEditMode={isEditMode}
-                        onChange={fieldChangeHandler}
-                        options={taskTypes}
-                    />
-                    <FieldControl
-                        label="Основание"
-                        name="problem_id"
-                        id="problem_id"
-                        value={task.problem_id}
-                        error={errors?.problem_id}
-                        isEditMode={isEditMode}
-                        onChange={fieldChangeHandler}
-                        options={activeProblemList}
-                    />
-                </Stack>
+        <Stack spacing={isEditMode ? 2 : 4}>
+            <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+                {isEditMode
+                    ? (<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+                        <DatePicker
+                            label="Срок выполнения"
+                            value={dayjs(task.due_date)}
+                            onChange={handleDateChange}
+                            format="DD.MM.YYYY"
+                            slotProps={{
+                                textField: {
+                                    fullWidth: true,
+                                    variant: "outlined",
+                                },
+                            }}
+                        />
+                    </LocalizationProvider>)
+                    : (<Typography variant="subtitle1">
+                        Срок до: {convertMillisecondsToDate(task.due_date)}
+                    </Typography>)}
                 <FieldControl
                     label="Заголовок"
                     name="title"
@@ -81,43 +63,65 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                     onChange={fieldChangeHandler}
                     isRequired
                 />
+            </Stack>
+            <FieldControl
+                label="Описание"
+                name="description"
+                id="description"
+                value={task.description}
+                error={errors?.description}
+                isEditMode={isEditMode}
+                onChange={fieldChangeHandler}
+                isRequired
+                isMultiline
+            />
+            <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <FieldControl
-                    label="Описание"
-                    name="description"
-                    id="description"
-                    value={task.description}
-                    error={errors?.description}
+                    label="Тип работ"
+                    name="type_id"
+                    id="type_id"
+                    value={task.type_id}
+                    error={errors?.type_id}
                     isEditMode={isEditMode}
                     onChange={fieldChangeHandler}
-                    isRequired
-                    isMultiline
+                    options={taskTypes}
                 />
-                <Stack direction="row" spacing={2}>
-                    <FieldControl
-                        label="Приоритет"
-                        name="priority_id"
-                        id="priority_id"
-                        value={task.priority_id}
-                        error={errors?.priority_id}
-                        isEditMode={isEditMode}
-                        onChange={fieldChangeHandler}
-                        options={taskPriority}
-                        isRequired
-                    />
-                    <FieldControl
-                        label="Исполнитель"
-                        name="assigned_to_id"
-                        id="assigned_to_id"
-                        value={task.assigned_to_id}
-                        error={errors?.assigned_to_id}
-                        isEditMode={isEditMode}
-                        onChange={fieldChangeHandler}
-                        options={usersList}
-                        isRequired
-                    />
-                </Stack>
+                <FieldControl
+                    label="Основание"
+                    name="problem_id"
+                    id="problem_id"
+                    value={task.problem_id}
+                    error={errors?.problem_id}
+                    isEditMode={isEditMode}
+                    onChange={fieldChangeHandler}
+                    options={activeProblemList}
+                />
             </Stack>
-        </Card>
+            <Stack direction="row" spacing={2}>
+                <FieldControl
+                    label="Приоритет"
+                    name="priority_id"
+                    id="priority_id"
+                    value={task.priority_id}
+                    error={errors?.priority_id}
+                    isEditMode={isEditMode}
+                    onChange={fieldChangeHandler}
+                    options={taskPriority}
+                    isRequired
+                />
+                <FieldControl
+                    label="Исполнитель"
+                    name="assigned_to_id"
+                    id="assigned_to_id"
+                    value={task.assigned_to_id}
+                    error={errors?.assigned_to_id}
+                    isEditMode={isEditMode}
+                    onChange={fieldChangeHandler}
+                    options={usersList}
+                    isRequired
+                />
+            </Stack>
+        </Stack>
     );
 };
 

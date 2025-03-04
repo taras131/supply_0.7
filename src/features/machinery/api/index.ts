@@ -129,6 +129,7 @@ export const machineryAPI = {
         return await res.json();
     },
     updateTask: async (task: ITask) => {
+        console.log("Data sent to API:", task);
         const res = await fetch(`${machineryPath}/${tasksPath}/${task.id}`, {
             method: "PUT",
             headers: {
@@ -143,7 +144,6 @@ export const machineryAPI = {
         return await res.json();
     },
     addNewProblem: async (newProblem: INewProblem) => {
-        console.log("Data sent to API:", newProblem);
         const res = await fetch(`${machineryPath}/${problemsPath}/`, {
             method: "POST",
             mode: "cors",

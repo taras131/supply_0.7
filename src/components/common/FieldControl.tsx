@@ -1,7 +1,16 @@
 import {ChangeEvent, FC} from "react";
 import {styled} from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import {FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent, Typography} from "@mui/material";
+import {
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    SxProps,
+    Typography,
+} from "@mui/material";
 
 const StyledInput = styled(TextField, {
     shouldForwardProp: (prop) => prop !== "isError",
@@ -70,6 +79,7 @@ interface IProps {
     isRequired?: boolean;
     isMultiline?: boolean; // Новый пропс для многострочного режима
     rows?: number;
+    sx?: SxProps;
 }
 
 const FieldControl: FC<IProps> = ({
@@ -84,8 +94,9 @@ const FieldControl: FC<IProps> = ({
                                       isRequired = false,
                                       isMultiline = false,
                                       rows = 3,
+                                      sx,
                                   }) => (
-    <FormControl fullWidth>
+    <FormControl fullWidth sx={sx}>
         <StyledLabel required={isRequired} shrink htmlFor={id}>
             {label}
         </StyledLabel>

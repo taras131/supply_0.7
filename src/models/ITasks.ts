@@ -28,5 +28,5 @@ export interface ITask  extends  INewTask{
     updated_date: number;
     result_photos: string[];
     result_description: string;
-    spent_resources: string[];
+    spent_resources: string;
 }
