@@ -16,6 +16,7 @@ import {fetchUpdateMachineryTask} from "../../model/actions";
 import {basePath} from "../../../../api";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TaskResultView from "./TaskResultView";
+import TaskDetailsIssue from "./TaskDetailsIssue";
 
 const TaskDetailsPage = () => {
     const dispatch = useAppDispatch();
@@ -83,43 +84,10 @@ const TaskDetailsPage = () => {
                     <Typography component="span">Постановка задачи</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Box
-                        sx={{
-                            width: "100%",
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(min(500px, 100%), 1fr))",
-                            gap: "16px",
-                        }}
-                    >
-                        <TaskIssueView isEditMode={isEditMode}
-                                       task={editedValue}
-                                       fieldChangeHandler={handleFieldChange}
-                                       handleDateChange={handleDateChange}
-                                       errors={errors}
-                        />
-                        <PhotosManager photosPaths={photosPaths}
-                                       onAddPhoto={onAddPhoto}
-                                       onDeletePhoto={onDeletePhoto}
-                                       isViewingOnly={!isEditMode}/>
-                        {isEditMode
-                            ? (<>
-                                <Button variant="outlined" onClick={toggleIsEditMode}>
-                                    Отменить
-                                </Button>
-                                <Button onClick={saveTaskClickHandler}
-                                        variant={"contained"}
-                                        color={"success"}
-                                        disabled={false}>
-                                    Сохранить
-                                </Button>
-                            </>)
-                            : (<Button onClick={toggleIsEditMode}
-                                       variant={"contained"}
-                                       color={"primary"}
-                                       disabled={false}>
-                                Редактировать
-                            </Button>)}
-                    </Box>
+                    <TaskDetailsIssue editedValue={editedValue}
+                                      handleDateChange={handleDateChange}
+                                      fieldChangeHandler={handleFieldChange}
+                                      errors={errors} />
                 </AccordionDetails>
             </Accordion>
             <Accordion expanded={expandedResultPanel} onChange={() => setExpandedResultPanel(prev => !prev)}>

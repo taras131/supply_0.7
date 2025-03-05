@@ -1,6 +1,6 @@
 import React, {FC} from "react";
-import {Card, CardContent, CardActions, Stack, Typography, Chip, Button} from "@mui/material";
-import {ITask, taskPriority} from "../../../../models/ITasks";
+import {Card, CardContent, CardActions, Stack, Typography, Button} from "@mui/material";
+import {ITask} from "../../../../models/ITasks";
 import dayjs from "dayjs";
 import {useDrag} from "react-dnd";
 import Box from "@mui/material/Box";
