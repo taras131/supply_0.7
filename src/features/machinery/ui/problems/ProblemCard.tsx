@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {IProblem} from "../../../../models/IProblems";
 import {Button, Drawer, Stack} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -30,7 +30,13 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
         editedValue,
         errors,
         handleFieldChange,
+        setEditedValue,
     } = useEditor<IProblem>({initialValue: currentProblem || defaultProblem, validate: problemValidate});
+    useEffect(() => {
+        if (currentProblem) {
+            setEditedValue(currentProblem);
+        }
+    }, [currentProblem]);
     const toggleIsEditMode = () => {
         setIsEditMode(prev => !prev);
     };

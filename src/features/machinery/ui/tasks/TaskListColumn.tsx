@@ -11,16 +11,12 @@ import AddIcon from "@mui/icons-material/Add";
 interface TasksColumnProps {
     status: { id: number; title: string };
     tasks: ITask[];
-    onViewTask: (task: ITask) => () => void;
-    onEditTask: (task: ITask) => () => void;
     moveTask: (taskId: number, newStatusId: number) => void;
 }
 
 const TasksColumn: React.FC<TasksColumnProps> = ({
                                                      status,
                                                      tasks,
-                                                     onViewTask,
-                                                     onEditTask,
                                                      moveTask,
                                                  }) => {
     const machineryId = useParams().machineryId || "0";
@@ -43,23 +39,19 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
         >
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <h3>{status.title}</h3>
-                {status.id === 0 && (
+                {status.id === 1 && (
                     <Button
                         component={Link}
                         to={`/machinery/add_problem/${machineryId}`}
                         startIcon={<AddIcon sx={{fontSize: "var(--icon-fontSize-md)"}}/>}
                         variant="contained"
+                        size="small"
                     >
                         Добавить
                     </Button>
                 )}
             </Stack>
-            {tasks.map((task) => (
-                <TaskCard key={task.id}
-                          task={task}
-                          openDetailsHandler={onViewTask(task)}
-                          openEditHandler={onEditTask(task)}/>
-            ))}
+            {tasks.map((task) => (<TaskCard key={task.id} task={task}/>))}
         </Stack>
     );
 };

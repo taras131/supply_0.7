@@ -10,11 +10,9 @@ import {useNavigate} from "react-router-dom";
 
 interface IProps {
     task: ITask;
-    openDetailsHandler: () => void;
-    openEditHandler: () => void;
 }
 
-const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
+const TaskCard: FC<IProps> = ({task}) => {
     const navigate = useNavigate();
     const [{isDragging}, drag] = useDrag({
         type: "TASK",
@@ -58,7 +56,6 @@ const TaskCard: FC<IProps> = ({task, openDetailsHandler, openEditHandler}) => {
             <CardActions sx={{p: 2}}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Button size="small" onClick={handleNavigateToDetails}>Подробнее</Button>
-                    <Button size="small" onClick={openEditHandler}>Редактировать</Button>
                 </Stack>
             </CardActions>
         </Card>

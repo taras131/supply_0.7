@@ -94,8 +94,9 @@ export const problemCategories = [
 
 export const problemStatus = [
     {id: 1, title: "Ожидает"},
-    {id: 2, title: "Решается"},
-    {id: 3, title: "Решена"},
+    {id: 2, title: "Задача создана"},
+    {id: 3, title: "Задача в работе"},
+    {id: 4, title: "Решена"},
 ];
 
 export const problemPriority = [
@@ -112,9 +113,9 @@ export const taskPriority: ITaskPriority [] = [
 ];
 
 export const taskStatus: ITaskStatus [] = [
-    {id: 0, title: "Новая"},
-    {id: 1, title: "В работе"},
-    {id: 2, title: "Завершена"},
+    {id: 1, title: "Новая"},
+    {id: 2, title: "В работе"},
+    {id: 3, title: "Завершена"},
 ];
 export const taskTypes: ITaskStatus [] = [
     {id: 1, title: "Тех обслуживание"},
@@ -153,7 +154,7 @@ export const defaultProblem: IProblem = {
 export const emptyTask: INewTask = {
     title: "",
     description: "",
-    status_id: 0,
+    status_id: 1,
     priority_id: -1,
     due_date: 0,
     author_id: -1,
@@ -163,12 +164,14 @@ export const emptyTask: INewTask = {
     category_id: -1,
     problem_id: -1,
     type_id: -1,
+    issue_operating: 0,
+    issue_odometer: 0,
 };
 
 export const defaultTask: ITask = {
     title: "",
     description: "",
-    status_id: 0,
+    status_id: 1,
     priority_id: -1,
     due_date: 0,
     author_id: -1,
@@ -178,9 +181,16 @@ export const defaultTask: ITask = {
     category_id: -1,
     problem_id: -1,
     type_id: -1,
+    issue_operating: 0,
+    issue_odometer: 0,
     id: 0,
     created_date: 0,
     updated_date: 0,
+    result_photos: [],
+    result_description: "",
+    result_operating: 0,
+    result_odometer: 0,
+    spent_resources: "",
 };
 
 export const emptyMachinery: INewMachinery = {

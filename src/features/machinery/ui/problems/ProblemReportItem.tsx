@@ -7,6 +7,7 @@ import BuildIcon from "@mui/icons-material/Build";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {convertMillisecondsToDate} from "../../../../utils/services";
 import {getPriorityChipColor, getPriorityTitleById} from "../../utils/services";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 interface IProps {
     problem: IProblem
@@ -25,9 +26,10 @@ const ProblemReportItem: FC<IProps> = ({problem}) => {
             gap: "8px",
             borderBottom: "1px solid lightGray",
         }}>
-            {problem.status_id === 1 && <HourglassBottomIcon color="warning"/>}
-            {problem.status_id === 2 && <BuildIcon color="primary"/>}
-            {problem.status_id === 3 && <CheckCircleIcon color="success"/>}
+            {problem.status_id === 1 && <HourglassBottomIcon color="error"/>}
+            {problem.status_id === 2 && <AssignmentIcon color="warning"/>}
+            {problem.status_id === 3 && <BuildIcon color="primary"/>}
+            {problem.status_id === 4 && <CheckCircleIcon color="success"/>}
             <Typography variant="subtitle2">{convertMillisecondsToDate(problem.created_date)}</Typography>
             <Typography sx={{flexGrow: 1}}>{problem.title}</Typography>
             <Chip

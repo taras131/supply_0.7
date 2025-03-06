@@ -3,24 +3,16 @@ import {Accordion, AccordionDetails, AccordionSummary, Stack} from "@mui/materia
 import Button from "@mui/material/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import TaskIssueView from "./TaskIssueView";
-import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
+import {useAppSelector} from "../../../../hooks/redux";
 import {getTaskById} from "../../model/selectors";
 import {useEditor} from "../../../../hooks/useEditor";
 import {defaultTask} from "../../utils/const";
 import {ITask} from "../../../../models/ITasks";
 import {taskValidate} from "../../../../utils/validators";
-import PhotosManager from "../../../../components/common/PhotosManager";
-import Box from "@mui/material/Box";
-import {fetchUpdateMachineryTask} from "../../model/actions";
-import {basePath} from "../../../../api";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import TaskResultView from "./TaskResultView";
-import TaskDetailsIssue from "./TaskDetailsIssue";
+import TaskDetails from "./TaskDetails";
 
 const TaskDetailsPage = () => {
-    const dispatch = useAppDispatch();
-    const [isEditMode, setIsEditMode] = useState(false);
     const {taskId} = useParams();
     const navigate = useNavigate();
     const [expandedIssuePanel, setExpandedIssuePanel] = useState(true);
@@ -30,7 +22,6 @@ const TaskDetailsPage = () => {
         editedValue,
         errors,
         handleFieldChange,
-        resetValue,
         setEditedValue,
     } = useEditor<ITask>({
         initialValue: JSON.parse(JSON.stringify(defaultTask)),
@@ -42,9 +33,6 @@ const TaskDetailsPage = () => {
         }
     }, [currentTask]);
     if (!currentTask) return null;
-    const toggleIsEditMode = () => {
-        setIsEditMode(prev => !prev);
-    };
     const handleDateChange = (date: any) => {
         if (date && date.isValid && date.isValid()) {
             setEditedValue(prev => ({
@@ -52,17 +40,6 @@ const TaskDetailsPage = () => {
                 due_date: date.toDate().getTime(),
             }));
         }
-    };
-    const onAddPhoto = (newFile: File) => {
-        console.log(newFile);
-    };
-    const onDeletePhoto = (deletedFileIndex: number) => {
-        console.log(deletedFileIndex);
-    };
-    const photosPaths = currentTask.issue_photos.map(photo => `${basePath}/files/${photo}`);
-    const saveTaskClickHandler = () => {
-        dispatch(fetchUpdateMachineryTask(editedValue));
-        toggleIsEditMode();
     };
     return (
         <Stack spacing={2}>
@@ -84,10 +61,13 @@ const TaskDetailsPage = () => {
                     <Typography component="span">Постановка задачи</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <TaskDetailsIssue editedValue={editedValue}
-                                      handleDateChange={handleDateChange}
-                                      fieldChangeHandler={handleFieldChange}
-                                      errors={errors} />
+                    <TaskDetails
+                        editedValue={editedValue}
+                        fieldChangeHandler={handleFieldChange}
+                        handleDateChange={handleDateChange}
+                        errors={errors}
+                        viewType="issue"
+                    />
                 </AccordionDetails>
             </Accordion>
             <Accordion expanded={expandedResultPanel} onChange={() => setExpandedResultPanel(prev => !prev)}>
@@ -99,26 +79,15 @@ const TaskDetailsPage = () => {
                     <Typography component="span">Результат выполнения</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Box
-                        sx={{
-                            width: "100%",
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(min(500px, 100%), 1fr))",
-                            gap: "16px",
-                        }}
-                    >
-                        <TaskResultView task={editedValue}
-                                        isEditMode={isEditMode}
-                                        errors={errors}
-                                        fieldChangeHandler={handleFieldChange}/>
-                        <PhotosManager photosPaths={photosPaths}
-                                       onAddPhoto={onAddPhoto}
-                                       onDeletePhoto={onDeletePhoto}
-                                       isViewingOnly={!isEditMode}/>
-                    </Box>
+                    <TaskDetails
+                        editedValue={editedValue}
+                        fieldChangeHandler={handleFieldChange}
+                        handleDateChange={handleDateChange}
+                        errors={errors}
+                        viewType="result"
+                    />
                 </AccordionDetails>
             </Accordion>
-
         </Stack>
     );
 };

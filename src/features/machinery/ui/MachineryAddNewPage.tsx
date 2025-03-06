@@ -1,7 +1,6 @@
 import React, {useEffect} from "react";
 import {Stack, Typography} from "@mui/material";
 import PhotosManager from "../../../components/common/PhotosManager";
-import MachineryView from "./MachineryView";
 import Button from "@mui/material/Button";
 import {useAppDispatch} from "../../../hooks/redux";
 import {INewMachinery} from "../../../models/iMachinery";
@@ -12,6 +11,8 @@ import {routes} from "../../../utils/routes";
 import {useEditor} from "../../../hooks/useEditor";
 import {machineryValidate} from "../../../utils/validators";
 import {emptyMachinery} from "../utils/const";
+import MachineryAdditionalView from "./MachineryAdditionalView";
+import MachineryBasicView from "./MachineryBasicView";
 
 const MachineryAddNewPage = () => {
     const dispatch = useAppDispatch();
@@ -58,7 +59,11 @@ const MachineryAddNewPage = () => {
                     Сохранить
                 </Button>
             </Stack>
-            <MachineryView editedMachinery={editedValue}
+            <MachineryBasicView editedMachinery={editedValue}
+                                     errors={errors}
+                                     machineryFieldChangeHandler={handleFieldChange}
+                                     isEditMode={true}/>
+            <MachineryAdditionalView editedMachinery={editedValue}
                            errors={errors}
                            machineryFieldChangeHandler={handleFieldChange}
                            isEditMode={true}/>

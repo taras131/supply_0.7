@@ -4,6 +4,7 @@ import {ICurrentMachinery} from "../../../models/iMachinery";
 import {useAppDispatch} from "../../../hooks/redux";
 import PhotosManager from "../../../components/common/PhotosManager";
 import {basePath} from "../../../api";
+import Card from "@mui/material/Card";
 
 interface IProps {
     machinery: ICurrentMachinery;
@@ -23,10 +24,12 @@ const MachineryDetailsPhotos: FC<IProps> = ({machinery, isEditMode}) => {
     };
     const photosPaths = machinery.photos.map(photo => `${basePath}/files/${photo}`);
     return (
-        <PhotosManager photosPaths={photosPaths}
-                       onAddPhoto={onAddPhoto}
-                       onDeletePhoto={onDeletePhoto}
-                       isViewingOnly={!isEditMode}/>
+        <Card sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <PhotosManager photosPaths={photosPaths}
+                           onAddPhoto={onAddPhoto}
+                           onDeletePhoto={onDeletePhoto}
+                           isViewingOnly={!isEditMode}/>
+        </Card>
     );
 };
 

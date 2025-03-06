@@ -278,9 +278,18 @@ export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (a
 
 export const fetchUpdateMachineryTask = createAsyncThunk(
     "fetch_update_task",
-    async (task: ITask, {rejectWithValue, dispatch}) => {
+    async (task: ITask, {rejectWithValue, dispatch, getState}) => {
         try {
-            return await machineryAPI.updateTask(task);
+            const res = await machineryAPI.updateTask(task);
+            if (res.problem_id) {
+                const state = getState() as RootState;
+                const problem = getProblemById(state, res.problem_id);
+                if (problem) {
+                    const updatedProblem = {...problem, status_id: res.status_id + 1};
+                    dispatch(fetchUpdateMachineryProblem(updatedProblem));
+                }
+            }
+            return res;
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
             dispatch(

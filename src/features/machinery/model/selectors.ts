@@ -4,6 +4,8 @@ import {useAppSelector} from "../../../hooks/redux";
 import {IOrder} from "../../../models/iOrders";
 import {MachineryStatus} from "utils/const";
 import {ITask} from "../../../models/ITasks";
+import problems from "../ui/problems/Problems";
+import {IProblem} from "../../../models/IProblems";
 
 const collator = new Intl.Collator("ru");
 
@@ -48,12 +50,16 @@ export const getCurrentMachineryOperatingTypeId = (state: RootState): number | n
     return state.machinery.currentMachinery?.operating_type_id || null;
 };
 
-export const getProblemById = (state: RootState, problemId: number) => {
-    return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId);
+export const getProblemById = (state: RootState, problemId: number): IProblem | null => {
+    return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId) || null;
 };
 
-export const getActiveProblems = (state: RootState) => {
-    return state.machinery.currentMachinery?.problems.filter(problem => problem.status_id === 1) || [];
+export const getActiveProblems = (state: RootState, problemId: number | undefined) => {
+    return state.machinery.currentMachinery?.problems.filter(problem => !problem.task_id || problem.id === problemId) || [];
+};
+
+export const getProblemTitleById = (state: RootState, problemId: number | undefined) => {
+    return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId)?.title || "";
 };
 
 export const getCurrentMachineryId = (state: RootState): number | null => {
@@ -64,9 +70,45 @@ export const getCurrentMachineryTasks = (state: RootState): ITask [] | [] => {
     return state.machinery.currentMachinery?.tasks || [];
 };
 
+export const getCurrentMachineryProblems = (state: RootState): IProblem [] | [] => {
+    return state.machinery.currentMachinery?.problems || [];
+};
+
 export const getTaskById = (state: RootState, taskId: number): ITask | null => {
     return state.machinery.currentMachinery?.tasks.find(task => task.id === taskId) || null;
-}
+};
+
+export const getLastMaintenance = (state: RootState): ITask | null => {
+    const tasks = state.machinery.currentMachinery?.tasks;
+    if (!tasks) return null;
+    const filteredTasks = tasks.filter(task => task.status_id === 3 && task.type_id === 1);
+    if (filteredTasks.length === 0) return null;
+    return filteredTasks.reduce(
+        (latestTask, currentTask) =>
+            currentTask.due_date > latestTask.due_date ? currentTask : latestTask,
+        filteredTasks[0]
+    );
+};
+
+export const getUpcomingMaintenance = (state: RootState): ITask | null => {
+    // Получаем список задач текущей техники
+    const tasks = state.machinery.currentMachinery?.tasks;
+    if (!tasks) return null;
+
+    // Фильтруем задачи по условиям: status_id (1 или 2) и type_id (1)
+    const filteredTasks = tasks.filter(
+        task => (task.status_id === 1 || task.status_id === 2) &&
+            task.type_id === 1
+    );
+    if (filteredTasks.length === 0) return null;
+
+    // Ищем задачу с минимальным значением due_date (ближайшую)
+    return filteredTasks.reduce(
+        (nearestTask, currentTask) =>
+            currentTask.due_date < nearestTask.due_date ? currentTask : nearestTask,
+        filteredTasks[0]
+    );
+};
 
 export const getRelatedMachineryByInvoiceId = (state: RootState, invoiceId: string): IMachinery[] => {
     const relatedMachinery: IMachinery[] = [];

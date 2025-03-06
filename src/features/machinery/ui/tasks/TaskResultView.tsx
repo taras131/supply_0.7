@@ -19,6 +19,26 @@ const TaskResultView: FC<IProps> = ({task, errors, isEditMode = false, fieldChan
         < Stack spacing={isEditMode ? 2 : 4}>
             {"result_description" in task && "spent_resources" in task && (
                 <>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
+                        <FieldControl
+                            label="Наработка (часы)"
+                            name="result_operating"
+                            id="result_operating"
+                            value={task.result_operating}
+                            error={errors?.result_operating}
+                            isEditMode={isEditMode}
+                            onChange={fieldChangeHandler}
+                        />
+                        <FieldControl
+                            label="Пробег (километры)"
+                            name="result_odometer"
+                            id="result_odometer"
+                            value={task.result_odometer}
+                            error={errors?.result_odometer}
+                            isEditMode={isEditMode}
+                            onChange={fieldChangeHandler}
+                        />
+                    </Stack>
                     <FieldControl
                         label="Результат"
                         name="result_description"
@@ -29,19 +49,17 @@ const TaskResultView: FC<IProps> = ({task, errors, isEditMode = false, fieldChan
                         onChange={fieldChangeHandler}
                         isRequired
                         isMultiline
-                        rows={5}
                     />
                     <FieldControl
                         label="Потраченные материалы"
-                        name="result_description"
-                        id="result_description"
+                        name="spent_resources"
+                        id="spent_resources"
                         value={task.spent_resources}
                         error={errors?.spent_resources}
                         isEditMode={isEditMode}
                         onChange={fieldChangeHandler}
                         isRequired
                         isMultiline
-                        rows={5}
                     />
                 </>
             )}

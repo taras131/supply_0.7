@@ -4,7 +4,7 @@ import {convertMillisecondsToDate} from "../../../../utils/services";
 import {ValidationErrors} from "../../../../utils/validators";
 import {Button, Chip, SelectChangeEvent, Stack, Typography} from "@mui/material";
 import FieldControl from "../../../../components/common/FieldControl";
-import {problemCategories, problemPriority, problemStatus} from "../../utils/const";
+import {problemCategories, problemPriority, problemStatus, taskStatus} from "../../utils/const";
 import {getPriorityChipColor, getPriorityTitleById} from "../../utils/services";
 import Box from "@mui/material/Box";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
@@ -13,6 +13,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {useAppSelector} from "../../../../hooks/redux";
 import {getUserFullNameById} from "../../../users/model/selectors";
 import {useNavigate} from "react-router-dom";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 interface IProps {
     problem: INewProblem | IProblem | null;
@@ -43,6 +44,21 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
             state: {problemId: problemId},
         });
     };
+    let statusColor: "error" | "warning" | "primary" | "success" = "error";
+    switch (problem.status_id) {
+        case 1:
+            statusColor = "error";
+            break;
+        case 2:
+            statusColor = "warning";
+            break;
+        case 3:
+            statusColor = "primary";
+            break;
+        case 4:
+            statusColor = "success";
+            break;
+    }
     return (
         <Stack spacing={isEditMode ? 2 : 4} sx={{flexGrow: 1}}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
@@ -69,19 +85,20 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                     </>)
                     : (<>
                         <Box sx={{display: "flex", gap: "10px", alignItems: "center"}}>
-                            {problem.status_id === 1 && <HourglassBottomIcon color="warning"/>}
-                            {problem.status_id === 2 && <BuildIcon color="primary"/>}
-                            {problem.status_id === 3 && <CheckCircleIcon color="success"/>}
+                            {problem.status_id === 1 && <HourglassBottomIcon color={statusColor}/>}
+                            {problem.status_id === 2 && <AssignmentIcon color={statusColor}/>}
+                            {problem.status_id === 3 && <BuildIcon color={statusColor}/>}
+                            {problem.status_id === 4 && <CheckCircleIcon color={statusColor}/>}
                             <Typography fontWeight={700}>
                                 {problem.task_id
                                     ? (<Button variant="text"
-                                               color="primary"
+                                               color={statusColor}
                                                onClick={viewTaskClickHandler}
                                     >
-                                        Создана Задача
+                                        {problemStatus.find(status => status.id === problem.status_id)?.title || ""}
                                     </Button>)
                                     : (<Button variant="text"
-                                               color="primary"
+                                               color={statusColor}
                                                onClick={createTaskClickHandler}
                                     >
                                         Создать задачу

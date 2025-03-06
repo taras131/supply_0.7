@@ -20,6 +20,8 @@ export interface INewTask {
     category_id: number;
     problem_id: number;
     type_id: number;
+    issue_operating: number;
+    issue_odometer: number;
 }
 
 export interface ITask  extends  INewTask{
@@ -28,5 +30,7 @@ export interface ITask  extends  INewTask{
     updated_date: number;
     result_photos: string[];
     result_description: string;
+    result_operating: number;
+    result_odometer: number;
     spent_resources: string;
 }
