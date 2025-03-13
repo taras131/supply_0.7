@@ -29,8 +29,6 @@ import {
 import {fetchAddOrder, fetchUpdateOrder} from "features/orders/model/actions";
 import OrderChangeCancelledButton from "features/orders/ui/OrderChangeCancelledButton";
 import {getUserFullNameById} from "../../users/model/selectors";
-import MachineryTable from "../../machinery/ui/MachineryTable";
-import MachineryTableRow from "../../machinery/ui/MachineryTableRow";
 
 const OrderDetails = () => {
     const [isValidate, setIsValidate] = useState(false);
@@ -150,7 +148,7 @@ const OrderDetails = () => {
                 orderId={orderId}
                 isSelectPositionMode={false}
             />
-            {machinery && !isEdit && (
+      {/*      {machinery && !isEdit && (
                 <>
                     <Box sx={{width: "100%"}}>
                         <Typography fontSize={matches_700 ? "18px" : "14px"} fontWeight={550}>
@@ -159,7 +157,7 @@ const OrderDetails = () => {
                     </Box>
                     <MachineryTableRow row={machinery}/>
                 </>
-            )}
+            )}*/}
             {relatedInvoices && relatedInvoices.length > 0 && !isEdit && (
                 <>
                     <Box sx={{width: "100%"}}>

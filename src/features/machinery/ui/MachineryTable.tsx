@@ -1,67 +1,129 @@
-import React, {FC, useMemo, useState} from "react";
+import React, {FC} from "react";
 import Card from "@mui/material/Card";
 import {IMachinery} from "../../../models/iMachinery";
-import {Table, TableBody, TableCell, TableHead, TablePagination, TableRow} from "@mui/material";
-import MachineryTableRow from "./MachineryTableRow";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
+import {Chip, Stack, useMediaQuery} from "@mui/material";
+import {ITableColumn} from "../../../models/ITable";
+import {filesPath} from "../../files/api";
+import photoPlaceholder from "../../../assets/images/placeholder.png";
+import BaseTable from "../../../components/common/BaseTable";
+import {engineTypes, machineryTypes} from "../utils/const";
+import {styled} from "@mui/material/styles";
+import {routes} from "../../../utils/routes";
+import {useNavigate} from "react-router-dom";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {setMessage} from "../../../store/reducers/message";
+import {MESSAGE_SEVERITY, VIN_COPY_TEXT} from "../../../utils/const";
+import {useAppDispatch} from "../../../hooks/redux";
+
+const StyledImage = styled("img")({
+    width: "100%",
+    height: "70px",
+    objectFit: "contain",
+    backgroundColor: "inherit",
+    borderRadius: "8px",
+});
 
 interface IProps {
     rows?: IMachinery[];
 }
 
 const MachineryTable: FC<IProps> = ({rows = []}) => {
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    const handlePageChange = (event: unknown, newPage: number) => {
-        setPage(newPage);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const matches_1150 = useMediaQuery("(max-width:1150px)");
+    const matches_1000 = useMediaQuery("(max-width:1000px)");
+    const matches_850 = useMediaQuery("(max-width:850px)");
+    const matches_650 = useMediaQuery("(max-width:650px)");
+    const rowClickHandler = (row: IMachinery) => {
+        navigate(`${routes.machinery}/${row.id}`);
     };
-
-    const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const paginatedRows = useMemo(() => {
-        const start = page * rowsPerPage;
-        return rows.slice(start, start + rowsPerPage);
-    }, [rows, page, rowsPerPage]);
-
-    const rowsList = paginatedRows.map(row => (
-        <MachineryTableRow key={row.id} row={row}/>
-    ));
-
+    const columns: ITableColumn<IMachinery>[] = [
+        {
+            key: "photo",
+            label: "Фото",
+            isHidden: matches_650,
+            getValue: (row) => {
+                const photoPath = row.photos[0] ? `${filesPath}/${row.photos[0]}` : photoPlaceholder;
+                return (
+                    <StyledImage src={photoPath} alt="machinery_photo"/>
+                );
+            },
+        },
+        {
+            key: "type_id",
+            label: "Категория",
+            isHidden: matches_1150,
+            getValue: (row) => machineryTypes.find(type => type.id === row.type_id)?.title || "",
+        },
+        {
+            key: "brand",
+            label: "Марка",
+        },
+        {
+            key: "model",
+            label: "Модель",
+        },
+        {
+            key: "year_manufacture",
+            label: "Год выпуска",
+        },
+        {
+            key: "engine_type_id",
+            label: "Тип двигателя",
+            isHidden: matches_1150,
+            getValue: (row) => engineTypes.find(type => type.id === row.engine_type_id)?.title || "",
+        },
+        {
+            key: "description",
+            label: "Гос. номер",
+            isHidden: matches_850,
+        },
+        {
+            key: "vin",
+            label: "VIN",
+            isHidden: matches_1000,
+            getValue: (row) => {
+                const handleVINClick = (e: any) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(row.vin);
+                    dispatch(setMessage({text: VIN_COPY_TEXT, severity: MESSAGE_SEVERITY.success}));
+                };
+                return (
+                    <Stack sx={{cursor: "pointer"}}
+                           onClick={handleVINClick}
+                           direction="row"
+                           alignItems="center"
+                           spacing={1}>
+                        <ContentCopyIcon color="info"/>
+                        {row.vin}
+                    </Stack>
+                );
+            },
+        },
+        {
+            key: "status",
+            label: "Статус",
+            getValue: (row) => {
+                const statusColor = row.status === "Работает"
+                    ? "success"
+                    : "error";
+                return (
+                    <Chip
+                        label={row.status}
+                        color={statusColor}
+                    />
+                );
+            },
+        },
+    ];
     return (
-        <Card>
-            <Box sx={{overflowX: "auto"}}>
-                <Table sx={{minWidth: "800px"}}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Фото</TableCell>
-                            <TableCell>Марка</TableCell>
-                            <TableCell>Модель</TableCell>
-                            <TableCell>Год выпуска</TableCell>
-                            <TableCell>Номер</TableCell>
-                            <TableCell>VIN</TableCell>
-                            <TableCell>Категория</TableCell>
-                            <TableCell>Ещё</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rowsList}
-                    </TableBody>
-                </Table>
-            </Box>
-            <Divider/>
-            <TablePagination
-                component="div"
-                count={rows.length}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPageOptions={[5, 10, 25]}
+        <Card sx={{overflowX: "auto"}}>
+            <BaseTable
+                rows={rows}
+                columns={columns}
+                onRowClick={rowClickHandler}
+                minWidth="470px"
             />
         </Card>
     );

@@ -6,4 +6,5 @@ export interface ITableColumn<T> {
     formatter?: CellFormatter<T>;
     getValue?: (row: T) => any;
     width?: string | number;
+    isHidden?: boolean;
 }

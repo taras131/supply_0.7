@@ -25,21 +25,17 @@ const BaseTable = <T extends { id: number | string }>({
     const theme = useTheme();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
     const handlePageChange = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
-
     const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
     const paginatedRows = useMemo(() => {
         const start = page * rowsPerPage;
         return rows.slice(start, start + rowsPerPage);
     }, [rows, page, rowsPerPage]);
-
     const renderRow = (row: T) => {
         if (renderCustomRow) {
             return renderCustomRow(row);
@@ -56,16 +52,16 @@ const BaseTable = <T extends { id: number | string }>({
                         : "transparent",
                     "& .MuiTableCell-root": {
                         color: row.id === activeRowId
-                            ? "white" // Белый текст, если строка активная
-                            : "inherit", // Наследование, если строка не активна
+                            ? "white"
+                            : "inherit",
                     },
                 }}
             >
                 {
-                    columns.map((column) => (
+                    columns.filter(column => !column.isHidden).map(column => (
                         <TableCell
                             key={`${row.id}-${column.key}`}
-                            style={{width: column.width}}
+                            style={{width: column.width,  padding: "8px"}}
                         >
                             {column.formatter
                                 ? column.formatter(column.getValue ? column.getValue(row) : row[column.key as keyof T])
@@ -78,14 +74,13 @@ const BaseTable = <T extends { id: number | string }>({
             </TableRow>
         );
     };
-
     return (
         <Card>
             <Box sx={{overflowX: "auto"}}>
                 <Table sx={{minWidth}}>
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => (
+                            {columns.filter(column => !column.isHidden).map((column) => (
                                 <TableCell
                                     key={column.key}
                                     style={{width: column.width}}
