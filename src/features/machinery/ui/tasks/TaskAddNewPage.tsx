@@ -2,8 +2,7 @@ import React, {useEffect} from "react";
 import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import {routes} from "../../../../utils/routes";
+import {useLocation, useNavigate} from "react-router-dom";
 import TaskIssueView from "./TaskIssueView";
 import {useEditor} from "../../../../hooks/useEditor";
 import {newTaskValidate} from "../../../../utils/validators";
@@ -26,18 +25,25 @@ const TaskAddNewPage = () => {
     const {tempFiles, onAddPhoto, onDeletePhoto, clearPhotos} = usePhotoManager();
     const location = useLocation();
     const problemId = location.state?.problemId;
+    const taskTypeId = location.state?.taskTypeId;
     const {
         editedValue,
         errors,
         handleFieldChange,
         setEditedValue,
         resetValue,
+        validateValue,
     } = useEditor<INewTask>({initialValue: JSON.parse(JSON.stringify(emptyTask)), validate: newTaskValidate});
     useEffect(() => {
         if (problemId) {
             setEditedValue(prev => ({...prev, problem_id: problemId, type_id: 2}));
         }
     }, [problemId]);
+    useEffect(() => {
+        if (taskTypeId) {
+            setEditedValue(prev => ({...prev, type_id: taskTypeId}));
+        }
+    }, [taskTypeId]);
     useEffect(() => {
         const today = new Date();
         setEditedValue(prev => ({
@@ -46,6 +52,11 @@ const TaskAddNewPage = () => {
         }));
         return () => clearPhotos();
     }, []);
+    useEffect(() => {
+        if (validateValue) {
+            validateValue();
+        }
+    }, [editedValue, validateValue]);
     const handleDateChange = (date: any) => {
         if (date && date.isValid && date.isValid()) {
             setEditedValue(prev => ({
@@ -77,7 +88,7 @@ const TaskAddNewPage = () => {
                 <Button onClick={handleAddClick}
                         variant={"contained"}
                         color={"success"}
-                        disabled={false}>
+                        disabled={!!Object.keys(errors).length}>
                     Сохранить
                 </Button>
             </Stack>

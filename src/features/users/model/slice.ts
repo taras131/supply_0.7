@@ -2,13 +2,13 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IUser} from "../../../models/IUser";
 
 export const userRoles = [
-    {id: 0, title: "Директор"},
-    {id: 1, title: "Бухгалтер"},
-    {id: 2, title: "Снабженец"},
-    {id: 3, title: "Механик"},
-    {id: 4, title: "Слесарь"},
-    {id: 5, title: "Электрик"},
-    {id: 5, title: "Энергетик"},
+    {id: 1, title: "Директор"},
+    {id: 2, title: "Бухгалтер"},
+    {id: 3, title: "Снабженец"},
+    {id: 4, title: "Механик"},
+    {id: 5, title: "Слесарь"},
+    {id: 6, title: "Электрик"},
+    {id: 7, title: "Энергетик"},
 ];
 
 export interface IUserState {

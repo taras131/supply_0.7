@@ -36,7 +36,6 @@ export const authAPI = {
         localStorage.setItem("token", access_token);
         // Расшифровка токена
         return parseJwt(access_token);
-
     },
     register: async (registerData: IRegisterData) => {
         const res = await fetch(registerPath, {
@@ -50,7 +49,11 @@ export const authAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
-        return  await res.json();
+        const result = await res.json();
+        if(result.access_token) {
+            localStorage.setItem("token", result.access_token);
+        }
+        return result;
     },
     out: async () => {
       /*  const res = await signOut(this.auth);

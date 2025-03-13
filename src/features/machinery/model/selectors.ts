@@ -55,7 +55,7 @@ export const getProblemById = (state: RootState, problemId: number): IProblem | 
 };
 
 export const getActiveProblems = (state: RootState, problemId: number | undefined) => {
-    return state.machinery.currentMachinery?.problems.filter(problem => !problem.task_id || problem.id === problemId) || [];
+    return state.machinery.currentMachinery?.problems.filter(problem => problem.status_id !== 4 || problem.id === problemId) || [];
 };
 
 export const getProblemTitleById = (state: RootState, problemId: number | undefined) => {

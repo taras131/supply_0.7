@@ -68,10 +68,6 @@ const ProblemCard: FC<IProps> = ({isOpen, onClose, currentProblemId}) => {
                 flexDirection: "column",
                 gap: "12px",
             }}>
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-
-
-                </Stack>
                 <ProblemView problem={editedValue}
                              errors={errors}
                              fieldChangeHandler={handleFieldChange}

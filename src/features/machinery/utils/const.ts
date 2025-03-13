@@ -2,6 +2,10 @@ import {INewProblem, IProblem} from "../../../models/IProblems";
 import {INewTask, ITask, ITaskPriority, ITaskStatus} from "../../../models/ITasks";
 import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
 import {MachineryStatus} from "../../../utils/const";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import WarningIcon from '@mui/icons-material/Warning';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
 
 export const engineTypes = [
     {id: 0, title: "Дизельный"},
@@ -72,10 +76,10 @@ export const machineryTypes = [
 ];
 
 export const PRIORITIES = [
-    {id: 0, title: "Не срочно и не важно"},
-    {id: 1, title: "Срочно, но не важно"},
-    {id: 2, title: "Не срочно, но важно"},
-    {id: 3, title: "Срочно и важно"},
+    {id: 1, title: "Ждёт", icon: AccessTimeIcon, color: "primary"},
+    {id: 2, title: "Важно", icon: NewReleasesIcon, color: "warning"},
+    {id: 3, title: "Срочно", icon: WarningIcon, color: "error"},
+ //   {id: 4, title: "Срочно и важно", icon: WarningIcon, color: "error"},
 ];
 
 export const problemCategories = [
@@ -133,19 +137,11 @@ export const emptyProblem: INewProblem = {
     operating: 0,
     odometer: 0,
     status_id: 1,
+    tasks_id: [],
 };
 
 export const defaultProblem: IProblem = {
-    title: "",
-    description: "",
-    photos: [],
-    author_id: 0,
-    machinery_id: 0,
-    priority_id: 2,
-    category_id: -1,
-    operating: 0,
-    odometer: 0,
-    status_id: 1,
+    ...emptyProblem,
     id: 0,
     created_date: 0,
     updated_date: 0,

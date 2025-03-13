@@ -10,6 +10,7 @@ export const getUserById = (state: RootState, useId: number): IUser => {
     return state.users.list.filter((user: IUser) => user.id === useId)[0];
 };
 
-export const getUserFullNameById = (state: RootState, userId: number): string => {
-    return "";
+export const getUserFullNameById = (state: RootState, userId: number | null): string => {
+    const user = state.users.list.find(user => user.id === userId);
+    return user ? `${user.first_name} ${user.middle_name}`  : "";
 };

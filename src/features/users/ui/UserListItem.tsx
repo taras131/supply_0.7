@@ -24,7 +24,7 @@ const UserListItem: FC<IProps> = ({user }) => {
         {user.email}
       </TableCell>
       <TableCell sx={{ padding: matches_650 ? "12px" : "4px" }} align="left">
-        {userRoles[user.role_id].title}
+        {userRoles.find(role => role.id === user.role_id)?.title || ""}
       </TableCell>
     </TableRow>
   );

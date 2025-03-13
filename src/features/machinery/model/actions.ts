@@ -260,7 +260,7 @@ export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (a
             const state = getState() as RootState;
             const problem = getProblemById(state, res.problem_id);
             if (problem) {
-                const updatedProblem = {...problem, task_id: res.id, status_id: 2};
+                const updatedProblem = {...problem, tasks_id: [...problem.tasks_id, res.id], status_id: 2};
                 dispatch(fetchUpdateMachineryProblem(updatedProblem));
             }
         }
@@ -281,7 +281,7 @@ export const fetchUpdateMachineryTask = createAsyncThunk(
     async (task: ITask, {rejectWithValue, dispatch, getState}) => {
         try {
             const res = await machineryAPI.updateTask(task);
-            if (res.problem_id) {
+            if (res.problem_id && res.status_id !== 3) {
                 const state = getState() as RootState;
                 const problem = getProblemById(state, res.problem_id);
                 if (problem) {

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useMemo} from 'react';
+import React, {ChangeEvent, FC, useMemo} from "react";
 import {IMachinery, INewMachinery} from "../../../models/iMachinery";
 import {ValidationErrors} from "../../../utils/validators";
 import {SelectChangeEvent, Stack, Typography} from "@mui/material";

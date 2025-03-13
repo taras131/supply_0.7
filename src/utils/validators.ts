@@ -1,6 +1,7 @@
 import {ICurrentMachinery, IDoc, INewMachinery} from "../models/iMachinery";
 import {INewProblem, IProblem} from "../models/IProblems";
 import {INewTask} from "../models/ITasks";
+import {IRegisterData} from "../models/iAuth";
 
 export type ValidationErrors = { [key: string]: string | null };
 
@@ -62,6 +63,8 @@ export const newTaskValidate = (task: INewTask) => {
     if(task.description.length === 0) errors.description = "Описание должно быть";
     if(task.description.length < 3) errors.description = "Описание должно быть не менее 2 символов";
     if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
+    if(task.priority_id < 0) errors.priority_id = "Выбирите приоритет";
+    if(task.type_id < 0) errors.type_id = "Выбирите тип работ";
     return errors;
 };
 
@@ -73,5 +76,41 @@ export const taskValidate = (task: INewTask) => {
     if(task.description.length === 0) errors.description = "Описание должно быть";
     if(task.description.length < 3) errors.description = "Описание должно быть не менее 2 символов";
     if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
+    if(task.priority_id < 0) errors.priority_id = "Выбирите приоритет";
+    if(task.type_id < 0) errors.type_id = "Выбирите тип работ";
     return errors;
 };
+
+export const loginValidate = (user: IRegisterData) => {
+    const errors: ValidationErrors = {};
+    if (!user.email) {
+        errors.email = "Email обязателен";
+    } else {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(user.email)) {
+            errors.email = "Некорректный формат email";
+        } else if (user.email.length < 3) {
+            errors.email = "Не менее 3 символов";
+        }
+    }
+    if(user.password.length === 0) errors.password = "Пароль должен быть";
+    if(user.password.length < 4) errors.password = "Пароль должен быть не короче 4 символов";
+    if(user.password.length > 32) errors.password = "Пароль должен быть не длинее 32 символов";
+    return errors;
+};
+
+export const registerValidate = (user: IRegisterData) => {
+    const errors: ValidationErrors = loginValidate(user);
+    if(user.password.length === 0) errors.password = "Пароль должен быть";
+    if(user.password.length < 4) errors.password = "Пароль должен быть не короче 4 символов";
+    if(user.password.length > 32) errors.password = "Пароль должен быть не длинее 32 символов";
+    if(user.first_name.length === 0) errors.first_name = "Имя должен быть";
+    if(user.first_name.length < 2) errors.first_name = "Имя должен быть не короче 2 символов";
+    if(user.first_name.length > 32) errors.first_name = "Имя должно быть не длинее 32 символов";
+    if(user.middle_name.length === 0) errors.middle_name = "Отчество должено быть";
+    if(user.middle_name.length < 2) errors.middle_name = "Отчество должено быть не короче 2 символов";
+    if(user.middle_name.length > 32) errors.middle_name = "Отчество должно быть не длинее 32 символов";
+    if(user.role_id < 0) errors.role_id = "Выберите роль";
+    return errors;
+};
+

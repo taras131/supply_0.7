@@ -20,7 +20,7 @@ export interface INewProblem {
     status_id: number;
     operating: number;
     odometer: number;
-    task_id?: number;
+    tasks_id: number [];
 }
 
 export interface IProblem extends INewProblem {

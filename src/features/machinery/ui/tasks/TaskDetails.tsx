@@ -20,12 +20,12 @@ interface IProps {
 }
 
 const TaskDetails: FC<IProps> = ({
-                                         editedValue,
-                                         errors,
-                                         fieldChangeHandler,
-                                         handleDateChange,
-                                         viewType,
-                                     }) => {
+                                     editedValue,
+                                     errors,
+                                     fieldChangeHandler,
+                                     handleDateChange,
+                                     viewType,
+                                 }) => {
     const dispatch = useAppDispatch();
     const [isEditMode, setIsEditMode] = useState(false);
     if (!editedValue) return null;
@@ -34,7 +34,7 @@ const TaskDetails: FC<IProps> = ({
     };
     const onAddPhoto = (newFile: File) => {
         const type = viewType === "issue" ? "issue_photos" : "result_photos";
-        dispatch(fetchUploadTaskPhoto({ task: editedValue, file: newFile, type }));
+        dispatch(fetchUploadTaskPhoto({task: editedValue, file: newFile, type}));
         toggleIsEditMode();
     };
     const onDeletePhoto = (deletedFileIndex: number) => {
@@ -51,7 +51,7 @@ const TaskDetails: FC<IProps> = ({
     };
     const saveTaskClickHandler = () => {
         const updatedTask = viewType === "result"
-            ? { ...editedValue, status_id: 3 }
+            ? {...editedValue, status_id: 3}
             : editedValue;
         dispatch(fetchUpdateMachineryTask(updatedTask));
         toggleIsEditMode();
@@ -102,7 +102,9 @@ const TaskDetails: FC<IProps> = ({
                         <Button onClick={saveTaskClickHandler}
                                 variant={"contained"}
                                 color={"success"}
-                                size="small">
+                                size="small"
+                                disabled={errors && !!Object.keys(errors).length}
+                        >
                             Сохранить
                         </Button>
                     </>)

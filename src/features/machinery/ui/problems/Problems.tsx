@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import {IProblem} from "../../../../models/IProblems";
 import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -7,46 +7,20 @@ import AddIcon from "@mui/icons-material/Add";
 import ProblemsTable from "./ProblemsTable";
 import ProblemAddNew from "./ProblemAddNew";
 import ProblemCard from "./ProblemCard";
-
-export type DrawerMode = "create" | "edit" | "view";
+import {useProblemDrawer} from "../../../../hooks/useProblemDrawer";
 
 interface IProps {
     problems: IProblem[] | null;
 }
 
-interface IDrawerState {
-    isOpen: boolean;
-    mode: DrawerMode;
-    problemId: number | null;
-}
-
 const Problems: FC<IProps> = ({problems}) => {
-    const [drawerState, setDrawerState] = useState<IDrawerState>({
-        isOpen: false,
-        mode: "create",
-        problemId: null,
-    });
-
-    const handleDrawerClose = () => {
-        setDrawerState(prev => ({...prev, isOpen: false}));
-    };
-
+    const { drawerState, openDrawer, closeDrawer } = useProblemDrawer();
     const handleAddClick = () => {
-        setDrawerState({
-            isOpen: true,
-            mode: "create",
-            problemId: null,
-        });
+        openDrawer("create");
     };
-
     const handleProblemClick = (problemId: number) => {
-        setDrawerState({
-            isOpen: true,
-            mode: "view",
-            problemId: problemId,
-        });
+        openDrawer("view", problemId);
     };
-
     return (
         <Stack spacing={4}>
             <Stack direction="row" spacing={3} justifyContent="space-between" alignItems="center">
@@ -67,13 +41,13 @@ const Problems: FC<IProps> = ({problems}) => {
             {drawerState.isOpen && drawerState.mode === "create" && (
                 <ProblemAddNew
                     isOpen={drawerState.isOpen}
-                    onClose={handleDrawerClose}
+                    onClose={closeDrawer}
                 />
             )}
             {drawerState.isOpen && drawerState.problemId && drawerState.mode === "view" && (
                 <ProblemCard
                     isOpen={drawerState.isOpen}
-                    onClose={handleDrawerClose}
+                    onClose={closeDrawer}
                     currentProblemId={drawerState.problemId}
                 />
             )}

@@ -23,6 +23,7 @@ const TaskDetailsPage = () => {
         errors,
         handleFieldChange,
         setEditedValue,
+        validateValue,
     } = useEditor<ITask>({
         initialValue: JSON.parse(JSON.stringify(defaultTask)),
         validate: taskValidate,
@@ -30,6 +31,8 @@ const TaskDetailsPage = () => {
     useEffect(() => {
         if (currentTask) {
             setEditedValue(currentTask);
+            validateValue();
+            setExpandedResultPanel(currentTask.status_id === 3);
         }
     }, [currentTask]);
     if (!currentTask) return null;

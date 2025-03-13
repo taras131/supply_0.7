@@ -167,12 +167,15 @@ export const getPriorityColor = (priorityId: number): "success" | "primary" | "s
     let color = "success";
     switch (priorityId) {
         case 1:
-            color = "primary";
+            color = "success";
             break;
         case 2:
-            color = "secondary";
+            color = "primary";
             break;
         case 3:
+            color = "secondary";
+            break;
+        case 4:
             color = "warning";
             break;
     }

@@ -1,14 +1,12 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import LoadingButton from "@mui/lab/LoadingButton";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {ChangeEvent, useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {routes} from "../../../utils/routes";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
@@ -17,31 +15,34 @@ import {getAuthErrorMessage, getIsAuth, getIsAuthLoading} from "../model/selecto
 import MessageWindow from "../../../components/MessageWindow";
 import {setMessage} from "../../../store/reducers/message";
 import {MESSAGE_SEVERITY} from "../../../utils/const";
-import {FormControl, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {userRoles} from "../../users/model/slice";
+import {useEditor} from "../../../hooks/useEditor";
+import {registerValidate} from "../../../utils/validators";
+import {emptyUser} from "../utils/const";
+import {IRegisterData} from "../../../models/iAuth";
+import FieldControl from "../../../components/common/FieldControl";
+import {Stack} from "@mui/material";
+import Card from "@mui/material/Card";
 
 const Auth = () => {
     const location: any = useLocation();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const isAuth = useAppSelector((state) => getIsAuth(state));
-    const isLoading = useAppSelector((state) => getIsAuthLoading(state));
-    const errorMessage = useAppSelector((state) => getAuthErrorMessage(state));
+    const isAuth = useAppSelector(getIsAuth);
+    const isLoading = useAppSelector(getIsAuthLoading);
+    const errorMessage = useAppSelector(getAuthErrorMessage);
     const {pathname} = useLocation();
     const isRegister = pathname === routes.register;
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-    const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
-    const [inputData, setInputData] = useState({
-        email: "",
-        first_name: "",
-        middle_name: "",
-        role_id: 2,
-        password: "",
+    const {
+        editedValue,
+        errors,
+        handleFieldChange,
+        resetValue,
+    } = useEditor<IRegisterData>({
+        initialValue: emptyUser,
+        validate: registerValidate,
     });
-    const inputChangeHandler = (e: ChangeEvent<HTMLInputElement
-        | HTMLTextAreaElement> | SelectChangeEvent) => {
-        setInputData(prev => ({...prev, [e.target.name]: e.target.value}));
-    };
+    const [isOpenErrorMessageWindow, setIsOpenErrorMessageWindow] = useState(false);
     useEffect(() => {
         if (errorMessage) {
             setIsOpenErrorMessageWindow(true);
@@ -68,142 +69,112 @@ const Auth = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (isRegister) {
-            dispatch(
-                fetchRegister({
-                    first_name: inputData.first_name,
-                    middle_name: inputData.middle_name,
-                    password: inputData.password,
-                    email: inputData.email,
-                    role_id: +inputData.role_id,
-                }),
-            );
+            dispatch(fetchRegister(editedValue),);
         } else {
-            dispatch(fetchLogin({email: inputData.email, password: inputData.password}));
+            dispatch(fetchLogin({email: editedValue.email, password: editedValue.password}));
         }
+        resetValue();
     };
-    const roleList = useMemo(
-        () =>
-            userRoles.map((type) => (
-                <MenuItem key={type.id} value={type.id}>
-                    {type.title}
-                </MenuItem>
-            )),
-        []
-    );
+    console.log(errors);
     return (
         <Container component="div" maxWidth="xs">
-            <CssBaseline/>
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
-            >
-                <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    {isRegister ? "Регистрация" : "Вход"}
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1, width: "300px"}}>
-                    <div style={{height: 95}}>
-                        <TextField
-                            onChange={inputChangeHandler}
-                            value={inputData.email}
-                            margin="normal"
-                            fullWidth
-                            id="email"
-                            label="Email"
-                            name="email"
-                            autoComplete="email"
-                            error={!inputData.email}
-                            type={"email"}
-                        />
-                    </div>
-                    <div style={{height: 95}}>
-                        <TextField
-                            onChange={inputChangeHandler}
-                            value={inputData.password}
-                            margin="normal"
-                            fullWidth
-                            name="password"
-                            label="Пароль"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            error={!inputData.password}
-                        />
-                    </div>
-                    {isRegister && (
-                        <>
-                            <div style={{height: 95}}>
-                                <TextField
-                                    onChange={inputChangeHandler}
-                                    value={inputData.first_name}
-                                    margin="normal"
-                                    fullWidth
-                                    name="first_name"
-                                    label="Имя"
-                                    type="text"
-                                    id="firstName"
-                                    autoComplete="firstName"
-                                    error={!inputData.first_name}
-                                />
-                            </div>
-                            <div style={{height: 95}}>
-                                <TextField
-                                    onChange={inputChangeHandler}
-                                    value={inputData.middle_name}
-                                    margin="normal"
-                                    fullWidth
-                                    name="middle_name"
-                                    label="Отчество"
-                                    type="text"
-                                    id="middleName"
-                                    autoComplete="middleName"
-                                    error={!inputData.middle_name}
-                                />
-                            </div>
-                            <div style={{height: 95}}>
-                                <FormControl fullWidth>
-                                    <Select
-                                        id={"select_role"}
-                                        value={`${inputData.role_id}`}
-                                        onChange={inputChangeHandler}
-                                        sx={{overflow: "hidden"}}
-                                        fullWidth
-                                        name={"role_id"}
-                                    >
-                                        {roleList}
-                                    </Select>
-                                </FormControl>
-                            </div>
-                        </>
-                    )}
-                    <LoadingButton
-                        loading={isLoading}
-                        loadingIndicator="Загрузка…"
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{mt: 3, mb: 2}}
-
-                    >
-                        {isRegister ? "Регистрация" : "Войти"}
-                    </LoadingButton>
-                    <Grid container>
-                        <Grid item>
-                            {isRegister ? (
-                                <Link to={routes.login}>{"Есть аккаунт? Войти"}</Link>
-                            ) : (
-                                <Link to={routes.register}>{"Нет аккаунта? Зарегистрироваться"}</Link>
+            <Stack justifyContent="center" alignItems="center" sx={{minHeight: "80vh"}}>
+                <Card sx={{padding: "24px"}}>
+                    <Stack spacing={1} alignItems="center" justifyContent="center">
+                        <Avatar sx={{m: 1, backgroundColor: "secondary.main"}}>
+                            <LockOutlinedIcon/>
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            {isRegister ? "Регистрация" : "Вход"}
+                        </Typography>
+                        <Box component="form"
+                             onSubmit={handleSubmit}
+                             sx={{width: "300px",
+                                 display: "flex",
+                                 justifyContent: "center",
+                                 alignItems: "center",
+                                 flexDirection: "column",
+                                 gap: "10px"}}>
+                            <FieldControl
+                                label="Email"
+                                name="email"
+                                id="email"
+                                value={editedValue.email}
+                                error={errors?.email}
+                                isEditMode={true}
+                                onChange={handleFieldChange}
+                                isRequired
+                            />
+                            <FieldControl
+                                label="Пароль"
+                                name="password"
+                                id="password"
+                                value={editedValue.password}
+                                error={errors?.password}
+                                isEditMode={true}
+                                onChange={handleFieldChange}
+                                isRequired
+                            />
+                            {isRegister && (
+                                <>
+                                    <FieldControl
+                                        label="Имя"
+                                        name="first_name"
+                                        id="first_name"
+                                        value={editedValue.first_name}
+                                        error={errors?.first_name}
+                                        isEditMode={true}
+                                        onChange={handleFieldChange}
+                                        isRequired
+                                    />
+                                    <FieldControl
+                                        label="Отчество"
+                                        name="middle_name"
+                                        id="middle_name"
+                                        value={editedValue.middle_name}
+                                        error={errors?.middle_name}
+                                        isEditMode={true}
+                                        onChange={handleFieldChange}
+                                        isRequired
+                                    />
+                                    <FieldControl
+                                        label="Основание"
+                                        name="role_id"
+                                        id="role_id"
+                                        value={editedValue.role_id}
+                                        error={errors?.role_id}
+                                        isEditMode={true}
+                                        onChange={handleFieldChange}
+                                        options={userRoles}
+                                        isRequired
+                                    />
+                                </>
                             )}
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Box>
+                            <LoadingButton
+                                loading={isLoading}
+                                loadingIndicator="Загрузка…"
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
+
+                            >
+                                {isRegister ? "Регистрация" : "Войти"}
+                            </LoadingButton>
+                            <Grid container>
+                                <Grid item>
+                                    {isRegister ? (
+                                        <Link to={routes.login}>{"Есть аккаунт? Войти"}</Link>
+                                    ) : (
+                                        <Link to={routes.register}>{"Нет аккаунта? Зарегистрироваться"}</Link>
+                                    )}
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Stack>
+                </Card>
+            </Stack>
+
             <MessageWindow
                 isOpenModal={isOpenErrorMessageWindow}
                 handleToggleOpen={toggleIsOpenErrorMessageWindow}

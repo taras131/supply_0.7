@@ -167,7 +167,6 @@ export const MachinerySlice = createSlice({
             })
             .addCase(fetchUpdateMachineryProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
                 if (state.currentMachinery && state.currentMachinery.problems) {
-                    console.log("fetchUpdateMachineryProblem "+action.payload.photos.length);
                     state.currentMachinery = {
                         ...state.currentMachinery,
                         problems: [...state.currentMachinery.problems.map(problem => problem.id === action.payload.id

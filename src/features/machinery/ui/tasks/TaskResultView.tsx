@@ -13,7 +13,6 @@ interface IProps {
 }
 
 const TaskResultView: FC<IProps> = ({task, errors, isEditMode = false, fieldChangeHandler}) => {
-
     if (!task) return null;
     return (
         < Stack spacing={isEditMode ? 2 : 4}>

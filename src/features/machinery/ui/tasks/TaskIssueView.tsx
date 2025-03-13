@@ -4,7 +4,7 @@ import {ValidationErrors} from "../../../../utils/validators";
 import {SelectChangeEvent, Stack, Typography} from "@mui/material";
 import {INewTask, ITask} from "../../../../models/ITasks";
 import FieldControl from "../../../../components/common/FieldControl";
-import {taskPriority, taskStatus, taskTypes} from "../../utils/const";
+import {PRIORITIES, taskPriority, taskStatus, taskTypes} from "../../utils/const";
 import {useAppSelector} from "../../../../hooks/redux";
 import {getAllUsers} from "../../../users/model/selectors";
 import {getActiveProblems, getProblemTitleById} from "../../model/selectors";
@@ -14,6 +14,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import ProblemCard from "../problems/ProblemCard";
+import {useProblemDrawer} from "../../../../hooks/useProblemDrawer";
 
 interface IProps {
     task: INewTask | ITask | null;
@@ -25,14 +26,15 @@ interface IProps {
 }
 
 const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChangeHandler, handleDateChange}) => {
-    const [isOpenProblemCard, setIsOpenProblemCard] = useState(false);
+    const {drawerState, openDrawer, closeDrawer} = useProblemDrawer();
+    const handleProblemClick = () => {
+        if (task && task.problem_id)
+            openDrawer("view", task.problem_id);
+    };
     const users = useAppSelector(getAllUsers);
     const usersList = users.map(user => ({id: user.id, title: `${user.first_name} ${user.middle_name}`}));
     const activeProblem = useAppSelector(state => getActiveProblems(state, task?.problem_id));
     const problemTitle = useAppSelector(state => getProblemTitleById(state, task?.problem_id));
-    const toggleIsOpenProblemCard = () => {
-        setIsOpenProblemCard(prev => !prev);
-    };
     const activeProblemList = activeProblem.map(problem => ({
         id: problem.id,
         title: `${convertMillisecondsToDate(problem.created_date)} ${problem.title}`,
@@ -77,7 +79,7 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                         <Typography ml={2} variant="subtitle2" sx={{width: "100%"}}>
                             Основание:
                             <span style={{display: "block", marginTop: "2px", cursor: "pointer"}}
-                                  onClick={toggleIsOpenProblemCard}>
+                                  onClick={handleProblemClick}>
                                 {problemTitle}
                             </span>
                         </Typography>
@@ -125,7 +127,7 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                     error={errors?.priority_id}
                     isEditMode={isEditMode}
                     onChange={fieldChangeHandler}
-                    options={taskPriority}
+                    options={PRIORITIES}
                     isRequired
                 />
                 <FieldControl
@@ -163,8 +165,8 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
             </Stack>
             {task.problem_id && (
                 <ProblemCard currentProblemId={task.problem_id}
-                             isOpen={isOpenProblemCard}
-                             onClose={toggleIsOpenProblemCard}/>
+                             isOpen={drawerState.isOpen}
+                             onClose={closeDrawer}/>
             )}
         </Stack>
     );
