@@ -42,10 +42,10 @@ const NavigationButton = styled(IconButton)(({theme}) => ({
     position: "absolute",
     top: "50%",
     transform: "translateY(-50%)",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
     color: theme.palette.text.primary,
     "&:hover": {
-        backgroundColor: theme.palette.action.hover,
+        backgroundColor: theme.palette.background.paper,
     },
     "&.Mui-disabled": {
         backgroundColor: theme.palette.action.disabledBackground,
@@ -75,11 +75,11 @@ const FullscreenNextButton = styled(FullscreenNavigationButton)({
 });
 
 const PrevButton = styled(NavigationButton)({
-    left: 16,
+    left: 10,
 });
 
 const NextButton = styled(NavigationButton)({
-    right: 16,
+    right: 10,
 });
 
 const ImageContainer = styled(Box)(({theme}) => ({
@@ -88,9 +88,8 @@ const ImageContainer = styled(Box)(({theme}) => ({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    backgroundColor: theme.palette.background.default,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[2],
+    borderRadius: "20px",
+    backgroundColor: "inherit",
     overflow: "hidden",
 }));
 
@@ -98,7 +97,7 @@ const StyledImage = styled("img")({
     width: "100%",
     height: "100%",
     objectFit: "contain",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "inherit",
     borderRadius: "8px",
 });
 
@@ -208,7 +207,7 @@ const PhotosManager: FC<IProps> = ({
         setActivePhoto((prev) => (prev < photosPaths.length - 1 ? prev + 1 : prev));
     };
     return (
-        <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
+        <Box sx={{display: "flex", flexDirection: "column", gap: 2, position: "relative"}}>
             <ImageContainer sx={{aspectRatio: "16/9"}}>
                 <StyledImage
                     onClick={toggleFullscreen}

@@ -24,12 +24,10 @@ const MachineryDetailsPhotos: FC<IProps> = ({machinery, isEditMode}) => {
     };
     const photosPaths = machinery.photos.map(photo => `${basePath}/files/${photo}`);
     return (
-        <Card sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
-            <PhotosManager photosPaths={photosPaths}
-                           onAddPhoto={onAddPhoto}
-                           onDeletePhoto={onDeletePhoto}
-                           isViewingOnly={!isEditMode}/>
-        </Card>
+        <PhotosManager photosPaths={photosPaths}
+                       onAddPhoto={onAddPhoto}
+                       onDeletePhoto={onDeletePhoto}
+                       isViewingOnly={!isEditMode}/>
     );
 };
 

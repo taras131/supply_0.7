@@ -15,8 +15,8 @@ const PhotoPaginator: FC<IProps> = ({activePhoto, photoCount, onPhotoClick}) => 
             key={index}
             onClick={() => onPhotoClick(index)}
             sx={{
-                width: 20,
-                height: 20,
+                width: 30,
+                height: 10,
                 borderRadius: "5px",
                 cursor: "pointer",
                 backgroundColor: activePhoto === index ? "primary.main" : "grey.300", // активный кружок
@@ -32,7 +32,11 @@ const PhotoPaginator: FC<IProps> = ({activePhoto, photoCount, onPhotoClick}) => 
         </Box>
     ));
     return (
-        <Stack direction={ROW} alignItems={CENTER} justifyContent={CENTER} spacing={2}>
+        <Stack direction={ROW}
+               alignItems={CENTER}
+               justifyContent={CENTER}
+               spacing={2}
+        sx={{position: "absolute", bottom: 10, width: "100%"}} >
             {photoCount < 2
                 ? (<div></div>)
                 : (<>{paginatorList}</>)
