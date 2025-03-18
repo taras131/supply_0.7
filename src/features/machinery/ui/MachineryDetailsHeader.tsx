@@ -7,6 +7,7 @@ import {useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachineryTitle} from "../model/selectors";
 
 const MachineryDetailsHeader: FC = () => {
+    const matches_850 = useMediaQuery("(min-width:850px)");
     const matches_700 = useMediaQuery("(min-width:700px)");
     const navigate = useNavigate();
     const title = useAppSelector(getCurrentMachineryTitle);
@@ -15,7 +16,7 @@ const MachineryDetailsHeader: FC = () => {
     };
     return (
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Button onClick={handleBackClick} variant={"outlined"}>
+            <Button onClick={handleBackClick} variant={"outlined"} size={matches_850 ? "medium" : "small"}>
                 Назад
             </Button>
             <Typography variant="h2" color="primary" fontSize={matches_700 ? "24px" : "16px"}

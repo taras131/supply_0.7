@@ -3,17 +3,16 @@ import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMac
 import {
     fetchAddMachinery,
     fetchAddMachineryComment,
-    fetchAddMachineryDoc, fetchAddMachineryProblem, fetchAddMachineryTask,
+    fetchAddMachineryDoc, fetchAddMachineryTask,
     fetchDeleteMachineryComment,
     fetchDeleteMachineryPhoto,
     fetchGetMachineryById,
     fetchUpdateMachinery,
-    fetchUpdateMachineryComment, fetchUpdateMachineryProblem, fetchUpdateMachineryTask,
+    fetchUpdateMachineryComment, fetchUpdateMachineryTask,
     fetchUploadMachineryPhoto,
 } from "./actions";
 import {IComment} from "../../../models/iComents";
 import {ITask} from "../../../models/ITasks";
-import {IProblem} from "../../../models/IProblems";
 
 interface IMachineryState {
     list: (IMachinery)[];
@@ -152,26 +151,6 @@ export const MachinerySlice = createSlice({
                     state.currentMachinery = {
                         ...state.currentMachinery,
                         tasks: [...state.currentMachinery.tasks.map(task => task.id === action.payload.id ? action.payload : task)],
-                    };
-                }
-                state.isLoading = false;
-            })
-            .addCase(fetchAddMachineryProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
-                if (state.currentMachinery && action.payload.machinery_id) {
-                    state.currentMachinery = {
-                        ...state.currentMachinery,
-                        problems: [...state.currentMachinery.problems, action.payload],
-                    };
-                }
-                state.isLoading = false;
-            })
-            .addCase(fetchUpdateMachineryProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
-                if (state.currentMachinery && state.currentMachinery.problems) {
-                    state.currentMachinery = {
-                        ...state.currentMachinery,
-                        problems: [...state.currentMachinery.problems.map(problem => problem.id === action.payload.id
-                            ? action.payload
-                            : problem)],
                     };
                 }
                 state.isLoading = false;

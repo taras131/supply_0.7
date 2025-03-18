@@ -4,7 +4,7 @@ import type { Theme } from "../types";
 
 export const MuiTab = {
   styleOverrides: {
-    root: {
+    root: ({ theme }) => ({
       fontSize: "14px",
       fontWeight: 500,
       lineHeight: 1.71,
@@ -12,7 +12,13 @@ export const MuiTab = {
       paddingLeft: 0,
       paddingRight: 0,
       textTransform: "none",
-      "& + &": { marginLeft: "24px" },
-    },
+      "& + &": {
+        marginLeft: "24px",
+        [theme.breakpoints.down(650)]: {
+          marginLeft: "14px",
+
+        },
+      },
+    }),
   },
 } satisfies Components<Theme>["MuiTab"];

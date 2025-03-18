@@ -6,11 +6,11 @@ import {
     getUpcomingMaintenance,
 } from "../../model/selectors";
 import {useAppSelector} from "../../../../hooks/redux";
-import ProblemReportItem from "../problems/ProblemReportItem";
+import ProblemReportItem from "../../../problems/ui/ProblemReportItem";
 import Card from "@mui/material/Card";
-import {IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
+import {List, ListItem, ListItemIcon, ListItemText, Typography} from "@mui/material";
 import TaskReportItem from "../tasks/TaskReportItem";
-import ProblemCard from "../problems/ProblemCard";
+import ProblemCard from "../../../problems/ui/ProblemCard";
 import {useProblemDrawer} from "../../../../hooks/useProblemDrawer";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import {useNavigate} from "react-router-dom";
@@ -37,12 +37,12 @@ const MachineryReportSummary = () => {
                            handleProblemClick={handleProblemClick(problem.id)}/>
     ));
     return (
-        <Card sx={{padding: "24px"}}>
+        <Card>
             <Typography variant="h6" color="primary">Последние проблемы:</Typography>
             <List sx={{width: "100%", backgroundColor: "background.paper"}}>
                 {lastProblemList}
             </List>
-            <Typography mt={2} variant="h6" color="primary">ТО:</Typography>
+            <Typography mt={1} variant="h6" color="primary">ТО:</Typography>
             <List sx={{width: "100%", backgroundColor: "background.paper"}}>
                 {lastMaintenance
                     ? (<TaskReportItem key={lastMaintenance.id} taskId={lastMaintenance.id}/>)

@@ -4,14 +4,25 @@ import {useAppSelector} from "../../../hooks/redux";
 import {IOrder} from "../../../models/iOrders";
 import {MachineryStatus} from "utils/const";
 import {ITask} from "../../../models/ITasks";
-import problems from "../ui/problems/Problems";
 import {IProblem} from "../../../models/IProblems";
+import {createSelector} from "@reduxjs/toolkit";
 
 const collator = new Intl.Collator("ru");
 
 export const getMachineryIsLoading = (state: RootState): boolean => {
     return state.machinery.isLoading;
 };
+
+const selectMachineryList = (state: RootState): IMachinery[] => state.machinery.list;
+
+export const selectMachineryTitles = createSelector(
+    [selectMachineryList],
+    (machineryList) =>
+        machineryList.reduce((acc: Record<number, string>, machine: IMachinery) => {
+            acc[machine.id] = `${machine.brand} ${machine.model}`;
+            return acc;
+        }, {} as Record<number, string>)
+);
 
 export const getMachinery = (state: RootState): (IMachinery | ICurrentMachinery)[] => {
     const arr = state.machinery.list.filter(machinery => !machinery.status || machinery.status === MachineryStatus.active);
@@ -46,12 +57,16 @@ export const getCurrentMachineryTitle = (state: RootState): string => {
         return "";
     }
 };
+export const getMachineryTitleById = (state: RootState, machineryId: number): string => {
+    const machinery = getMachineryById(state, machineryId);
+    if (machinery) {
+        return `${machinery.brand} ${machinery.model}`;
+    } else {
+        return "";
+    }
+};
 export const getCurrentMachineryOperatingTypeId = (state: RootState): number | null => {
     return state.machinery.currentMachinery?.operating_type_id || null;
-};
-
-export const getProblemById = (state: RootState, problemId: number): IProblem | null => {
-    return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId) || null;
 };
 
 export const getActiveProblems = (state: RootState, problemId: number | undefined) => {

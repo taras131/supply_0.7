@@ -1,12 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
-import {Tab, Tabs} from "@mui/material";
+import {Tab, Tabs, useMediaQuery} from "@mui/material";
 import MachineryDetailsDocs from "./docs/MachineryDetailsDocs";
 import Comments from "../../../components/common/comments/Comments";
 import {useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachinery} from "../model/selectors";
 import {TaskList} from "./tasks/TasksList";
-import Problems from "./problems/Problems";
+import Problems from "../../problems/ui/Problems";
 import MachineryReport from "./report/MachineryReport";
 import {useLocation, useNavigate} from "react-router-dom";
 
@@ -18,6 +18,7 @@ interface CustomTabPanelProps {
 
 function CustomTabPanel(props: CustomTabPanelProps) {
     const {children, value, index, ...other} = props;
+    const matches_850 = useMediaQuery("(max-width:850px)");
     return (
         <div
             role="tabpanel"
@@ -26,7 +27,7 @@ function CustomTabPanel(props: CustomTabPanelProps) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && <Box sx={{p: 3}}>{children}</Box>}
+            {value === index && <Box sx={{p: matches_850 ? 0 : 3}}>{children}</Box>}
         </div>
     );
 }
@@ -54,8 +55,8 @@ const MachineryDetailsTabs: FC = () => {
     }, [initialTab]);
     return (
         <Box sx={{width: "100%"}}>
-            <Box sx={{borderBottom: 1, borderColor: "divider"}}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Box sx={{paddingBottom: 2}}>
+                <Tabs  value={value} onChange={handleChange} aria-label="basic_tabs">
                     <Tab label="Обзор" {...a11yProps(0)} />
                     <Tab label="Документы" {...a11yProps(1)} />
                     <Tab label="Проблемы" {...a11yProps(2)} />

@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {Stack} from "@mui/material";
+import {Stack, useMediaQuery} from "@mui/material";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {MachineryStatus} from "../../../../utils/const";
@@ -27,6 +27,7 @@ const MachineryReportActionButtons: FC<IProps> = ({
                                                       changeMachineryStatusHandler,
                                                   }) => {
     const isLoading = useAppSelector(getMachineryIsLoading);
+    const matches_850 = useMediaQuery("(max-width:850px)");
     return (
         <Stack direction="row" sx={{width: "100%"}} alignItems="center" justifyContent="end" spacing={2}>
             {isEditMode
@@ -50,7 +51,8 @@ const MachineryReportActionButtons: FC<IProps> = ({
                                 : "error"}
                             disabled={isLoading}
                             onClick={changeMachineryStatusHandler}
-                            sx={{width: "150px"}}>
+                            sx={{width: "150px"}}
+                            size={matches_850 ? "small" : "medium"}>
                         {machinery && machinery.status && machinery.status === MachineryStatus.disActive
                             ? "Востановить"
                             : "Списать"
@@ -59,7 +61,8 @@ const MachineryReportActionButtons: FC<IProps> = ({
                     <LoadingButton onClick={toggleIsEditMode}
                                    variant={"contained"}
                                    loading={isLoading}
-                                   color="primary">
+                                   color="primary"
+                                   size={matches_850 ? "small" : "medium"}>
                         Редактировать
                     </LoadingButton>
                 </>)}

@@ -25,8 +25,8 @@ const MachineryBasicView: FC<IProps> = ({
         const yearOptions = useMemo(() => yearsManufacture.map(year => ({id: year, title: year})), []);
         if (!editedMachinery) return null;
         return (
-            <Card sx={{padding: "24px", flexGrow: 1}}>
-                <Typography variant="h5" color="primary">
+            <Card sx={{flexGrow: 1}}>
+                <Typography variant="h6" color="primary">
                     Основные сведения:
                 </Typography>
                 <Stack spacing={2} sx={STYLES.stack(isEditMode)}>

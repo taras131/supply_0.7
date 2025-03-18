@@ -1,11 +1,11 @@
 import React, {FC} from "react";
-import {IProblem} from "../../../../models/IProblems";
-import {Chip, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+import {IProblem} from "../../../models/IProblems";
+import {Chip, ListItemButton, ListItemIcon, ListItemText, useMediaQuery} from "@mui/material";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import BuildIcon from "@mui/icons-material/Build";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import {convertMillisecondsToDate} from "../../../../utils/services";
-import {getPriorityChipColor, getPriorityTitleById} from "../../utils/services";
+import {convertMillisecondsToDate} from "../../../utils/services";
+import {getPriorityChipColor, getPriorityTitleById} from "../../machinery/utils/services";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 interface IProps {
@@ -14,7 +14,9 @@ interface IProps {
 }
 
 const ProblemReportItem: FC<IProps> = ({problem, handleProblemClick}) => {
+    const matches_850 = useMediaQuery("(max-width:850px)");
     const priorityColor = getPriorityChipColor(problem.priority_id);
+    const label = getPriorityTitleById(problem.priority_id) || " ";
     return (
         <ListItemButton onClick={handleProblemClick}>
             <ListItemIcon>
@@ -29,9 +31,8 @@ const ProblemReportItem: FC<IProps> = ({problem, handleProblemClick}) => {
             <ListItemText color="primary"
                           secondary={problem.title}/>
             <Chip
-                label={getPriorityTitleById(problem.priority_id)}
+                label={matches_850 ? label[0] : label}
                 color={priorityColor}
-                sx={{width: "100px"}}
             />
         </ListItemButton>
     );

@@ -18,4 +18,5 @@ export const routes = {
   machineryAddProblem: "/machinery/add_problem/:machineryId/",
   addNewMachinery: "/machinery/add_new",
   machineryTaskDetails: "/machinery/:machineryId/task/:taskId/",
+  problems: "/problems",
 };

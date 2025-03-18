@@ -1,16 +1,16 @@
 import React, {ChangeEvent, FC} from "react";
-import {INewProblem, IProblem} from "../../../../models/IProblems";
-import {convertMillisecondsToDate} from "../../../../utils/services";
-import {ValidationErrors} from "../../../../utils/validators";
+import {INewProblem, IProblem} from "../../../models/IProblems";
+import {convertMillisecondsToDate} from "../../../utils/services";
+import {ValidationErrors} from "../../../utils/validators";
 import {Button, Chip, List, SelectChangeEvent, Stack, Typography} from "@mui/material";
-import FieldControl from "../../../../components/common/FieldControl";
-import {problemCategories, problemPriority, problemStatus} from "../../utils/const";
-import {getPriorityChipColor, getPriorityTitleById} from "../../utils/services";
+import FieldControl from "../../../components/common/FieldControl";
+import {problemCategories, problemPriority, problemStatus} from "../../machinery/utils/const";
+import {getPriorityChipColor, getPriorityTitleById} from "../../machinery/utils/services";
 import AddIcon from "@mui/icons-material/Add";
-import {useAppSelector} from "../../../../hooks/redux";
-import {getUserFullNameById} from "../../../users/model/selectors";
+import {useAppSelector} from "../../../hooks/redux";
+import {getUserFullNameById} from "../../users/model/selectors";
 import {useNavigate} from "react-router-dom";
-import TaskReportItem from "../tasks/TaskReportItem";
+import TaskReportItem from "../../machinery/ui/tasks/TaskReportItem";
 
 interface IProps {
     problem: INewProblem | IProblem | null;

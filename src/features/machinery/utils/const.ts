@@ -4,8 +4,8 @@ import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
 import {MachineryStatus} from "../../../utils/const";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import WarningIcon from '@mui/icons-material/Warning';
-import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import WarningIcon from "@mui/icons-material/Warning";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
 
 export const engineTypes = [
     {id: 0, title: "Дизельный"},

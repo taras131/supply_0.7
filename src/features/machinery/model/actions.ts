@@ -7,10 +7,10 @@ import {setMessage} from "../../../store/reducers/message";
 import {IComment, INewComment} from "../../../models/iComents";
 import {INewTask, ITask} from "../../../models/ITasks";
 import {filesAPI} from "../../files/api";
-import {INewProblem, IProblem} from "../../../models/IProblems";
 import {thunkHandlers} from "../../../store/thunkHandlers";
 import {AppDispatch, RootState} from "../../../store";
-import {getProblemById} from "./selectors";
+import {fetchUpdateProblem} from "../../problems/model/actions";
+import {getProblemById} from "../../problems/model/selectors";
 
 const messages = {
     addMachinery: {error: "Не удалось добавить машину.", success: "Машина добавлена"},
@@ -261,7 +261,7 @@ export const fetchAddMachineryTask = createAsyncThunk("fetch_add_task", async (a
             const problem = getProblemById(state, res.problem_id);
             if (problem) {
                 const updatedProblem = {...problem, tasks_id: [...problem.tasks_id, res.id], status_id: 2};
-                dispatch(fetchUpdateMachineryProblem(updatedProblem));
+                dispatch(fetchUpdateProblem(updatedProblem));
             }
         }
         return res;
@@ -286,7 +286,7 @@ export const fetchUpdateMachineryTask = createAsyncThunk(
                 const problem = getProblemById(state, res.problem_id);
                 if (problem) {
                     const updatedProblem = {...problem, status_id: res.status_id + 1};
-                    dispatch(fetchUpdateMachineryProblem(updatedProblem));
+                    dispatch(fetchUpdateProblem(updatedProblem));
                 }
             }
             return res;
@@ -358,111 +358,9 @@ export const fetchDeleteTaskPhoto = createAsyncThunk(
     },
 );
 
-export interface IAddProblem {
-    newProblem: INewProblem;
-    files: File []
-}
 
-export const fetchAddMachineryProblem = createAsyncThunk("fetch_add_problem"
-    , async (addProblemData: IAddProblem, {
-        rejectWithValue,
-        dispatch,
-    }) => {
-        const {newProblem, files} = addProblemData;
-        const problem_in = {...newProblem};
-        try {
-            if (files.length > 0) {
-                for (const file of files) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-                    const uploadedFile = await filesAPI.upload(formData);
-                    problem_in.photos.push(uploadedFile.filename);
-                }
-            }
-            const res = await machineryAPI.addNewProblem(problem_in);
-            return res;
 
-        } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
-            dispatch(
-                setMessage({
-                    severity: MESSAGE_SEVERITY.error,
-                    text: errorMessage || "Не удалось добавить машину.",
-                }));
-            return rejectWithValue(handlerError(e));
-        }
-    });
 
-export const fetchUpdateMachineryProblem = createAsyncThunk(
-    "fetch_update_machinery_problem",
-    async (problem: IProblem, {rejectWithValue, dispatch}) => {
-        try {
-            return await machineryAPI.updateProblem(problem);
-        } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
-            dispatch(
-                setMessage({
-                    severity: MESSAGE_SEVERITY.error,
-                    text: errorMessage || "Не удалось обновить проблему.",
-                }));
-            return rejectWithValue(handlerError(e));
-        }
-    },
-);
 
-interface IUploadProblemPhoto {
-    problem: IProblem;
-    file: File;
-}
 
-export const fetchUploadProblemPhoto = createAsyncThunk(
-    "fetch_upload_problem_photo",
-    async (uploadData: IUploadProblemPhoto, {rejectWithValue, dispatch}) => {
-        try {
-            const formData = new FormData();
-            formData.append("file", uploadData.file);
-            const res = await filesAPI.upload(formData);
-            const updatedProblem = {
-                ...uploadData.problem
-                , photos: [...uploadData.problem.photos, res.filename],
-            };
-            return dispatch(fetchUpdateMachineryProblem(updatedProblem)).unwrap();
-        } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
-            dispatch(
-                setMessage({
-                    severity: MESSAGE_SEVERITY.error,
-                    text: errorMessage || "Не удалось добавить фото.",
-                }));
-            return rejectWithValue(handlerError(e));
-        }
-    },
-);
-
-interface IDeleteProblemPhoto {
-    problem: IProblem;
-    deletePhotoName: string;
-}
-
-export const fetchDeleteProblemPhoto = createAsyncThunk(
-    "fetch_delete_problem_photo",
-    async (deleteDate: IDeleteProblemPhoto, {rejectWithValue, dispatch}) => {
-        try {
-            const {deletePhotoName, problem} = deleteDate;
-            const res = await filesAPI.delete(deletePhotoName);
-            const updatedProblem = {
-                ...problem, photos: [...problem.photos.filter(photo => photo !== res.filename)],
-            };
-            return dispatch(fetchUpdateMachineryProblem(updatedProblem)).unwrap();
-        } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
-            dispatch(
-                setMessage({
-                    severity: MESSAGE_SEVERITY.error,
-                    text: errorMessage || "Не удалось добавить фото.",
-                }));
-            return rejectWithValue(handlerError(e));
-        }
-    },
-);
 

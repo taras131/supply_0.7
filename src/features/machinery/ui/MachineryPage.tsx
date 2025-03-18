@@ -8,7 +8,7 @@ import MachineryPageHeader from "./MachineryPageHeader";
 const MachineryPage = () => {
     const machinery = useAppSelector(getMachinery);
     return (
-        <Stack spacing={3} sx={{height: "100%"}}>
+        <Stack spacing={2} sx={{height: "100%"}}>
             <MachineryPageHeader/>
             {/* <CustomersFilters />*/}
             <MachineryTable rows={machinery}/>

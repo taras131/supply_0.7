@@ -24,7 +24,7 @@ const BaseTable = <T extends { id: number | string }>({
                                                       }: BaseTableProps<T>) => {
     const theme = useTheme();
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
     const handlePageChange = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -61,7 +61,7 @@ const BaseTable = <T extends { id: number | string }>({
                     columns.filter(column => !column.isHidden).map(column => (
                         <TableCell
                             key={`${row.id}-${column.key}`}
-                            style={{width: column.width,  padding: "8px"}}
+                            style={{width: column.width}}
                         >
                             {column.formatter
                                 ? column.formatter(column.getValue ? column.getValue(row) : row[column.key as keyof T])
@@ -75,7 +75,7 @@ const BaseTable = <T extends { id: number | string }>({
         );
     };
     return (
-        <Card>
+        <Card style={{padding: 0}}>
             <Box sx={{overflowX: "auto"}}>
                 <Table sx={{minWidth}}>
                     <TableHead>
@@ -103,7 +103,7 @@ const BaseTable = <T extends { id: number | string }>({
                 rowsPerPage={rowsPerPage}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPageOptions={[5, 10, 25]}
+                rowsPerPageOptions={[10, 25, 50]}
             />
         </Card>
     )

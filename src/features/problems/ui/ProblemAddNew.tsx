@@ -1,17 +1,17 @@
 import React, {FC, useEffect} from "react";
 import {Button, Drawer, Stack, Typography} from "@mui/material";
 import ProblemView from "./ProblemView";
-import {INewProblem} from "../../../../models/IProblems";
-import {useEditor} from "../../../../hooks/useEditor";
-import {emptyProblem} from "../../utils/const";
-import {problemValidate} from "../../../../utils/validators";
-import {fetchAddMachineryProblem} from "../../model/actions";
-import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
-import {getCurrentMachineryId} from "../../model/selectors";
-import {getCurrentUserId} from "../../../auth/model/selectors";
-import usePhotoManager from "../../../../hooks/usePhotoManager";
-import PhotosManager from "../../../../components/common/PhotosManager";
+import {INewProblem} from "../../../models/IProblems";
+import {useEditor} from "../../../hooks/useEditor";
+import {emptyProblem} from "../../machinery/utils/const";
+import {problemValidate} from "../../../utils/validators";
+import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
+import {getCurrentMachineryId} from "../../machinery/model/selectors";
+import {getCurrentUserId} from "../../auth/model/selectors";
+import usePhotoManager from "../../../hooks/usePhotoManager";
+import PhotosManager from "../../../components/common/PhotosManager";
 import Box from "@mui/material/Box";
+import {fetchAddProblem} from "../model/actions";
 
 interface IProps {
     isOpen: boolean;
@@ -40,7 +40,7 @@ const ProblemAddNew: FC<IProps> = ({isOpen, onClose}) => {
         };
         clearPhotos();
         resetValue();
-        await dispatch(fetchAddMachineryProblem({
+        await dispatch(fetchAddProblem({
             newProblem,
             files: newFiles,
         }));

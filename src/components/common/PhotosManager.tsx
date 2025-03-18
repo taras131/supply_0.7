@@ -26,8 +26,8 @@ const FullscreenContainer = styled(Box)({
 });
 
 const FullscreenImage = styled("img")({
-    maxWidth: "90%",
-    maxHeight: "90%",
+    maxWidth: "100%",
+    maxHeight: "100%",
     objectFit: "contain",
 });
 

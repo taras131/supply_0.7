@@ -1,28 +1,23 @@
 import React from "react";
-import {Stack, useMediaQuery} from "@mui/material";
+import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
-import AddIcon from "@mui/icons-material/Add";
-import {routes} from "../../../utils/routes";
 import {Link} from "react-router-dom";
+import {routes} from "../../../utils/routes";
+import AddIcon from "@mui/icons-material/Add";
 
-const MachineryPageHeader = () => {
-    const matches_850 = useMediaQuery("(max-width:850px)");
+const ProblemsPageHeader = () => {
     return (
         <Stack direction="row" spacing={3}>
             <Stack spacing={1} sx={{flex: "1 1 auto"}}>
-                <Typography fontSize={matches_850 ? "1.5rem" : "2rem"}  variant="h4">Техника</Typography>
+                <Typography variant="h4">Проблемы</Typography>
                 <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
-                    <Button color="inherit"
-                            sx={{fontSize: matches_850 ? 15 : "var(--icon-fontSize-md)"}}
-                            startIcon={<UploadIcon/>}>
+                    <Button color="inherit" sx={{fontSize: "var(--icon-fontSize-md)"}} startIcon={<UploadIcon/>}>
                         Import
                     </Button>
-                    <Button color="inherit"
-                            sx={{fontSize: matches_850 ? 15 : "var(--icon-fontSize-md)"}}
-                            startIcon={<DownloadIcon/>}>
+                    <Button color="inherit" sx={{fontSize: "var(--icon-fontSize-md)"}} startIcon={<DownloadIcon/>}>
                         Export
                     </Button>
                 </Stack>
@@ -33,7 +28,6 @@ const MachineryPageHeader = () => {
                     to={routes.addNewMachinery}
                     startIcon={<AddIcon sx={{fontSize: "var(--icon-fontSize-md)"}}/>}
                     variant="contained"
-                    size={matches_850 ? "small" : "medium"}
                 >
                     Добавить
                 </Button>
@@ -42,4 +36,4 @@ const MachineryPageHeader = () => {
     );
 };
 
-export default MachineryPageHeader;
+export default ProblemsPageHeader;

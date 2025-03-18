@@ -65,7 +65,7 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
         },
         {
             key: "year_manufacture",
-            label: "Год выпуска",
+            label: "Г.в.",
         },
         {
             key: "engine_type_id",
@@ -74,7 +74,7 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
             getValue: (row) => engineTypes.find(type => type.id === row.engine_type_id)?.title || "",
         },
         {
-            key: "description",
+            key: "state_number",
             label: "Гос. номер",
             isHidden: matches_850,
         },
@@ -110,7 +110,7 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
                     : "error";
                 return (
                     <Chip
-                        label={row.status}
+                        label={matches_650 ? row.status[0] : row.status}
                         color={statusColor}
                     />
                 );
@@ -118,14 +118,14 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
         },
     ];
     return (
-        <Card sx={{overflowX: "auto"}}>
+
             <BaseTable
                 rows={rows}
                 columns={columns}
                 onRowClick={rowClickHandler}
-                minWidth="470px"
+                minWidth="410px"
             />
-        </Card>
+
     );
 };
 
