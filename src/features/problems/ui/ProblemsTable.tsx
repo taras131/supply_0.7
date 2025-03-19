@@ -1,12 +1,8 @@
 import React, {FC} from "react";
 import {IProblem} from "../../../models/IProblems";
-import {Chip, useMediaQuery} from "@mui/material";
+import {useMediaQuery} from "@mui/material";
 import {convertMillisecondsToDate} from "../../../utils/services";
-import {
-    getCategoryTitleById,
-    getPriorityChipColor,
-    getPriorityTitleById,
-} from "../../machinery/utils/services";
+import {getCategoryTitleById} from "../../machinery/utils/services";
 import {ITableColumn} from "../../../models/ITable";
 import BaseTable from "../../../components/common/BaseTable";
 import {useAppSelector} from "../../../hooks/redux";
@@ -16,6 +12,7 @@ import BuildIcon from "@mui/icons-material/Build";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Box from "@mui/material/Box";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import ProblemPriorityChip from "./ProblemPriorityChip";
 
 interface IProps {
     rows: IProblem[] | null;
@@ -81,16 +78,7 @@ const ProblemsTable: FC<IProps> = ({rows, onProblemClick, activeRowId, isMachine
         {
             key: "priority_id",
             label: matches_650 ? " " : "Приоритет",
-            getValue: (row) => {
-                const priorityColor = getPriorityChipColor(row.priority_id);
-                const label = getPriorityTitleById(row.priority_id) || " ";
-                return (
-                    <Chip
-                        label={matches_650 ? label[0] : label}
-                        color={priorityColor}
-                    />
-                );
-            },
+            getValue: (row) => (<ProblemPriorityChip priorityId={row.priority_id}/>),
         },
     ];
 

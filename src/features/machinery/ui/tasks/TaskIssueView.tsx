@@ -15,6 +15,7 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import ProblemCard from "../../../problems/ui/ProblemCard";
 import {useProblemDrawer} from "../../../../hooks/useProblemDrawer";
+import ProblemDrawer from "../../../problems/ui/ProblemDrawer";
 
 interface IProps {
     task: INewTask | ITask | null;
@@ -163,11 +164,10 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                     options={usersList}
                 />
             </Stack>
-            {task.problem_id && (
-                <ProblemCard currentProblemId={task.problem_id}
-                             isOpen={drawerState.isOpen}
-                             onClose={closeDrawer}/>
-            )}
+            <ProblemDrawer currentProblemId={task.problem_id}
+                           mode={drawerState.mode}
+                           isOpen={drawerState.isOpen}
+                           onClose={closeDrawer}/>
         </Stack>
     );
 };

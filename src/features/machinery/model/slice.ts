@@ -13,6 +13,7 @@ import {
 } from "./actions";
 import {IComment} from "../../../models/iComents";
 import {ITask} from "../../../models/ITasks";
+import {IProblem} from "../../../models/IProblems";
 
 interface IMachineryState {
     list: (IMachinery)[];
@@ -63,6 +64,24 @@ export const MachinerySlice = createSlice({
         },
         updateMachineryList: (state, action: PayloadAction<IMachinery[]>) => {
             state.list = action.payload;
+        },
+        updateCurrentMachineryProblem: (state, action: PayloadAction<IProblem>) => {
+            console.log(action.payload);
+            if (state.currentMachinery) {
+                state.currentMachinery = {
+                    ...state.currentMachinery,
+                    problems: [...state.currentMachinery.problems
+                        .map(problem => problem.id === action.payload.id ? action.payload : problem)],
+                };
+            }
+        },
+        currentMachineryAddProblem: (state, action: PayloadAction<IProblem>) => {
+            if (state.currentMachinery && state.currentMachinery.id === action.payload.machinery_id) {
+                state.currentMachinery = {
+                    ...state.currentMachinery,
+                    problems: [...state.currentMachinery.problems, action.payload],
+                };
+            }
         },
     },
     extraReducers: (builder) => {
@@ -167,5 +186,12 @@ export const MachinerySlice = createSlice({
     },
 });
 
-export const {updateMachineryList, wsConnected, wsDisconnected, wsMessageReceived} = MachinerySlice.actions;
+export const {
+    updateMachineryList,
+    wsConnected,
+    wsDisconnected,
+    wsMessageReceived,
+    updateCurrentMachineryProblem,
+    currentMachineryAddProblem,
+} = MachinerySlice.actions;
 export default MachinerySlice.reducer;

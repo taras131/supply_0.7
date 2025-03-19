@@ -5,9 +5,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import ProblemsTable from "./ProblemsTable";
-import ProblemAddNew from "./ProblemAddNew";
-import ProblemCard from "./ProblemCard";
 import {useProblemDrawer} from "../../../hooks/useProblemDrawer";
+import ProblemDrawer from "./ProblemDrawer";
 
 interface IProps {
     problems: IProblem[] | null;
@@ -42,15 +41,10 @@ const Problems: FC<IProps> = ({problems, isMachineryMode = true}) => {
                 activeRowId={drawerState.problemId}
                 isMachineryMode={isMachineryMode}
             />
-            {drawerState.isOpen && drawerState.mode === "create" && (
-                <ProblemAddNew
-                    isOpen={drawerState.isOpen}
-                    onClose={closeDrawer}
-                />
-            )}
-            <ProblemCard
+            <ProblemDrawer
                 isOpen={drawerState.isOpen}
                 onClose={closeDrawer}
+                mode={drawerState.mode}
                 currentProblemId={drawerState.problemId || 0}
             />
         </Stack>

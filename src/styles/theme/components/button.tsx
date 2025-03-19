@@ -4,12 +4,17 @@ import type { Theme } from "../types";
 
 export const MuiButton = {
   styleOverrides: {
-    root: { borderRadius: "5px", textTransform: "none" },
-    sizeSmall: { padding: "6px 16px" },
-    sizeMedium: { padding: "8px 20px" },
-    sizeLarge: { padding: "11px 24px" },
-    textSizeSmall: { padding: "7px 12px" },
-    textSizeMedium: { padding: "9px 16px" },
-    textSizeLarge: { padding: "12px 16px" },
+    root: ({ theme }) => {
+      return {
+        borderRadius: "5px",
+        textTransform: "none",
+        fontSize: "14px", // Базовый размер текста для кнопок
+        padding: "8px 20px", // Базовый padding для кнопок sizeMedium
+        [theme.breakpoints.down(850)]: {
+          fontSize: "12px", // Размер текста уменьшается на меньших экранах
+          padding: "6px 16px", // Уменьшаем padding
+        },
+      };
+    },
   },
 } satisfies Components<Theme>["MuiButton"];

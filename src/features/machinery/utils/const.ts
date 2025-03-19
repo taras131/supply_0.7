@@ -1,9 +1,7 @@
-import {INewProblem, IProblem} from "../../../models/IProblems";
 import {INewTask, ITask, ITaskPriority, ITaskStatus} from "../../../models/ITasks";
 import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
 import {MachineryStatus} from "../../../utils/const";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import WarningIcon from "@mui/icons-material/Warning";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 
@@ -82,33 +80,6 @@ export const PRIORITIES = [
  //   {id: 4, title: "Срочно и важно", icon: WarningIcon, color: "error"},
 ];
 
-export const problemCategories = [
-    {id: 1, title: "Силовая установка"},
-    {id: 2, title: "Система трансмиссии"},
-    {id: 3, title: "Подвеска и ходовая часть"},
-    {id: 4, title: "Тормозная система"},
-    {id: 5, title: "Рулевое управление"},
-    {id: 6, title: "Электрооборудование"},
-    {id: 7, title: "Климатическая система"},
-    {id: 8, title: "Система безопасности"},
-    {id: 9, title: "Кузов и внешний вид"},
-    {id: 10, title: "Вспомогательные и дополнительные системы"},
-    {id: 11, title: "Системы управления двигателем"},
-];
-
-export const problemStatus = [
-    {id: 1, title: "Ожидает"},
-    {id: 2, title: "Задача создана"},
-    {id: 3, title: "Задача в работе"},
-    {id: 4, title: "Решена"},
-];
-
-export const problemPriority = [
-    {id: 1, title: "Ждёт"},
-    {id: 2, title: "Важно"},
-    {id: 3, title: "Критично"},
-];
-
 export const taskPriority: ITaskPriority [] = [
     {id: 1, title: "Не срочно и не важно"},
     {id: 2, title: "Срочно, но не важно"},
@@ -125,27 +96,6 @@ export const taskTypes: ITaskStatus [] = [
     {id: 1, title: "Тех обслуживание"},
     {id: 2, title: "Ремонт"},
 ];
-
-export const emptyProblem: INewProblem = {
-    title: "",
-    description: "",
-    photos: [],
-    author_id: 0,
-    machinery_id: 0,
-    priority_id: 2,
-    category_id: -1,
-    operating: 0,
-    odometer: 0,
-    status_id: 1,
-    tasks_id: [],
-};
-
-export const defaultProblem: IProblem = {
-    ...emptyProblem,
-    id: 0,
-    created_date: 0,
-    updated_date: 0,
-};
 
 export const emptyTask: INewTask = {
     title: "",

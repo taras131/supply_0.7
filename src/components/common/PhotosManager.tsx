@@ -82,7 +82,7 @@ const NextButton = styled(NavigationButton)({
     right: 10,
 });
 
-const ImageContainer = styled(Box)(({theme}) => ({
+const ImageContainer = styled(Box)(() => ({
     position: "relative",
     display: "flex",
     justifyContent: "center",

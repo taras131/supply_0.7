@@ -5,6 +5,7 @@ import {MESSAGE_SEVERITY} from "../../../utils/const";
 import {handlerError} from "../../../store/actionsCreators/handleError";
 import {filesAPI} from "../../files/api";
 import {problemsAPI} from "../api";
+import {currentMachineryAddProblem, updateCurrentMachineryProblem} from "../../machinery/model/slice";
 
 export interface IAddProblem {
     newProblem: INewProblem;
@@ -28,8 +29,8 @@ export const fetchAddProblem = createAsyncThunk("fetch_add_problem"
                 }
             }
             const res = await problemsAPI.addNewProblem(problem_in);
+            dispatch(currentMachineryAddProblem(res));
             return res;
-
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
             dispatch(
@@ -45,7 +46,9 @@ export const fetchUpdateProblem = createAsyncThunk(
     "fetch_update_machinery_problem",
     async (problem: IProblem, {rejectWithValue, dispatch}) => {
         try {
-            return await problemsAPI.updateProblem(problem);
+            const res = await problemsAPI.updateProblem(problem);
+            dispatch(updateCurrentMachineryProblem(res));
+            return res;
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
             dispatch(
@@ -101,7 +104,7 @@ export const fetchDeleteProblemPhoto = createAsyncThunk(
             const updatedProblem = {
                 ...problem, photos: [...problem.photos.filter(photo => photo !== res.filename)],
             };
-            return dispatch(fetchUpdateMachineryProblem(updatedProblem)).unwrap();
+            return dispatch(fetchUpdateProblem(updatedProblem)).unwrap();
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Неизвестная ошибка";
             dispatch(

@@ -24,6 +24,12 @@ export const selectMachineryTitles = createSelector(
         }, {} as Record<number, string>)
 );
 
+export const getMachineryForSelect = createSelector(
+    [selectMachineryList],
+    (machineryList) =>
+        machineryList.map(machinery => ({id: machinery.id, title: `${machinery.brand} ${machinery.model}`}))
+);
+
 export const getMachinery = (state: RootState): (IMachinery | ICurrentMachinery)[] => {
     const arr = state.machinery.list.filter(machinery => !machinery.status || machinery.status === MachineryStatus.active);
     return arr.sort((a, b) => {

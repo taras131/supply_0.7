@@ -17,7 +17,7 @@ const TaskDetailsPage = () => {
     const navigate = useNavigate();
     const [expandedIssuePanel, setExpandedIssuePanel] = useState(true);
     const [expandedResultPanel, setExpandedResultPanel] = useState(false);
-    const currentTask = useAppSelector(state => getTaskById(state, +taskId));
+    const currentTask = useAppSelector(state => getTaskById(state, taskId ? +taskId : 0));
     const {
         editedValue,
         errors,

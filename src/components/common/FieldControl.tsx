@@ -18,19 +18,25 @@ const StyledInput = styled(TextField, {
     "label + &": {
         marginTop: theme.spacing(2),
     },
-    "& .MuiInputBase-input": {
+    "& .MuiOutlinedInput-root": { // Указываем стили для общего контейнера
         borderRadius: 4,
-        position: "relative",
+        padding: "6px 8px",
         backgroundColor: isError ? "#FFFBE6" : "#E8F5E9",
         border: "1px solid",
         borderColor: isError ? "#FFC107" : "#4CAF50",
-        fontSize: 16,
-        padding: "10px 12px",
         transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
-        ...theme.applyStyles("dark", {
-            backgroundColor: isError ? "#423A00" : "#1B5E20",
-            borderColor: isError ? "#FFD54F" : "#66BB6A",
-        }),
+        "&:hover": {
+            backgroundColor: isError ? "#FFE082" : "#C8E6C9",
+        },
+    },
+    "& .MuiInputBase-input": { // Стили текстового ввода
+        fontSize: 16,
+        borderRadius: 4,
+        padding: "10px 12px",
+        [theme.breakpoints.down(650)]: {
+            padding: "6px 8px",
+            fontSize: 14,
+        },
     },
 }));
 
@@ -47,12 +53,15 @@ const StyledSelect = styled(Select, {
         border: "1px solid",
         borderColor: isError ? "#FFC107" : "#4CAF50",
         fontSize: 16,
-        padding: "10px 12px",
         transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
         ...theme.applyStyles("dark", {
             backgroundColor: isError ? "#423A00" : "#1B5E20",
             borderColor: isError ? "#FFD54F" : "#66BB6A",
         }),
+        [theme.breakpoints.down(650)]: {
+            padding: "6px 8px",
+            fontSize: 14,
+        },
     },
 }));
 
@@ -60,11 +69,19 @@ const StyledTypography = styled(Typography)(({theme}) => ({
     marginTop: theme.spacing(1.5),
     marginLeft: theme.spacing(1.7),
     fontWeight: 600,
+    [theme.breakpoints.down(650)]: {
+        fontSize: "12px",
+        fontWeight: 500,
+    },
 }));
 
-const StyledLabel = styled(InputLabel)(() => ({
+const StyledLabel = styled(InputLabel)(({theme}) => ({
     fontSize: "18px",
     fontWeight: 500,
+    [theme.breakpoints.down(650)]: {
+        marginTop: theme.spacing(1),
+        fontSize: 14,
+    },
 }));
 
 interface IProps {

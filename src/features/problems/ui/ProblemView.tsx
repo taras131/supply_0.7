@@ -2,28 +2,30 @@ import React, {ChangeEvent, FC} from "react";
 import {INewProblem, IProblem} from "../../../models/IProblems";
 import {convertMillisecondsToDate} from "../../../utils/services";
 import {ValidationErrors} from "../../../utils/validators";
-import {Button, Chip, List, SelectChangeEvent, Stack, Typography} from "@mui/material";
+import {Button, List, SelectChangeEvent, Stack, Typography} from "@mui/material";
 import FieldControl from "../../../components/common/FieldControl";
-import {problemCategories, problemPriority, problemStatus} from "../../machinery/utils/const";
-import {getPriorityChipColor, getPriorityTitleById} from "../../machinery/utils/services";
 import AddIcon from "@mui/icons-material/Add";
 import {useAppSelector} from "../../../hooks/redux";
 import {getUserFullNameById} from "../../users/model/selectors";
 import {useNavigate} from "react-router-dom";
 import TaskReportItem from "../../machinery/ui/tasks/TaskReportItem";
+import {getMachineryForSelect} from "../../machinery/model/selectors";
+import ProblemPriorityChip from "./ProblemPriorityChip";
+import {problemCategories, problemPriority, problemStatus} from "../utils/consts";
 
 interface IProps {
     problem: INewProblem | IProblem | null;
     errors?: ValidationErrors;
     isEditMode?: boolean;
+    isNewProblem?: boolean;
     fieldChangeHandler: (e: ChangeEvent<HTMLInputElement
         | HTMLTextAreaElement> | SelectChangeEvent<string | unknown>) => void
 }
 
 const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = false, errors}) => {
     const navigate = useNavigate();
-    const priorityColor = getPriorityChipColor(problem?.priority_id || 0);
     const authorFullName = useAppSelector(state => getUserFullNameById(state, problem?.author_id || null));
+    const machineryList = useAppSelector(getMachineryForSelect);
     let problemId = 0;
     if (!problem) {
         return null;
@@ -38,8 +40,11 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
     };
     const tasksList = problem.tasks_id.map(taskId => (<TaskReportItem key={taskId} taskId={taskId}/>));
     return (
-        <Stack spacing={isEditMode ? 2 : 4} sx={{flexGrow: 1}}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
+        <Stack spacing={isEditMode ? 2 : 3} sx={{flexGrow: 1}}>
+            <Stack direction="row"
+                   alignItems="center"
+                   justifyContent="space-between"
+                   spacing={2}>
                 {isEditMode
                     ? (<>
                         <FieldControl
@@ -65,16 +70,23 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                         <Button variant="outlined"
                                 size="small"
                                 onClick={createTaskClickHandler}
-                                startIcon={<AddIcon />}>
+                                startIcon={<AddIcon/>}>
                             Создать задачу
                         </Button>
-                        <Chip
-                            label={getPriorityTitleById(problem.priority_id)}
-                            color={priorityColor}
-                            sx={{width: "100px"}}
-                        />
+                        <ProblemPriorityChip priorityId={problem.priority_id} isNotSmall/>
                     </>)}
             </Stack>
+            <FieldControl
+                label="Тухника"
+                name="machinery_id"
+                id="machinery_id"
+                value={problem.machinery_id}
+                error={errors?.machinery_id}
+                isEditMode={isEditMode}
+                onChange={fieldChangeHandler}
+                options={machineryList}
+                isRequired
+            />
             <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
                 <FieldControl
                     label="Категория"
@@ -118,6 +130,7 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                 onChange={fieldChangeHandler}
                 isMultiline
                 isRequired
+                rows={6}
                 sx={{
                     flexGrow: 1,
                     height: "100%",

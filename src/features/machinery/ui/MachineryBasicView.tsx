@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, useMemo} from "react";
 import {IMachinery, INewMachinery} from "../../../models/iMachinery";
 import {ValidationErrors} from "../../../utils/validators";
-import {SelectChangeEvent, Stack, Typography} from "@mui/material";
+import {SelectChangeEvent, Stack, Typography, useMediaQuery} from "@mui/material";
 import Card from "@mui/material/Card";
 import FieldControl from "../../../components/common/FieldControl";
 import {engineTypes, machineryTypes, operatingTypes} from "../utils/const";
@@ -22,6 +22,7 @@ const MachineryBasicView: FC<IProps> = ({
                                             machineryFieldChangeHandler,
                                             isEditMode = false,
                                         }) => {
+        const matches_650 = useMediaQuery("(max-width:650px)");
         const yearOptions = useMemo(() => yearsManufacture.map(year => ({id: year, title: year})), []);
         if (!editedMachinery) return null;
         return (
@@ -29,7 +30,7 @@ const MachineryBasicView: FC<IProps> = ({
                 <Typography variant="h6" color="primary">
                     Основные сведения:
                 </Typography>
-                <Stack spacing={2} sx={STYLES.stack(isEditMode)}>
+                <Stack spacing={matches_650 ? 1 : 2} sx={STYLES.stack(isEditMode)}>
                     <FieldControl
                         label="Тип техники"
                         name="type_id"
@@ -112,6 +113,13 @@ const MachineryBasicView: FC<IProps> = ({
                         isEditMode={isEditMode}
                         onChange={machineryFieldChangeHandler}
                     />
+                    <FieldControl
+                        label="Статус"
+                        name="status"
+                        id="status"
+                        value={editedMachinery.status}
+                        isEditMode={isEditMode}
+                        onChange={machineryFieldChangeHandler}/>
                 </Stack>
             </Card>
         );

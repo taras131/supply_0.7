@@ -52,6 +52,7 @@ export const problemValidate = (problem: IProblem | INewProblem) => {
     if(problem.description.length === 0) errors.description = "Описание должно быть";
     if(problem.description.length < 3) errors.description = "Описание должно быть не менее 2 символов";
     if(problem.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
+    if(problem.machinery_id < 0) errors.machinery_id = "Выбирите технику";
     return errors;
 };
 

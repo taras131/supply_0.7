@@ -103,7 +103,7 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
         },
         {
             key: "status",
-            label: "Статус",
+            label: matches_650 ? " " : "Статус",
             getValue: (row) => {
                 const statusColor = row.status === "Работает"
                     ? "success"
@@ -118,12 +118,11 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
         },
     ];
     return (
-
             <BaseTable
                 rows={rows}
                 columns={columns}
                 onRowClick={rowClickHandler}
-                minWidth="410px"
+                minWidth="390px"
             />
 
     );

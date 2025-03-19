@@ -3,7 +3,7 @@ import {IMachinery, INewMachinery} from "../../../models/iMachinery";
 import {
     SelectChangeEvent,
     Stack,
-    Typography,
+    Typography, useMediaQuery,
 } from "@mui/material";
 import {tractionTypes, transmissionTypes} from "../utils/const";
 import Card from "@mui/material/Card";
@@ -24,6 +24,9 @@ export const STYLES = {
             width: "100%",
             maxWidth: "420px",
         },
+        "@media (max-width: 850px)": {
+            gap: "12px",
+        },
     }),
 };
 
@@ -41,13 +44,14 @@ const MachineryAdditionalView: FC<IProps> = ({
                                                  isEditMode = false,
                                                  machineryFieldChangeHandler,
                                              }) => {
+    const matches_650 = useMediaQuery("(max-width:650px)");
     if (!editedMachinery) return null;
     return (
         <Card sx={{flexGrow: 1}}>
             <Typography variant="h6" color="primary">
                 Дополнительные сведения:
             </Typography>
-            <Stack spacing={2} sx={STYLES.stack(isEditMode)}>
+            <Stack sx={STYLES.stack(isEditMode)}>
                 <FieldControl
                     label="Тип движетеля"
                     name="traction_type_id"
@@ -114,13 +118,7 @@ const MachineryAdditionalView: FC<IProps> = ({
                     onChange={machineryFieldChangeHandler}
                 />
                 {"created_date" in editedMachinery && "updated_date" in editedMachinery && !isEditMode && (<>
-                    <FieldControl
-                        label="Статус"
-                        name="status"
-                        id="status"
-                        value={editedMachinery.status}
-                        isEditMode={isEditMode}
-                        onChange={machineryFieldChangeHandler}/>
+
                     <FieldControl
                         label="Добавлена"
                         name="created_date"

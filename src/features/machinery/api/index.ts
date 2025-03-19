@@ -47,7 +47,7 @@ export const machineryAPI = {
         return await axios.get(machineryPath);
     },
     getOne: async (machinery_id: number) => {
-        const res = await axios.get(`${machineryPath}/${machinery_id}`, {});
+        const res = await axios.get(`${machineryPath}/${machinery_id}/`, {});
         return res.data;
     },
     addComment: async (comment: INewComment) => {

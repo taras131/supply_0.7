@@ -75,6 +75,7 @@ const MachineryReport: FC = () => {
             <MachineryReportSummary/>
             <MachineryDetailsPhotos machinery={machinery}
                                     isEditMode={isEditMode}/>
+            <Box></Box>
             <MachineryReportActionButtons machinery={machinery}
                                           isEditMode={isEditMode}
                                           isValid={!Object.keys(errors).length}

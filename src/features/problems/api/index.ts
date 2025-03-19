@@ -31,6 +31,7 @@ export const problemsAPI = {
             const errorDetails = await res.json();
             throw new Error(errorDetails.detail || `Ошибка сервера: ${res.status} ${res.statusText}`);
         }
+
         return await res.json();
     },
 
