@@ -9,12 +9,13 @@ import {useAppSelector} from "../../../../hooks/redux";
 import ProblemReportItem from "../../../problems/ui/ProblemReportItem";
 import Card from "@mui/material/Card";
 import {List, ListItem, ListItemIcon, ListItemText, Typography} from "@mui/material";
-import TaskReportItem from "../tasks/TaskReportItem";
+import TaskReportItem from "../../../tasks/ui/TaskReportItem";
 import {useProblemDrawer} from "../../../../hooks/useProblemDrawer";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import {useNavigate} from "react-router-dom";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ProblemDrawer from "../../../problems/ui/ProblemDrawer";
+import {routes} from "../../../../utils/routes";
 
 const MachineryReportSummary = () => {
     const navigate = useNavigate();
@@ -27,8 +28,8 @@ const MachineryReportSummary = () => {
         openDrawer("view", problemId);
     };
     const createTaskClickHandler = () => {
-        navigate(`/machinery/add_problem/${currentMachineryId}`, {
-            state: {taskTypeId: 1},
+        navigate(routes.machineryAddTask, {
+            state: {taskTypeId: 1, machineryId: currentMachineryId},
         });
     };
     const lastProblemList = problems.slice(0, 3).map(problem => (

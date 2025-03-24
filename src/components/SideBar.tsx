@@ -2,7 +2,7 @@ import {FC, useEffect} from "react";
 import {Drawer, Stack, styled, Typography, useMediaQuery} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import SideBarMenuItem from "./SideBarMenuItem";
+import SideBarNavItem from "./SideBarNavItem";
 import {routes} from "utils/routes";
 import MenuIcon from "@mui/icons-material/Menu";
 import {useAppSelector} from "hooks/redux";
@@ -13,6 +13,7 @@ import {getCountUnpaidInvoices} from "features/invoices/model/selectors";
 import Box from "@mui/material/Box";
 import {Logo} from "./Logo";
 import {routesConfig} from "../config/routes";
+import SideBarNav from "./SideBarNav";
 
 interface IProps {
     open: boolean;
@@ -28,10 +29,8 @@ const DrawerHeader = styled("div")(({theme}) => ({
 }));
 
 const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
-    const countUnpaidInvoices = useAppSelector((state) => getCountUnpaidInvoices(state));
     const matches_1200 = useMediaQuery("(min-width:1200px)");
     const {pathname} = useLocation();
-    const isAuth = useAppSelector((state) => getIsAuth(state));
     useEffect(() => {
         if (!matches_1200) {
             handleDrawerClose();
@@ -98,20 +97,7 @@ const SideBar: FC<IProps> = ({open, handleDrawerClose}) => {
                 </Stack>
             </DrawerHeader>
             <Divider sx={{borderColor: "var(--mui-palette-neutral-700)"}}/>
-            <Box component="nav"
-                 sx={{flex: "1 1 auto", p: "12px"}}>
-                {routesConfig.filter(route => route.showInMenu).map(menuItem => (
-                    <SideBarMenuItem key={menuItem.path} title={menuItem.label} route={menuItem.path}/>
-                ))}
-                {isAuth ? (
-                    <SideBarMenuItem title={"Профиль"} route={routes.profile}/>
-                ) : (
-                    <>
-                        <SideBarMenuItem title={"Вход"} route={routes.login}/>
-                        <SideBarMenuItem title={"Регистрация"} route={routes.register}/>
-                    </>
-                )}
-            </Box>
+            <SideBarNav routesConfig={routesConfig.filter(route => route.showInMenu)}/>
         </Drawer>
     );
 };

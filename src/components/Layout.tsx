@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import SideBar from "./SideBar";
 import Header from "./Header";
-import backgroundImage from "../assets/images/background.jpg";
 
 interface IProps {
     children: React.ReactNode;
@@ -24,7 +23,7 @@ const Layout: FC<IProps> = ({children}) => {
             <GlobalStyles
                 styles={{
                     body: {
-                        "--MainNav-height": "56px",
+                        "--MainNav-height": "40px",
                         "--MainNav-zIndex": 1000,
                         "--SideNav-width": "240px",
                         "--SideNav-zIndex": 1100,

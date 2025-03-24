@@ -1,8 +1,8 @@
 import React, {ChangeEvent, FC} from "react";
-import {INewTask, ITask} from "../../../../models/ITasks";
-import {ValidationErrors} from "../../../../utils/validators";
+import {INewTask, ITask} from "../../../models/ITasks";
+import {ValidationErrors} from "../../../utils/validators";
 import {SelectChangeEvent, Stack} from "@mui/material";
-import FieldControl from "../../../../components/common/FieldControl";
+import FieldControl from "../../../components/common/FieldControl";
 
 interface IProps {
     task: INewTask | ITask | null;

@@ -35,7 +35,7 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
     const matches_850 = useMediaQuery("(max-width:850px)");
     const matches_650 = useMediaQuery("(max-width:650px)");
     const rowClickHandler = (row: IMachinery) => {
-        navigate(`${routes.machinery}/${row.id}`);
+        navigate(`${routes.machinery}/list/${row.id}`);
     };
     const columns: ITableColumn<IMachinery>[] = [
         {

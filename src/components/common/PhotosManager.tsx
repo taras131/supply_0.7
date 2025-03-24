@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PhotoPaginator from "./photoPaginator/photoPaginator";
 import {styled} from "@mui/material/styles";
@@ -31,75 +30,19 @@ const FullscreenImage = styled("img")({
     objectFit: "contain",
 });
 
-const CloseButton = styled(IconButton)(({theme}) => ({
+const VisuallyHiddenInput = styled("input")({
     position: "absolute",
-    top: 16,
-    right: 16,
-    color: theme.palette.common.white,
-}));
-
-const NavigationButton = styled(IconButton)(({theme}) => ({
-    position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%)",
-    backgroundColor: "rgba(255, 255, 255, 0.4)",
-    color: theme.palette.text.primary,
-    "&:hover": {
-        backgroundColor: theme.palette.background.paper,
-    },
-    "&.Mui-disabled": {
-        backgroundColor: theme.palette.action.disabledBackground,
-    },
-}));
-
-const FullscreenNavigationButton = styled(IconButton)(({theme}) => ({
-    position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%)",
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    color: theme.palette.common.white,
-    "&:hover": {
-        backgroundColor: "rgba(255, 255, 255, 0.4)",
-    },
-    "&.Mui-disabled": {
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-    },
-}));
-
-const FullscreenPrevButton = styled(FullscreenNavigationButton)({
-    left: 16,
-});
-
-const FullscreenNextButton = styled(FullscreenNavigationButton)({
-    right: 16,
-});
-
-const PrevButton = styled(NavigationButton)({
-    left: 10,
-});
-
-const NextButton = styled(NavigationButton)({
-    right: 10,
-});
-
-const ImageContainer = styled(Box)(() => ({
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    borderRadius: "20px",
-    backgroundColor: "inherit",
+    width: 1,
+    height: 1,
+    padding: 0,
+    margin: -1,
     overflow: "hidden",
-}));
-
-const StyledImage = styled("img")({
-    width: "100%",
-    height: "100%",
-    objectFit: "contain",
-    backgroundColor: "inherit",
-    borderRadius: "8px",
+    border: "none",
+    clip: "rect(0 0 0 0)",
+    whiteSpace: "nowrap",
+    clipPath: "inset(50%)",
 });
+
 
 const StyledDeleteButton = styled(LoadingButton)(({theme}) => ({
     position: "absolute",
@@ -130,26 +73,60 @@ const StyledUploadButton = styled(LoadingButton)<LoadingButtonProps & { componen
         },
         "&:hover": {
             backgroundColor: theme.palette.success.dark,
-            color: theme.palette.error.contrastText,
+            color: theme.palette.success.contrastText,
         },
     })
 );
 
-const VisuallyHiddenInput = styled("input")({
+const CloseButton = styled(IconButton)(({theme}) => ({
     position: "absolute",
-    width: 1,
-    height: 1,
-    padding: 0,
-    margin: -1,
+    top: 16,
+    right: 16,
+    color: theme.palette.common.white,
+}));
+
+const NavigationButton = styled(IconButton, {
+    shouldForwardProp: (prop) => prop !== "isFullscreen" && prop !== "position",
+})<{ isFullscreen: boolean; position: "left" | "right" }>(({theme, isFullscreen, position}) => ({
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
+    [position]: 16,
+    backgroundColor: isFullscreen ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.4)",
+    color: isFullscreen ? theme.palette.common.white : theme.palette.text.primary,
+    "&:hover": {
+        backgroundColor: isFullscreen
+            ? "rgba(255, 255, 255, 0.4)"
+            : theme.palette.background.paper,
+    },
+    "&.Mui-disabled": {
+        backgroundColor: isFullscreen ? "rgba(255, 255, 255, 0.1)" : theme.palette.action.disabledBackground,
+    },
+}));
+
+const ImageContainer = styled(Box)(() => ({
+
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "400px", // Фиксированная высота для обычного режима
+    borderRadius: "20px",
+    backgroundColor: "inherit",
     overflow: "hidden",
-    border: "none",
-    clip: "rect(0 0 0 0)",
-    whiteSpace: "nowrap",
-    clipPath: "inset(50%)",
-});
+}));
+
+const StyledImage = styled("img")<{ isFullscreen?: boolean }>(({isFullscreen}) => ({
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    objectFit: isFullscreen ? "contain" : "cover", // "cover" для обычного режима, "contain" для полноэкранного
+    backgroundColor: "inherit",
+    borderRadius: isFullscreen ? 0 : "8px", // Убираем скругления в полноэкранном режиме
+}));
 
 interface IProps {
-    photosPaths: string [];
+    photosPaths: string[];
     isViewingOnly?: boolean;
     onAddPhoto?: (newFile: File) => void;
     onDeletePhoto?: (deletedFileIndex: number) => void;
@@ -165,16 +142,6 @@ const PhotosManager: FC<IProps> = ({
                                    }) => {
     const [activePhoto, setActivePhoto] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const isLoading = false;
-    const photoClickHandler = (photoNumber: number) => {
-        setActivePhoto(photoNumber);
-    };
-    const toggleFullscreen = () => {
-        if (photosPaths && photosPaths.length > 0) {
-            setIsFullscreen(prev => !prev);
-        }
-
-    };
     useEffect(() => {
         const handleEscapeKey = (event: KeyboardEvent) => {
             if (event.key === "Escape" && isFullscreen) {
@@ -186,115 +153,131 @@ const PhotosManager: FC<IProps> = ({
             document.removeEventListener("keydown", handleEscapeKey);
         };
     }, [isFullscreen]);
-    const addPhotoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!onAddPhoto) return;
-        const selectedFile = e.target.files?.[0];
-        if (selectedFile) {
-            onAddPhoto(selectedFile);
+    const toggleFullscreen = () => {
+        if (photosPaths && photosPaths.length > 0) {
+            setIsFullscreen((prev) => !prev);
         }
     };
-    const deletePhotoHandler = () => {
-        if (!onDeletePhoto) return;
-        if (!isViewingOnly) {
-            setActivePhoto(0);
-            onDeletePhoto(activePhoto);
-        }
-    };
+
     const handlePrevPhoto = () => {
         setActivePhoto((prev) => (prev > 0 ? prev - 1 : prev));
     };
+
     const handleNextPhoto = () => {
         setActivePhoto((prev) => (prev < photosPaths.length - 1 ? prev + 1 : prev));
     };
+    const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!onAddPhoto) return;
+
+        const files = e.target.files; // Сохраняем files в переменную для дальнейшей проверки
+        if (files && files[0]) { // Проверяем, что files не null и содержит хотя бы один файл
+            const selectedFile = files[0];
+
+            // Проверяем MIME-тип файла
+            if (selectedFile.type.startsWith("image/")) {
+                onAddPhoto(selectedFile);
+            } else {
+                alert("Можно загружать только изображения (JPEG, PNG и т.д.)");
+            }
+        }
+    };
     return (
         <Box sx={{display: "flex", flexDirection: "column", gap: 2, position: "relative"}}>
-            <ImageContainer sx={{aspectRatio: "16/9"}}>
+            {/* Обычное отображение с фиксированной высотой */}
+            <ImageContainer>
                 <StyledImage
+                    isFullscreen={isFullscreen}
                     onClick={toggleFullscreen}
-                    style={{cursor: photosPaths && photosPaths.length > 0 ? "pointer" : "default"}}
-                    src={photosPaths && photosPaths.length > 0
-                        ? photosPaths[activePhoto]
-                        : photoPlaceholder}
+                    style={{cursor: photosPaths?.length > 0 ? "pointer" : "default"}}
+                    src={photosPaths?.length > 0 ? photosPaths[activePhoto] : photoPlaceholder}
                     alt="photo"
                 />
-                {photosPaths && photosPaths.length > 1 && (
+
+                {photosPaths?.length > 1 && (
                     <>
-                        <PrevButton
+                        <NavigationButton
+                            isFullscreen={false}
+                            position="left"
                             onClick={handlePrevPhoto}
                             disabled={activePhoto === 0}
                         >
                             <ChevronLeftIcon/>
-                        </PrevButton>
-
-                        <NextButton
+                        </NavigationButton>
+                        <NavigationButton
+                            isFullscreen={false}
+                            position="right"
                             onClick={handleNextPhoto}
                             disabled={activePhoto === photosPaths.length - 1}
                         >
                             <ChevronRightIcon/>
-                        </NextButton>
+                        </NavigationButton>
                     </>
                 )}
+
+                {!isViewingOnly && photosPaths?.length > 0 && (
+                    <StyledDeleteButton onClick={() => onDeletePhoto?.(activePhoto)} color="error">
+                        <DeleteIcon/>
+                    </StyledDeleteButton>
+                )}
+
                 {!isViewingOnly && (
-                    <>
-                        {photosPaths && photosPaths.length > 0 && (
-                            <StyledDeleteButton
-                                color="error"
-                                onClick={deletePhotoHandler}
-                                loading={isLoading}
-                                loadingIndicator={<CircularProgress size={16} color="inherit"/>}
-                            >
-                                <DeleteIcon fontSize="small"/>
-                            </StyledDeleteButton>
-                        )}
-                        <StyledUploadButton
-                            component="label"
-                            variant="contained"
-                            tabIndex={-1}
-                            disabled={isLoading || photosPaths && photosPaths.length >= photosCountLimit}
-                        >
-                            <UploadIcon fontSize="small"/>
-                            <VisuallyHiddenInput
-                                type="file"
-                                onChange={addPhotoHandler}
-                                accept="image/jpeg, image/png, image/jpg"
-                                multiple
-                            />
-                        </StyledUploadButton>
-                    </>
-                )}
-                {isFullscreen && (
-                    <FullscreenContainer>
-                        <FullscreenImage
-                            src={photosPaths[activePhoto]}
-                            alt="fullscreen photo"
-                        />
-                        <CloseButton onClick={toggleFullscreen}>
-                            <CloseIcon/>
-                        </CloseButton>
-                        {photosPaths.length > 1 && (
-                            <>
-                                <FullscreenPrevButton
-                                    onClick={handlePrevPhoto}
-                                    disabled={activePhoto === 0}
-                                >
-                                    <ChevronLeftIcon/>
-                                </FullscreenPrevButton>
-                                <FullscreenNextButton
-                                    onClick={handleNextPhoto}
-                                    disabled={activePhoto === photosPaths.length - 1}
-                                >
-                                    <ChevronRightIcon/>
-                                </FullscreenNextButton>
-                            </>
-                        )}
-                    </FullscreenContainer>
+                    <StyledUploadButton
+                        component="label"
+                        disabled={photosPaths.length >= photosCountLimit}
+                    >
+                        <UploadIcon/>
+                        <VisuallyHiddenInput type="file"
+                                             onChange={handleAddPhoto}
+                                             accept="image/jpeg, image/png, image/jpg"/>
+                    </StyledUploadButton>
                 )}
             </ImageContainer>
-            <PhotoPaginator
-                activePhoto={activePhoto}
-                photoCount={photosPaths?.length || 0}
-                onPhotoClick={photoClickHandler}
-            />
+
+            {/* Полноэкранный режим */}
+            {isFullscreen && (
+                <FullscreenContainer>
+                    <FullscreenImage src={photosPaths[activePhoto]} alt="fullscreen photo"/>
+                    <CloseButton onClick={toggleFullscreen}>
+                        <CloseIcon/>
+                    </CloseButton>
+
+                    {photosPaths?.length > 1 && (
+                        <>
+                            <NavigationButton
+                                isFullscreen={true}
+                                position="left"
+                                onClick={handlePrevPhoto}
+                                disabled={activePhoto === 0}
+                            >
+                                <ChevronLeftIcon/>
+                            </NavigationButton>
+                            <NavigationButton
+                                isFullscreen={true}
+                                position="right"
+                                onClick={handleNextPhoto}
+                                disabled={activePhoto === photosPaths.length - 1}
+                            >
+                                <ChevronRightIcon/>
+                            </NavigationButton>
+                        </>
+                    )}
+
+                    <PhotoPaginator
+                        activePhoto={activePhoto}
+                        photoCount={photosPaths.length}
+                        onPhotoClick={setActivePhoto}
+                    />
+                </FullscreenContainer>
+            )}
+
+            {/* Пагинация в обычном режиме */}
+            {!isFullscreen && (
+                <PhotoPaginator
+                    activePhoto={activePhoto}
+                    photoCount={photosPaths.length}
+                    onPhotoClick={setActivePhoto}
+                />
+            )}
         </Box>
     );
 };

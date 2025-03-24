@@ -120,11 +120,13 @@ function App() {
     return (
         <Layout>
             <Routes>
-                {routesConfig.map(({ path, element }) => (
-                    <Route key={path} path={path} element={element} />
+                {routesConfig.map(({path, element, subRoutes}) => (
+                    subRoutes
+                        ? (subRoutes.map(({path, element}) => (<Route key={path} path={path} element={element}/>)))
+                        : (<Route key={path} path={path} element={element}/>)
                 ))}
             </Routes>
-            <Message />
+            <Message/>
         </Layout>
     );
 }

@@ -1,21 +1,21 @@
-import React, {ChangeEvent, FC, useState} from "react";
-import Card from "@mui/material/Card";
-import {ValidationErrors} from "../../../../utils/validators";
+import React, {ChangeEvent, FC} from "react";
+import {ValidationErrors} from "../../../utils/validators";
 import {SelectChangeEvent, Stack, Typography} from "@mui/material";
-import {INewTask, ITask} from "../../../../models/ITasks";
-import FieldControl from "../../../../components/common/FieldControl";
-import {PRIORITIES, taskPriority, taskStatus, taskTypes} from "../../utils/const";
-import {useAppSelector} from "../../../../hooks/redux";
-import {getAllUsers} from "../../../users/model/selectors";
-import {getActiveProblems, getProblemTitleById} from "../../model/selectors";
-import {convertMillisecondsToDate} from "../../../../utils/services";
+import {INewTask, ITask} from "../../../models/ITasks";
+import FieldControl from "../../../components/common/FieldControl";
+import {PRIORITIES} from "../../machinery/utils/const";
+import {useAppSelector} from "../../../hooks/redux";
+import {getAllUsers} from "../../users/model/selectors";
+import {getMachineryForSelect} from "../../machinery/model/selectors";
+import {convertMillisecondsToDate} from "../../../utils/services";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import ProblemCard from "../../../problems/ui/ProblemCard";
-import {useProblemDrawer} from "../../../../hooks/useProblemDrawer";
-import ProblemDrawer from "../../../problems/ui/ProblemDrawer";
+import {useProblemDrawer} from "../../../hooks/useProblemDrawer";
+import ProblemDrawer from "../../problems/ui/ProblemDrawer";
+import {taskStatus, taskTypes} from "../utils/consts";
+import {getActiveProblems, getProblemTitleById} from "../../problems/model/selectors";
 
 interface IProps {
     task: INewTask | ITask | null;
@@ -34,8 +34,9 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
     };
     const users = useAppSelector(getAllUsers);
     const usersList = users.map(user => ({id: user.id, title: `${user.first_name} ${user.middle_name}`}));
-    const activeProblem = useAppSelector(state => getActiveProblems(state, task?.problem_id));
-    const problemTitle = useAppSelector(state => getProblemTitleById(state, task?.problem_id));
+    const activeProblem = useAppSelector(state => getActiveProblems(state, task?.problem_id || 0, task?.machinery_id || 0));
+    const problemTitle = useAppSelector(state => getProblemTitleById(state, task?.problem_id || 0));
+    const machineryList = useAppSelector(getMachineryForSelect);
     const activeProblemList = activeProblem.map(problem => ({
         id: problem.id,
         title: `${convertMillisecondsToDate(problem.created_date)} ${problem.title}`,
@@ -59,16 +60,7 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                             }}
                         />
                     </LocalizationProvider>
-                        <FieldControl
-                            label="Основание"
-                            name="problem_id"
-                            id="problem_id"
-                            value={task.problem_id}
-                            error={errors?.problem_id}
-                            isEditMode={isEditMode}
-                            onChange={fieldChangeHandler}
-                            options={activeProblemList}
-                        />
+
                     </>)
                     : (<>
                         <Typography ml={2} variant="subtitle2" sx={{width: "100%"}}>
@@ -77,26 +69,38 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                             {convertMillisecondsToDate(task.due_date)}
                         </span>
                         </Typography>
-                        <Typography ml={2} variant="subtitle2" sx={{width: "100%"}}>
-                            Основание:
-                            <span style={{display: "block", marginTop: "2px", cursor: "pointer"}}
-                                  onClick={handleProblemClick}>
-                                {problemTitle}
-                            </span>
-                        </Typography>
                     </>)}
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <FieldControl
-                    label="Заголовок"
-                    name="title"
-                    id="title"
-                    value={task.title}
-                    error={errors?.title}
+                    label="Тeхника"
+                    name="machinery_id"
+                    id="machinery_id"
+                    value={task.machinery_id || -1}
+                    error={errors?.machinery_id}
                     isEditMode={isEditMode}
                     onChange={fieldChangeHandler}
+                    options={machineryList}
                     isRequired
                 />
+            </Stack>
+            <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+                {isEditMode
+                    ? (<FieldControl
+                        label="Основание"
+                        name="problem_id"
+                        id="problem_id"
+                        value={task.problem_id}
+                        error={errors?.problem_id}
+                        isEditMode={isEditMode}
+                        onChange={fieldChangeHandler}
+                        options={activeProblemList}
+                    />)
+                    : (<Typography ml={2} variant="subtitle2" sx={{width: "100%"}}>
+                        Основание:
+                        <span style={{display: "block", marginTop: "2px", cursor: "pointer"}}
+                              onClick={handleProblemClick}>
+                                {problemTitle}
+                            </span>
+                    </Typography>)}
                 <FieldControl
                     label="Статус"
                     name="status_id"
@@ -108,6 +112,16 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                     options={taskStatus}
                 />
             </Stack>
+            <FieldControl
+                label="Заголовок"
+                name="title"
+                id="title"
+                value={task.title}
+                error={errors?.title}
+                isEditMode={isEditMode}
+                onChange={fieldChangeHandler}
+                isRequired
+            />
             <FieldControl
                 label="Описание"
                 name="description"

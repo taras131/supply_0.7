@@ -1,14 +1,13 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMachinery";
 import {
-    fetchAddMachinery,
     fetchAddMachineryComment,
-    fetchAddMachineryDoc, fetchAddMachineryTask,
+    fetchAddMachineryDoc,
     fetchDeleteMachineryComment,
     fetchDeleteMachineryPhoto,
     fetchGetMachineryById,
     fetchUpdateMachinery,
-    fetchUpdateMachineryComment, fetchUpdateMachineryTask,
+    fetchUpdateMachineryComment,
     fetchUploadMachineryPhoto,
 } from "./actions";
 import {IComment} from "../../../models/iComents";
@@ -66,7 +65,6 @@ export const MachinerySlice = createSlice({
             state.list = action.payload;
         },
         updateCurrentMachineryProblem: (state, action: PayloadAction<IProblem>) => {
-            console.log(action.payload);
             if (state.currentMachinery) {
                 state.currentMachinery = {
                     ...state.currentMachinery,
@@ -83,12 +81,26 @@ export const MachinerySlice = createSlice({
                 };
             }
         },
+        updateCurrentMachineryTask: (state, action: PayloadAction<ITask>) => {
+            if (state.currentMachinery) {
+                state.currentMachinery = {
+                    ...state.currentMachinery,
+                    tasks: [...state.currentMachinery.tasks
+                        .map(task => task.id === action.payload.id ? action.payload : task)],
+                };
+            }
+        },
+        currentMachineryAddTask: (state, action: PayloadAction<ITask>) => {
+            if (state.currentMachinery && state.currentMachinery.id === action.payload.machinery_id) {
+                state.currentMachinery = {
+                    ...state.currentMachinery,
+                    tasks: [...state.currentMachinery.tasks, action.payload],
+                };
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAddMachinery.fulfilled, (state, action: PayloadAction<IMachinery>) => {
-                state.isLoading = false;
-            })
             .addCase(fetchGetMachineryById.fulfilled, (state, action: PayloadAction<ICurrentMachinery>) => {
                 state.isLoading = false;
                 state.currentMachinery = action.payload;
@@ -156,24 +168,6 @@ export const MachinerySlice = createSlice({
                 }
                 state.isLoading = false;
             })
-            .addCase(fetchAddMachineryTask.fulfilled, (state, action: PayloadAction<ITask>) => {
-                if (state.currentMachinery && action.payload.machinery_id) {
-                    state.currentMachinery = {
-                        ...state.currentMachinery,
-                        tasks: [...state.currentMachinery.tasks, action.payload],
-                    };
-                }
-                state.isLoading = false;
-            })
-            .addCase(fetchUpdateMachineryTask.fulfilled, (state, action: PayloadAction<ITask>) => {
-                if (state.currentMachinery) {
-                    state.currentMachinery = {
-                        ...state.currentMachinery,
-                        tasks: [...state.currentMachinery.tasks.map(task => task.id === action.payload.id ? action.payload : task)],
-                    };
-                }
-                state.isLoading = false;
-            })
             .addCase(fetchDeleteMachineryPhoto.rejected, handleRejected)
             .addMatcher(
                 (action) => action.type.endsWith("/pending"),
@@ -193,5 +187,8 @@ export const {
     wsMessageReceived,
     updateCurrentMachineryProblem,
     currentMachineryAddProblem,
+    updateCurrentMachineryTask,
+    currentMachineryAddTask,
+
 } = MachinerySlice.actions;
 export default MachinerySlice.reducer;

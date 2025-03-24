@@ -9,6 +9,7 @@ import shipmentsReducer from "features/shipments/model/slice";
 import ordersReducer from "features/orders/model/slice";
 import machineryReducer from "../features/machinery/model/slice";
 import problemsReducer from "../features/problems/model/slice";
+import tasksReducer from "../features/tasks/model/slice";
 import usersReducer from "../features/users/model/slice";
 import filesReducer from "../features/files/model/slice";
 import {machineryWebsocketMiddleware} from "../features/machinery/model/websocketMiddleware";
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     orders: ordersReducer,
     machinery: machineryReducer,
     problems: problemsReducer,
+    tasks: tasksReducer,
     users: usersReducer,
     files: filesReducer,
 });

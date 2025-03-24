@@ -2,12 +2,11 @@ import {IMachinery, INewMachinery, INewMachineryDoc} from "../../../models/iMach
 import axios from "axios";
 import {IComment, INewComment} from "../../../models/iComents";
 import {basePath} from "../../../api";
-import {INewTask, ITask} from "../../../models/ITasks";
 
 const machineryPath = `${basePath}/machinery`;
 const noticePath = "comment";
 const docPath = "docs";
-const tasksPath = "tasks";
+
 
 interface IAddDocParams {
     doc: INewMachineryDoc;
@@ -107,34 +106,6 @@ export const machineryAPI = {
         void machinery;
         return filteredResult;
     },
-    addNewTask: async (newTask: INewTask) => {
-        const res = await fetch(`${machineryPath}/${tasksPath}`, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newTask),
-        });
-        if (!res.ok) {
-            const errorDetails = await res.json();
-            throw new Error(errorDetails.message || `Ошибка сервера: ${res.status} ${res.statusText}`);
-        }
-        return await res.json();
-    },
-    updateTask: async (task: ITask) => {
-        const res = await fetch(`${machineryPath}/${tasksPath}/${task.id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(task),
-        });
-        if (!res.ok) {
-            const errorDetails = await res.json();
-            throw new Error(errorDetails.detail || `Ошибка сервера: ${res.status} ${res.statusText}`);
-        }
-        return await res.json();
-    },
+
 };
 

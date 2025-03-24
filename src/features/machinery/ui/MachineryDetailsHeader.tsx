@@ -12,7 +12,7 @@ const MachineryDetailsHeader: FC = () => {
     const navigate = useNavigate();
     const title = useAppSelector(getCurrentMachineryTitle);
     const handleBackClick = () => {
-        navigate(routes.machinery);
+        navigate(routes.machineryList);
     };
     return (
         <Stack direction="row" alignItems="center" justifyContent="space-between">

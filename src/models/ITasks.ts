@@ -15,7 +15,7 @@ export interface INewTask {
     due_date: number;
     author_id: number;
     assigned_to_id: number;
-    machinery_id?: number;
+    machinery_id: number;
     issue_photos: string[];
     category_id: number;
     problem_id: number;

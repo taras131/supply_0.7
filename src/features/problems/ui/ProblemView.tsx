@@ -8,10 +8,11 @@ import AddIcon from "@mui/icons-material/Add";
 import {useAppSelector} from "../../../hooks/redux";
 import {getUserFullNameById} from "../../users/model/selectors";
 import {useNavigate} from "react-router-dom";
-import TaskReportItem from "../../machinery/ui/tasks/TaskReportItem";
+import TaskReportItem from "../../tasks/ui/TaskReportItem";
 import {getMachineryForSelect} from "../../machinery/model/selectors";
 import ProblemPriorityChip from "./ProblemPriorityChip";
 import {problemCategories, problemPriority, problemStatus} from "../utils/consts";
+import {routes} from "../../../utils/routes";
 
 interface IProps {
     problem: INewProblem | IProblem | null;
@@ -34,8 +35,8 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
         problemId = problem.id;
     }
     const createTaskClickHandler = () => {
-        navigate(`/machinery/add_problem/${problem.machinery_id}`, {
-            state: {problemId: problemId},
+        navigate(routes.machineryAddTask, {
+            state: {problemId: problemId, machineryId: problem.machinery_id, priorityId: problem.priority_id,taskTypeId: 2},
         });
     };
     const tasksList = problem.tasks_id.map(taskId => (<TaskReportItem key={taskId} taskId={taskId}/>));
@@ -77,7 +78,7 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                     </>)}
             </Stack>
             <FieldControl
-                label="Тухника"
+                label="Тeхника"
                 name="machinery_id"
                 id="machinery_id"
                 value={problem.machinery_id}

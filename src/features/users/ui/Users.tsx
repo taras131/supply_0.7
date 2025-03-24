@@ -17,11 +17,11 @@ import Preloader from "../../../components/Preloader";
 
 const Users = () => {
   const users = useAppSelector(getAllUsers);
+  const matches_650 = useMediaQuery("(min-width:500px)");
+  const matches_550 = useMediaQuery("(min-width:550px)");
   if(users.length === 0) {
     return (<Preloader/>);
   }
-  const matches_650 = useMediaQuery("(min-width:500px)");
-  const matches_550 = useMediaQuery("(min-width:550px)");
   return (
     <Stack style={{ minHeight: "calc(100vh - 60px" }} alignItems="center">
       <TableContainer component={Paper} sx={{ maxWidth: 850 }}>

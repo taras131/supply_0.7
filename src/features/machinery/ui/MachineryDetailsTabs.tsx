@@ -4,8 +4,8 @@ import {Tab, Tabs, useMediaQuery} from "@mui/material";
 import MachineryDetailsDocs from "./docs/MachineryDetailsDocs";
 import Comments from "../../../components/common/comments/Comments";
 import {useAppSelector} from "../../../hooks/redux";
-import {getCurrentMachinery} from "../model/selectors";
-import {TaskList} from "./tasks/TasksList";
+import {getCurrentMachinery, getCurrentMachineryTasks} from "../model/selectors";
+import {TaskList} from "../../tasks/ui/TasksList";
 import Problems from "../../problems/ui/Problems";
 import MachineryReport from "./report/MachineryReport";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -56,7 +56,7 @@ const MachineryDetailsTabs: FC = () => {
     return (
         <Box sx={{width: "100%"}}>
             <Box sx={{paddingBottom: 2}}>
-                <Tabs  value={value} onChange={handleChange} aria-label="basic_tabs">
+                <Tabs value={value} onChange={handleChange} aria-label="basic_tabs">
                     <Tab label="Обзор" {...a11yProps(0)} />
                     <Tab label="Документы" {...a11yProps(1)} />
                     <Tab label="Проблемы" {...a11yProps(2)} />
@@ -75,7 +75,7 @@ const MachineryDetailsTabs: FC = () => {
                 <Problems problems={machinery?.problems || null}/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-                <TaskList/>
+                <TaskList tasks={machinery?.tasks || null} machineryId={machinery?.id} machineryMode/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
                 Заявки

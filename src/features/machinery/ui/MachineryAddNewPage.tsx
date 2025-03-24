@@ -39,14 +39,14 @@ const MachineryAddNewPage = () => {
         }));
         clearPhotos();
         resetValue();
-        navigate(routes.machinery);
+        navigate(routes.machineryList);
     };
     return (
         <Stack sx={{padding: "24px", height: "100%"}} spacing={4}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Button variant="outlined"
                         component={Link}
-                        to={routes.machinery}>
+                        to={routes.machineryList}>
                     Назад
                 </Button>
                 <Typography variant="h2" fontSize={"24px"} textAlign="center">

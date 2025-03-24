@@ -12,12 +12,12 @@ interface IProps {
     icon?: string;
 }
 
-const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
+const SideBarNavItem: FC<IProps> = ({title, route, icon}) => {
     const patch: any = useLocation().pathname;
     const isActive =
         route === "/"
             ? patch === route
-            : patch.startsWith(route);
+            : patch.startsWith(route) || new RegExp(`^${route}/\\d+/?$`).test(patch);
     const Icon = icon ? navIcons[icon] : null;
     return (
         <Link style={{textDecoration: "none", color: "white"}} to={route}>
@@ -26,6 +26,7 @@ const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
                 disablePadding
                 sx={{
                     alignItems: "center",
+                    justifyContent: "center",
                     marginBottom: "8px",
                     borderRadius: 1,
                     color: "var(--NavItem-color)",
@@ -33,7 +34,7 @@ const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
                     display: "flex",
                     flex: "0 0 auto",
                     gap: 1,
-                    p: "6px 16px",
+                    p: "0 16px",
                     position: "relative",
                     textDecoration: "none",
                     height: "var(--MainNav-height)",
@@ -63,7 +64,7 @@ const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
                         component="span"
                         sx={{
                             color: "inherit",
-                            fontSize: "0.875rem",
+                            fontSize: "14px",
                             fontWeight: 500,
                             lineHeight: "28px",
                         }}
@@ -77,4 +78,4 @@ const SideBarMenuItem: FC<IProps> = ({title, route, icon}) => {
     );
 };
 
-export default SideBarMenuItem;
+export default SideBarNavItem;

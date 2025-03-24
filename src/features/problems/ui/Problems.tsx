@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {IProblem} from "../../../models/IProblems";
-import {Stack, useMediaQuery} from "@mui/material";
+import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,7 +14,6 @@ interface IProps {
 }
 
 const Problems: FC<IProps> = ({problems, isMachineryMode = true}) => {
-    const matches_850 = useMediaQuery("(max-width:850px)");
     const {drawerState, openDrawer, closeDrawer} = useProblemDrawer();
     const handleAddClick = () => {
         openDrawer("create");
@@ -30,7 +29,6 @@ const Problems: FC<IProps> = ({problems, isMachineryMode = true}) => {
                     onClick={handleAddClick}
                     startIcon={<AddIcon/>}
                     variant="contained"
-                    size={matches_850 ? "small" : "medium"}
                 >
                     Добавить
                 </Button>

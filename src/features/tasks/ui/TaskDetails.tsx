@@ -1,15 +1,15 @@
 import React, {ChangeEvent, FC, useState} from "react";
 import Box from "@mui/material/Box";
 import TaskIssueView from "./TaskIssueView";
-import PhotosManager from "../../../../components/common/PhotosManager";
+import PhotosManager from "../../../components/common/PhotosManager";
 import Button from "@mui/material/Button";
-import {ITask} from "../../../../models/ITasks";
+import {ITask} from "../../../models/ITasks";
 import {SelectChangeEvent, Stack} from "@mui/material";
-import {ValidationErrors} from "../../../../utils/validators";
-import {basePath} from "../../../../api";
-import {fetchDeleteTaskPhoto, fetchUpdateMachineryTask, fetchUploadTaskPhoto} from "../../model/actions";
-import {useAppDispatch} from "../../../../hooks/redux";
+import {ValidationErrors} from "../../../utils/validators";
+import {basePath} from "../../../api";
+import {useAppDispatch} from "../../../hooks/redux";
 import TaskResultView from "./TaskResultView";
+import {fetchDeleteTaskPhoto, fetchUpdateTask, fetchUploadTaskPhoto} from "../model/actions";
 
 interface IProps {
     editedValue: ITask | null;
@@ -53,7 +53,7 @@ const TaskDetails: FC<IProps> = ({
         const updatedTask = viewType === "result"
             ? {...editedValue, status_id: 3}
             : editedValue;
-        dispatch(fetchUpdateMachineryTask(updatedTask));
+        dispatch(fetchUpdateTask(updatedTask));
         toggleIsEditMode();
     };
     const photosPaths = (viewType === "issue"

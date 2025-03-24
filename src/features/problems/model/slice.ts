@@ -42,12 +42,6 @@ export const ProblemsSlice = createSlice({
         },
         wsMessageReceived: (state, action: PayloadAction<any>) => {
             state.wsMessage = action.payload;
-            console.log(action.payload);
-        },
-        updateProblem(state, action: PayloadAction<IProblem>) {
-            state.list = state.list.map((machinery) =>
-                machinery.id === action.payload.id ? action.payload : machinery
-            );
         },
         updateProblemsList: (state, action: PayloadAction<IProblem[]>) => {
             state.list = action.payload;
@@ -60,7 +54,6 @@ export const ProblemsSlice = createSlice({
                 state.isLoading = false;
             })
             .addCase(fetchUpdateProblem.fulfilled, (state, action: PayloadAction<IProblem>) => {
-                console.log(action.payload);
                 state.list = [...state.list.map(problem => problem.id === action.payload.id ? action.payload : problem)];
                 state.isLoading = false;
             })
@@ -75,5 +68,5 @@ export const ProblemsSlice = createSlice({
     },
 });
 
-export const {updateProblem, wsConnected, wsDisconnected, updateProblemsList} = ProblemsSlice.actions;
+export const {wsConnected, wsDisconnected, updateProblemsList} = ProblemsSlice.actions;
 export default ProblemsSlice.reducer;

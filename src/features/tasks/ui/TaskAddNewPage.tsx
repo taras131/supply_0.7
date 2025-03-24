@@ -4,28 +4,28 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {useLocation, useNavigate} from "react-router-dom";
 import TaskIssueView from "./TaskIssueView";
-import {useEditor} from "../../../../hooks/useEditor";
-import {newTaskValidate} from "../../../../utils/validators";
-import {INewTask} from "../../../../models/ITasks";
-import {emptyTask} from "../../utils/const";
+import {useEditor} from "../../../hooks/useEditor";
+import {newTaskValidate} from "../../../utils/validators";
+import {INewTask} from "../../../models/ITasks";
 import Box from "@mui/material/Box";
-import PhotosManager from "../../../../components/common/PhotosManager";
-import usePhotoManager from "../../../../hooks/usePhotoManager";
-import {fetchAddMachineryTask} from "../../model/actions";
-import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
-import {getCurrentMachineryId} from "../../model/selectors";
-import {getCurrentUserId} from "../../../auth/model/selectors";
+import PhotosManager from "../../../components/common/PhotosManager";
+import usePhotoManager from "../../../hooks/usePhotoManager";
+import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
+import {getCurrentUserId} from "../../auth/model/selectors";
 import Card from "@mui/material/Card";
+import {fetchAddTask} from "../model/actions";
+import {emptyTask} from "../utils/consts";
 
 const TaskAddNewPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const currentMachineryId = useAppSelector(getCurrentMachineryId);
     const currentUserId = useAppSelector(getCurrentUserId);
     const {tempFiles, onAddPhoto, onDeletePhoto, clearPhotos} = usePhotoManager();
     const location = useLocation();
+    const machineryId = location.state?.machineryId;
     const problemId = location.state?.problemId;
     const taskTypeId = location.state?.taskTypeId;
+    const priorityId = location.state?.priorityId;
     const {
         editedValue,
         errors,
@@ -35,28 +35,25 @@ const TaskAddNewPage = () => {
         validateValue,
     } = useEditor<INewTask>({initialValue: JSON.parse(JSON.stringify(emptyTask)), validate: newTaskValidate});
     useEffect(() => {
-        if (problemId) {
-            setEditedValue(prev => ({...prev, problem_id: problemId, type_id: 2}));
-        }
-    }, [problemId]);
-    useEffect(() => {
-        if (taskTypeId) {
-            setEditedValue(prev => ({...prev, type_id: taskTypeId}));
-        }
-    }, [taskTypeId]);
-    useEffect(() => {
         const today = new Date();
         setEditedValue(prev => ({
             ...prev,
             due_date: today.getTime(),
+            ...(machineryId && {machinery_id: machineryId}),
+            ...(problemId && {problem_id: problemId}),
+            ...(taskTypeId && {type_id: taskTypeId}),
+            ...(priorityId && {priority_id: priorityId}),
         }));
         return () => clearPhotos();
-    }, []);
+    }, [machineryId, problemId, taskTypeId, priorityId]);
     useEffect(() => {
-        if (validateValue) {
-            validateValue();
+        if (editedValue.problem_id !== -1) {
+            setEditedValue((prev) => ({...prev, problem_id: -1}));
         }
-    }, [editedValue, validateValue]);
+    }, [editedValue.problem_id]);
+    useEffect(() => {
+        validateValue();
+    }, [editedValue]);
     const handleDateChange = (date: any) => {
         if (date && date.isValid && date.isValid()) {
             setEditedValue(prev => ({
@@ -67,13 +64,11 @@ const TaskAddNewPage = () => {
     };
     const handleAddClick = async () => {
         const newFiles = [...tempFiles.map(fileData => fileData.file)];
-        const newTask = {
-            ...editedValue, machinery_id: currentMachineryId ? currentMachineryId : 0
-            , author_id: currentUserId,
-        };
-        await dispatch(fetchAddMachineryTask({newTask, files: newFiles}));
+        const newTask = {...editedValue, author_id: currentUserId};
+        await dispatch(fetchAddTask({newTask, files: newFiles}));
         resetValue();
         clearPhotos();
+        navigate(-1);
     };
     return (
         <div>
@@ -101,11 +96,13 @@ const TaskAddNewPage = () => {
                     marginTop: "24px",
                 }}
             >
-                <TaskIssueView task={editedValue}
-                               errors={errors}
-                               isEditMode={true}
-                               fieldChangeHandler={handleFieldChange}
-                               handleDateChange={handleDateChange}/>
+                <Card>
+                    <TaskIssueView task={editedValue}
+                                   errors={errors}
+                                   isEditMode={true}
+                                   fieldChangeHandler={handleFieldChange}
+                                   handleDateChange={handleDateChange}/>
+                </Card>
                 <Card sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <PhotosManager onAddPhoto={onAddPhoto}
                                    onDeletePhoto={onDeletePhoto}

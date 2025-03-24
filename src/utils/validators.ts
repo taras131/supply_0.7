@@ -66,6 +66,7 @@ export const newTaskValidate = (task: INewTask) => {
     if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
     if(task.priority_id < 0) errors.priority_id = "Выбирите приоритет";
     if(task.type_id < 0) errors.type_id = "Выбирите тип работ";
+    if(task.machinery_id < 0) errors.machinery_id = "Выбирите технику";
     return errors;
 };
 
@@ -79,6 +80,7 @@ export const taskValidate = (task: INewTask) => {
     if(task.description.length > 400) errors.description = "Описание должно быть не длиннее 400 символов";
     if(task.priority_id < 0) errors.priority_id = "Выбирите приоритет";
     if(task.type_id < 0) errors.type_id = "Выбирите тип работ";
+    if(task.status_id < 0) errors.status_id = "Выбирите статус";
     return errors;
 };
 

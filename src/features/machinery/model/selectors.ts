@@ -39,7 +39,7 @@ export const getMachinery = (state: RootState): (IMachinery | ICurrentMachinery)
     });
 };
 export const getMachineryById = (state: RootState, machineryId: number): IMachinery | ICurrentMachinery => {
-    return state.machinery.list.filter(machinery => machinery.id !== machineryId)[0];
+    return state.machinery.list.filter(machinery => machinery.id === machineryId)[0];
 };
 
 
@@ -73,14 +73,6 @@ export const getMachineryTitleById = (state: RootState, machineryId: number): st
 };
 export const getCurrentMachineryOperatingTypeId = (state: RootState): number | null => {
     return state.machinery.currentMachinery?.operating_type_id || null;
-};
-
-export const getActiveProblems = (state: RootState, problemId: number | undefined) => {
-    return state.machinery.currentMachinery?.problems.filter(problem => problem.status_id !== 4 || problem.id === problemId) || [];
-};
-
-export const getProblemTitleById = (state: RootState, problemId: number | undefined) => {
-    return state.machinery.currentMachinery?.problems.find(problem => problem.id === problemId)?.title || "";
 };
 
 export const getCurrentMachineryId = (state: RootState): number | null => {

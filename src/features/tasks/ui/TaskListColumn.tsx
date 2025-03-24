@@ -1,29 +1,38 @@
 import React from "react";
 import {useDrop} from "react-dnd";
-import {ITask} from "../../../../models/ITasks";
+import {ITask} from "../../../models/ITasks";
 import TaskCard from "./TaskCard";
 import {Stack} from "@mui/material";
 import Button from "@mui/material/Button";
-import {Link, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-
+import {routes} from "../../../utils/routes";
 
 interface TasksColumnProps {
     status: { id: number; title: string };
+    machineryId: number | null;
     tasks: ITask[];
     moveTask: (taskId: number, newStatusId: number) => void;
+    machineryMode: boolean;
 }
 
 const TasksColumn: React.FC<TasksColumnProps> = ({
                                                      status,
                                                      tasks,
+                                                     machineryId,
                                                      moveTask,
+                                                     machineryMode,
                                                  }) => {
-    const machineryId = useParams().machineryId || "0";
+    const navigate = useNavigate();
     const [, drop] = useDrop({
         accept: "TASK",
         drop: (item: { id: number }) => moveTask(item.id, status.id),
     });
+    const createTaskClickHandler = () => {
+        navigate(routes.machineryAddTask, {
+            state: {machineryId: machineryId},
+        });
+    };
     return (
         <Stack
             ref={drop}
@@ -33,7 +42,7 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
                 padding: "16px",
                 borderRadius: "8px",
                 flex: "1",
-                minHeight: "300px",
+                minHeight: "70vh",
                 border: "1px solid #ccc",
             }}
         >
@@ -41,8 +50,7 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
                 <h3>{status.title}</h3>
                 {status.id === 1 && (
                     <Button
-                        component={Link}
-                        to={`/machinery/add_problem/${machineryId}`}
+                        onClick={createTaskClickHandler}
                         startIcon={<AddIcon sx={{fontSize: "var(--icon-fontSize-md)"}}/>}
                         variant="contained"
                         size="small"
@@ -51,7 +59,7 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
                     </Button>
                 )}
             </Stack>
-            {tasks.map((task) => (<TaskCard key={task.id} task={task}/>))}
+            {tasks.map((task) => (<TaskCard key={task.id} task={task} machineryMode={machineryMode}/>))}
         </Stack>
     );
 };

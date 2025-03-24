@@ -16,16 +16,21 @@ import Profile from "../features/auth/ui/Profile";
 import MachineryPage from "../features/machinery/ui/MachineryPage";
 import MachineryDetailsPage from "../features/machinery/ui/MachineryDetailsPage";
 import MachineryAddNewPage from "../features/machinery/ui/MachineryAddNewPage";
-import TaskAddNewPage from "../features/machinery/ui/tasks/TaskAddNewPage";
-import TaskDetailsPage from "../features/machinery/ui/tasks/TaskDetailsPage";
+import TaskAddNewPage from "../features/tasks/ui/TaskAddNewPage";
+import TaskDetailsPage from "../features/tasks/ui/TaskDetailsPage";
 import ProblemsPage from "../features/problems/ui/ProblemsPage";
+import TasksPage from "../features/tasks/ui/TasksPage";
 
 
-export interface IRouteConfig {
-    path: string;
+export interface IBaseRoutes {
+    path: string
     element: React.ReactNode;
-    label: string; // Название для меню
-    showInMenu?: boolean; // Показывать в меню или нет
+    label: string;
+    showInMenu: boolean;
+}
+
+export interface IRouteConfig extends IBaseRoutes {
+    subRoutes?: IBaseRoutes [];
 }
 
 export const routesConfig: IRouteConfig[] = [
@@ -42,11 +47,35 @@ export const routesConfig: IRouteConfig[] = [
     {path: routes.login, element: <Auth/>, label: "Вход", showInMenu: false},
     {path: routes.register, element: <Auth/>, label: "Регистрация", showInMenu: false},
     {path: routes.profile, element: <Profile/>, label: "Профиль", showInMenu: false},
-    {path: routes.machinery, element: <MachineryPage/>, label: "Техника", showInMenu: true},
     {path: routes.machineryDetails, element: <MachineryDetailsPage/>, label: "Подробности", showInMenu: false},
     {path: routes.addNewMachinery, element: <MachineryAddNewPage/>, label: "Новая техника", showInMenu: false},
-    {path: routes.machineryAddProblem, element: <TaskAddNewPage/>, label: "Новая проблема", showInMenu: false},
+    {path: routes.machineryAddTask, element: <TaskAddNewPage/>, label: "Новая проблема", showInMenu: false},
     {path: routes.machineryTaskDetails, element: <TaskDetailsPage/>, label: "Подробности задачи", showInMenu: false},
-    {path: routes.problems, element: <ProblemsPage/>, label: "Проблемы", showInMenu: true},
+    {
+        path: routes.machinery,
+        element: <MachineryPage/>, // Главная страница для раздела "Техника"
+        label: "Техника",
+        showInMenu: true,
+        subRoutes: [ // Добавляем подпункты
+            {
+                path: routes.machineryList,
+                element: <MachineryPage/>,
+                label: "Список",
+                showInMenu: true,
+            },
+            {
+                path: routes.problems,
+                element: <ProblemsPage/>,
+                label: "Проблемы",
+                showInMenu: true,
+            },
+            {
+                path: routes.tasks,
+                element: <TasksPage/>,
+                label: "Задачи",
+                showInMenu: true,
+            },
+        ],
+    },
     {path: "*", element: <Navigate to={routes.main}/>, label: "Not found", showInMenu: false},
 ];

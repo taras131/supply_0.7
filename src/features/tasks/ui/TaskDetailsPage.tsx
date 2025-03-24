@@ -3,21 +3,25 @@ import {Accordion, AccordionDetails, AccordionSummary, Stack} from "@mui/materia
 import Button from "@mui/material/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import {useAppSelector} from "../../../../hooks/redux";
-import {getTaskById} from "../../model/selectors";
-import {useEditor} from "../../../../hooks/useEditor";
-import {defaultTask} from "../../utils/const";
-import {ITask} from "../../../../models/ITasks";
-import {taskValidate} from "../../../../utils/validators";
+import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
+import {useEditor} from "../../../hooks/useEditor";
+import {ITask} from "../../../models/ITasks";
+import {taskValidate} from "../../../utils/validators";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TaskDetails from "./TaskDetails";
+import {getCurrentTask, getTaskIsLoading} from "../model/selectors";
+import {fetchGetTaskById} from "../model/actions";
+import {defaultTask} from "../utils/consts";
+import Preloader from "../../../components/Preloader";
 
 const TaskDetailsPage = () => {
+    const dispatch = useAppDispatch();
     const {taskId} = useParams();
     const navigate = useNavigate();
     const [expandedIssuePanel, setExpandedIssuePanel] = useState(true);
     const [expandedResultPanel, setExpandedResultPanel] = useState(false);
-    const currentTask = useAppSelector(state => getTaskById(state, taskId ? +taskId : 0));
+    const currentTask = useAppSelector(getCurrentTask);
+    const isLoading = useAppSelector(getTaskIsLoading);
     const {
         editedValue,
         errors,
@@ -29,12 +33,18 @@ const TaskDetailsPage = () => {
         validate: taskValidate,
     });
     useEffect(() => {
+        if (taskId) {
+            dispatch(fetchGetTaskById(+taskId));
+        }
+    }, []);
+    useEffect(() => {
         if (currentTask) {
             setEditedValue(currentTask);
-            validateValue();
             setExpandedResultPanel(currentTask.status_id === 3);
         }
+        validateValue();
     }, [currentTask]);
+    if (isLoading) return (<Preloader/>);
     if (!currentTask) return null;
     const handleDateChange = (date: any) => {
         if (date && date.isValid && date.isValid()) {

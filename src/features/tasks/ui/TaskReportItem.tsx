@@ -3,11 +3,12 @@ import {ListItemButton, ListItemIcon, ListItemText, useMediaQuery} from "@mui/ma
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import BuildIcon from "@mui/icons-material/Build";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import {convertMillisecondsToDate} from "../../../../utils/services";
-import {useAppSelector} from "../../../../hooks/redux";
-import {getTaskById} from "../../model/selectors";
-import {getUserFullNameById} from "../../../users/model/selectors";
+import {convertMillisecondsToDate} from "../../../utils/services";
+import {useAppSelector} from "../../../hooks/redux";
+import {getTaskById} from "../../machinery/model/selectors";
+import {getUserFullNameById} from "../../users/model/selectors";
 import {useNavigate} from "react-router-dom";
+import {routes} from "../../../utils/routes";
 
 interface IProps {
     taskId: number
@@ -20,7 +21,7 @@ const TaskReportItem: FC<IProps> = ({taskId}) => {
     const assignedFullName = useAppSelector(state => getUserFullNameById(state, task?.assigned_to_id || null));
     if (!task) return null;
     const viewTaskClickHandler = () => {
-        navigate(`/machinery/${task.machinery_id}/task/${task.id}/`);
+        navigate(`${routes.tasks}/${task.id}`);
     };
     const resultOperating = task.result_operating ? `${task.result_operating} ч.` : `${task.result_odometer} км.`;
     const date = convertMillisecondsToDate(task.created_date);
