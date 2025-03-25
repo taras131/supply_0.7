@@ -57,7 +57,7 @@ const TasksMobileTable: FC<IProps> = ({rows, machineryMode}) => {
             getValue: (row) => matches_530 ? row.description.slice(0,20) : row.description.slice(0,200),
         },
         {
-            key: "status_id",
+            key: "due_date",
             label: "До",
             getValue:
                 (row) => (

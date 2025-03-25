@@ -67,6 +67,7 @@ const StyledUploadButton = styled(LoadingButton)<LoadingButtonProps & { componen
         right: 16,
         padding: 8,
         minWidth: "auto",
+        color: "white",
         backgroundColor: theme.palette.success.main,
         "&.MuiLoadingButton-loading": {
             backgroundColor: theme.palette.action.disabledBackground,
@@ -85,35 +86,18 @@ const CloseButton = styled(IconButton)(({theme}) => ({
     color: theme.palette.common.white,
 }));
 
-const NavigationButton = styled(IconButton, {
-    shouldForwardProp: (prop) => prop !== "isFullscreen" && prop !== "position",
-})<{ isFullscreen: boolean; position: "left" | "right" }>(({theme, isFullscreen, position}) => ({
-    position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%)",
-    [position]: 16,
-    backgroundColor: isFullscreen ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.4)",
-    color: isFullscreen ? theme.palette.common.white : theme.palette.text.primary,
-    "&:hover": {
-        backgroundColor: isFullscreen
-            ? "rgba(255, 255, 255, 0.4)"
-            : theme.palette.background.paper,
-    },
-    "&.Mui-disabled": {
-        backgroundColor: isFullscreen ? "rgba(255, 255, 255, 0.1)" : theme.palette.action.disabledBackground,
-    },
-}));
+
 
 const ImageContainer = styled(Box)(() => ({
-
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    height: "400px", // Фиксированная высота для обычного режима
+    height: "400px",
     borderRadius: "20px",
     backgroundColor: "inherit",
     overflow: "hidden",
+    position: "relative",
 }));
 
 const StyledImage = styled("img")<{ isFullscreen?: boolean }>(({isFullscreen}) => ({
@@ -168,11 +152,9 @@ const PhotosManager: FC<IProps> = ({
     };
     const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!onAddPhoto) return;
-
         const files = e.target.files; // Сохраняем files в переменную для дальнейшей проверки
         if (files && files[0]) { // Проверяем, что files не null и содержит хотя бы один файл
             const selectedFile = files[0];
-
             // Проверяем MIME-тип файла
             if (selectedFile.type.startsWith("image/")) {
                 onAddPhoto(selectedFile);
@@ -181,8 +163,12 @@ const PhotosManager: FC<IProps> = ({
             }
         }
     };
+    const handleDeletePhoto = () => {
+        setActivePhoto(0);
+        onDeletePhoto?.(activePhoto);
+    };
     return (
-        <Box sx={{display: "flex", flexDirection: "column", gap: 2, position: "relative"}}>
+        <>
             {/* Обычное отображение с фиксированной высотой */}
             <ImageContainer>
                 <StyledImage
@@ -192,34 +178,20 @@ const PhotosManager: FC<IProps> = ({
                     src={photosPaths?.length > 0 ? photosPaths[activePhoto] : photoPlaceholder}
                     alt="photo"
                 />
-
                 {photosPaths?.length > 1 && (
-                    <>
-                        <NavigationButton
-                            isFullscreen={false}
-                            position="left"
-                            onClick={handlePrevPhoto}
-                            disabled={activePhoto === 0}
-                        >
-                            <ChevronLeftIcon/>
-                        </NavigationButton>
-                        <NavigationButton
-                            isFullscreen={false}
-                            position="right"
-                            onClick={handleNextPhoto}
-                            disabled={activePhoto === photosPaths.length - 1}
-                        >
-                            <ChevronRightIcon/>
-                        </NavigationButton>
-                    </>
+                    <PhotoPaginator
+                        activePhoto={activePhoto}
+                        photoCount={photosPaths.length}
+                        onPhotoClick={setActivePhoto}
+                        handleNextPhoto={handleNextPhoto}
+                        handlePrevPhoto={handlePrevPhoto}
+                    />
                 )}
-
                 {!isViewingOnly && photosPaths?.length > 0 && (
-                    <StyledDeleteButton onClick={() => onDeletePhoto?.(activePhoto)} color="error">
+                    <StyledDeleteButton onClick={handleDeletePhoto} color="error">
                         <DeleteIcon/>
                     </StyledDeleteButton>
                 )}
-
                 {!isViewingOnly && (
                     <StyledUploadButton
                         component="label"
@@ -232,7 +204,6 @@ const PhotosManager: FC<IProps> = ({
                     </StyledUploadButton>
                 )}
             </ImageContainer>
-
             {/* Полноэкранный режим */}
             {isFullscreen && (
                 <FullscreenContainer>
@@ -240,45 +211,18 @@ const PhotosManager: FC<IProps> = ({
                     <CloseButton onClick={toggleFullscreen}>
                         <CloseIcon/>
                     </CloseButton>
-
                     {photosPaths?.length > 1 && (
-                        <>
-                            <NavigationButton
-                                isFullscreen={true}
-                                position="left"
-                                onClick={handlePrevPhoto}
-                                disabled={activePhoto === 0}
-                            >
-                                <ChevronLeftIcon/>
-                            </NavigationButton>
-                            <NavigationButton
-                                isFullscreen={true}
-                                position="right"
-                                onClick={handleNextPhoto}
-                                disabled={activePhoto === photosPaths.length - 1}
-                            >
-                                <ChevronRightIcon/>
-                            </NavigationButton>
-                        </>
+                            <PhotoPaginator
+                                activePhoto={activePhoto}
+                                photoCount={photosPaths.length}
+                                onPhotoClick={setActivePhoto}
+                                handleNextPhoto={handleNextPhoto}
+                                handlePrevPhoto={handlePrevPhoto}
+                            />
                     )}
-
-                    <PhotoPaginator
-                        activePhoto={activePhoto}
-                        photoCount={photosPaths.length}
-                        onPhotoClick={setActivePhoto}
-                    />
                 </FullscreenContainer>
             )}
-
-            {/* Пагинация в обычном режиме */}
-            {!isFullscreen && (
-                <PhotoPaginator
-                    activePhoto={activePhoto}
-                    photoCount={photosPaths.length}
-                    onPhotoClick={setActivePhoto}
-                />
-            )}
-        </Box>
+        </>
     );
 };
 

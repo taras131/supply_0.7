@@ -46,11 +46,11 @@ const TaskAddNewPage = () => {
         }));
         return () => clearPhotos();
     }, [machineryId, problemId, taskTypeId, priorityId]);
-    useEffect(() => {
+/*    useEffect(() => {
         if (editedValue.problem_id !== -1) {
             setEditedValue((prev) => ({...prev, problem_id: -1}));
         }
-    }, [editedValue.problem_id]);
+    }, [editedValue.problem_id]);*/
     useEffect(() => {
         validateValue();
     }, [editedValue]);
