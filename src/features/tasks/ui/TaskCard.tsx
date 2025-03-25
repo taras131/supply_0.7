@@ -11,6 +11,7 @@ import {getUserFullNameById} from "../../users/model/selectors";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {PRIORITIES} from "../../machinery/utils/const";
 import {getMachineryTitleById} from "../../machinery/model/selectors";
+import {getDueDateColor} from "../utils/services";
 
 interface IProps {
     task: ITask;
@@ -31,16 +32,7 @@ const TaskCard: FC<IProps> = ({task, machineryMode}) => {
     const handleNavigateToDetails = () => {
         navigate(routes.machineryTaskDetails.replace(":taskId", task.id.toString()));
     };
-    const getTextColor = (): "info" | "error" | "warning" | "primary" => {
-        if (!task.due_date) return "info"; // Если даты нет, цвет черный по умолчанию
-        const today = dayjs(); // Текущая дата
-        const dueDate = dayjs(task.due_date); // Дата исполнения задачи
-        const difference = dueDate.diff(today, "day"); // Разница в днях
-        if (difference < 0) return "error"; // Просроченная дата
-        if (difference === 0) return "warning"; // Сегодняшняя дата
-        if (difference === 1) return "primary"; // Завтра
-        return "info"; // Остальные дни
-    };
+
     const getPriorityIcon = (priorityId: number) => {
         const IconComponent = PRIORITIES.find(priority => priority.id === priorityId);
         return IconComponent ? <IconComponent.icon color={IconComponent.color}/> : null;
@@ -59,7 +51,7 @@ const TaskCard: FC<IProps> = ({task, machineryMode}) => {
             <CardContent sx={{p: 0}}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Chip label={`до: ${task.due_date ? dayjs(task.due_date).format("DD.MM.YY") : "нет даты"}`}
-                          color={getTextColor()}/>
+                          color={getDueDateColor(task.due_date)}/>
                     {machineryMode
                         ? (getPriorityIcon(task.priority_id))
                         : (<Typography variant="subtitle2" fontSize={16}>
