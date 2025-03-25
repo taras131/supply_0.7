@@ -61,4 +61,4 @@ export const tasksAPI = {
         }
         return await res.json();
     },
-}
+};

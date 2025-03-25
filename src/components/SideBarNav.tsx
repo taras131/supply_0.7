@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC} from "react";
 import {IRouteConfig} from "../config/routes";
 import SideBarNavItem from "./SideBarNavItem";
 import Box from "@mui/material/Box";

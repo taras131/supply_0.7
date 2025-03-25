@@ -39,7 +39,7 @@ const PhotoPaginator: FC<IProps> = ({
                                         photoCount,
                                         onPhotoClick,
                                         handlePrevPhoto,
-                                        handleNextPhoto
+                                        handleNextPhoto,
                                     }) => {
     const paginatorList = Array.from({length: photoCount}).map((_, index) => (
         <Box

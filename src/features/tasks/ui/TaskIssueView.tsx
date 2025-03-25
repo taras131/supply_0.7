@@ -93,14 +93,24 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                         isEditMode={isEditMode}
                         onChange={fieldChangeHandler}
                         options={activeProblemList}
+                        disabled={task.machinery_id < 0}
                     />)
-                    : (<Typography ml={2} variant="subtitle2" sx={{width: "100%"}}>
-                        Основание:
-                        <span style={{display: "block", marginTop: "2px", cursor: "pointer"}}
-                              onClick={handleProblemClick}>
-                                {problemTitle}
-                            </span>
-                    </Typography>)}
+                    : (
+                        <Stack ml={2} sx={{width: "100%"}}>
+                            <Typography variant="subtitle2" sx={{width: "100%"}}>
+                                Основание:
+                            </Typography>
+                            {task.type_id === 1
+                                ? (<Typography variant="subtitle1">
+                                    Проведение ТО
+                                </Typography>)
+                                : (<Typography variant="subtitle1"
+                                               color="primary"
+                                               sx={{cursor: "pointer"}}
+                                               onClick={handleProblemClick}>
+                                    {problemTitle}
+                                </Typography>)}
+                        </Stack>)}
                 <FieldControl
                     label="Статус"
                     name="status_id"

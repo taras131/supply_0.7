@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Accordion, AccordionDetails, AccordionSummary, Stack} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, ButtonGroup, Stack} from "@mui/material";
 import Button from "@mui/material/Button";
 import {useNavigate, useParams} from "react-router-dom";
 import Typography from "@mui/material/Typography";
@@ -10,7 +10,7 @@ import {taskValidate} from "../../../utils/validators";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TaskDetails from "./TaskDetails";
 import {getCurrentTask, getTaskIsLoading} from "../model/selectors";
-import {fetchGetTaskById} from "../model/actions";
+import {fetchGetTaskById, fetchUpdateTask} from "../model/actions";
 import {defaultTask} from "../utils/consts";
 import Preloader from "../../../components/Preloader";
 
@@ -54,6 +54,11 @@ const TaskDetailsPage = () => {
             }));
         }
     };
+    const handleStatusChange = (statusId: number) => {
+        if (editedValue.status_id !== statusId) {
+            dispatch(fetchUpdateTask({...editedValue, status_id: statusId}));
+        }
+    };
     return (
         <Stack spacing={2}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -61,9 +66,23 @@ const TaskDetailsPage = () => {
                         onClick={() => navigate(-1)}>
                     Назад
                 </Button>
-                <Typography variant="h2" fontSize={"24px"} textAlign="center">
-                    Подробности задачи:
-                </Typography>
+                <ButtonGroup variant="outlined" aria-label="Basic button group">
+                    <Button color={editedValue.status_id === 1 ? "warning" : "primary"}
+                            variant={editedValue.status_id === 1 ? "contained" : "outlined"}
+                            onClick={() => handleStatusChange(1)}>
+                        Новая
+                    </Button>
+                    <Button
+                        variant={editedValue.status_id === 2 ? "contained" : "outlined"}
+                        onClick={() => handleStatusChange(2)}>
+                        В работе
+                    </Button>
+                    <Button color={editedValue.status_id === 3 ? "success" : "primary"}
+                            variant={editedValue.status_id === 3 ? "contained" : "outlined"}
+                            onClick={() => handleStatusChange(3)}>
+                        Завершена
+                    </Button>
+                </ButtonGroup>
             </Stack>
             <Accordion expanded={expandedIssuePanel} onChange={() => setExpandedIssuePanel(prev => !prev)}>
                 <AccordionSummary

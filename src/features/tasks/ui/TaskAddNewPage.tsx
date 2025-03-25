@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -20,6 +20,7 @@ const TaskAddNewPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const currentUserId = useAppSelector(getCurrentUserId);
+    const isInitialRenderRef = useRef(true);
     const {tempFiles, onAddPhoto, onDeletePhoto, clearPhotos} = usePhotoManager();
     const location = useLocation();
     const machineryId = location.state?.machineryId;
@@ -46,11 +47,14 @@ const TaskAddNewPage = () => {
         }));
         return () => clearPhotos();
     }, [machineryId, problemId, taskTypeId, priorityId]);
-/*    useEffect(() => {
-        if (editedValue.problem_id !== -1) {
+    useEffect(() => {
+        if (editedValue.problem_id !== -1 && !isInitialRenderRef.current) {
             setEditedValue((prev) => ({...prev, problem_id: -1}));
         }
-    }, [editedValue.problem_id]);*/
+        if (isInitialRenderRef.current && editedValue.machinery_id > 0) {
+            isInitialRenderRef.current = false;
+        }
+    }, [editedValue.machinery_id]);
     useEffect(() => {
         validateValue();
     }, [editedValue]);
