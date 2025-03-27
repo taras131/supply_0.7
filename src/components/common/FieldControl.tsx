@@ -12,7 +12,7 @@ import {
     Typography,
 } from "@mui/material";
 
-const StyledInput = styled(TextField, {
+export const StyledInput = styled(TextField, {
     shouldForwardProp: (prop) => prop !== "isError",
 })<{ isError?: boolean }>(({ theme, isError }) => ({
     "label + &": {
@@ -98,6 +98,7 @@ interface IProps {
     rows?: number;
     sx?: SxProps;
     disabled?: boolean;
+    size?: "small" | "medium" ;
 }
 
 const FieldControl: FC<IProps> = ({
@@ -114,8 +115,9 @@ const FieldControl: FC<IProps> = ({
                                       rows = 3,
                                       sx,
                                       disabled = false,
+                                      size="medium",
                                   }) => (
-    <FormControl fullWidth sx={sx}>
+    <FormControl fullWidth sx={sx} size={size}>
         <StyledLabel required={isRequired} shrink htmlFor={id}>
             {label}
         </StyledLabel>

@@ -9,12 +9,12 @@ import {useAppDispatch, useAppSelector} from "../../../../hooks/redux";
 import {
     getCurrentMachinery,
 } from "../../model/selectors";
-import {MachineryStatus} from "../../../../utils/const";
-import {defaultMachinery} from "../../utils/const";
+import {defaultMachinery, MachineryStatus} from "../../utils/const";
 import MachineryBasicView from "../MachineryBasicView";
 import MachineryAdditionalView from "../MachineryAdditionalView";
 import MachineryReportSummary from "./MachineryReportSummary";
 import MachineryReportActionButtons from "./MachineryReportActionButtons";
+import MachineryReportStatusButtons from "./MachineryReportStatusButtons";
 
 const MachineryReport: FC = () => {
     const dispatch = useAppDispatch();
@@ -75,15 +75,12 @@ const MachineryReport: FC = () => {
             <MachineryReportSummary/>
             <MachineryDetailsPhotos machinery={machinery}
                                     isEditMode={isEditMode}/>
-            <Box></Box>
-            <MachineryReportActionButtons machinery={machinery}
-                                          isEditMode={isEditMode}
+            <MachineryReportStatusButtons machinery={machinery}/>
+            <MachineryReportActionButtons isEditMode={isEditMode}
                                           isValid={!Object.keys(errors).length}
                                           toggleIsEditMode={toggleIsEditMode}
                                           updateMachineryHandler={updateMachineryHandler}
-                                          cancelUpdateMachineryHandler={cancelUpdateMachineryHandler}
-                                          changeMachineryStatusHandler={changeMachineryStatusHandler}
-            />
+                                          cancelUpdateMachineryHandler={cancelUpdateMachineryHandler}/>
         </Box>
     );
 };

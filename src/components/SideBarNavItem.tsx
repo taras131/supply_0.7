@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import {ListItem, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {useLocation} from "react-router-dom";
@@ -10,14 +10,20 @@ interface IProps {
     route: string;
     count?: number;
     icon?: string;
+    setExpanded?: (isExpanded: boolean) => void;
 }
 
-const SideBarNavItem: FC<IProps> = ({title, route, icon}) => {
+const SideBarNavItem: FC<IProps> = ({title, route, icon, setExpanded}) => {
     const patch: any = useLocation().pathname;
     const isActive =
         route === "/"
             ? patch === route
             : patch.startsWith(route) || new RegExp(`^${route}/\\d+/?$`).test(patch);
+    useEffect(() => {
+        if (isActive && setExpanded) {
+            setExpanded(true);
+        }
+    }, [isActive]);
     const Icon = icon ? navIcons[icon] : null;
     return (
         <Link style={{textDecoration: "none", color: "white"}} to={route}>

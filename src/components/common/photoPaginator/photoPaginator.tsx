@@ -75,7 +75,7 @@ const PhotoPaginator: FC<IProps> = ({
             <Stack direction={ROW}
                    alignItems={CENTER}
                    justifyContent={CENTER}
-                   spacing={2}
+                   spacing={1}
                    sx={{position: "absolute", bottom: 10, width: "100%"}}>
                 {photoCount < 2
                     ? (<div></div>)

@@ -48,7 +48,8 @@ const SideBarNavAccordion: FC<IProps> = ({title, routesConfig}) => {
             <AccordionDetails sx={{padding: "8px 16px 0 32px"}}>
                 {routesConfig.map(menuItem => (<SideBarNavItem key={menuItem.path}
                                                                title={menuItem.label}
-                                                               route={menuItem.path}/>))}
+                                                               route={menuItem.path}
+                                                               setExpanded={setExpanded}/>))}
             </AccordionDetails>
         </Accordion>
     );

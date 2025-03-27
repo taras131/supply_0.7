@@ -60,10 +60,6 @@ export const VIN_COPY_TEXT = "VIN скопирован";
 export const AMOUNT_COPY_TEXT = "Сумма скопирована";
 export const FILE_TYPE = "file";
 
-export enum MachineryStatus {
-    active = "Работает",
-    disActive = "Списана",
-}
 export const yearsManufacture = [
     "1990",
     "1991",

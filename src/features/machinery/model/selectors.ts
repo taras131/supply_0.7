@@ -2,10 +2,10 @@ import {RootState} from "../../../store";
 import {ICurrentMachinery, IMachinery, IMachineryDoc} from "../../../models/iMachinery";
 import {useAppSelector} from "../../../hooks/redux";
 import {IOrder} from "../../../models/iOrders";
-import {MachineryStatus} from "utils/const";
 import {ITask} from "../../../models/ITasks";
 import {IProblem} from "../../../models/IProblems";
 import {createSelector} from "@reduxjs/toolkit";
+import {MachineryStatus} from "../utils/const";
 
 const collator = new Intl.Collator("ru");
 
@@ -30,8 +30,30 @@ export const getMachineryForSelect = createSelector(
         machineryList.map(machinery => ({id: machinery.id, title: `${machinery.brand} ${machinery.model}`}))
 );
 
+export const getActualEngineTypes = createSelector(
+    [
+        (state: RootState) => state.machinery.list,
+        (_: RootState, engineTypes: {id: number, title: string}[]) => engineTypes,
+    ],
+    (machineryList, machineryTypes) => {
+        const engineTypeIds = new Set(machineryList.map(machinery => machinery.type_id));
+        return machineryTypes.filter(type => engineTypeIds.has(type.id));
+    }
+);
+
+export const getActualMachineryTypes = createSelector(
+    [
+        (state: RootState) => state.machinery.list,
+        (_: RootState, machineryTypes: {id: number, title: string}[]) => machineryTypes,
+    ],
+    (machineryList, machineryTypes) => {
+        const typeIds = new Set(machineryList.map(machinery => machinery.type_id));
+        return machineryTypes.filter(type => typeIds.has(type.id));
+    }
+);
+
 export const getMachinery = (state: RootState): (IMachinery | ICurrentMachinery)[] => {
-    const arr = state.machinery.list.filter(machinery => !machinery.status || machinery.status === MachineryStatus.active);
+    const arr = state.machinery.list.filter(machinery => machinery.status !== MachineryStatus.disActive);
     return arr.sort((a, b) => {
         const nameA = a.brand.toLowerCase();
         const nameB = b.brand.toLowerCase();

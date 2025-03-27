@@ -1,14 +1,19 @@
 import {ICurrentMachinery, INewMachinery} from "../../../models/iMachinery";
-import {MachineryStatus} from "../../../utils/const";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import WarningIcon from "@mui/icons-material/Warning";
 import NewReleasesIcon from "@mui/icons-material/NewReleases";
 
+export enum MachineryStatus {
+    active = "Работает",
+    disActive = "Списана",
+    repair = "Ремонт",
+}
+
 export const engineTypes = [
-    {id: 0, title: "Дизельный"},
-    {id: 1, title: "Бензиновый"},
-    {id: 4, title: "Электрический"},
-    {id: 5, title: "Гибридный"},
+    {id: 1, title: "Дизельный"},
+    {id: 2, title: "Бензиновый"},
+    {id: 3, title: "Электрический"},
+    {id: 4, title: "Гибридный"},
 ];
 
 export const tractionTypes = [
@@ -29,9 +34,9 @@ export const operatingTypes = [
 ];
 
 export const machineryTypes = [
-    {id: 0, title: "Легковые а/м"},
-    {id: 1, title: "Грузовые а/м"},
-    {id: 4, title: "Асфальтоукладчики"},
+    {id: 1, title: "Легковые а/м"},
+    {id: 2, title: "Грузовые а/м"},
+    {id: 3, title: "Асфальтоукладчики"},
     {id: 5, title: "Беспилотная/роботизированная платформа"},
     {id: 6, title: "Бетоносмеситель"},
     {id: 7, title: "Бульдозер"},
@@ -109,3 +114,5 @@ export const defaultMachinery: ICurrentMachinery = {
     tasks: [],
     problems: [],
 };
+
+

@@ -14,6 +14,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {setMessage} from "../../../store/reducers/message";
 import {MESSAGE_SEVERITY, VIN_COPY_TEXT} from "../../../utils/const";
 import {useAppDispatch} from "../../../hooks/redux";
+import MachineryStatusChip from "./MachineryStatusChip";
 
 const StyledImage = styled("img")({
     width: "100%",
@@ -104,26 +105,16 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
         {
             key: "status",
             label: matches_650 ? " " : "Статус",
-            getValue: (row) => {
-                const statusColor = row.status === "Работает"
-                    ? "success"
-                    : "error";
-                return (
-                    <Chip
-                        label={matches_650 ? row.status[0] : row.status}
-                        color={statusColor}
-                    />
-                );
-            },
+            getValue: row => (<MachineryStatusChip status={row.status}/>),
         },
     ];
     return (
-            <BaseTable
-                rows={rows}
-                columns={columns}
-                onRowClick={rowClickHandler}
-                minWidth="390px"
-            />
+        <BaseTable
+            rows={rows}
+            columns={columns}
+            onRowClick={rowClickHandler}
+            minWidth="390px"
+        />
 
     );
 };
