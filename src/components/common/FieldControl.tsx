@@ -160,7 +160,7 @@ const FieldControl: FC<IProps> = ({
                     : value || "-------"}
             </StyledTypography>
         )}
-        {isEditMode && (<FormHelperText sx={{minHeight: "20px"}}>{error}</FormHelperText>)}
+        {isEditMode && (<FormHelperText sx={{minHeight: "20px", textAlign: "right"}}>{error}</FormHelperText>)}
     </FormControl>
 );
 

@@ -1,26 +1,48 @@
-import React, {useEffect} from "react";
-import {Stack} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import React, {ChangeEvent, useEffect, useState} from "react";
+import {SelectChangeEvent, Stack} from "@mui/material";
 import {TaskList} from "./TasksList";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {getTaskIsLoading, getTasks} from "../model/selectors";
 import {fetchGetTasks} from "../model/actions";
 import Preloader from "../../../components/Preloader";
+import TasksPageHeader from "./TasksPageHeader";
 
 const TasksPage = () => {
-    const tasks = useAppSelector(getTasks);
+    const [tasksFilter, setTasksFilter] = useState({
+        machinery_id: -1,
+        type_id: -1,
+        text: "",
+        status_id: -1,
+    });
+    let filteredTasks = useAppSelector(getTasks);
     const isLoading = useAppSelector(getTaskIsLoading);
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(fetchGetTasks());
     }, []);
-    if(isLoading) return (<Preloader/>);
+    const filterChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string | number>) => {
+        if (e && e.target.name) {
+            setTasksFilter(prev => ({...prev, [e.target.name]: e.target.value}));
+        }
+    };
+    if (isLoading) return (<Preloader/>);
+    if(tasksFilter.machinery_id > 0) {
+        filteredTasks = filteredTasks.filter(task => task.machinery_id === tasksFilter.machinery_id);
+    }
+    if(tasksFilter.type_id > 0) {
+        filteredTasks = filteredTasks.filter(task => task.type_id === tasksFilter.type_id);
+    }
+    if (tasksFilter.status_id > 0) {
+        filteredTasks = filteredTasks.filter(task => task.status_id === tasksFilter.status_id);
+    }
+    if (tasksFilter.text.length > 0) {
+        filteredTasks = filteredTasks.filter(task => task.title.toLowerCase().includes(tasksFilter.text.toLowerCase())
+            || task.description.toLowerCase().includes(tasksFilter.text.toLowerCase()));
+    }
     return (
         <Stack spacing={4}>
-            <Stack direction="row" spacing={3} justifyContent="space-between" alignItems="center">
-                <Typography variant="h5">Задачи</Typography>
-            </Stack>
-            <TaskList tasks={tasks}/>
+            <TasksPageHeader tasksFilter={tasksFilter} filterChangeHandler={filterChangeHandler}/>
+            <TaskList tasks={filteredTasks}/>
         </Stack>
     );
 };

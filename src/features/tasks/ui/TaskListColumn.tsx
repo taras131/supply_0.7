@@ -48,7 +48,7 @@ const TasksColumn: React.FC<TasksColumnProps> = ({
         >
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <h3>{status.title}</h3>
-                {status.id === 1 && (
+                {status.id === 1 && machineryMode && (
                     <Button
                         onClick={createTaskClickHandler}
                         startIcon={<AddIcon sx={{fontSize: "var(--icon-fontSize-md)"}}/>}

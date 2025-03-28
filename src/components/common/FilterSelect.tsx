@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC} from "react";
-import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, useMediaQuery} from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 
 interface IProps {
     label: string;
@@ -15,17 +15,13 @@ const FilterSelect: FC<IProps> = ({
                                       value,
                                       options,
                                       onChange,
-                                      sx,
                                   }) => {
-    const matches_850 = useMediaQuery("(max-width:850px)");
-
     return (
         <FormControl
             sx={{
-                minWidth: "170px", // Аналогичный минимальный размер
+                width: "200px",
                 flexGrow: 1,
-                m: 1,          // Внешний отступ
-                ...sx,         // Возможность переопределить стили
+                m: 1,
             }}
         >
             <InputLabel id={name}>{label}</InputLabel>
@@ -36,12 +32,10 @@ const FilterSelect: FC<IProps> = ({
                 label={label}
                 onChange={onChange}
                 variant="outlined"
-                size={matches_850 ? "small" : "medium"}
-                sx={{
-                    width: "100%", // Поле занимает всю ширину контейнера
-                }}
+                size="small"
+                sx={{width: "100%"}}
             >
-                <MenuItem value={-1}>Не выбрано</MenuItem>
+                <MenuItem value={-1}>Все</MenuItem>
                 {options.map((option) => (
                     <MenuItem key={option.id} value={option.id}>
                         {option.title}

@@ -115,4 +115,9 @@ export const defaultMachinery: ICurrentMachinery = {
     problems: [],
 };
 
+export const machineryStatus = [
+    {id: 1, title: MachineryStatus.active},
+    {id: 2, title: MachineryStatus.repair},
+    {id: 3, title: MachineryStatus.disActive},
+];
 

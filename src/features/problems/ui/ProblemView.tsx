@@ -2,17 +2,13 @@ import React, {ChangeEvent, FC} from "react";
 import {INewProblem, IProblem} from "../../../models/IProblems";
 import {convertMillisecondsToDate} from "../../../utils/services";
 import {ValidationErrors} from "../../../utils/validators";
-import {Button, List, SelectChangeEvent, Stack, Typography} from "@mui/material";
+import {List, SelectChangeEvent, Stack, Typography} from "@mui/material";
 import FieldControl from "../../../components/common/FieldControl";
-import AddIcon from "@mui/icons-material/Add";
 import {useAppSelector} from "../../../hooks/redux";
 import {getUserFullNameById} from "../../users/model/selectors";
-import {useNavigate} from "react-router-dom";
 import TaskReportItem from "../../tasks/ui/TaskReportItem";
 import {getMachineryForSelect} from "../../machinery/model/selectors";
-import ProblemPriorityChip from "./ProblemPriorityChip";
 import {problemCategories, problemPriority, problemStatus} from "../utils/consts";
-import {routes} from "../../../utils/routes";
 
 interface IProps {
     problem: INewProblem | IProblem | null;
@@ -24,30 +20,20 @@ interface IProps {
 }
 
 const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = false, errors}) => {
-    const navigate = useNavigate();
     const authorFullName = useAppSelector(state => getUserFullNameById(state, problem?.author_id || null));
     const machineryList = useAppSelector(getMachineryForSelect);
-    let problemId = 0;
     if (!problem) {
         return null;
     }
-    if ("id" in problem) {
-        problemId = problem.id;
-    }
-    const createTaskClickHandler = () => {
-        navigate(routes.machineryAddTask, {
-            state: {problemId: problemId, machineryId: problem.machinery_id, priorityId: problem.priority_id,taskTypeId: 2},
-        });
-    };
     const tasksList = problem.tasks_id.map(taskId => (<TaskReportItem key={taskId} taskId={taskId}/>));
     return (
-        <Stack spacing={isEditMode ? 2 : 3} sx={{flexGrow: 1}}>
+        <Stack spacing={isEditMode ? 0 : 3} sx={{flexGrow: 1}}>
             <Stack direction="row"
                    alignItems="center"
                    justifyContent="space-between"
                    spacing={2}>
                 {isEditMode
-                    ? (<>
+                    && (<>
                         <FieldControl
                             label="Статус"
                             name="status_id"
@@ -66,15 +52,6 @@ const ProblemView: FC<IProps> = ({problem, fieldChangeHandler, isEditMode = fals
                             onChange={fieldChangeHandler}
                             options={problemPriority}
                         />
-                    </>)
-                    : (<>
-                        <Button variant="outlined"
-                                size="small"
-                                onClick={createTaskClickHandler}
-                                startIcon={<AddIcon/>}>
-                            Создать задачу
-                        </Button>
-                        <ProblemPriorityChip priorityId={problem.priority_id} isNotSmall/>
                     </>)}
             </Stack>
             <FieldControl

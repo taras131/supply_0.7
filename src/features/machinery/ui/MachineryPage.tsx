@@ -4,7 +4,7 @@ import {useAppSelector} from "../../../hooks/redux";
 import {getMachinery} from "../model/selectors";
 import MachineryTable from "./MachineryTable";
 import MachineryPageHeader from "./MachineryPageHeader";
-import MachineryFilters, {machineryStatus} from "../MachineryFilters";
+import {machineryStatus} from "../utils/const";
 
 const MachineryPage = () => {
     const [machineryFilter, setMachineryFilter] = useState({
@@ -13,7 +13,7 @@ const MachineryPage = () => {
         engine_type_id: -1,
         status: -1,
     });
-    let filteredMachinery = useAppSelector(getMachinery);
+    let filteredMachinery = useAppSelector(state => getMachinery(state, machineryFilter.status));
     const filterChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string | number>) => {
         if (e && e.target.name) {
             setMachineryFilter(prev => ({...prev, [e.target.name]: e.target.value}));
@@ -34,9 +34,8 @@ const MachineryPage = () => {
     }
     return (
         <Stack spacing={2} sx={{height: "100%"}}>
-            <MachineryPageHeader/>
-            <MachineryFilters machineryFilter={machineryFilter}
-                              filterChangeHandler={filterChangeHandler}/>
+            <MachineryPageHeader machineryFilter={machineryFilter}
+                                 filterChangeHandler={filterChangeHandler}/>
             {filteredMachinery.length
                 ? (<MachineryTable rows={filteredMachinery}/>)
                 : (<Typography textAlign="center" mt={5}>

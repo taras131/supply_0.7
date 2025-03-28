@@ -33,7 +33,7 @@ export const getMachineryForSelect = createSelector(
 export const getActualEngineTypes = createSelector(
     [
         (state: RootState) => state.machinery.list,
-        (_: RootState, engineTypes: {id: number, title: string}[]) => engineTypes,
+        (_: RootState, engineTypes: { id: number, title: string }[]) => engineTypes,
     ],
     (machineryList, machineryTypes) => {
         const engineTypeIds = new Set(machineryList.map(machinery => machinery.type_id));
@@ -44,7 +44,7 @@ export const getActualEngineTypes = createSelector(
 export const getActualMachineryTypes = createSelector(
     [
         (state: RootState) => state.machinery.list,
-        (_: RootState, machineryTypes: {id: number, title: string}[]) => machineryTypes,
+        (_: RootState, machineryTypes: { id: number, title: string }[]) => machineryTypes,
     ],
     (machineryList, machineryTypes) => {
         const typeIds = new Set(machineryList.map(machinery => machinery.type_id));
@@ -52,11 +52,24 @@ export const getActualMachineryTypes = createSelector(
     }
 );
 
-export const getMachinery = (state: RootState): (IMachinery | ICurrentMachinery)[] => {
-    const arr = state.machinery.list.filter(machinery => machinery.status !== MachineryStatus.disActive);
+export const getMachinery = (state: RootState, status: number | string = -1): (IMachinery | ICurrentMachinery)[] => {
+    let arr = [...state.machinery.list];
+    if (status === -1) {
+        arr = arr.filter(machinery => machinery.status !== MachineryStatus.disActive);
+    }
+    if (status === MachineryStatus.repair) {
+        arr = arr.filter(machinery => machinery.status === MachineryStatus.repair);
+    }
+    if (status === MachineryStatus.active) {
+        arr = arr.filter(machinery => machinery.status === MachineryStatus.active);
+    }
+    if (status === MachineryStatus.disActive) {
+        arr = arr.filter(machinery => machinery.status === MachineryStatus.disActive);
+    }
+    if (arr.length < 2) return arr;
     return arr.sort((a, b) => {
-        const nameA = a.brand.toLowerCase();
-        const nameB = b.brand.toLowerCase();
+        const nameA: string = a.brand.toLowerCase();
+        const nameB: string = b.brand.toLowerCase();
         return collator.compare(nameA, nameB);
     });
 };

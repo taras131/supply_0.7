@@ -7,12 +7,8 @@ import {ITableColumn} from "../../../models/ITable";
 import BaseTable from "../../../components/common/BaseTable";
 import {useAppSelector} from "../../../hooks/redux";
 import {getCurrentMachineryOperatingTypeId, selectMachineryTitles} from "../../machinery/model/selectors";
-import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
-import BuildIcon from "@mui/icons-material/Build";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import Box from "@mui/material/Box";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import ProblemPriorityChip from "./ProblemPriorityChip";
+import ProblemStatusIcon from "./ProblemStatusIcon";
 
 interface IProps {
     rows: IProblem[] | null;
@@ -26,6 +22,7 @@ const ProblemsTable: FC<IProps> = ({rows, onProblemClick, activeRowId, isMachine
     const machineryTitles = useAppSelector(selectMachineryTitles);
     const matches_850 = useMediaQuery("(max-width:850px)");
     const matches_650 = useMediaQuery("(max-width:650px)");
+    const matches_440 = useMediaQuery("(max-width:440px)");
     if (!rows) return null;
     const rowClickHandler = (problem: IProblem) => {
         onProblemClick(problem.id);
@@ -34,14 +31,7 @@ const ProblemsTable: FC<IProps> = ({rows, onProblemClick, activeRowId, isMachine
         {
             key: "status_id",
             label: "Статус",
-            getValue: (row) => (
-                <Box display="flex" alignItems="center" justifyContent="center">
-                    {row.status_id === 1 && <HourglassBottomIcon color="error"/>}
-                    {row.status_id === 2 && <AssignmentIcon color="warning"/>}
-                    {row.status_id === 3 && <BuildIcon color="primary"/>}
-                    {row.status_id === 4 && <CheckCircleIcon color="success"/>}
-                </Box>
-            ),
+            getValue: (row) => (<ProblemStatusIcon statusId={row.status_id}/>),
         },
         {
             key: "created_date",
@@ -78,6 +68,7 @@ const ProblemsTable: FC<IProps> = ({rows, onProblemClick, activeRowId, isMachine
         {
             key: "priority_id",
             label: matches_650 ? " " : "Приоритет",
+            isHidden: matches_440,
             getValue: (row) => (<ProblemPriorityChip priorityId={row.priority_id}/>),
         },
     ];
@@ -88,7 +79,7 @@ const ProblemsTable: FC<IProps> = ({rows, onProblemClick, activeRowId, isMachine
             columns={columns}
             onRowClick={rowClickHandler}
             activeRowId={activeRowId}
-            minWidth="400px"
+            minWidth="380px"
         />
     );
 };

@@ -1,5 +1,6 @@
 import React, {ChangeEvent, FC} from "react";
-import {FormControl, SelectChangeEvent, SxProps, TextField, useMediaQuery} from "@mui/material";
+import {FormControl, InputAdornment, SelectChangeEvent, SxProps, TextField} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface IProps {
     label: string;
@@ -10,15 +11,13 @@ interface IProps {
 }
 
 const SearchTextField: FC<IProps> = ({ label, name, value, onChange, sx }) => {
-    const matches_850 = useMediaQuery("(max-width:850px)");
-
     return (
         <FormControl
             sx={{
-                minWidth: "170px",// Совпадает с Select
+                minWidth: "170px",
                 flexGrow: 1,
-                m: 1,         // Одинаковый внешний отступ
-                ...sx,        // Возможность переопределить стили
+                m: 1,
+                ...sx,
             }}
         >
             <TextField
@@ -28,8 +27,14 @@ const SearchTextField: FC<IProps> = ({ label, name, value, onChange, sx }) => {
                 variant="outlined"
                 value={value}
                 onChange={onChange}
-                size={matches_850 ? "small" : "medium"} // Унифицированный размер
-
+                size="small"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
             />
         </FormControl>
     );

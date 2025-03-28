@@ -9,9 +9,7 @@ import {useAppSelector} from "../../../hooks/redux";
 import {selectMachineryTitles} from "../../machinery/model/selectors";
 import {routes} from "../../../utils/routes";
 import {useNavigate} from "react-router-dom";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import BuildIcon from "@mui/icons-material/Build";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ProblemStatusIcon from "../../problems/ui/ProblemStatusIcon";
 
 interface IProps {
     rows: ITask []
@@ -30,13 +28,7 @@ const TasksMobileTable: FC<IProps> = ({rows, machineryMode}) => {
         {
             key: "status_id",
             label: "Статус",
-            getValue: (row) => (
-                <>
-                    {row.status_id === 1 && <AssignmentIcon color="warning"/>}
-                    {row.status_id === 2 && <BuildIcon color="primary"/>}
-                    {row.status_id === 3 && <CheckCircleIcon color="success"/>}
-                </>
-            ),
+            getValue: (row) => (<ProblemStatusIcon statusId={row.status_id}/>),
         },
         {
             key: "machinery_id",
@@ -54,15 +46,16 @@ const TasksMobileTable: FC<IProps> = ({rows, machineryMode}) => {
             key: "description",
             label: "Описание",
             isHidden: matches_460,
-            getValue: (row) => matches_530 ? row.description.slice(0,20) : row.description.slice(0,200),
+            getValue: (row) => matches_530 ? row.description.slice(0, 20) : row.description.slice(0, 200),
         },
         {
             key: "due_date",
-            label: "До",
+            label: "Срок",
             getValue:
                 (row) => (
-                    <Chip label={`до: ${row.due_date ? dayjs(row.due_date).format("DD.MM.YY") : "нет даты"}`}
-                          color={getDueDateColor(row.due_date)}/>
+                    <Chip
+                        label={`${matches_530 ? "" : "до: "} ${row.due_date ? dayjs(row.due_date).format("DD.MM.YY").slice(0, 5) : "нет даты"}`}
+                        color={getDueDateColor(row.due_date)}/>
                 ),
         },
     ];

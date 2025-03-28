@@ -1,7 +1,6 @@
 import React, {FC} from "react";
 import {IProblem} from "../../../models/IProblems";
-import {Stack} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {Stack, useMediaQuery} from "@mui/material";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import ProblemsTable from "./ProblemsTable";
@@ -15,6 +14,7 @@ interface IProps {
 
 const Problems: FC<IProps> = ({problems, isMachineryMode = true}) => {
     const {drawerState, openDrawer, closeDrawer} = useProblemDrawer();
+    const matches_850 = useMediaQuery("(max-width:850px)");
     const handleAddClick = () => {
         openDrawer("create");
     };
@@ -23,16 +23,6 @@ const Problems: FC<IProps> = ({problems, isMachineryMode = true}) => {
     };
     return (
         <Stack spacing={4}>
-            <Stack direction="row" spacing={3} justifyContent="space-between" alignItems="center">
-                <Typography variant="h5">Проблемы</Typography>
-                <Button
-                    onClick={handleAddClick}
-                    startIcon={<AddIcon/>}
-                    variant="contained"
-                >
-                    Добавить
-                </Button>
-            </Stack>
             <ProblemsTable
                 rows={problems}
                 onProblemClick={handleProblemClick}
@@ -45,8 +35,24 @@ const Problems: FC<IProps> = ({problems, isMachineryMode = true}) => {
                 mode={drawerState.mode}
                 currentProblemId={drawerState.problemId || 0}
             />
-        </Stack>
-    );
+            {isMachineryMode && (
+                <>
+                    <Button
+                        onClick={handleAddClick}
+                        startIcon={<AddIcon/>}
+                        variant="contained"
+                        sx={{
+                            position: "fixed",
+                            bottom: matches_850 ? "20px" : "40px",
+                            right: matches_850 ? "20px" : "40px",
+                            zIndex: 1000,
+                        }}
+                    >
+                        Добавить
+                    </Button>
+                </>
+            )}
+        </Stack>);
 };
 
 export default Problems;
