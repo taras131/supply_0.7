@@ -11,7 +11,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import OrdersInfo from "features/orders/ui/OrdersInfo";
 import AccessibleForwardIcon from "@mui/icons-material/AccessibleForward";
-import SuppliersInfo from "./SuppliersInfo";
+import SuppliersInfo from "../features/suppliers/ui/SuppliersInfo";
 
 const MainMenuList = () => {
   const matches_800 = useMediaQuery("(min-width:500px)");

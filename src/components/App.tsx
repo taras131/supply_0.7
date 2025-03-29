@@ -5,7 +5,6 @@ import {useEffect, useState} from "react";
 import {collection, onSnapshot, query} from "firebase/firestore";
 import {db} from "../firebase";
 import {ISupplier} from "models/iSuppliers";
-import {setSuppliers} from "store/reducers/suppliers";
 import {IInvoice} from "models/iInvoices";
 import Message from "./Message";
 import {setComments, setCommentsLoading} from "store/reducers/coments";
@@ -20,6 +19,7 @@ import {fetchCheckAuth} from "../features/auth/model/actions";
 import Layout from "./Layout";
 import {routesConfig} from "../config/routes";
 import {IShipments} from "../models/iShipments";
+import {setSuppliers} from "../features/suppliers/model/slice";
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ function App() {
         });
     }, []);
 
-    useEffect(() => {
+   /* useEffect(() => {
         const q = query(collection(db, "suppliers"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             try {
@@ -59,7 +59,7 @@ function App() {
             }
             return () => unsubscribe();
         });
-    }, []);
+    }, []);*/
     useEffect(() => {
         const q = query(collection(db, "comments"));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -114,9 +114,6 @@ function App() {
             return () => unsubscribe();
         });
     }, []);
-    if (isLoading || supplierIsLoading) {
-        return <Preloader/>;
-    }
     return (
         <Layout>
             <Routes>

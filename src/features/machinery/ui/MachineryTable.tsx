@@ -1,7 +1,6 @@
 import React, {FC} from "react";
-import Card from "@mui/material/Card";
 import {IMachinery} from "../../../models/iMachinery";
-import {Chip, Stack, useMediaQuery} from "@mui/material";
+import {Stack, useMediaQuery} from "@mui/material";
 import {ITableColumn} from "../../../models/ITable";
 import {filesPath} from "../../files/api";
 import photoPlaceholder from "../../../assets/images/placeholder.png";

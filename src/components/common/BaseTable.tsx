@@ -106,8 +106,7 @@ const BaseTable = <T extends { id: number | string }>({
                 rowsPerPageOptions={[10, 25, 50]}
             />
         </Card>
-    )
-        ;
+    );
 };
 
 export default BaseTable;

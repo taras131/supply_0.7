@@ -124,6 +124,7 @@ const TaskDetailsPage = () => {
                         handleDateChange={handleDateChange}
                         errors={errors}
                         viewType="result"
+                        resetEditedValue={resetEditedValue}
                     />
                 </AccordionDetails>
             </Accordion>

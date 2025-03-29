@@ -27,6 +27,5 @@ export interface IProblem extends INewProblem {
     id: number;
     created_date: number;
     updated_date: number;
-
 }
 

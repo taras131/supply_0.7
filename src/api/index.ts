@@ -11,10 +11,6 @@ export const basePath ="https://mylittleserver.ru/api/v1";
 
 class Api {
 
-  addSupplier = async (supplier: INewSupplier) => {
-    const res = await addDoc(collection(db, "suppliers"), supplier);
-    return res;
-  };
   addComment = async (comment: INewComment) => {
     const res = await addDoc(collection(db, "comments"), comment);
     return res;

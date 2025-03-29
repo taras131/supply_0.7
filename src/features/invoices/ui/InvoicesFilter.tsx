@@ -5,7 +5,7 @@ import { CENTER, COLUMN, ROW, SPACE_BETWEEN } from "styles/const";
 import Stack from "@mui/material/Stack";
 import { ALL } from "utils/const";
 import { useAppSelector } from "hooks/redux";
-import { selectSuppliers } from "store/reducers/suppliers";
+import {selectSuppliers} from "../../suppliers/model/selectors";
 
 interface IProps {
   filter: string;

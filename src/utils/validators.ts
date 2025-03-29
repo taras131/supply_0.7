@@ -2,6 +2,7 @@ import {ICurrentMachinery, IDoc, INewMachinery} from "../models/iMachinery";
 import {INewProblem, IProblem} from "../models/IProblems";
 import {INewTask} from "../models/ITasks";
 import {IRegisterData} from "../models/iAuth";
+import {INewSupplier, ISupplier} from "../models/iSuppliers";
 
 export type ValidationErrors = { [key: string]: string | null };
 
@@ -114,6 +115,18 @@ export const registerValidate = (user: IRegisterData) => {
     if(user.middle_name.length < 2) errors.middle_name = "Отчество должено быть не короче 2 символов";
     if(user.middle_name.length > 32) errors.middle_name = "Отчество должно быть не длинее 32 символов";
     if(user.role_id < 0) errors.role_id = "Выберите роль";
+    return errors;
+};
+
+
+export const supplierValidate = (supplier: ISupplier | INewSupplier) => {
+    const errors: ValidationErrors = {};
+    if(supplier.name.length === 0) errors.name = "Наименование должно быть должен быть";
+    if(supplier.name.length < 4) errors.name = "Наименование слишком короткое";
+    if(supplier.name.length > 63) errors.name = "Наименование слишком длинное";
+    if(supplier.INN === 0) errors.INN = "ИНН должен быть";
+    if(`${supplier.INN}`.length < 10) errors.INN = "ИНН слишком короткий";
+    if(`${supplier.INN}`.length > 28) errors.INN = "ИНН слишком длинный";
     return errors;
 };
 

@@ -1,22 +1,23 @@
 import React, {FC} from "react";
 import {Drawer, Box, useMediaQuery} from "@mui/material";
 import {DrawerMode} from "../../../hooks/useProblemDrawer";
-import ProblemCard from "./ProblemCard";
-import ProblemAddNew from "./ProblemAddNew";
+import SupplierCard from "./SupplierCard";
+import SupplierAddNew from "./SuppliersAddNew";
 
 interface IProps {
     isOpen: boolean;
     onClose: (event: React.KeyboardEvent | React.MouseEvent) => void;
     mode: DrawerMode;
-    currentProblemId?: number;
+    currentSupplierId: number;
 }
 
-const ProblemDrawer: FC<IProps> = ({
-                                       isOpen,
-                                       onClose,
-                                       mode,
-                                       currentProblemId = 0,
-                                   }) => {
+const SupplierDrawer: FC<IProps> = ({
+                                        isOpen,
+                                        onClose,
+                                        mode,
+                                        currentSupplierId,
+
+                                    }) => {
     const matches_650 = useMediaQuery("(max-width:650px)");
     return (
         <Drawer
@@ -27,10 +28,10 @@ const ProblemDrawer: FC<IProps> = ({
             transitionDuration={{enter: 300, exit: 300}}
             sx={{
                 flexShrink: 0,
-                width: matches_650 ? "400px" : "500px",
+                width: matches_650 ? "390px" : "500px",
                 "& .MuiDrawer-paper": {
                     boxSizing: "border-box",
-                    width: matches_650 ? "400px" : "500px",
+                    width: matches_650 ? "390px" : "500px",
                 },
             }}
         >
@@ -43,12 +44,12 @@ const ProblemDrawer: FC<IProps> = ({
                     gap: "12px",
                 }}
             >
-                {mode === "create"
-                    ? (<ProblemAddNew onClose={onClose}/>)
-                    : (<ProblemCard onClose={onClose} currentProblemId={currentProblemId}/>)}
+                {mode === "view"
+                    ? (<SupplierCard currentSupplierId={currentSupplierId} onClose={onClose}/>)
+                    : (<SupplierAddNew onClose={onClose}/>)}
             </Box>
         </Drawer>
     );
 };
 
-export default ProblemDrawer;
+export default SupplierDrawer;

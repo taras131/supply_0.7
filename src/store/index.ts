@@ -1,6 +1,6 @@
 import {combineReducers} from "redux";
 import {configureStore} from "@reduxjs/toolkit";
-import SuppliersReducer from "./reducers/suppliers";
+import SuppliersReducer from "features/suppliers/model/slice";
 import MessageReducer from "./reducers/message";
 import InvoicesReducer from "features/invoices/model/slice";
 import authReducer from "../features/auth/model/slice";

@@ -17,8 +17,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Typography from "@mui/material/Typography";
-import { selectSuppliers } from "store/reducers/suppliers";
 import { useAppSelector } from "hooks/redux";
+import {selectSuppliers} from "../../suppliers/model/selectors";
 
 interface IInputValue {
   amount: number;
