@@ -15,11 +15,13 @@ export const taskStatus: ITaskStatus [] = [
 export const taskTypes: ITaskStatus [] = [
     {id: 1, title: "Тех обслуживание"},
     {id: 2, title: "Ремонт"},
+    {id: 3, title: "Диагностика"},
 ];
 
 export const emptyTask: INewTask = {
     title: "",
     description: "",
+    event_location: "",
     status_id: 1,
     priority_id: -1,
     due_date: 0,
@@ -37,6 +39,7 @@ export const emptyTask: INewTask = {
 export const defaultTask: ITask = {
     title: "",
     description: "",
+    event_location: "",
     status_id: 1,
     priority_id: -1,
     due_date: 0,

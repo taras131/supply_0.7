@@ -51,18 +51,18 @@ const MachineryTable: FC<IProps> = ({rows = []}) => {
             },
         },
         {
-            key: "type_id",
-            label: "Категория",
-            isHidden: matches_1150,
-            getValue: (row) => machineryTypes.find(type => type.id === row.type_id)?.title || "",
-        },
-        {
             key: "brand",
             label: "Марка",
         },
         {
             key: "model",
             label: "Модель",
+        },
+        {
+            key: "type_id",
+            label: "Категория",
+            isHidden: matches_1150,
+            getValue: (row) => machineryTypes.find(type => type.id === row.type_id)?.title || "",
         },
         {
             key: "year_manufacture",

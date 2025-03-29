@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC} from "react";
 import {ValidationErrors} from "../../../utils/validators";
-import {SelectChangeEvent, Stack, Typography} from "@mui/material";
+import {FormControl, SelectChangeEvent, Stack, Typography, useMediaQuery} from "@mui/material";
 import {INewTask, ITask} from "../../../models/ITasks";
 import FieldControl from "../../../components/common/FieldControl";
 import {PRIORITIES} from "../../machinery/utils/const";
@@ -14,25 +14,35 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {useProblemDrawer} from "../../../hooks/useProblemDrawer";
 import ProblemDrawer from "../../problems/ui/ProblemDrawer";
-import {taskStatus, taskTypes} from "../utils/consts";
+import {taskTypes} from "../utils/consts";
 import {getActiveProblems, getProblemTitleById} from "../../problems/model/selectors";
 
 interface IProps {
     task: INewTask | ITask | null;
     errors?: ValidationErrors;
     isEditMode?: boolean;
+    detailsMode: boolean;
     handleDateChange: (date: any) => void;
     fieldChangeHandler: (e: ChangeEvent<HTMLInputElement
         | HTMLTextAreaElement> | SelectChangeEvent<string | unknown>) => void
 }
 
-const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChangeHandler, handleDateChange}) => {
+const TaskIssueView: FC<IProps> = ({
+                                       task,
+                                       errors,
+                                       isEditMode = false,
+                                       detailsMode,
+                                       fieldChangeHandler,
+                                       handleDateChange,
+                                   }) => {
     const {drawerState, openDrawer, closeDrawer} = useProblemDrawer();
     const handleProblemClick = () => {
         if (task && task.problem_id)
             openDrawer("view", task.problem_id);
     };
     const users = useAppSelector(getAllUsers);
+    const matches_850 = useMediaQuery("(max-width:850px)");
+    const matches_650 = useMediaQuery("(max-width:650px)");
     const usersList = users.map(user => ({id: user.id, title: `${user.first_name} ${user.middle_name}`}));
     const activeProblem = useAppSelector(state => getActiveProblems(state, task?.problem_id || 0, task?.machinery_id || 0));
     const problemTitle = useAppSelector(state => getProblemTitleById(state, task?.problem_id || 0));
@@ -43,10 +53,11 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
     }));
     if (!task) return null;
     return (
-        <Stack spacing={isEditMode ? 2 : 4}>
+        <Stack spacing={isEditMode ? 0 : 3}>
             <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 {isEditMode
                     ? (<><LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+                        <FormControl fullWidth  size={matches_850 ? "small"  :"medium"}>
                         <DatePicker
                             label="Срок выполнения"
                             value={dayjs(task.due_date)}
@@ -59,13 +70,14 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                                 },
                             }}
                         />
+                        </FormControl>
                     </LocalizationProvider>
 
                     </>)
                     : (<>
-                        <Typography ml={2} variant="subtitle2" sx={{width: "100%"}}>
+                        <Typography ml={2} variant="subtitle2" sx={{width: "100%", color: "#667085", fontSize: matches_650 ? "12px" : "16px"}}>
                             Срок до:
-                            <span style={{display: "block", marginTop: "2px"}}>
+                            <span style={{display: "block", marginTop: "2px", color: "black"}}>
                             {convertMillisecondsToDate(task.due_date)}
                         </span>
                         </Typography>
@@ -79,6 +91,7 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                     isEditMode={isEditMode}
                     onChange={fieldChangeHandler}
                     options={machineryList}
+                    disabled={detailsMode}
                     isRequired
                 />
             </Stack>
@@ -97,7 +110,7 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                     />)
                     : (
                         <Stack ml={2} sx={{width: "100%"}}>
-                            <Typography variant="subtitle2" sx={{width: "100%"}}>
+                            <Typography variant="subtitle2" sx={{width: "100%", color: "#667085", fontSize: matches_650 ? "12px" : "16px"}}>
                                 Основание:
                             </Typography>
                             {task.type_id === 1
@@ -106,20 +119,19 @@ const TaskIssueView: FC<IProps> = ({task, errors, isEditMode = false, fieldChang
                                 </Typography>)
                                 : (<Typography variant="subtitle1"
                                                color="primary"
-                                               sx={{cursor: "pointer"}}
+                                               sx={{cursor: "pointer", fontSize: matches_650 ? "12px" : "16px"}}
                                                onClick={handleProblemClick}>
                                     {problemTitle}
                                 </Typography>)}
                         </Stack>)}
                 <FieldControl
-                    label="Статус"
-                    name="status_id"
-                    id="status_id"
-                    value={task.status_id}
-                    error={errors?.status_id}
+                    label="Место проведения работ"
+                    name="event_location"
+                    id="event_location"
+                    value={task.event_location}
+                    error={errors?.event_location}
                     isEditMode={isEditMode}
                     onChange={fieldChangeHandler}
-                    options={taskStatus}
                 />
             </Stack>
             <FieldControl

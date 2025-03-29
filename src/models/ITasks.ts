@@ -10,6 +10,7 @@ export interface ITaskPriority {
 export interface INewTask {
     title: string;
     description: string;
+    event_location: string;
     status_id: number;
     priority_id: number;
     due_date: number;

@@ -20,7 +20,6 @@ export const StyledInput = styled(TextField, {
     },
     "& .MuiOutlinedInput-root": { // Указываем стили для общего контейнера
         borderRadius: 4,
-        padding: "6px 8px",
         backgroundColor: isError ? "#FFFBE6" : "#E8F5E9",
         border: "1px solid",
         borderColor: isError ? "#FFC107" : "#4CAF50",
@@ -31,7 +30,6 @@ export const StyledInput = styled(TextField, {
     },
     "& .MuiInputBase-input": { // Стили текстового ввода
         fontSize: 16,
-        borderRadius: 4,
         padding: "10px 12px",
         [theme.breakpoints.down(650)]: {
             padding: "6px 8px",
@@ -47,7 +45,7 @@ const StyledSelect = styled(Select, {
         marginTop: theme.spacing(2),
     },
     "& .MuiInputBase-input": {
-        borderRadius: 4,
+        borderRadius: 2,
         position: "relative",
         backgroundColor: isError ? "#FFFBE6" : "#E8F5E9",
         border: "1px solid",
@@ -69,13 +67,14 @@ const StyledTypography = styled(Typography)(({theme}) => ({
     marginTop: theme.spacing(1.5),
     marginLeft: theme.spacing(1.7),
     fontWeight: 600,
+    whiteSpace: "pre-line",
     [theme.breakpoints.down(650)]: {
         fontSize: "12px",
         fontWeight: 500,
     },
 }));
 
-const StyledLabel = styled(InputLabel)(({theme}) => ({
+export const StyledLabel = styled(InputLabel)(({theme}) => ({
     fontSize: "18px",
     fontWeight: 500,
     [theme.breakpoints.down(650)]: {

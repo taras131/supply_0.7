@@ -54,6 +54,9 @@ const TaskDetailsPage = () => {
             }));
         }
     };
+    const resetEditedValue = () => {
+        setEditedValue(currentTask);
+    };
     const handleStatusChange = (statusId: number) => {
         if (editedValue.status_id !== statusId) {
             dispatch(fetchUpdateTask({...editedValue, status_id: statusId}));
@@ -90,15 +93,19 @@ const TaskDetailsPage = () => {
                     aria-controls="panel1-content"
                     id="panel1-header"
                 >
-                    <Typography component="span">Постановка задачи</Typography>
+                    <Typography component="span" color="primary" fontWeight={500}>
+                        Постановка задачи
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <TaskDetails
                         editedValue={editedValue}
                         fieldChangeHandler={handleFieldChange}
                         handleDateChange={handleDateChange}
+                        resetEditedValue={resetEditedValue}
                         errors={errors}
                         viewType="issue"
+                        detailsMode={true}
                     />
                 </AccordionDetails>
             </Accordion>
@@ -108,7 +115,7 @@ const TaskDetailsPage = () => {
                     aria-controls="panel2-content"
                     id="panel2-header"
                 >
-                    <Typography component="span">Результат выполнения</Typography>
+                    <Typography component="span" color="primary" fontWeight={500}>Результат выполнения</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <TaskDetails

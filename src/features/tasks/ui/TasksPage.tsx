@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {SelectChangeEvent, Stack} from "@mui/material";
+import {SelectChangeEvent, Stack, Typography} from "@mui/material";
 import {TaskList} from "./TasksList";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {getTaskIsLoading, getTasks} from "../model/selectors";
@@ -26,10 +26,10 @@ const TasksPage = () => {
         }
     };
     if (isLoading) return (<Preloader/>);
-    if(tasksFilter.machinery_id > 0) {
+    if (tasksFilter.machinery_id > 0) {
         filteredTasks = filteredTasks.filter(task => task.machinery_id === tasksFilter.machinery_id);
     }
-    if(tasksFilter.type_id > 0) {
+    if (tasksFilter.type_id > 0) {
         filteredTasks = filteredTasks.filter(task => task.type_id === tasksFilter.type_id);
     }
     if (tasksFilter.status_id > 0) {
@@ -42,7 +42,11 @@ const TasksPage = () => {
     return (
         <Stack spacing={4}>
             <TasksPageHeader tasksFilter={tasksFilter} filterChangeHandler={filterChangeHandler}/>
-            <TaskList tasks={filteredTasks}/>
+            {filteredTasks.length
+                ? (<TaskList tasks={filteredTasks}/>)
+                : <Typography textAlign="center" mt={5}>
+                    Нет задач , отвечающих параметрам фильтрации
+                </Typography>}
         </Stack>
     );
 };

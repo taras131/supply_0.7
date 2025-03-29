@@ -17,6 +17,8 @@ interface IProps {
     fieldChangeHandler: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string | unknown>) => void;
     handleDateChange: (date: any) => void;
     viewType: "issue" | "result";
+    detailsMode?: boolean;
+    resetEditedValue: () => void;
 }
 
 const TaskDetails: FC<IProps> = ({
@@ -25,6 +27,8 @@ const TaskDetails: FC<IProps> = ({
                                      fieldChangeHandler,
                                      handleDateChange,
                                      viewType,
+                                     detailsMode = false,
+                                     resetEditedValue,
                                  }) => {
     const dispatch = useAppDispatch();
     const [isEditMode, setIsEditMode] = useState(false);
@@ -56,6 +60,10 @@ const TaskDetails: FC<IProps> = ({
         dispatch(fetchUpdateTask(updatedTask));
         toggleIsEditMode();
     };
+    const cancelClickHandler = () => {
+        resetEditedValue();
+        toggleIsEditMode();
+    };
     const photosPaths = (viewType === "issue"
             ? editedValue.issue_photos
             : editedValue.result_photos || []
@@ -77,6 +85,7 @@ const TaskDetails: FC<IProps> = ({
                         fieldChangeHandler={fieldChangeHandler}
                         handleDateChange={handleDateChange}
                         errors={errors}
+                        detailsMode={detailsMode}
                     />
                 ) : (
                     <TaskResultView
@@ -86,17 +95,23 @@ const TaskDetails: FC<IProps> = ({
                         errors={errors}
                     />
                 )}
-                <PhotosManager
-                    photosPaths={photosPaths}
-                    onAddPhoto={onAddPhoto}
-                    onDeletePhoto={onDeletePhoto}
-                    isViewingOnly={!isEditMode}
-                />
+                <Box sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}>
+                    <PhotosManager
+                        photosPaths={photosPaths}
+                        onAddPhoto={onAddPhoto}
+                        onDeletePhoto={onDeletePhoto}
+                        isViewingOnly={!isEditMode}
+                    />
+                </Box>
             </Box>
             <Stack direction="row" alignItems="center" justifyContent="end" spacing={2}>
                 {isEditMode
                     ? (<>
-                        <Button variant="outlined" onClick={toggleIsEditMode} size="small">
+                        <Button variant="outlined" onClick={cancelClickHandler} size="small">
                             Отменить
                         </Button>
                         <Button onClick={saveTaskClickHandler}
