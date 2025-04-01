@@ -40,6 +40,11 @@ const SuppliersTable: FC<IProps> = ({rows, onSupplierClick, activeRowId}) => {
             isHidden: matches_650,
         },
         {
+            key: "manager_email",
+            label: "Почта",
+            isHidden: matches_650,
+        },
+        {
             key: "operating",
             label: "Оборот",
             getValue: (row) => {
