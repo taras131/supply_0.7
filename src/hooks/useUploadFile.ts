@@ -1,11 +1,7 @@
 import {ChangeEvent, useState} from "react";
-import {pdfjs} from "react-pdf";
-
-// Настройка worker без проблем с типами
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.js",
-    import.meta.url,
-).toString();
+import { pdfjs } from "react-pdf";
+// ВАЖНО: используем .mjs и тип 'module'
+pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.js";
 
 const isPdfFile = async (file: File): Promise<boolean> => {
     if (!file) return false;
