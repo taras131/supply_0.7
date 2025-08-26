@@ -3,7 +3,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { LABEL, LOADING_BUTTON_BORDER_RADIUS, SIZE_SMALL } from "styles/const";
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { CANCEL_TEXT, FILE_TYPE, UPLOAD_TEXT } from "utils/const";
+import {CANCEL_TEXT, FILE_TYPE, MESSAGE_SEVERITY, UPLOAD_TEXT} from "utils/const";
 import MessageWindowWithChoiceOption from "components/MessageWindowWithChoiceOption";
 import { useUploadFile } from "hooks/useUploadFile";
 import { getDateInMilliseconds } from "utils/services";
@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "hooks/redux";
 import { IInvoice } from "models/iInvoices";
 import { getUser } from "store/selectors/auth";
 import {fetchUpdateInvoice, fetchUploadFile} from "features/invoices/model/actions";
+import {setMessage} from "../../../store/reducers/message";
 
 interface IProps {
   invoice: IInvoice;
@@ -20,7 +21,7 @@ interface IProps {
 const UploadPayment: FC<IProps> = ({ invoice, forDetailsMode = false }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => getUser(state));
-  const { file, onFileChange, paymentErrorMessage, amount, isLoading, setIsLoading } = useUploadFile();
+  const { filesWithAmount, onFileChange, paymentErrorMessage, isLoading, resetFiles } = useUploadFile();
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const toggleOpen = () => {
@@ -35,32 +36,37 @@ const UploadPayment: FC<IProps> = ({ invoice, forDetailsMode = false }) => {
     };
     dispatch(fetchUpdateInvoice({ invoiceId: invoice.id, newPaid: newPaid }));
   };
-  const uploadFile = () => {
+  const uploadFile = (file: File) => {
     if (file) {
       dispatch(
         fetchUploadFile({
           file: file,
           updateFile: onLoadingPaymentOrderFile,
-          setIsUpdateFileLoading: setIsLoading,
         }),
       );
     }
   };
   useEffect(() => {
-    if (file && !paymentErrorMessage && !isLoading) {
+    if (filesWithAmount) {
+      const {file, amount} = filesWithAmount[0];
       if (amount === invoice.amount) {
-        uploadFile();
+        uploadFile(file);
+        resetFiles();
       } else {
         setModalMessage(`Обратите внимание, - сумма счёта: ${invoice.amount} руб. 
                 Сумма добавляемого платёжного поручения: ${amount} руб. Всё равно продолжить?`);
         setOpenModal(true);
       }
     }
-    if (file && paymentErrorMessage && !isLoading) {
-      setModalMessage(`${paymentErrorMessage} Всё равно продолжить?`);
-      setOpenModal(true);
-    }
-  }, [file, paymentErrorMessage, amount, isLoading]);
+  }, [filesWithAmount]);
+
+  useEffect(() => {
+    if (!paymentErrorMessage) return;
+    dispatch(setMessage({
+      text: paymentErrorMessage,
+      severity: MESSAGE_SEVERITY.error,
+    }));
+  }, [paymentErrorMessage]);
   return (
     <>
       <LoadingButton
@@ -80,7 +86,12 @@ const UploadPayment: FC<IProps> = ({ invoice, forDetailsMode = false }) => {
         message={modalMessage}
         handleToggleOpen={toggleOpen}
         isOpenModal={openModal}
-        handleOkClick={uploadFile}
+        handleOkClick={() => {
+          if(filesWithAmount) {
+            uploadFile(filesWithAmount[0].file);
+            resetFiles();
+          }
+        }}
       />
     </>
   );

@@ -92,7 +92,7 @@ export const fetchUpdateInvoiceCancel = createAsyncThunk(
 export interface IFileData {
     file: File;
     updateFile: (name: string, filePatch: string) => void;
-    setIsUpdateFileLoading: (isLoading: boolean) => void;
+    setIsUpdateFileLoading?: (isLoading: boolean) => void;
 }
 export const fetchUploadFile = createAsyncThunk("upload_file", async (fileData: IFileData, ThunkAPI) => {
     try {

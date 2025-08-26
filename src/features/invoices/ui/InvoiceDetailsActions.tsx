@@ -39,12 +39,11 @@ const InvoiceDetailsActions: FC<IProps> = ({
         dispatch(fetchUpdateInvoice({invoiceId: id, newPaid: newPaid}));
     };
     const handleOrdersClick = () => {
-        console.log(id)
         if (isShowOrdersPosition) {
             dispatch(fetchLinkPositions({selectedPosition, orders: allOrders, invoiceId: id}));
         }
-        handleIsShowOrdersPositionChange()
-    }
+        handleIsShowOrdersPositionChange();
+    };
     return (
         <Grid container sx={{width: "100%", minHeight: "100px"}} alignItems={START} spacing={2}>
             <Grid xs={matches_700 ? 4 : 12}>

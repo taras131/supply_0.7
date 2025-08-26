@@ -32,18 +32,18 @@ const Invoices = () => {
   };
   const supplierFilter = supplierFilterParams.get("supplierFilter") || ALL;
   useEffect(() => {
-    let newFilteredInvoice = [...invoices];
+    let newFilteredInvoice = invoices.slice(); // важно брать актуальные invoices
     if (supplierFilter !== ALL) {
-      newFilteredInvoice = [...newFilteredInvoice.filter((invoice) => invoice.supplierId === supplierFilter)];
+      newFilteredInvoice = newFilteredInvoice.filter((inv) => inv.supplierId === supplierFilter);
     }
     if (!isShowCanceledInvoice) {
-      newFilteredInvoice = [...newFilteredInvoice.filter((invoice) => !(invoice.cancel && invoice.cancel.isCancel))];
+      newFilteredInvoice = newFilteredInvoice.filter((inv) => !(inv.cancel && inv.cancel.isCancel));
     }
     if (!isShowPaidInvoice) {
-      newFilteredInvoice = [...newFilteredInvoice.filter((invoice) => !invoice.paid.isPaid)];
+      newFilteredInvoice = newFilteredInvoice.filter((inv) => !inv.paid?.isPaid);
     }
     setFilteredInvoice(newFilteredInvoice);
-  }, [supplierFilter, isShowCanceledInvoice, isShowPaidInvoice]);
+  }, [invoices, supplierFilter, isShowCanceledInvoice, isShowPaidInvoice]);
   return (
     <Stack alignItems="center" spacing={matches_700 ? 3 : 2}>
       <InvoicesHeader />
